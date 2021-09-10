@@ -428,7 +428,11 @@ task:
     - cd src/tools/msvc
     - perl vcregress.pl ecpgcheck
 
-  on_failure: *on_failure
+  on_failure:
+    <<: *on_failure
+    crashlog_artifacts:
+      path: "crashlog-**.txt"
+      type: text/plain
 
 
 task:
