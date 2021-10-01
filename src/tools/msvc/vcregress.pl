@@ -248,6 +248,7 @@ sub tap_check
 	$ENV{REGRESS_SHLIB} = "$topdir/src/test/regress/regress.dll";
 
 	$ENV{TESTDIR} = "$dir";
+	$ENV{TESTOUTDIR} = "$dir/tmp_check";
 
 	rmtree('tmp_check');
 	system(@args);
