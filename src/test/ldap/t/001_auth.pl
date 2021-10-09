@@ -130,8 +130,8 @@ while (1)
 	last
 	  if (
 		system_log(
-			"ldapsearch", "-h", $ldap_server, "-p",
-			$ldap_port,   "-s", "base",       "-b",
+			"ldapsearch", "-H", "$ldap_url",  "-s",
+			"base",       "-b",
 			$ldap_basedn, "-D", $ldap_rootdn, "-y",
 			$ldap_pwfile, "-n", "'objectclass=*'") == 0);
 	die "cannot connect to slapd" if ++$retries >= 300;
