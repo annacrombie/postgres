@@ -267,13 +267,13 @@ endif
 
 llvmopt = get_option('llvm')
 if not llvmopt.disabled()
+  add_languages('cpp', required : true, native: false)
   llvm = dependency('llvm', version : '>=3.9', method: 'config-tool', required: llvmopt)
 
   if llvm.found()
 
     cdata.set('USE_LLVM', 1)
 
-    add_languages('cpp', required : true, native: false)
     cpp = meson.get_compiler('cpp')
 
     llvm_binpath = llvm.get_variable(configtool: 'bindir')
