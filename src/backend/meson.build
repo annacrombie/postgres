@@ -32,13 +32,19 @@ subdir('tsearch')
 subdir('utils')
 
 
-if host_machine.system() == 'windows'
-  backend_deps += cc.find_library('secur32', required: true)
-endif
-
-
 postgres_link_args = []
 postgres_link_depends = []
+
+if host_machine.system() == 'windows'
+  backend_deps += cc.find_library('secur32', required: true)
+
+  if cc.get_id() == 'msvc'
+    postgres_link_args += '/STACK:@0@'.format(cdata.get('WIN32_STACK_RLIMIT'))
+  else
+    postgres_link_args += '-Wl,--stack,@0@'.format(cdata.get('WIN32_STACK_RLIMIT'))
+  endif
+endif
+
 
 # On windows when compiling with msvc we need to make postgres export all its
 # symbols so that extension libraries can use them. For that we need to scan
@@ -82,7 +88,6 @@ if cc.get_id() == 'msvc' # or true
 
   if cc.get_id() == 'msvc'
     postgres_link_args += '/DEF:@0@'.format(postgres_def.full_path())
-    postgres_link_args += '/STACK:@0@'.format(cdata.get('WIN32_STACK_RLIMIT'))
     postgres_link_depends += postgres_def
   endif
 
@@ -106,6 +111,7 @@ else
     backend_sources + generated_backend_sources + timezone_sources,
     c_pch: '../include/pch/postgres_pch.h',
     c_args: backend_c_args,
+    link_args: postgres_link_args,
     link_with: backend_link_with,
     export_dynamic: true,
     dependencies: [backend_build_deps, backend_deps],
