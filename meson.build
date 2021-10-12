@@ -425,7 +425,7 @@ else
   useshrplib = run_command(perl_conf_cmd, 'useshrplib', check: true).stdout()
   libperl = run_command(perl_conf_cmd, 'libperl', check: true).stdout()
 
-  perl_inc = include_directories('@0@/CORE'.format(archlibexp))
+  perl_inc_dir = '@0@/CORE'.format(archlibexp)
 
   perl_ccflags = []
 
@@ -440,17 +440,19 @@ else
 
   message('perl libperl: @0@'.format(libperl))
 
+  # XXX: should we only add directories that exist? Seems a bit annoying with
+  # macos' sysroot stuff...
+  #
+  # NB: For unknown reasons msys' python doesn't see these paths, despite gcc
+  # et al seeing them. So we can't use include_directories(), as that checks
+  # file existence.
+  perl_ccflags += ['-I@0@'.format(perl_inc_dir)]
   if host_machine.system() == 'darwin'
-    perl_ccflags += ['-iwithsysroot', '@0@/CORE'.format(archlibexp)]
+    perl_ccflags += ['-iwithsysroot', perl_inc_dir]
   endif
 
-  # FIXME macOS may need sysroot muckery
-
-  # XXX: On my system the cc.find_library() is actually enough to get a working
-  # plperl. Would be nice to get rid of the nasty stuff below.
   if perl_may_work and \
-      cc.has_header('perl.h', args: g_c_args + perl_ccflags,
-                    include_directories: perl_inc, required: perlopt)
+      cc.has_header('perl.h', args: g_c_args + perl_ccflags, required: perlopt)
     foreach p : ['perl', 'libperl', libperl, libperl.strip('lib'), fs.stem(libperl), fs.stem(libperl).strip('lib')]
       perl_dep_int = cc.find_library(p,
         dirs: ['@0@/CORE'.format(archlibexp)],
@@ -521,7 +523,6 @@ else
 
     if perl_dep_int.found()
       perl_dep = declare_dependency(
-        include_directories: perl_inc,
         compile_args: perl_ccflags,
         link_args: perl_ldopts,
         version: perlversion,
