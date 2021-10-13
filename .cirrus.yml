@@ -284,7 +284,7 @@ task:
         INCLUDES="/usr/local/opt/icu4c/include:$INCLUDES"
         LIBS="/usr/local/opt/icu4c/lib:$LIBS"
 
-        PKG_CONFIG_PATH="/usr/local/opt/ldap/lib/pkgconfig:$PKG_CONFIG_PATH"
+        PKG_CONFIG_PATH="/usr/local/opt/openldap/lib/pkgconfig:$PKG_CONFIG_PATH"
         LIBS="/usr/local/opt/openldap/lib:$LIBS"
         INCLUDES="/usr/local/opt/openldap/include:$INCLUDES"
 
