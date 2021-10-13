@@ -22,6 +22,25 @@ fs = import('fs')
 thread_dep = dependency('threads')
 
 
+# It's very easy to get into confusing states when the source directory
+# contains an in-place build. E.g. the wrong pg_config.h will be used. So just
+# refuse to build in that case.
+if fs.exists(meson.current_source_dir() / 'src' / 'include' / 'pg_config.h')
+  error('''
+****
+Non-clean source code directory detected.
+
+To build with meson the source tree may not have an in-place, ./configure
+style, build configured. Use a separate check out for meson based builds, or
+run make distclean in the source tree.
+
+You can have both meson and ./configure style builds for the same source tree
+by building out-of-source / VPATH with configure as well.
+****
+''')
+endif
+
+
 
 ###############################################################
 # Version and other metadata
