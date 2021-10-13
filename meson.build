@@ -275,7 +275,8 @@ if not ldapopt.disabled()
   endif
 
 else
-  ldap_r = ldap = dependency('', required : false)
+  ldap = dependency('', required : false)
+  ldap_r = ldap
 endif
 
 
