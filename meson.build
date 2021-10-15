@@ -135,6 +135,7 @@ touch = find_program('touch', native: true)
 # Internal programs
 find_meson = find_program('src/tools/find_meson', native: true)
 testwrap = find_program('src/tools/testwrap', native: true)
+relpath = find_program('src/tools/relpath.py', native: true)
 
 bisonflags = []
 if bison.found()
@@ -1535,6 +1536,27 @@ default_mod_args = default_lib_args + {
 default_bin_args = default_target_args + {
 }
 
+if host_machine.system() == 'windows'
+  # nothing to do
+else
+  if host_machine.system() == 'darwin'
+    rpath_var = '@loader_path'
+  else
+    rpath_var = '$ORIGIN'
+  endif
+
+  # PG binaries might need to link to libpq, use relative path to reference
+  bin_to_lib = run_command(relpath,
+    get_option('bindir'), get_option('libdir'), check: true).stdout().strip()
+  default_bin_args += {'install_rpath':  rpath_var / bin_to_lib}
+
+  # PG extensions might need to link to libpq, use relative path to reference
+  # (often just .)
+  mod_to_lib = run_command(relpath,
+    get_option('libdir'), get_option('libdir'), check: true).stdout().strip()
+  default_mod_args += {'install_rpath': rpath_var}
+endif
+
 
 # First visit src/include - all targets creating headers are defined
 # within. That makes it easy to add the necessary dependencies for the
@@ -1638,6 +1660,11 @@ subdir('contrib')
 subdir('src/test')
 
 
+if host_machine.system() == 'darwin'
+  meson.add_install_script('src/tools/relativize_shared_library_references')
+endif
+
+
 ###############################################################
 # Test prep
 ###############################################################
@@ -1686,16 +1713,7 @@ testport=40000
 
 test_env = environment()
 
-if host_machine.system() == 'darwin'
-  library_path_var = 'DYLD_LIBRARY_PATH'
-elif host_machine.system() == 'aix'
-  library_path_var = 'LIBPATH'
-else
-  library_path_var = 'LD_LIBRARY_PATH'
-endif
-
 test_env.prepend('PATH', test_install_location / get_option('bindir'))
-test_env.prepend(library_path_var, test_install_location / get_option('libdir'))
 test_env.set('PG_REGRESS', meson.build_root() / 'src/test/regress/pg_regress')
 test_env.set('REGRESS_SHLIB', regress_module.full_path())
 
