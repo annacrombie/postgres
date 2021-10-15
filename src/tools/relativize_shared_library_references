@@ -55,7 +55,6 @@ def collect_information():
 
 def patch_references(destdir, shared_libraries, executables, shared_modules):
     install_name_tool = [shutil.which('install_name_tool')]
-    install_name_tool = [shutil.which('echo'), 'install_name_tool']
 
     for lib in shared_libraries:
         libname = os.path.basename(lib)
