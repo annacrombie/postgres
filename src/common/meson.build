@@ -130,7 +130,7 @@ common_shlib = static_library('pgcommon_shlib',
   kwargs: default_lib_args,
 )
 
-common_static = static_library('pgcommon_static',
+common_static = static_library('pgcommon',
   common_sources_frontend_static,
   c_pch: '../include/pch/c_pch.h',
   link_with: [ryu_static],
