@@ -12,4 +12,6 @@ lwlocknames = custom_target('lwlocknames',
   install_dir: get_option('includedir')
 )
 
-generated_backend_headers += lwlocknames[0]
+lwlocknames_h = lwlocknames[0]
+
+generated_backend_headers += lwlocknames_h

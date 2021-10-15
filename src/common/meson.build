@@ -111,8 +111,11 @@ common_sources_frontend_static += files(
 # XXX: in most environments we could probably link_whole pgcommon_shlib
 # against pgcommon_static, instead of compiling twice.
 
+# For the server build of pgcommon, depend on lwlocknames_h, because at least
+# cryptohash_openssl.c, hmac_openssl.c depend on it. That's arguably a
+# layering violation, but ...
 common_srv = static_library('pgcommon_srv',
-  common_sources,
+  common_sources + [lwlocknames_h],
   c_pch: '../include/pch/c_pch.h',
   link_with: [ryu_srv],
   dependencies: [backend_common_code, ssl],
