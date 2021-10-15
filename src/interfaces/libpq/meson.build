@@ -54,7 +54,7 @@ libpq_deps = [frontend_shlib_code, thread_dep, ssl, ldap, gssapi]
 libpq_link_depends = []
 
 libpq_kwargs = default_lib_args + {
-  'version': '5.'+pg_version_major.to_string(),
+  'version': '9.'+pg_version_major.to_string(),
 }
 
 
@@ -62,7 +62,7 @@ if host_machine.system() == 'darwin'
   libpq_kwargs = libpq_kwargs + {
     'link_args': ['-exported_symbols_list', export_file.full_path()],
     'link_depends': export_file,
-    'soversion': '5',
+    'soversion': '9',
   }
 elif host_machine.system() == 'windows'
   libpq_deps += cc.find_library('secur32', required: true)
@@ -75,7 +75,7 @@ else
   libpq_kwargs = libpq_kwargs + {
     'link_args': '-Wl,--version-script=' + export_file.full_path(),
     'link_depends': export_file,
-    'soversion': '5',
+    'soversion': '9',
   }
 endif
 
