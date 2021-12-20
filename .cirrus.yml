@@ -35,6 +35,10 @@ on_failure: &on_failure
   tap_artifacts:
     path: "**/regress_log_*"
     type: text/plain
+  meson_test_artifacts:
+    path: "build/meson-logs/testlog.junit.xml"
+    type: text/xml
+    format: junit
 
 
 task:
@@ -80,41 +84,60 @@ task:
     chown root:postgres /tmp/cores
     sysctl kern.corefile='/tmp/cores/%N.%P.core'
 
-  # NB: Intentionally building without --with-llvm. The freebsd image size is
-  # already large enough to make task startup slow, and freebsd already takes
-  # longer than other platforms except for windows.
-  configure_script: |
-    su postgres <<-EOF
-      ./configure \
-        --enable-cassert --enable-debug --enable-tap-tests \
-        --enable-nls \
-        \
-        --with-gssapi \
-        --with-icu \
-        --with-ldap \
-        --with-libxml \
-        --with-libxslt \
-        --with-lz4 \
-        --with-pam \
-        --with-perl \
-        --with-python \
-        --with-ssl=openssl \
-        --with-tcl --with-tclconfig=/usr/local/lib/tcl8.6/ \
-        --with-uuid=bsd \
-        \
-        --with-includes=/usr/local/include \
-        --with-libs=/usr/local/lib \
-        \
-        CC="ccache cc" CFLAGS="-O0 -ggdb"
-    EOF
-  build_script: su postgres -c "gmake -s -j${BUILD_JOBS} world-bin"
-  upload_caches: ccache
+  matrix:
+    - name: FreeBSD - 13 - Autoconf
 
-  # Use of script is to avoid make -Otarget complaints about fcntl() on platforms
-  # without support for locking pipes. See also https://savannah.gnu.org/bugs/?60774
-  # script uses a pseudo-tty, which do support locking.
-  test_world_script:
-    - su postgres -c "time script test.log gmake -s -j${TEST_JOBS} ${CHECK} ${CHECKFLAGS}"
+      # NB: Intentionally building without --with-llvm. The freebsd image size is
+      # already large enough to make task startup slow, and freebsd already takes
+      # longer than other platforms except for windows.
+      configure_script: |
+        su postgres <<-EOF
+          ./configure \
+            --enable-cassert --enable-debug --enable-tap-tests \
+            --enable-nls \
+            \
+            --with-gssapi \
+            --with-icu \
+            --with-ldap \
+            --with-libxml \
+            --with-libxslt \
+            --with-lz4 \
+            --with-pam \
+            --with-perl \
+            --with-python \
+            --with-ssl=openssl \
+            --with-tcl --with-tclconfig=/usr/local/lib/tcl8.6/ \
+            --with-uuid=bsd \
+            \
+            --with-includes=/usr/local/include \
+            --with-libs=/usr/local/lib \
+            \
+            CC="ccache cc" CFLAGS="-O0 -ggdb"
+        EOF
+      build_script: su postgres -c "gmake -s -j${BUILD_JOBS} world-bin"
+      upload_caches: ccache
+
+      # Use of script is to avoid make -Otarget complaints about fcntl() on platforms
+      # without support for locking pipes. See also https://savannah.gnu.org/bugs/?60774
+      # script uses a pseudo-tty, which do support locking.
+      test_world_script:
+        - su postgres -c "time script test.log gmake -s -j${TEST_JOBS} ${CHECK} ${CHECKFLAGS}"
+
+    - name: FreeBSD - 13 - Meson
+
+      configure_script:
+        - su postgres -c 'meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=bsd build'
+      build_script:
+        - su postgres -c 'ninja -C build'
+      upload_caches:
+        - ccache
+      run_tests_script:
+        - su postgres -c 'meson test --no-rebuild -C build'
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
 
   on_failure:
     <<: *on_failure
@@ -186,26 +209,56 @@ task:
     chown root:postgres /tmp/cores
     sysctl kernel.core_pattern='/tmp/cores/%e-%s-%p.core'
 
-  configure_script: |
-    su postgres <<-EOF
-      ./configure \
-        --enable-cassert --enable-debug --enable-tap-tests \
-        --enable-nls \
-        \
-        ${LINUX_CONFIGURE_FEATURES} \
-        \
-        CC="ccache gcc" CFLAGS="-O0 -ggdb" \
-        CXX="ccache g++" CXXFLAGS="-O0 -ggdb" \
-        CLANG="ccache clang"
-    EOF
-  build_script: su postgres -c 'make -s -j${BUILD_JOBS} world-bin'
-  upload_caches: ccache
+  matrix:
+    - name: Linux - Debian Bullseye - Autoconf
 
-  test_world_script: |
-    su postgres <<-EOF
-      ulimit -c unlimited # default is 0
-      make -s ${CHECK} ${CHECKFLAGS} -j${TEST_JOBS}
-    EOF
+      configure_script: |
+        su postgres <<-EOF
+          ./configure \
+            --enable-cassert --enable-debug --enable-tap-tests \
+            --enable-nls \
+            \
+            ${LINUX_CONFIGURE_FEATURES} \
+            \
+            CC="ccache gcc" CFLAGS="-O0 -ggdb" \
+            CXX="ccache g++" CXXFLAGS="-O0 -ggdb" \
+            CLANG="ccache clang"
+        EOF
+      build_script: su postgres -c 'make -s -j${BUILD_JOBS} world-bin'
+      upload_caches: ccache
+
+      test_world_script: |
+        su postgres <<-EOF
+          ulimit -c unlimited # default is 0
+          make -s ${CHECK} ${CHECKFLAGS} -j${TEST_JOBS}
+        EOF
+
+    - name: Linux - Debian Bullseye - Meson
+
+      configure_script:
+        - su postgres -c 'meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=e2fs build'
+      build_script:
+        - su postgres -c 'ninja -C build'
+      upload_caches:
+        - ccache
+
+      tests_script:
+        - su postgres -c 'meson test --no-rebuild -C build'
+
+    - name: Linux - Debian Sid - Meson
+
+      compute_engine_instance:
+        image: family/pg-ci-sid
+
+      configure_script:
+        - su postgres -c 'meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=ossp build'
+      build_script:
+        - su postgres -c 'ninja -C build'
+      upload_caches:
+        - ccache
+
+      tests_script:
+        - su postgres -c 'meson test --no-rebuild -C build'
 
   on_failure:
     <<: *on_failure
@@ -261,6 +314,7 @@ task:
       llvm \
       lz4 \
       make \
+      meson \
       openldap \
       openssl \
       python \
@@ -271,53 +325,83 @@ task:
 
   ccache_cache:
     folder: $CCACHE_DIR
-  configure_script: |
-    LIBS="/usr/local/lib:${LIBS}"
-    INCLUDES="/usr/local/include:${INCLUDES}"
 
-    brewpath=/usr/local/opt
-    for package in icu4c krb5 openldap openssl; do
-      PKG_CONFIG_PATH="${brewpath}/${package}/lib/pkgconfig:${PKG_CONFIG_PATH}"
-      INCLUDES="${brewpath}/${package}/include:${INCLUDES}"
-      LIBS="${brewpath}/${package}/lib:${LIBS}"
-    done
+  matrix:
+    - name: macOS - Monterey - Autoconf
 
-    export PKG_CONFIG_PATH
+      configure_script: |
+        LIBS="/usr/local/lib:${LIBS}"
+        INCLUDES="/usr/local/include:${INCLUDES}"
 
-    ./configure \
-      --enable-cassert --enable-debug --enable-tap-tests \
-      --enable-nls \
-      \
-      --with-bonjour \
-      --with-gssapi \
-      --with-icu \
-      --with-ldap \
-      --with-libxml \
-      --with-libxslt \
-      --with-lz4 \
-      --with-perl \
-      --with-python \
-      --with-ssl=openssl \
-      --with-tcl --with-tclconfig=${brewpath}/tcl-tk/lib/ \
-      --with-uuid=e2fs \
-      \
-      --prefix=${HOME}/install \
-      --with-includes="${INCLUDES}" \
-      --with-libs="${LIBS}" \
-      \
-      CC="ccache cc" CFLAGS="-O0 -ggdb" \
-      CXX="ccache c++" CXXFLAGS="-O0 -ggdb" \
-      CLANG="ccache ${brewpath}/llvm/bin/ccache" \
-      LLVM_CONFIG=${brewpath}/llvm/bin/llvm-config \
-      PYTHON=python3
-  build_script: gmake -s -j${BUILD_JOBS} world-bin
-  upload_caches: ccache
+        brewpath=/usr/local/opt
+        for package in icu4c krb5 openldap openssl; do
+          PKG_CONFIG_PATH="${brewpath}/${package}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+          INCLUDES="${brewpath}/${package}/include:${INCLUDES}"
+          LIBS="${brewpath}/${package}/lib:${LIBS}"
+        done
 
-  test_world_script: |
-    ulimit -c unlimited # default is 0
-    ulimit -n 1024 # default is 256, pretty low
-    # See freebsd use of script for explanation
-    script test.log gmake -s -j${TEST_JOBS} ${CHECK} ${CHECKFLAGS}
+        export PKG_CONFIG_PATH
+
+        ./configure \
+          --enable-cassert --enable-debug --enable-tap-tests \
+          --enable-nls \
+          \
+          --with-bonjour \
+          --with-gssapi \
+          --with-icu \
+          --with-ldap \
+          --with-libxml \
+          --with-libxslt \
+          --with-lz4 \
+          --with-perl \
+          --with-python \
+          --with-ssl=openssl \
+          --with-tcl --with-tclconfig=${brewpath}/tcl-tk/lib/ \
+          --with-uuid=e2fs \
+          \
+          --prefix=${HOME}/install \
+          --with-includes="${INCLUDES}" \
+          --with-libs="${LIBS}" \
+          \
+          CC="ccache cc" CFLAGS="-O0 -ggdb" \
+          CXX="ccache c++" CXXFLAGS="-O0 -ggdb" \
+          CLANG="ccache ${brewpath}/llvm/bin/ccache" \
+          LLVM_CONFIG=${brewpath}/llvm/bin/llvm-config \
+          PYTHON=python3
+      build_script: gmake -s -j${BUILD_JOBS} world-bin
+      upload_caches: ccache
+
+      test_world_script: |
+        ulimit -c unlimited # default is 0
+        ulimit -n 1024 # default is 256, pretty low
+        # See freebsd use of script for explanation
+        script test.log gmake -s -j${TEST_JOBS} ${CHECK} ${CHECKFLAGS}
+
+    - name: macOS - Monterey - Meson
+
+      configure_script: |
+        PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+        brewpath=/usr/local/opt
+        for package in icu4c krb5 openldap openssl; do
+          PKG_CONFIG_PATH="${brewpath}/${package}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+        done
+
+        export PKG_CONFIG_PATH
+
+        meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=e2fs build
+      build_script: ninja -C build
+      upload_caches: ccache
+
+      tests_script:
+        - ulimit -c unlimited
+        - ulimit -n 1024
+        - meson test --no-rebuild -C build
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
 
   on_failure:
     <<: *on_failure
@@ -366,56 +450,102 @@ task:
     powershell -Command get-psdrive -psprovider filesystem
     set
 
-  configure_script:
-    # copy errors out when using forward slashes
-    - copy src\tools\ci\windows_build_config.pl src\tools\msvc\config.pl
-    - vcvarsall x64
-    - perl src/tools/msvc/mkvcbuild.pl
-  build_script:
-    - vcvarsall x64
-    - msbuild %MSBFLAGS% pgsql.sln
-  tempinstall_script:
-    # Installation on windows currently only completely works from src/tools/msvc
-    - cd src/tools/msvc && perl install.pl %CIRRUS_WORKING_DIR%/tmp_install
+  matrix:
+    - name: Windows - Server 2019, VS 2019 - Homegrown
 
-  test_regress_parallel_script:
-    - perl src/tools/msvc/vcregress.pl check parallel
-  startcreate_script:
-    # paths to binaries need backslashes
-    - tmp_install\bin\pg_ctl.exe initdb -D tmp_check/db -l tmp_check/initdb.log
-    - echo include '%TEMP_CONFIG%' >> tmp_check/db/postgresql.conf
-    - tmp_install\bin\pg_ctl.exe start -D tmp_check/db -l tmp_check/postmaster.log
-  test_pl_script:
-    - perl src/tools/msvc/vcregress.pl plcheck
-  test_isolation_script:
-    - perl src/tools/msvc/vcregress.pl isolationcheck
-  test_modules_script:
-    - perl src/tools/msvc/vcregress.pl modulescheck
-  test_contrib_script:
-    - perl src/tools/msvc/vcregress.pl contribcheck
-  stop_script:
-    - tmp_install\bin\pg_ctl.exe stop -D tmp_check/db -l tmp_check/postmaster.log
-  test_ssl_script:
-    - set with_ssl=openssl
-    - perl src/tools/msvc/vcregress.pl taptest ./src/test/ssl/
-  test_subscription_script:
-    - perl src/tools/msvc/vcregress.pl taptest ./src/test/subscription/
-  test_authentication_script:
-    - perl src/tools/msvc/vcregress.pl taptest ./src/test/authentication/
-  test_recovery_script:
-    - perl src/tools/msvc/vcregress.pl recoverycheck
-  test_bin_script:
-    - perl src/tools/msvc/vcregress.pl bincheck
-  test_pg_upgrade_script:
-    - perl src/tools/msvc/vcregress.pl upgradecheck
-  test_ecpg_script:
-    # tries to build additional stuff
-    - vcvarsall x64
-    # References ecpg_regression.proj in the current dir
-    - cd src/tools/msvc
-    - perl vcregress.pl ecpgcheck
+      configure_script:
+        # copy errors out when using forward slashes
+        - copy src\tools\ci\windows_build_config.pl src\tools\msvc\config.pl
+        - vcvarsall x64
+        - perl src/tools/msvc/mkvcbuild.pl
+      build_script:
+        - vcvarsall x64
+        - msbuild %MSBFLAGS% pgsql.sln
+      tempinstall_script:
+        # Installation on windows currently only completely works from src/tools/msvc
+        - cd src/tools/msvc && perl install.pl %CIRRUS_WORKING_DIR%/tmp_install
+
+      test_regress_parallel_script:
+        - perl src/tools/msvc/vcregress.pl check parallel
+      startcreate_script:
+        # paths to binaries need backslashes
+        - tmp_install\bin\pg_ctl.exe initdb -D tmp_check/db -l tmp_check/initdb.log
+        - echo include '%TEMP_CONFIG%' >> tmp_check/db/postgresql.conf
+        - tmp_install\bin\pg_ctl.exe start -D tmp_check/db -l tmp_check/postmaster.log
+      test_pl_script:
+        - perl src/tools/msvc/vcregress.pl plcheck
+      test_isolation_script:
+        - perl src/tools/msvc/vcregress.pl isolationcheck
+      test_modules_script:
+        - perl src/tools/msvc/vcregress.pl modulescheck
+      test_contrib_script:
+        - perl src/tools/msvc/vcregress.pl contribcheck
+      stop_script:
+        - tmp_install\bin\pg_ctl.exe stop -D tmp_check/db -l tmp_check/postmaster.log
+      test_ssl_script:
+        - set with_ssl=openssl
+        - perl src/tools/msvc/vcregress.pl taptest ./src/test/ssl/
+      test_subscription_script:
+        - perl src/tools/msvc/vcregress.pl taptest ./src/test/subscription/
+      test_authentication_script:
+        - perl src/tools/msvc/vcregress.pl taptest ./src/test/authentication/
+      test_recovery_script:
+        - perl src/tools/msvc/vcregress.pl recoverycheck
+      test_bin_script:
+        - perl src/tools/msvc/vcregress.pl bincheck
+      test_pg_upgrade_script:
+        - perl src/tools/msvc/vcregress.pl upgradecheck
+      test_ecpg_script:
+        # tries to build additional stuff
+        - vcvarsall x64
+        # References ecpg_regression.proj in the current dir
+        - cd src/tools/msvc
+        - perl vcregress.pl ecpgcheck
+
+    - name: Windows - Server 2019, VS 2019 - Meson & ninja
+
+      meson_script:
+        - pip install meson
+        - pip install ninja
+      configure_script:
+        - vcvarsall x64
+        - mkdir subprojects
+        - meson wrap install lz4
+        - meson wrap install zlib
+        - meson setup --buildtype debug --backend ninja  -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
+      build_script:
+        - vcvarsall x64
+        - ninja -C build
+
+      check_script:
+        - meson test --no-rebuild -C build
+
+    - name: Windows - Server 2019, VS 2019 - Meson & msbuild
+
+      # Need a development version of meson for now
+      meson_dev_script:
+        - git clone https://github.com/mesonbuild/meson.git
+
+      configure_script:
+        - vcvarsall x64
+        - mkdir subprojects
+        - .\meson\meson.py wrap install lz4
+        - .\meson\meson.py wrap install zlib
+        - .\meson\meson.py setup --buildtype debug --backend vs -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
+
+      build_script:
+        - vcvarsall x64
+        - msbuild /p:UseMultiToolTask=true %MSBFLAGS% build\postgresql.sln
+
+      check_script:
+        - vcvarsall x64
+        - .\meson\meson.py test --no-rebuild -C build
 
   always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
+
     cores_script: cat crashlog.txt || true
     dump_artifacts:
       path: "crashlog.txt"
@@ -429,7 +559,7 @@ task:
 
   # To limit unneccessary work only run this once normal linux test succeeded
   depends_on:
-    - Linux - Debian Bullseye
+    - Linux - Debian Bullseye - Autoconf
 
   env:
     CPUS: 4
