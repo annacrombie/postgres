@@ -49,6 +49,7 @@ task:
 
     CCACHE_DIR: /tmp/ccache_dir
 
+  depends_on: precheck
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*freebsd.*'
 
   compute_engine_instance:
@@ -141,6 +142,76 @@ LINUX_CONFIGURE_FEATURES: &LINUX_CONFIGURE_FEATURES >-
   --with-tcl --with-tclconfig=/usr/lib/tcl8.6/
   --with-uuid=e2fs
 
+
+# Quickly run task (using containers) that verifies that the source builds and
+# basic tests run before starting tasks using slower resources (particularly
+# windows VMs) and running slower tests. Container tasks tart up much quicker
+# than full blown VM tasks, but run tests more slowly and have fewer
+# diagnostic possibilities.
+task:
+  name: precheck
+
+  env:
+    CPUS: 4
+    BUILD_JOBS: 4
+
+    CCACHE_DIR: /tmp/ccache_dir
+
+    LINUX_CONFIGURE_FEATURES: *LINUX_CONFIGURE_FEATURES
+
+  arm_container:
+    image: $CONTAINER_REPO/linux_debian_bullseye_ci:latest
+    cpu: $CPUS
+    greedy: true
+
+  only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*linux.*'
+
+  ccache_cache:
+    folder: ${CCACHE_DIR}
+
+  sysinfo_script: |
+    id
+    uname -a
+    cat /proc/cmdline
+    ulimit -a -H && ulimit -a -S
+    export
+  create_user_script: |
+    useradd -m postgres
+    chown -R postgres:postgres .
+    mkdir -p ${CCACHE_DIR}
+    chown -R postgres:postgres ${CCACHE_DIR}
+    echo '* - memlock 134217728' > /etc/security/limits.d/postgres.conf
+    su postgres -c 'ulimit -l -H && ulimit -l -S'
+
+  configure_script: |
+    su postgres <<-EOF
+      ./configure \
+        --enable-cassert --enable-debug \
+        \
+        ${LINUX_CONFIGURE_FEATURES} \
+        \
+        CC="ccache gcc" \
+        CXX="ccache g++" \
+        CLANG="ccache clang" \
+        CFLAGS="-O0 -ggdb" \
+        CXXFLAGS="-O0 -ggdb"
+    EOF
+  build_script: su postgres -c 'make -s -j${BUILD_JOBS} world-bin'
+  upload_caches: ccache
+
+  test_script: |
+    su postgres <<-EOF
+      echo jit=off >> $TEMP_CONFIG
+      echo fsync=off >> $TEMP_CONFIG
+      ulimit -c unlimited # default is 0
+      make -s check ${CHECKFLAGS}
+    EOF
+
+  on_failure:
+    <<: *on_failure
+    cores_script: src/tools/ci/cores_backtrace.sh linux /tmp/cores
+
+
 task:
   name: Linux - Debian Bullseye
 
@@ -154,6 +225,7 @@ task:
 
     LINUX_CONFIGURE_FEATURES: *LINUX_CONFIGURE_FEATURES
 
+  depends_on: precheck
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*linux.*'
 
   compute_engine_instance:
@@ -225,6 +297,7 @@ task:
     HOMEBREW_CACHE: ${HOME}/homebrew-cache
     PERL5LIB: ${HOME}/perl5/lib/perl5
 
+  depends_on: precheck
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*(macos|darwin|osx).*'
 
   osx_instance:
@@ -355,6 +428,7 @@ task:
     # Use parallelism, disable file tracker, we're never going to rebuild...
     MSBFLAGS: -m -verbosity:minimal /p:TrackFileAccess=false
 
+  depends_on: precheck
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*windows.*'
 
   windows_container:
@@ -430,8 +504,7 @@ task:
   name: CompilerWarnings
 
   # To limit unneccessary work only run this once normal linux test succeeded
-  depends_on:
-    - Linux - Debian Bullseye
+  depends_on: precheck
 
   env:
     CPUS: 4
@@ -446,6 +519,7 @@ task:
 
   # task that did not run count as a success, so we need to recheck Linux'
   # condition here :/
+  depends_on: precheck
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*linux.*'
 
   container:
