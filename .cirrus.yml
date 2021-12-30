@@ -163,6 +163,7 @@ task:
     image: $CONTAINER_REPO/linux_debian_bullseye_ci:latest
     cpu: $CPUS
     greedy: true
+    use_in_memory_disk: true
 
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*linux.*'
 
@@ -525,6 +526,7 @@ task:
   container:
     image: $CONTAINER_REPO/linux_debian_bullseye_ci:latest
     cpu: $CPUS
+    use_in_memory_disk: true
 
   sysinfo_script: |
     id
