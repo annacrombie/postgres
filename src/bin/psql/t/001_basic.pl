@@ -6,7 +6,8 @@ use warnings;
 
 use PostgreSQL::Test::Cluster;
 use PostgreSQL::Test::Utils;
-use Test::More tests => 25;
+
+use Test::More tests => 29;
 
 program_help_ok('psql');
 program_version_ok('psql');
@@ -80,3 +81,19 @@ psql_like(
 	'handling of unexpected PQresultStatus',
 	'START_REPLICATION 0/0',
 	undef, qr/unexpected PQresultStatus: 8$/);
+
+# Test voluntary crash
+my ($ret, $out, $err) = $node->psql(
+	'postgres',
+	"SELECT 'before' AS running;\n" .
+	"SELECT pg_terminate_backend(pg_backend_pid());\n" .
+	"SELECT 'AFTER' AS not_running;\n");
+
+is($ret, 2, "server stopped");
+like($out, qr/before/, "output before crash");
+ok($out !~ qr/AFTER/, "no output after crash");
+is($err, 'psql:<stdin>:2: FATAL:  terminating connection due to administrator command
+psql:<stdin>:2: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+psql:<stdin>:2: fatal: connection to server was lost', "expected error message");

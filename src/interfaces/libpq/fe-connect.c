@@ -6771,6 +6771,12 @@ PQerrorMessage(const PGconn *conn)
 	return conn->errorMessage.data;
 }
 
+void
+PQclearErrorMessage(PGconn *conn)
+{
+	resetPQExpBuffer(&conn->errorMessage);
+}
+
 /*
  * In Windows, socket values are unsigned, and an invalid socket value
  * (INVALID_SOCKET) is ~0, which equals -1 in comparisons (with no compiler

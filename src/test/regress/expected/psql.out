@@ -5290,3 +5290,129 @@ ERROR:  relation "notexists" does not exist
 LINE 1: SELECT * FROM notexists;
                       ^
 STATEMENT:  SELECT * FROM notexists;
+ one 
+-----
+   1
+(1 row)
+
+NOTICE:  warn 1.5
+CONTEXT:  PL/pgSQL function warn(text) line 2 at RAISE
+ warn 
+------
+ t
+(1 row)
+
+ two 
+-----
+   2
+(1 row)
+
+ three 
+-------
+     3
+(1 row)
+
+NOTICE:  warn 3.5
+CONTEXT:  PL/pgSQL function warn(text) line 2 at RAISE
+ warn 
+------
+ t
+(1 row)
+
+:three 4
+ERROR:  syntax error at or near ";"
+LINE 1: SELECT 5 ; SELECT 6 + ; SELECT warn('6.5') ; SELECT 7 ;
+                              ^
+ eight 
+-------
+     8
+(1 row)
+
+ERROR:  division by zero
+ begin 
+-------
+ ok
+(1 row)
+
+Calvin
+Susie
+Hobbes
+ done 
+------
+ ok
+(1 row)
+
+NOTICE:  warn 1.5
+CONTEXT:  PL/pgSQL function warn(text) line 2 at RAISE
+ two 
+-----
+   2
+(1 row)
+
+# initial AUTOCOMMIT: on
+# AUTOCOMMIT: off
+   s   
+-------
+ hello
+ world
+(2 rows)
+
+# AUTOCOMMIT: on
+   s   
+-------
+ hello
+ world
+(2 rows)
+
+# final AUTOCOMMIT: on
+# initial ON_ERROR_ROLLBACK: off
+# ON_ERROR_ROLLBACK: on
+# AUTOCOMMIT: on
+ERROR:  type "no_such_type" does not exist
+LINE 1: CREATE TABLE bla(s NO_SUCH_TYPE);
+                           ^
+ERROR:  error oops!
+CONTEXT:  PL/pgSQL function psql_error(text) line 3 at RAISE
+   s    
+--------
+ Calvin
+ Hobbes
+(2 rows)
+
+     show     
+--------------
+ before error
+(1 row)
+
+ERROR:  error boum!
+CONTEXT:  PL/pgSQL function psql_error(text) line 3 at RAISE
+ERROR:  error bam!
+CONTEXT:  PL/pgSQL function psql_error(text) line 3 at RAISE
+       s       
+---------------
+ Calvin
+ Hobbes
+ Miss Wormwood
+ Susie
+(4 rows)
+
+# AUTOCOMMIT: off
+ERROR:  error bad!
+CONTEXT:  PL/pgSQL function psql_error(text) line 3 at RAISE
+ #mum 
+------
+    1
+(1 row)
+
+ERROR:  error bad!
+CONTEXT:  PL/pgSQL function psql_error(text) line 3 at RAISE
+       s       
+---------------
+ Calvin
+ Dad
+ Hobbes
+ Miss Wormwood
+ Susie
+(5 rows)
+
+# final ON_ERROR_ROLLBACK: off
