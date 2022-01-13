@@ -117,6 +117,65 @@ empty_signal_handler(SIGNAL_ARGS)
 }
 #endif
 
+#if defined(WIN32)
+#include <crtdbg.h>
+#endif
+
+static void
+startup_hacks(const char *progname)
+{
+	/*
+	 * Windows-specific execution environment hacking.
+	 */
+#ifdef WIN32
+	{
+		/*
+		 * By default abort() only generates a crash-dump in *non* debug
+		 * builds. As our Assert() / ExceptionalCondition() uses abort(),
+		 * leaving the default in place would make debugging harder.
+		 */
+#if !defined(__MINGW32__) && !defined(__MINGW64__)
+		_set_abort_behavior(_CALL_REPORTFAULT | _WRITE_ABORT_MSG,
+							_CALL_REPORTFAULT | _WRITE_ABORT_MSG);
+#endif /* MINGW */
+
+		/*
+		 * SEM_FAILCRITICALERRORS causes more errors to be reported to
+		 * callers.
+		 *
+		 * We used to also specify SEM_NOGPFAULTERRORBOX, but that prevents
+		 * windows crash reporting from working. Which includes registered
+		 * just-in-time debuggers. Now we try to disable sources of popups
+		 * separately below (note that SEM_NOGPFAULTERRORBOX didn't actually
+		 * prevent all sources of such popups).
+		 */
+		SetErrorMode(SEM_FAILCRITICALERRORS);
+
+		/*
+		 * Show errors on stderr instead of popup box (note this doesn't
+		 * affect errors originating in the C runtime, see below).
+		 */
+		_set_error_mode(_OUT_TO_STDERR);
+
+		/*
+		 * In DEBUG builds, errors, including assertions, C runtime errors are
+		 * reported via _CrtDbgReport. By default such errors are displayed
+		 * with a popup (even with NOGPFAULTERRORBOX), preventing forward
+		 * progress. Instead report such errors stderr (and the
+		 * debugger). This is C runtime specific and thus the above
+		 * incantations aren't sufficient to suppress these popups.
+		 */
+		_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+		_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+		_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+		_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+		_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
+	}
+#endif							/* WIN32 */
+
+}
+
 /*
  *
  * main
@@ -129,6 +188,8 @@ main(int argc, char *argv[])
 	int			successResult;
 	char	   *password = NULL;
 	bool		new_pass;
+
+	startup_hacks(argv[0]);
 
 	pg_logging_init(argv[0]);
 	pg_logging_set_pre_callback(log_pre_callback);
