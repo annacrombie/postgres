@@ -346,7 +346,7 @@ task:
     #
     # The concrete choice of 10 is based on a small bit of experimentation and
     # likely can be improved upon further.
-    PROVE_FLAGS: -j10 --timer
+    PROVE_FLAGS: -j10 --timer --verbose
 
     # The default cirrus working dir is in a directory msbuild complains about
     CIRRUS_WORKING_DIR: "c:/cirrus"
@@ -385,6 +385,16 @@ task:
   tempinstall_script:
     # Installation on windows currently only completely works from src/tools/msvc
     - cd src/tools/msvc && perl install.pl %CIRRUS_WORKING_DIR%/tmp_install
+
+  psql_test_tcp_script: |
+    echo %PG_TEST_USE_UNIX_SOCKETS%
+    set PG_TEST_USE_UNIX_SOCKETS=
+    echo %PG_TEST_USE_UNIX_SOCKETS%
+    "C:/Program Files/Git/usr/bin/timeout.exe" --kill-after=10m --verbose 5m perl src/tools/msvc/vcregress.pl taptest ./src/bin/psql
+
+  psql_test_llocal_script: |
+    echo %PG_TEST_USE_UNIX_SOCKETS%
+    "C:/Program Files/Git/usr/bin/timeout.exe" --kill-after=10m --verbose 5m perl src/tools/msvc/vcregress.pl taptest ./src/bin/psql
 
   test_regress_parallel_script:
     - perl src/tools/msvc/vcregress.pl check parallel
