@@ -637,14 +637,13 @@ copy_read_data(void *outbuf, int minread, int maxread)
 
 	while (maxread > 0 && bytesread < minread)
 	{
-		pgsocket	fd = PGINVALID_SOCKET;
 		int			len;
 		char	   *buf = NULL;
 
 		for (;;)
 		{
 			/* Try read the data. */
-			len = walrcv_receive(LogRepWorkerWalRcvConn, &buf, &fd);
+			len = walrcv_receive(LogRepWorkerWalRcvConn, &buf);
 
 			CHECK_FOR_INTERRUPTS();
 
@@ -676,11 +675,8 @@ copy_read_data(void *outbuf, int minread, int maxread)
 		/*
 		 * Wait for more data or latch.
 		 */
-		(void) WaitLatchOrSocket(MyLatch,
-								 WL_SOCKET_READABLE | WL_LATCH_SET |
-								 WL_TIMEOUT | WL_EXIT_ON_PM_DEATH,
-								 fd, 1000L, WAIT_EVENT_LOGICAL_SYNC_DATA);
-
+		(void) walrcv_wait(LogRepWorkerWalRcvConn, 1000L,
+						   WAIT_EVENT_LOGICAL_SYNC_DATA);
 		ResetLatch(MyLatch);
 	}
 
@@ -967,6 +963,7 @@ LogicalRepSyncTableStart(XLogRecPtr *origin_startpos)
 	 * application_name, so that it is different from the main apply worker,
 	 * so that synchronous replication can distinguish them.
 	 */
+	Assert(LogRepWorkerWalRcvConn == NULL);
 	LogRepWorkerWalRcvConn =
 		walrcv_connect(MySubscription->conninfo, true, slotname, &err);
 	if (LogRepWorkerWalRcvConn == NULL)

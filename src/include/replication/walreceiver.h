@@ -254,6 +254,17 @@ typedef void (*walrcv_check_conninfo_fn) (const char *conninfo);
 typedef char *(*walrcv_get_conninfo_fn) (WalReceiverConn *conn);
 
 /*
+ * walrcv_wait_fn
+ *
+ * Waits for socket to become readable, or a latch interrupt.
+ *
+ * timeout is passed on to WaitEventSetWait(), return value is
+ * like WaitLatchOrSocket's.
+ */
+typedef int (*walrcv_wait_fn) (WalReceiverConn *conn, long timeout,
+							   uint32 wait_event_info);
+
+/*
  * walrcv_get_senderinfo_fn
  *
  * Provide information of the WAL sender this WAL receiver is connected
@@ -317,14 +328,13 @@ typedef void (*walrcv_endstreaming_fn) (WalReceiverConn *conn,
 /*
  * walrcv_receive_fn
  *
- * Receive a message available from the WAL stream.  'buffer' is a pointer
- * to a buffer holding the message received.  Returns the length of the data,
- * 0 if no data is available yet ('wait_fd' is a socket descriptor which can
- * be waited on before a retry), and -1 if the cluster ended the COPY.
+ * Receive a message available from the WAL stream.  'buffer' is a pointer to
+ * a buffer holding the message received.  Returns the length of the data, 0
+ * if no data is available yet (see walrcv_wait()), and -1 if the cluster
+ * ended the COPY.
  */
 typedef int (*walrcv_receive_fn) (WalReceiverConn *conn,
-								  char **buffer,
-								  pgsocket *wait_fd);
+								  char **buffer);
 
 /*
  * walrcv_send_fn
@@ -385,6 +395,7 @@ typedef struct WalReceiverFunctionsType
 	walrcv_connect_fn walrcv_connect;
 	walrcv_check_conninfo_fn walrcv_check_conninfo;
 	walrcv_get_conninfo_fn walrcv_get_conninfo;
+	walrcv_wait_fn walrcv_wait;
 	walrcv_get_senderinfo_fn walrcv_get_senderinfo;
 	walrcv_identify_system_fn walrcv_identify_system;
 	walrcv_server_version_fn walrcv_server_version;
@@ -407,6 +418,8 @@ extern PGDLLIMPORT WalReceiverFunctionsType *WalReceiverFunctions;
 	WalReceiverFunctions->walrcv_check_conninfo(conninfo)
 #define walrcv_get_conninfo(conn) \
 	WalReceiverFunctions->walrcv_get_conninfo(conn)
+#define walrcv_wait(conn, timeout, wait_event_info) \
+	WalReceiverFunctions->walrcv_wait(conn, timeout, wait_event_info)
 #define walrcv_get_senderinfo(conn, sender_host, sender_port) \
 	WalReceiverFunctions->walrcv_get_senderinfo(conn, sender_host, sender_port)
 #define walrcv_identify_system(conn, primary_tli) \
@@ -419,8 +432,8 @@ extern PGDLLIMPORT WalReceiverFunctionsType *WalReceiverFunctions;
 	WalReceiverFunctions->walrcv_startstreaming(conn, options)
 #define walrcv_endstreaming(conn, next_tli) \
 	WalReceiverFunctions->walrcv_endstreaming(conn, next_tli)
-#define walrcv_receive(conn, buffer, wait_fd) \
-	WalReceiverFunctions->walrcv_receive(conn, buffer, wait_fd)
+#define walrcv_receive(conn, buffer) \
+	WalReceiverFunctions->walrcv_receive(conn, buffer)
 #define walrcv_send(conn, buffer, nbytes) \
 	WalReceiverFunctions->walrcv_send(conn, buffer, nbytes)
 #define walrcv_create_slot(conn, slotname, temporary, two_phase, snapshot_action, lsn) \
