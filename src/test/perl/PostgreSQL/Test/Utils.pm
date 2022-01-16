@@ -57,6 +57,7 @@ use File::stat qw(stat);
 use File::Temp ();
 use IPC::Run;
 use PostgreSQL::Test::SimpleTee;
+use Time::HiRes qw(time);
 
 # We need a version of Test::More recent enough to support subtests
 use Test::More 0.98;
@@ -89,10 +90,12 @@ our @EXPORT = qw(
   $windows_os
   $is_msys2
   $use_unix_sockets
+
+  $test_start_time
 );
 
 our ($windows_os, $is_msys2, $use_unix_sockets, $tmp_check, $log_path,
-	$test_logfile);
+	$test_logfile, $test_start_time);
 
 BEGIN
 {
@@ -172,6 +175,10 @@ Set to true when running under Windows, except on Cygwin.
 
 Set to true when running under MSYS2.
 
+=item C<$test_start_time>
+
+Time::HiRes::time() at start of test
+
 =back
 
 =cut
@@ -221,6 +228,8 @@ INIT
 	autoflush STDOUT 1;
 	autoflush STDERR 1;
 	autoflush $testlog 1;
+
+	$test_start_time = Time::HiRes::time();
 }
 
 END
@@ -360,8 +369,16 @@ value is passed through.
 
 sub system_log
 {
+	my $rc;
+	my $start_time = time();
+
 	print("# Running: " . join(" ", @_) . "\n");
-	return system(@_);
+	$rc = system(@_);
+
+
+	print("# ran in ".sprintf('%.3fs', time() - $start_time)."\n");
+
+	return $rc;
 }
 
 =pod

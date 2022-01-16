@@ -105,7 +105,7 @@ use PostgreSQL::Test::RecursiveCopy;
 use Socket;
 use Test::More;
 use PostgreSQL::Test::Utils ();
-use Time::HiRes qw(usleep);
+use Time::HiRes qw(usleep time);
 use Scalar::Util qw(blessed);
 
 our ($use_tcp, $test_localhost, $test_pghost, $last_host_assigned,
@@ -1754,7 +1754,12 @@ sub psql
 			push @ipcrun_opts, '2>', $stderr if defined $stderr;
 			push @ipcrun_opts, $timeout if defined $timeout;
 
+			my $start = time();
+
 			IPC::Run::run @ipcrun_opts;
+
+			diag("completed psql in ".sprintf('%.3f', time() - $start)."s running $sql");
+
 			$ret = $?;
 		};
 		my $exc_save = $@;
@@ -2268,6 +2273,8 @@ sub poll_query_until
 	my $max_attempts = 180 * 10;
 	my $attempts     = 0;
 
+	my $start = time();
+
 	while ($attempts < $max_attempts)
 	{
 		my $result = IPC::Run::run $cmd, '<', \$query,
@@ -2280,6 +2287,7 @@ sub poll_query_until
 
 		if ($stdout eq $expected && $stderr eq '')
 		{
+			diag("completed poll_query_until after $attempts attempts in ".sprintf('%.3f', time() - $start)."s running $query");
 			return 1;
 		}
 
