@@ -1637,6 +1637,10 @@ sendFile(bbsink *sink, const char *readfilename, const char *tarfilename,
 	AddFileToBackupManifest(manifest, spcoid, tarfilename, statbuf->st_size,
 							(pg_time_t) statbuf->st_mtime, &checksum_ctx);
 
+	elog(DEBUG2,
+		 "basebackup sent file \"%s\"",
+		 readfilename);
+
 	return true;
 }
 

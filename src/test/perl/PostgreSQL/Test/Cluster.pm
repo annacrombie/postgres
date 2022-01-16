@@ -104,8 +104,8 @@ use PostgreSQL::Version;
 use PostgreSQL::Test::RecursiveCopy;
 use Socket;
 use Test::More;
-use PostgreSQL::Test::Utils ();
-use Time::HiRes qw(usleep);
+use PostgreSQL::Test::Utils qw($test_start_time log_progress log_progress_ts);
+use Time::HiRes qw(usleep time);
 use Scalar::Util qw(blessed);
 
 our ($use_tcp, $test_localhost, $test_pghost, $last_host_assigned,
@@ -604,6 +604,7 @@ sub backup
 		$self->host,     '-p',
 		$self->port,     '--checkpoint',
 		'fast',          '--no-sync',
+		'--label',       $backup_name,
 		@{ $params{backup_options} });
 	print "# Backup finished\n";
 	return;
@@ -1754,7 +1755,12 @@ sub psql
 			push @ipcrun_opts, '2>', $stderr if defined $stderr;
 			push @ipcrun_opts, $timeout if defined $timeout;
 
+			my $start = time();
+
 			IPC::Run::run @ipcrun_opts;
+
+			log_progress_ts($start, "psql completed running $sql");
+
 			$ret = $?;
 		};
 		my $exc_save = $@;
@@ -2268,6 +2274,8 @@ sub poll_query_until
 	my $max_attempts = 180 * 10;
 	my $attempts     = 0;
 
+	my $start = time();
+
 	while ($attempts < $max_attempts)
 	{
 		my $result = IPC::Run::run $cmd, '<', \$query,
@@ -2280,6 +2288,7 @@ sub poll_query_until
 
 		if ($stdout eq $expected && $stderr eq '')
 		{
+			log_progress_ts($start, "poll_query_until completed, in $attempts, running $query");
 			return 1;
 		}
 
