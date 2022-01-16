@@ -604,6 +604,7 @@ sub backup
 		$self->host,     '-p',
 		$self->port,     '--checkpoint',
 		'fast',          '--no-sync',
+		'--status-interval=1',
 		@{ $params{backup_options} });
 	print "# Backup finished\n";
 	return;
