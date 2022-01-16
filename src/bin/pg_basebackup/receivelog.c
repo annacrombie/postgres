@@ -37,8 +37,8 @@ static bool still_sending = true;	/* feedback still needs to be sent? */
 
 static PGresult *HandleCopyStream(PGconn *conn, StreamCtl *stream,
 								  XLogRecPtr *stoppos);
-static int	CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket);
-static int	CopyStreamReceive(PGconn *conn, long timeout, pgsocket stop_socket,
+static int	CopyStreamPoll(PGconn *conn, long timeout_ms, StreamCtl *stream);
+static int	CopyStreamReceive(PGconn *conn, long timeout, StreamCtl *stream,
 							  char **buffer);
 static bool ProcessKeepaliveMsg(PGconn *conn, StreamCtl *stream, char *copybuf,
 								int len, XLogRecPtr blockpos, TimestampTz *last_status);
@@ -813,7 +813,7 @@ HandleCopyStream(PGconn *conn, StreamCtl *stream,
 		sleeptime = CalculateCopyStreamSleeptime(now, stream->standby_message_timeout,
 												 last_status);
 
-		r = CopyStreamReceive(conn, sleeptime, stream->stop_socket, &copybuf);
+		r = CopyStreamReceive(conn, sleeptime, stream, &copybuf);
 		while (r != 0)
 		{
 			if (r == -1)
@@ -858,7 +858,7 @@ HandleCopyStream(PGconn *conn, StreamCtl *stream,
 			 * Process the received data, and any subsequent data we can read
 			 * without blocking.
 			 */
-			r = CopyStreamReceive(conn, 0, stream->stop_socket, &copybuf);
+			r = CopyStreamReceive(conn, 0, stream, &copybuf);
 		}
 	}
 
@@ -877,8 +877,9 @@ error:
  * or interrupted by signal or stop_socket input, and -1 on an error.
  */
 static int
-CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket)
+CopyStreamPoll(PGconn *conn, long timeout_ms, StreamCtl *stream)
 {
+#ifndef WIN32
 	int			ret;
 	fd_set		input_mask;
 	int			connsocket;
@@ -896,10 +897,10 @@ CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket)
 	FD_ZERO(&input_mask);
 	FD_SET(connsocket, &input_mask);
 	maxfd = connsocket;
-	if (stop_socket != PGINVALID_SOCKET)
+	if (stream->stop_socket != PGINVALID_SOCKET)
 	{
-		FD_SET(stop_socket, &input_mask);
-		maxfd = Max(maxfd, stop_socket);
+		FD_SET(stream->stop_socket, &input_mask);
+		maxfd = Max(maxfd, stream->stop_socket);
 	}
 
 	if (timeout_ms < 0)
@@ -924,6 +925,77 @@ CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket)
 		return 1;				/* Got input on connection socket */
 
 	return 0;					/* Got timeout or input on stop_socket */
+#else
+	int			ret;
+	int			rc;
+	HANDLE	   *network_event;
+	int			nevents = 0;
+	HANDLE		events[2];
+
+	network_event = WSACreateEvent();
+	if (network_event == WSA_INVALID_EVENT)
+	{
+		pg_log_error("failed to create event for socket: error code %d",
+					 WSAGetLastError());
+		exit(1);
+	}
+
+	if (WSAEventSelect(PQsocket(conn), network_event, FD_READ | FD_CLOSE) != 0)
+	{
+		pg_log_error("failed to set up event for socket: error code %d",
+					 WSAGetLastError());
+		exit(1);
+	}
+
+	events[0] = network_event;
+	nevents++;
+
+	if (stream->stop_event != NULL)
+	{
+		events[1] = stream->stop_event;
+		nevents++;
+	}
+
+	/* map timeout_ms to WaitForMultipleObjects expectations */
+	if (timeout_ms < 0)
+		timeout_ms = INFINITE;
+
+	rc = WaitForMultipleObjects(nevents, events, FALSE, timeout_ms);
+
+	if (rc == WAIT_FAILED)
+	{
+		pg_log_error("WaitForMultipleObjects() failed: error code %lu",
+					 GetLastError());
+		exit(1);
+	}
+	else if (rc == WAIT_TIMEOUT)
+	{
+		/* timeout exceeded */
+		ret = 0;
+	}
+	else if (rc == WAIT_OBJECT_0)
+	{
+		/* Got input on connection socket */;
+		ret = 1;
+	}
+	else if (rc == (WAIT_OBJECT_0 + 1))
+	{
+		Assert(stream->stop_event != NULL);
+		/* Got event on stop socket  */;
+		ret = 0;
+	}
+	else
+	{
+		pg_log_error("unexpected return from WaitForMultipleObjects(): %d", rc);
+		exit(1);
+	}
+
+	/* reset event association for libpq socket, clean up event */
+	WSAEventSelect(PQsocket(conn), NULL, 0);
+	WSACloseEvent(network_event);
+
+	return ret;
+#endif /* WIN32 */
 }
 
 /*
@@ -939,7 +1011,7 @@ CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket)
  * -1 on error. -2 if the server ended the COPY.
  */
 static int
-CopyStreamReceive(PGconn *conn, long timeout, pgsocket stop_socket,
+CopyStreamReceive(PGconn *conn, long timeout, StreamCtl *stream,
 				  char **buffer)
 {
 	char	   *copybuf = NULL;
@@ -960,7 +1032,7 @@ CopyStreamReceive(PGconn *conn, long timeout, pgsocket stop_socket,
 		 * the specified timeout, so that we can ping the server.  Also stop
 		 * waiting if input appears on stop_socket.
 		 */
-		ret = CopyStreamPoll(conn, timeout, stop_socket);
+		ret = CopyStreamPoll(conn, timeout, stream);
 		if (ret <= 0)
 			return ret;
 
