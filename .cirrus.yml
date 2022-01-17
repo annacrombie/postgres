@@ -346,7 +346,7 @@ task:
     #
     # The concrete choice of 10 is based on a small bit of experimentation and
     # likely can be improved upon further.
-    PROVE_FLAGS: -j10 --timer
+    PROVE_FLAGS: -j10 -v --timer --color
 
     # The default cirrus working dir is in a directory msbuild complains about
     CIRRUS_WORKING_DIR: "c:/cirrus"
