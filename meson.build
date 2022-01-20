@@ -152,7 +152,7 @@ sed = find_program(get_option('SED'), 'sed', native: true)
 prove = find_program(get_option('PROVE'))
 tar = find_program(get_option('TAR'), native: true)
 gzip = find_program(get_option('GZIP'), native: true)
-program_lz4 = find_program(get_option('LZ4'), native: true)
+program_lz4 = find_program(get_option('LZ4'), native: true, required: false)
 touch = find_program('touch', native: true)
 
 # Internal programs
