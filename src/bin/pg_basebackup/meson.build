@@ -38,7 +38,9 @@ tap_tests += {
   'name' : 'pg_basebackup',
   'sd': meson.current_source_dir(),
   'bd': meson.current_build_dir(),
-  'env': {'GZIP_PROGRAM': gzip.path(), 'TAR': tar.path(), 'LZ4': program_lz4.path()},
+  'env': {'GZIP_PROGRAM': gzip.path(),
+          'TAR': tar.path(),
+          'LZ4': program_lz4.found() ? program_lz4.path() : ''},
   'tests': [
     't/010_pg_basebackup.pl',
     't/020_pg_receivewal.pl',
