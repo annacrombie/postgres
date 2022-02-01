@@ -365,6 +365,7 @@ task:
     # disable file tracker, we're never going to rebuild, and it slows down the
     #   build
     MSBFLAGS: -m -verbosity:minimal "-consoleLoggerParameters:Summary;ForceNoAlign" /p:TrackFileAccess=false -nologo
+    PATH: "c:/strawberry/5.32.1.1/perl/bin;$PATH"
 
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*windows.*'
 
@@ -378,6 +379,7 @@ task:
     systeminfo
     powershell -Command get-psdrive -psprovider filesystem
     set
+    where.exe perl.exe
 
   configure_script:
     # copy errors out when using forward slashes
