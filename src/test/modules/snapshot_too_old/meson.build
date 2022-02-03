@@ -2,6 +2,7 @@ isolation_tests += {
   'name': 'snapshot_too_old',
   'sd': meson.current_source_dir(),
   'bd': meson.current_build_dir(),
+  'test_kwargs': {'priority': 40}, # sto tests are slow, start early
   'specs': [
     'sto_using_cursor',
     'sto_using_select',
