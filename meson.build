@@ -698,6 +698,7 @@ Use -Dreadline=false to disable readline support.''')
       cdata.set('HAVE_'+var.to_upper(),
         cc.has_header_symbol(readline_h, var,
           args: g_c_args, include_directories: g_c_inc,
+          prefix: '#include <stdio.h>',
           dependencies: [readline]) ? 1 : false)
     endforeach
   endif
