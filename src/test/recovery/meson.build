@@ -2,6 +2,7 @@ tap_tests += {
   'name': 'recovery',
   'sd': meson.current_source_dir(),
   'bd': meson.current_build_dir(),
+  'test_kwargs': {'priority': 40}, # recovery tests are slow, start early
   'tests' : [
     't/001_stream_rep.pl',
     't/002_archiving.pl',
