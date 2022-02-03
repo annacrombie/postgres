@@ -1,8 +1,9 @@
 common_sources = files(
-  'receivelog.c',
   'bbstreamer_file.c',
+  'bbstreamer_gzip.c',
   'bbstreamer_inject.c',
   'bbstreamer_tar.c',
+  'receivelog.c',
   'streamutil.c',
   'walmethods.c',
 )

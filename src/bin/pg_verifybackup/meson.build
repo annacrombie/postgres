@@ -21,5 +21,7 @@ tap_tests += {
     't/005_bad_manifest.pl',
     't/006_encoding.pl',
     't/007_wal.pl',
+    't/008_untar.pl',
+    't/009_extract.pl',
   ]
 }

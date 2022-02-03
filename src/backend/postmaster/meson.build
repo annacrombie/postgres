@@ -9,6 +9,7 @@ backend_sources += files(
   'pgarch.c',
   'pgstat.c',
   'postmaster.c',
+  'shell_archive.c',
   'startup.c',
   'syslogger.c',
   'walwriter.c',

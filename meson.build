@@ -1942,7 +1942,7 @@ backend_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [],
   sources: generated_headers + generated_backend_headers,
-  dependencies: [os_deps, ssl, lz4, icu, icu_i18n, ldap, gssapi, libxml, systemd],
+  dependencies: [os_deps, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, systemd],
 )
 
 # Note there's intentionally no dependency on pgport/common here - we want the
@@ -1953,7 +1953,7 @@ backend_mod_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [],
   sources: generated_headers + generated_backend_headers,
-  dependencies: [os_deps, ssl, lz4, icu, icu_i18n, ldap, gssapi, libxml, systemd],
+  dependencies: [os_deps, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, systemd],
 )
 
 # Then through the main sources. That way contrib can have dependencies on
