@@ -281,8 +281,8 @@ if not ldapopt.disabled()
     if ldap.found()
       ldap_r = ldap
     else
-      ldap = cc.find_library('ldap', required: ldapopt)
-      ldap_r = cc.find_library('ldap_r', required: ldapopt)
+      ldap = cc.find_library('ldap', required: ldapopt, dirs: g_c_lib)
+      ldap_r = cc.find_library('ldap_r', required: ldapopt, dirs: g_c_lib)
 
       # Use ldap_r for FE if available, else assume ldap is thread-safe.
       # On some platforms ldap_r fails to link without PTHREAD_LIBS.
@@ -293,6 +293,18 @@ if not ldapopt.disabled()
 
     if ldap.found() and cc.has_function('ldap_initialize', args: g_c_args, dependencies: [ldap, thread_dep])
       cdata.set('HAVE_LDAP_INITIALIZE', 1)
+    endif
+
+    # If found via cc.find_library() ensure headers are found when using the
+    # dependency. On meson < 0.57 one cannot do compiler checks using the
+    # dependency returned by declare_dependency(), so we can't do this above.
+    if ldap.type_name() == 'library'
+      # declare dependency so that the additional include dir it might reside in
+      # is added automatically where necessary
+      ldap = declare_dependency(dependencies: ldap,
+        include_directories: g_c_inc)
+      ldap_r = declare_dependency(dependencies: ldap_r,
+        include_directories: g_c_inc)
     endif
   endif
 
@@ -631,7 +643,8 @@ if not get_option('readline').disabled()
   readline = dependency('readline', required: false)
   if not readline.found()
     readline = cc.find_library('readline',
-      required: get_option('readline').enabled())
+      required: get_option('readline').enabled(),
+      dirs: g_c_lib)
   endif
 
   if readline.found()
@@ -701,6 +714,14 @@ Use -Dreadline=false to disable readline support.''')
           prefix: '#include <stdio.h>',
           dependencies: [readline]) ? 1 : false)
     endforeach
+
+    # If found via cc.find_library() ensure headers are found when using the
+    # dependency. On meson < 0.57 one cannot do compiler checks using the
+    # dependency returned by declare_dependency(), so we can't do this above.
+    if readline.type_name() == 'library'
+      readline = declare_dependency(dependencies: readline,
+        include_directories: g_c_inc)
+    endif
   endif
 else
   readline = dependency('', required : false)
