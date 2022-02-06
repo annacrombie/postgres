@@ -1651,7 +1651,7 @@ func_checks = [
   ['ppoll'],
   ['pread'],
   ['pstat'],
-  ['pthread_is_threaded_np'],
+  ['pthread_is_threaded_np', {'dependencies': [thread_dep]}],
   ['pwrite'],
   ['random'],
   ['readlink'],
