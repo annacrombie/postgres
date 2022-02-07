@@ -1,8 +1,8 @@
 FROM opensuse/tumbleweed
 RUN \
-  zypper clean -a && \
-  zypper ref && \
-  zypper dup && \
+  zypper -n clean -a && \
+  zypper -n ref && \
+  zypper -n dup && \
   zypper -n update && \
   zypper -n install \
   diffutils \
@@ -44,7 +44,7 @@ RUN \
   krb5-devel \
   krb5-plugin-kdb-ldap \
   krb5-server && \
-  zypper cc
+  zypper -n cc
 # Fixing libperl.so not found error
 RUN \
   find /usr/lib/ -name libperl.so -exec ln -sf '{}' /usr/lib64/libperl.so ';'
