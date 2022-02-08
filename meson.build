@@ -560,30 +560,17 @@ else
 
     message('CCFLAGS for embedding perl: @0@'.format(' '.join(perl_ccflags)))
 
-    # perl.m4 sayeth:
-    #
-    # We are after Embed's ldopts, but without the subset mentioned in
-    # Config's ccdlflags;
-    #
-    # FIXME: andres sayeth: But why?
-
     ldopts = run_command(perl, '-MExtUtils::Embed', '-e', 'ldopts', check: true).stdout().strip()
-    ccdlflags = run_command(perl_conf_cmd, 'ccdlflags', check: true).stdout().strip()
-
-    ccdlflags_dict = {}
-
-    foreach ccdlflag : ccdlflags.split(' ')
-      ccdlflags_dict += {ccdlflag: 1}
-    endforeach
 
     perl_ldopts = []
     foreach ldopt : ldopts.split(' ')
       if ldopt == ''
         continue
-      elif ccdlflags_dict.has_key(ldopt)
-        continue
       # strawberry perl unhelpfully has that in ldopts
       elif ldopt == '-s'
+        continue
+      # AIX perl has export file in ldopts
+      elif ldopt.startswith('-bE')
         continue
       endif
 
@@ -592,8 +579,8 @@ else
 
     # FIXME: check if windows handling is necessary
 
-    message('LDFLAGS for embedding perl: "@0@" (ccdlflags: "@1@", ldopts: "@2@")'.format(
-      ' '.join(perl_ldopts), ccdlflags, ldopts))
+    message('LDFLAGS for embedding perl: "@0@" (ldopts: "@1@")'.format(
+      ' '.join(perl_ldopts), ldopts))
 
     if perl_dep_int.found()
       perl_dep = declare_dependency(
