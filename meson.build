@@ -1035,10 +1035,18 @@ if cc.has_type('_Bool', args: g_c_args) \
 endif
 
 
+# Need to check a call with %m because netbsd supports gnu_printf but emits a
+# warning for each use of %m.
 printf_attributes = ['gnu_printf', '__syslog__', 'printf']
-testsrc = 'extern void pgac_write(int ignore, const char *fmt,...) __attribute__((format(@0@, 2,3)));'
+testsrc = '''
+extern void log(int ignore, const char *fmt,...) __attribute__((format(@0@, 2,3)));
+static void call_log(void)
+{
+    log(0, "error: %s: %m", "foo");
+}
+'''
 foreach a : printf_attributes
-  if cc.compiles(testsrc.format(a), args: g_c_args + ['-Werror'], name: 'format ' + a)
+  if cc.compiles(testsrc.format(a), args: g_c_args + ['-Werror=format'], name: 'format ' + a)
     cdata.set('PG_PRINTF_ATTRIBUTE', a)
     break
   endif
