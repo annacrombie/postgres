@@ -46,8 +46,6 @@ RUN \
   krb5-server && \
   \
   zypper -n clean -a
-# Fixing libperl.so not found error
-RUN \
-  find /usr/lib/ -name libperl.so -exec ln -sf '{}' /usr/lib64/libperl.so ';'
+
 # Fixing ICU errors caused by locale being set to 'POSIX' 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
