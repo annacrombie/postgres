@@ -85,6 +85,7 @@ task:
   <<: *freebsd_template
 
   name: FreeBSD - 13 - Autoconf
+  trigger_type: manual
 
   # NB: Intentionally build without --with-llvm. The freebsd image size is
   # already large enough to make VM startup slow, and even without llvm
@@ -220,6 +221,7 @@ task:
   <<: *linux_debian_template
 
   name: Linux - Debian Bullseye - Autoconf
+  trigger_type: manual
 
   configure_script: |
     su postgres <<-EOF
@@ -324,6 +326,7 @@ task:
   <<: *linux_opensuse_template
 
   name: Linux - OpenSuse Tumbleweed - Autoconf
+  trigger_type: manual
 
   configure_script: |
     su postgres <<-EOF
@@ -452,6 +455,7 @@ task:
   <<: *macos_template
 
   name: macOS - Monterey - Autoconf
+  trigger_type: manual
 
   configure_script: |
     brewpath="/usr/local"
@@ -735,6 +739,7 @@ task:
   # To limit unnecessary work only run this once the normal linux test succeeds
   depends_on:
     - Linux - Debian Bullseye - Autoconf
+  trigger_type: manual
 
   env:
     CPUS: 4
