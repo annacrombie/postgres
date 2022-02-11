@@ -1960,7 +1960,7 @@ PQisBusy(PGconn *conn)
 	 * PQgetResult will return immediately in all states except BUSY, or if we
 	 * had a write failure.
 	 */
-	return conn->asyncStatus == PGASYNC_BUSY || conn->write_failed;
+	return conn->asyncStatus == PGASYNC_BUSY && !conn->write_failed;
 }
 
 /*
