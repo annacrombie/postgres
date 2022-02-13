@@ -6,17 +6,17 @@ use warnings;
 use PostgreSQL::Test::Utils;
 use PostgreSQL::Test::Cluster;
 use Test::More;
-
-if ($ENV{with_ldap} ne 'yes')
-{
-	plan skip_all => 'LDAP not supported by this build';
-}
+use Config;
 
 my ($slapd, $ldap_bin_dir, $ldap_schema_dir);
 
 $ldap_bin_dir = undef;    # usually in PATH
 
-if ($^O eq 'darwin' && -d '/usr/local/opt/openldap')
+if ($ENV{with_ldap} ne 'yes')
+{
+	plan skip_all => 'LDAP not supported by this build';
+}
+elsif ($^O eq 'darwin' && -d '/usr/local/opt/openldap')
 {
 	# typical paths for Homebrew
 	$slapd           = '/usr/local/opt/openldap/libexec/slapd';
@@ -38,6 +38,10 @@ elsif ($^O eq 'freebsd')
 {
 	$slapd           = '/usr/local/libexec/slapd';
 	$ldap_schema_dir = '/usr/local/etc/openldap/schema';
+}
+else
+{
+	plan skip_all => "ldap tests not supported on $^O or dependencies not installed";
 }
 
 # make your own edits here
