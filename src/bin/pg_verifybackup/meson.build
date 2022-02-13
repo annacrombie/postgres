@@ -23,5 +23,6 @@ tap_tests += {
     't/007_wal.pl',
     't/008_untar.pl',
     't/009_extract.pl',
+    't/010_client_untar.pl',
   ]
 }
