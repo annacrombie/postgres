@@ -2,6 +2,7 @@ common_sources = files(
   'bbstreamer_file.c',
   'bbstreamer_gzip.c',
   'bbstreamer_inject.c',
+  'bbstreamer_lz4.c',
   'bbstreamer_tar.c',
   'receivelog.c',
   'streamutil.c',
