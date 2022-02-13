@@ -35,10 +35,12 @@ on_failure: &on_failure
       - "**/*.diffs"
       - "**/regress_log_*"
     type: text/plain
+  meson_test_artifacts:
+    path: "build/meson-logs/testlog.junit.xml"
+    type: text/xml
+    format: junit
 
-task:
-  name: FreeBSD - 13
-
+freebsd_template: &freebsd_template
   env:
     # FreeBSD on GCP is slow when running with larger number of CPUS /
     # jobs. Using one more job than cpus seems to work best.
@@ -77,6 +79,12 @@ task:
     mkdir -m 770 /tmp/cores
     chown root:postgres /tmp/cores
     sysctl kern.corefile='/tmp/cores/%N.%P.core'
+
+
+task:
+  <<: *freebsd_template
+
+  name: FreeBSD - 13 - Autoconf
 
   # NB: Intentionally build without --with-llvm. The freebsd image size is
   # already large enough to make VM startup slow, and even without llvm
@@ -122,6 +130,30 @@ task:
     cores_script: src/tools/ci/cores_backtrace.sh freebsd /tmp/cores
 
 
+task:
+  <<: *freebsd_template
+
+  name: FreeBSD - 13 - Meson
+
+  configure_script:
+    - su postgres -c 'meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=bsd build'
+
+  build_script: su postgres -c 'ninja -C build'
+  upload_caches: ccache
+
+  test_world_script:
+    - su postgres -c 'meson test --no-rebuild -C build'
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
+
+  on_failure:
+    <<: *on_failure
+    cores_script: src/tools/ci/cores_backtrace.sh freebsd /tmp/cores
+
+
 # configure feature flags, shared between the task running the linux tests and
 # the CompilerWarnings task
 LINUX_CONFIGURE_FEATURES: &LINUX_CONFIGURE_FEATURES >-
@@ -142,9 +174,7 @@ LINUX_CONFIGURE_FEATURES: &LINUX_CONFIGURE_FEATURES >-
   --with-uuid=ossp
 
 
-task:
-  name: Linux - Debian Bullseye
-
+linux_debian_template: &linux_debian_template
   env:
     CPUS: 4
     BUILD_JOBS: 4
@@ -185,6 +215,12 @@ task:
     chown root:postgres /tmp/cores
     sysctl kernel.core_pattern='/tmp/cores/%e-%s-%p.core'
 
+
+task:
+  <<: *linux_debian_template
+
+  name: Linux - Debian Bullseye - Autoconf
+
   configure_script: |
     su postgres <<-EOF
       ./configure \
@@ -213,9 +249,40 @@ task:
     cores_script: src/tools/ci/cores_backtrace.sh linux /tmp/cores
 
 
-task:
-  name: macOS - Monterey
+task: &linux_debian_bullseye_meson
+  <<: *linux_debian_template
 
+  name: Linux - Debian Bullseye - Meson
+
+  configure_script:
+    - su postgres -c 'meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=e2fs build'
+
+  build_script: su postgres -c 'ninja -C build'
+  upload_caches: ccache
+
+  tests_world_script:
+    - su postgres -c 'meson test --no-rebuild -C build'
+
+  on_failure:
+    <<: *on_failure
+    cores_script: src/tools/ci/cores_backtrace.sh linux /tmp/cores
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
+
+
+task:
+  <<: *linux_debian_bullseye_meson
+
+  name: Linux - Debian Sid - Meson
+
+  compute_engine_instance:
+    image: family/pg-ci-sid
+
+
+macos_template: &macos_template
   env:
     CPUS: 12 # always get that much for cirrusci macOS instances
     BUILD_JOBS: $CPUS
@@ -262,6 +329,7 @@ task:
       llvm \
       lz4 \
       make \
+      meson \
       openldap \
       openssl \
       python \
@@ -272,6 +340,13 @@ task:
 
   ccache_cache:
     folder: $CCACHE_DIR
+
+
+task:
+  <<: *macos_template
+
+  name: macOS - Monterey - Autoconf
+
   configure_script: |
     brewpath="/usr/local"
     INCLUDES="${brewpath}/include:${INCLUDES}"
@@ -330,8 +405,42 @@ task:
 
 
 task:
-  name: Windows - Server 2019, VS 2019
+  <<: *macos_template
 
+  name: macOS - Monterey - Meson
+
+  configure_script: |
+    brewpath="/usr/local"
+    PKG_CONFIG_PATH="${brewpath}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+    for pkg in icu4c krb5 openldap openssl ; do
+      pkgpath="${brewpath}/opt/${pkg}"
+      PKG_CONFIG_PATH="${pkgpath}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+    done
+
+    export PKG_CONFIG_PATH
+
+    meson setup --buildtype debug -Dcassert=true -Dssl=openssl -Duuid=e2fs build
+
+  build_script: ninja -C build
+  upload_caches: ccache
+
+  tests_world_script:
+    - ulimit -c unlimited
+    - ulimit -n 1024
+    - meson test --no-rebuild -C build
+
+  on_failure:
+    <<: *on_failure
+    cores_script: src/tools/ci/cores_backtrace.sh macos "${HOME}/cores"
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
+
+
+windows_template: &windows_template
   env:
     # Half the allowed per-user CPU cores
     CPUS: 4
@@ -383,6 +492,11 @@ task:
     systeminfo
     powershell -Command get-psdrive -psprovider filesystem
     set
+
+
+task:
+  <<: *windows_template
+  name: Windows - Server 2019, VS 2019 - Homegrown
 
   configure_script:
     # copy errors out when using forward slashes
@@ -438,7 +552,74 @@ task:
     <<: *on_failure
     crashlog_artifacts:
       path: "crashlog-*.txt"
+
+
+task:
+  <<: *windows_template
+  name: Windows - Server 2019, VS 2019 - Meson & ninja
+
+  meson_script:
+    - pip install meson
+    - pip install ninja
+
+  configure_script:
+    - vcvarsall x64
+    - mkdir subprojects
+    - meson wrap install lz4
+    - meson wrap install zlib
+    - meson setup --buildtype debug --backend ninja  -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
+
+  build_script:
+    - vcvarsall x64
+    - ninja -C build
+
+  check_world_script:
+    - meson test --no-rebuild -C build
+
+  on_failure:
+    <<: *on_failure
+    crashlog_artifacts:
+      path: "crashlog-*.txt"
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
       type: text/plain
+
+
+task:
+  <<: *windows_template
+  name: Windows - Server 2019, VS 2019 - Meson & msbuild
+
+  # Need a development version of meson for now
+  # XXX: that shouldn't be true anymore
+  meson_script:
+    - git clone https://github.com/mesonbuild/meson.git
+
+  configure_script:
+    - vcvarsall x64
+    - mkdir subprojects
+    - .\meson\meson.py wrap install lz4
+    - .\meson\meson.py wrap install zlib
+    - .\meson\meson.py setup --buildtype debug --backend vs -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
+
+  build_script:
+    - vcvarsall x64
+    - msbuild /p:UseMultiToolTask=true %MSBFLAGS% build\postgresql.sln
+
+  check_world_script:
+    - vcvarsall x64
+    - .\meson\meson.py test --no-rebuild -C build
+
+  always:
+    meson_log_artifacts:
+      path: "build/meson-logs/*.txt"
+      type: text/plain
+
+  on_failure:
+    <<: *on_failure
+    crashlog_artifacts:
+      path: "crashlog-*.txt"
 
 
 task:
@@ -446,7 +627,7 @@ task:
 
   # To limit unnecessary work only run this once the normal linux test succeeds
   depends_on:
-    - Linux - Debian Bullseye
+    - Linux - Debian Bullseye - Autoconf
 
   env:
     CPUS: 4
