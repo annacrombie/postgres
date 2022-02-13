@@ -1944,6 +1944,7 @@ frontend_shlib_code = declare_dependency(
 )
 
 subdir('src/interfaces/libpq')
+# fe_utils depends on libpq
 subdir('src/fe_utils')
 
 frontend_code = declare_dependency(
@@ -1982,6 +1983,7 @@ subdir('src')
 subdir('contrib')
 
 subdir('src/test')
+subdir('src/interfaces/libpq/test')
 
 subdir('doc/src/sgml')
 

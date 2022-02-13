@@ -1,3 +1,6 @@
+# test/ is entered via top-level meson.build, that way it can use the default
+# args for executables (which depend on libpq).
+
 libpq_sources = files(
   'fe-auth-scram.c',
   'fe-connect.c',

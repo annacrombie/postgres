@@ -31,5 +31,6 @@ tap_tests += {
     't/025_stuck_on_old_timeline.pl',
     't/026_overwrite_contrecord.pl',
     't/027_stream_regress.pl',
+    't/028_pitr_timelines.pl',
   ]
 }
