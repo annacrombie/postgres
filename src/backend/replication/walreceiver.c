@@ -912,6 +912,8 @@ XLogWalRcvWrite(char *buf, Size nbytes, XLogRecPtr recptr, TimeLineID tli)
 		else
 			segbytes = nbytes;
 
+		AssertFileNotDeleted(recvFile);
+
 		/* OK to write the logs */
 		errno = 0;
 

@@ -93,6 +93,7 @@
 #include "common/file_perm.h"
 #include "common/file_utils.h"
 #include "common/pg_prng.h"
+#include "common/string.h"
 #include "miscadmin.h"
 #include "pgstat.h"
 #include "port/pg_iovec.h"
@@ -2073,6 +2074,8 @@ FilePrefetch(File file, off_t offset, int amount, uint32 wait_event_info)
 	if (returnCode < 0)
 		return returnCode;
 
+	AssertFileNotDeleted(VfdCache[file].fd);
+
 	pgstat_report_wait_start(wait_event_info);
 	returnCode = posix_fadvise(VfdCache[file].fd, offset, amount,
 							   POSIX_FADV_WILLNEED);
@@ -2103,6 +2106,11 @@ FileWriteback(File file, off_t offset, off_t nbytes, uint32 wait_event_info)
 	if (returnCode < 0)
 		return;
 
+	/*
+	 * XXX: can't assert non-use of fd right now,
+	 * ScheduleBufferTagForWriteback can end up writing at a later time.
+	 */
+
 	pgstat_report_wait_start(wait_event_info);
 	pg_flush_data(VfdCache[file].fd, offset, nbytes);
 	pgstat_report_wait_end();
@@ -2127,6 +2135,8 @@ FileRead(File file, char *buffer, int amount, off_t offset,
 		return returnCode;
 
 	vfdP = &VfdCache[file];
+
+	AssertFileNotDeleted(vfdP->fd);
 
 retry:
 	pgstat_report_wait_start(wait_event_info);
@@ -2183,6 +2193,8 @@ FileWrite(File file, char *buffer, int amount, off_t offset,
 		return returnCode;
 
 	vfdP = &VfdCache[file];
+
+	AssertFileNotDeleted(vfdP->fd);
 
 	/*
 	 * If enforcing temp_file_limit and it's a temp file, check to see if the
@@ -2276,6 +2288,8 @@ FileSync(File file, uint32 wait_event_info)
 	if (returnCode < 0)
 		return returnCode;
 
+	AssertFileNotDeleted(VfdCache[file].fd);
+
 	pgstat_report_wait_start(wait_event_info);
 	returnCode = pg_fsync(VfdCache[file].fd);
 	pgstat_report_wait_end();
@@ -2297,6 +2311,8 @@ FileSize(File file)
 			return (off_t) -1;
 	}
 
+	AssertFileNotDeleted(VfdCache[file].fd);
+
 	return lseek(VfdCache[file].fd, 0, SEEK_END);
 }
 
@@ -2313,6 +2329,8 @@ FileTruncate(File file, off_t offset, uint32 wait_event_info)
 	returnCode = FileAccess(file);
 	if (returnCode < 0)
 		return returnCode;
+
+	AssertFileNotDeleted(VfdCache[file].fd);
 
 	pgstat_report_wait_start(wait_event_info);
 	returnCode = ftruncate(VfdCache[file].fd, offset);
@@ -3826,6 +3844,71 @@ int
 data_sync_elevel(int elevel)
 {
 	return data_sync_retry ? elevel : PANIC;
+}
+
+void
+AssertFileNotDeleted(int fd)
+{
+	struct stat statbuf;
+	int			ret;
+	char		deleted_filename[MAXPGPATH];
+	bool		have_filename = false;
+
+	/*
+	 * fstat shouldn't fail, so it seems ok to error out, even if it's
+	 * just a debugging aid.
+	 *
+	 * XXX: Figure out which operating systems this works on.
+	 */
+	ret = fstat(fd, &statbuf);
+	if (ret != 0)
+		elog(ERROR, "fstat failed: %m");
+
+	/*
+	 * On several operating systems st_nlink == 0 indicates that the file has
+	 * been deleted. On some OS/filesystem combinations a deleted file may
+	 * still show up with nlink > 0, but nlink == 0 shouldn't be returned
+	 * spuriously. Hardlinks obviously can prevent this from working, but we
+	 * don't expect any, so that's fine.
+	 */
+	if (statbuf.st_nlink > 0)
+		return;
+
+#if defined(__linux__)
+	{
+		char        path[MAXPGPATH];
+		const char *const deleted_suffix = " (deleted)";
+
+		/*
+		 * On linux we can figure out what the file name
+		 */
+		sprintf(path, "/proc/self/fd/%d", fd);
+		ret = readlink(path, deleted_filename, sizeof(deleted_filename) - 1);
+
+		// FIXME: Tolerate most errors here
+		if (ret == -1)
+			elog(PANIC, "readlink failed: %m");
+
+		/* readlink doesn't null terminate */
+		deleted_filename[ret] = 0;
+		have_filename = true;
+
+		/* chop off the " (deleted)" */
+		if (pg_str_endswith(deleted_filename, deleted_suffix))
+		{
+			Size		len = strlen(deleted_filename);
+
+			deleted_filename[len - strlen(deleted_suffix)] = 0;
+		}
+	}
+#endif
+
+	if (have_filename)
+		elog(PANIC, "file descriptor %d for file %s is of a deleted file",
+			 fd, deleted_filename);
+	else
+		elog(PANIC, "file descriptor %d is of a deleted file",
+			 fd);
 }
 
 /*
