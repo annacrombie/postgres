@@ -2198,6 +2198,8 @@ XLogWrite(XLogwrtRqst WriteRqst, TimeLineID tli, bool flexible)
 				if (track_wal_io_timing)
 					INSTR_TIME_SET_CURRENT(start);
 
+				AssertFileNotDeleted(openLogFile);
+
 				pgstat_report_wait_start(WAIT_EVENT_WAL_WRITE);
 				written = pg_pwrite(openLogFile, from, nleft, startoffset);
 				pgstat_report_wait_end();

@@ -191,6 +191,7 @@ extern int	durable_rename_excl(const char *oldfile, const char *newfile, int log
 extern void SyncDataDirectory(void);
 extern int	data_sync_elevel(int elevel);
 
+extern void AssertFileNotDeleted(int fd);
 /* Filename components */
 #define PG_TEMP_FILES_DIR "pgsql_tmp"
 #define PG_TEMP_FILE_PREFIX "pgsql_tmp"

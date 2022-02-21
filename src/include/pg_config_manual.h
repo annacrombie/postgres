@@ -160,7 +160,7 @@
  * platforms, it can be defined to exercise those code paths.
  */
 #if defined(WIN32)
-#define USE_BARRIER_SMGRRELEASE
+//#define USE_BARRIER_SMGRRELEASE
 #endif
 
 /*
