@@ -1574,6 +1574,11 @@ tblspc_redo(XLogReaderState *record)
 	{
 		xl_tblspc_drop_rec *xlrec = (xl_tblspc_drop_rec *) XLogRecGetData(record);
 
+#if defined(USE_BARRIER_SMGRRELEASE)
+		/* Close all smgr fds in all backends. */
+		WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
+#endif
+
 		/*
 		 * If we issued a WAL record for a drop tablespace it implies that
 		 * there were no files in it at all when the DROP was done. That means
@@ -1591,11 +1596,6 @@ tblspc_redo(XLogReaderState *record)
 		 */
 		if (!destroy_tablespace_directories(xlrec->ts_id, true))
 		{
-#if defined(USE_BARRIER_SMGRRELEASE)
-			/* Close all smgr fds in all backends. */
-			WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
-#endif
-
 			ResolveRecoveryConflictWithTablespace(xlrec->ts_id);
 
 			/*

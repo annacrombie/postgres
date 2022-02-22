@@ -4819,9 +4819,14 @@ IssuePendingWritebacks(WritebackContext *context)
 
 		i += ahead;
 
-		/* and finally tell the kernel to write the data to storage */
-		reln = smgropen(tag.rnode, InvalidBackendId);
-		smgrwriteback(reln, tag.forkNum, tag.blockNum, nblocks);
+		/*
+		 * Finally tell the kernel to write the data to storage. Don't smgr if
+		 * previously closed, otherwise we could end up evading fd-reuse
+		 * protection.
+		 */
+		reln = smgropen_cond(tag.rnode, InvalidBackendId);
+		if (reln)
+			smgrwriteback(reln, tag.forkNum, tag.blockNum, nblocks);
 	}
 
 	context->nr_pending = 0;

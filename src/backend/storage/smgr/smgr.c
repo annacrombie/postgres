@@ -191,6 +191,26 @@ smgropen(RelFileNode rnode, BackendId backend)
 }
 
 /*
+ * Like smgropen(), but returns NULL if relation is not already open.
+ */
+SMgrRelation
+smgropen_cond(RelFileNode rnode, BackendId backend)
+{
+	RelFileNodeBackend brnode;
+
+	if (SMgrRelationHash == NULL)
+		return NULL;
+
+	/* Look up or create an entry */
+	brnode.node = rnode;
+	brnode.backend = backend;
+
+	return (SMgrRelation) hash_search(SMgrRelationHash,
+									  (void *) &brnode,
+									  HASH_FIND, NULL);
+}
+
+/*
  * smgrsetowner() -- Establish a long-lived reference to an SMgrRelation object
  *
  * There can be only one owner at a time; this is sufficient since currently
