@@ -1069,6 +1069,8 @@ dropdb(const char *dbname, bool missing_ok, bool force)
 	WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
 #endif
 
+	AssertNoDeletedFilesOpen();
+
 	/*
 	 * Remove all tablespace subdirs belonging to the database.
 	 */
@@ -1321,6 +1323,8 @@ movedb(const char *dbname, const char *tblspcname)
 	/* Close all smgr fds in all backends. */
 	WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
 #endif
+
+	AssertNoDeletedFilesOpen();
 
 	/*
 	 * Now drop all buffers holding data of the target database; they should
@@ -2452,6 +2456,8 @@ dbase_redo(XLogReaderState *record)
 		/* Close all sgmr fds in all backends. */
 		WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
 #endif
+
+		AssertNoDeletedFilesOpen();
 
 		for (i = 0; i < xlrec->ntablespaces; i++)
 		{

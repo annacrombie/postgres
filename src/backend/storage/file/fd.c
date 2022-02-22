@@ -3847,6 +3847,58 @@ data_sync_elevel(int elevel)
 }
 
 void
+AssertNoDeletedFilesOpenPid(int pid)
+{
+#if defined(__linux__)
+	const char *const deleted_suffix = " (deleted)";
+	char		proc_dir[MAXPGPATH];
+	struct dirent *de;
+	DIR		   *dirdesc;
+
+	sprintf(proc_dir, "/proc/%d/fd", pid);
+
+	elog(LOG, "checking %s", proc_dir);
+
+	dirdesc = AllocateDir(proc_dir);
+	if (dirdesc == NULL)
+	{
+		elog(WARNING, "could not open %s", proc_dir);
+		return;
+	}
+
+	while ((de = ReadDir(dirdesc, proc_dir)) != NULL)
+	{
+		char        path[MAXPGPATH];
+		char        target[MAXPGPATH];
+		int			ret;
+
+		if (strcmp(de->d_name, ".") == 0 ||
+			strcmp(de->d_name, "..") == 0)
+			continue;
+
+		sprintf(path, "/proc/%d/fd/%s", pid, de->d_name);
+
+		ret = readlink(path, target, sizeof(path) - 1);
+
+		// FIXME: Tolerate most errors here
+		if (ret == -1)
+			elog(PANIC, "readlink failed: %m");
+
+		/* readlink doesn't null terminate */
+		target[ret] = 0;
+
+		if (pg_str_endswith(target, deleted_suffix))
+		{
+			elog(PANIC, "pid %d has deleted file %s open in fd %s",
+				 pid, target, de->d_name);
+		}
+	}
+
+	FreeDir(dirdesc);
+#endif
+}
+
+void
 AssertFileNotDeleted(int fd)
 {
 	struct stat statbuf;

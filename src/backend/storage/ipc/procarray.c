@@ -58,6 +58,7 @@
 #include "commands/dbcommands.h"
 #include "miscadmin.h"
 #include "pgstat.h"
+#include "storage/fd.h"
 #include "storage/proc.h"
 #include "storage/procarray.h"
 #include "storage/spin.h"
@@ -3771,6 +3772,27 @@ CountOtherDBBackends(Oid databaseId, int *nbackends, int *nprepared)
 
 	return true;				/* timed out, still conflicts */
 }
+
+void
+AssertNoDeletedFilesOpen(void)
+{
+#if defined(__linux__)
+	ProcArrayStruct *arrayP = procArray;
+
+	LWLockAcquire(ProcArrayLock, LW_SHARED);
+
+	for (int index = 0; index < arrayP->numProcs; index++)
+	{
+		int			pgprocno = arrayP->pgprocnos[index];
+		PGPROC	   *proc = &allProcs[pgprocno];
+
+		AssertNoDeletedFilesOpenPid(proc->pid);
+	}
+
+	LWLockRelease(ProcArrayLock);
+#endif
+}
+
 
 /*
  * Terminate existing connections to the specified database. This routine

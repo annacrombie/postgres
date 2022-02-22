@@ -192,6 +192,9 @@ extern void SyncDataDirectory(void);
 extern int	data_sync_elevel(int elevel);
 
 extern void AssertFileNotDeleted(int fd);
+extern void AssertNoDeletedFilesOpen(void);
+extern void AssertNoDeletedFilesOpenPid(int pid);
+
 /* Filename components */
 #define PG_TEMP_FILES_DIR "pgsql_tmp"
 #define PG_TEMP_FILE_PREFIX "pgsql_tmp"
