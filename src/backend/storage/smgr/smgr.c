@@ -723,11 +723,13 @@ AtEOXact_SMgr(void)
 bool
 ProcessBarrierSmgrRelease(void)
 {
+	smgrcloseall();
+#if 0
 	for (int i = 0; i < NSmgr; i++)
 	{
 		if (smgrsw[i].smgr_release)
 			smgrsw[i].smgr_release();
 	}
-
+#endif
 	return true;
 }

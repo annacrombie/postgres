@@ -518,6 +518,18 @@ DropTableSpace(DropTableSpaceStmt *stmt)
 	deleteSharedDependencyRecordsFor(TableSpaceRelationId, tablespaceoid, 0);
 
 	/*
+	 * Ensure that nobody has still open files in this tablespace.
+	 *
+	 * FIXME: don't want to do that inside TablespaceCreateLock, but still
+	 * need to care about concurrency. Feels like there should be a
+	 * heavyweight lock on dbspace creation instead of an lwlock?
+	 */
+	WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
+
+	/* even if there are unlink requests, they should be not be open right now */
+	AssertNoDeletedFilesOpen();
+
+	/*
 	 * Acquire TablespaceCreateLock to ensure that no TablespaceCreateDbspace
 	 * is running concurrently.
 	 */
@@ -553,6 +565,8 @@ DropTableSpace(DropTableSpaceStmt *stmt)
 		WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
 		LWLockAcquire(TablespaceCreateLock, LW_EXCLUSIVE);
 #endif
+		AssertNoDeletedFilesOpen();
+
 		/* And now try again. */
 		if (!destroy_tablespace_directories(tablespaceoid, false))
 		{
