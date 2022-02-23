@@ -137,7 +137,7 @@ install: all installdirs install-lib
 	$(INSTALL_DATA) $(srcdir)/pqexpbuffer.h '$(DESTDIR)$(includedir_internal)'
 	$(INSTALL_DATA) $(srcdir)/pg_service.conf.sample '$(DESTDIR)$(datadir)/pg_service.conf.sample'
 
-installcheck:
+installcheck check:
 	$(MAKE) -C test $@
 
 installdirs: installdirs-lib
