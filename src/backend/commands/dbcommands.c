@@ -2411,6 +2411,10 @@ dbase_redo(XLogReaderState *record)
 		 */
 		FlushDatabaseBuffers(xlrec->src_db_id);
 
+		/* Close all sgmr fds in all backends. */
+		WaitForProcSignalBarrier(EmitProcSignalBarrier(PROCSIGNAL_BARRIER_SMGRRELEASE));
+		AssertNoDeletedFilesOpen();
+
 		/*
 		 * Copy this subdirectory to the new location
 		 *
