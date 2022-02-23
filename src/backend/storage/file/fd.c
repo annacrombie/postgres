@@ -3880,9 +3880,14 @@ AssertNoDeletedFilesOpenPid(int pid)
 
 		ret = readlink(path, target, sizeof(path) - 1);
 
-		// FIXME: Tolerate most errors here
 		if (ret == -1)
+		{
+			/* normal, file was closed */
+			if (errno == ENOENT)
+				continue;
+			// FIXME: Tolerate most errors here
 			elog(PANIC, "readlink failed: %m");
+		}
 
 		/* readlink doesn't null terminate */
 		target[ret] = 0;
