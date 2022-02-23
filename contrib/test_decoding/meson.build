@@ -53,6 +53,7 @@ isolation_tests += {
     'subxact_without_top',
     'concurrent_stream',
     'twophase_snapshot',
+    'slot_creation_error',
   ],
   'regress_args': [
     '--temp-config', files('logical.conf')

@@ -31,6 +31,7 @@ tap_tests += {
     't/025_rep_changes_for_schema.pl',
     't/026_worker_stats.pl',
     't/027_nosuperuser.pl',
+    't/028_row_filter.pl',
     't/100_bugs.pl',
   ],
 }
