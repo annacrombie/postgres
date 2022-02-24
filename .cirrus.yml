@@ -702,17 +702,16 @@ task:
   <<: *windows_template
   name: Windows - Server 2019, VS 2019 - Meson & msbuild
 
-  # Need a development version of meson for now
-  # XXX: that shouldn't be true anymore
   meson_script:
-    - git clone https://github.com/mesonbuild/meson.git
+    - pip install meson
+    - pip install ninja
 
   configure_script:
     - vcvarsall x64
     - mkdir subprojects
-    - .\meson\meson.py wrap install lz4
-    - .\meson\meson.py wrap install zlib
-    - .\meson\meson.py setup --buildtype debug --backend vs -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
+    - meson wrap install lz4
+    - meson wrap install zlib
+    - meson setup --buildtype debug --backend vs -Dcassert=true -Db_pch=true -Dssl=openssl -Dlz4=enabled -Dzlib=enabled -Dextra_lib_dirs=c:\openssl\1.1\lib -Dextra_include_dirs=c:\openssl\1.1\include -DTAR=c:/windows/system32/tar.exe build
 
   build_script:
     - vcvarsall x64
@@ -720,7 +719,7 @@ task:
 
   check_world_script:
     - vcvarsall x64
-    - .\meson\meson.py test --no-rebuild -C build
+    - meson test --no-rebuild -C build
 
   always:
     meson_log_artifacts:
