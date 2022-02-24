@@ -232,9 +232,9 @@ cdata.set('BLCKSZ', 8192, description: '''
  Changing BLCKSZ requires an initdb.
 ''')
 
-cdata.set('XLOG_BLCKSZ', 8192)
-cdata.set('RELSEG_SIZE', 131072)
-cdata.set('DEF_PGPORT', 5432)
+cdata.set('XLOG_BLCKSZ', get_option('wal-blocksize') * 1024)
+cdata.set('RELSEG_SIZE', get_option('segsize') * 131072)
+cdata.set('DEF_PGPORT', get_option('pgport'))
 cdata.set_quoted('DEF_PGPORT_STR', '5432')
 cdata.set_quoted('PG_KRB_SRVNAM', 'postgres')
 
@@ -2171,45 +2171,46 @@ endforeach
 
 # Define all 'tap' style tests
 # FIXME: dependencies for each test
-foreach t : tap_tests
-  test_command = [
-    perl.path(),
-    '-I', meson.source_root() / 'src/test/perl',
-    '-I', t['sd'],
-  ]
+if get_option('enable-tap-tests')
+  foreach t : tap_tests
+    test_command = [
+      perl.path(),
+      '-I', meson.source_root() / 'src/test/perl',
+      '-I', t['sd'],
+    ]
 
-  env = test_env
-  env.prepend('PATH', temp_install_bindir, t['bd'])
+    env = test_env
+    env.prepend('PATH', temp_install_bindir, t['bd'])
 
-  foreach name, value : t.get('env', {})
-    env.set(name, value)
+    foreach name, value : t.get('env', {})
+      env.set(name, value)
+    endforeach
+
+    test_kwargs = {
+      'protocol': 'tap',
+      'suite': ['tap', t['name']],
+      'timeout': 300,
+      'depends': test_deps + t.get('deps', []),
+      'env': env,
+    }
+
+    foreach onetap : t['tests']
+      test(t['name'] / onetap,
+        testwrap,
+        kwargs: test_kwargs,
+        args: [
+          t['sd'],
+          meson.build_root(),
+          t['bd'],
+          t['name'],
+          onetap,
+          test_command,
+          t['sd'] / onetap,
+        ]
+      )
+    endforeach
   endforeach
-
-  test_kwargs = {
-    'protocol': 'tap',
-    'suite': ['tap', t['name']],
-    'timeout': 300,
-    'depends': test_deps + t.get('deps', []),
-    'env': env,
-  }
-
-  foreach onetap : t['tests']
-    test(t['name'] / onetap,
-      testwrap,
-      kwargs: test_kwargs,
-      args: [
-        t['sd'],
-        meson.build_root(),
-        t['bd'],
-        t['name'],
-        onetap,
-        test_command,
-        t['sd'] / onetap,
-      ]
-    )
-  endforeach
-endforeach
-
+endif
 
 
 ###############################################################
