@@ -21,7 +21,7 @@ option('extra_include_dirs', type : 'array', value: [],
 option('extra_lib_dirs', type : 'array', value: [],
   description: 'non-default directories to be searched for libs')
 
-option('enable-tap-tests', type : 'boolean', value : false,
+option('enable-tap-tests', type : 'boolean', value : true,
   description : 'Whether to enable tap tests')
 
 option('pgport', type : 'string', value : '5432',
