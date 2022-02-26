@@ -227,7 +227,6 @@ task:
   <<: *linux_debian_template
 
   name: Linux - Debian Bullseye - Autoconf
-  trigger_type: manual
 
   configure_script: |
     su postgres <<-EOF
@@ -947,7 +946,7 @@ task:
 
   # To limit unnecessary work only run this once the normal linux test succeeds
   depends_on:
-    - Linux - Debian Bullseye - Autoconf
+    - Linux - Debian Bullseye - Meson
   trigger_type: manual
 
   env:
