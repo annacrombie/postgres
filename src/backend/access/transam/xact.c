@@ -1285,6 +1285,8 @@ RecordTransactionCommit(void)
 	RelFileNode *rels;
 	int			nchildren;
 	TransactionId *children;
+	int			ndroppedstats = 0;
+	PgStat_DroppedStatsItem *droppedstats = NULL;
 	int			nmsgs = 0;
 	SharedInvalidationMessage *invalMessages = NULL;
 	bool		RelcacheInitFileInval = false;
@@ -1303,6 +1305,7 @@ RecordTransactionCommit(void)
 	/* Get data needed for commit record */
 	nrels = smgrGetPendingDeletes(true, &rels);
 	nchildren = xactGetCommittedChildren(&children);
+	ndroppedstats = pgstat_pending_stats_drops(true, &droppedstats);
 	if (XLogStandbyInfoActive())
 		nmsgs = xactGetCommittedInvalidationMessages(&invalMessages,
 													 &RelcacheInitFileInval);
@@ -1317,10 +1320,12 @@ RecordTransactionCommit(void)
 		/*
 		 * We expect that every RelationDropStorage is followed by a catalog
 		 * update, and hence XID assignment, so we shouldn't get here with any
-		 * pending deletes.  Use a real test not just an Assert to check this,
-		 * since it's a bit fragile.
+		 * pending deletes. Same is true for dropping stats.
+		 *
+		 * Use a real test not just an Assert to check this, since it's a bit
+		 * fragile.
 		 */
-		if (nrels != 0)
+		if (nrels != 0 || ndroppedstats != 0)
 			elog(ERROR, "cannot commit a transaction that deleted files but has no xid");
 
 		/* Can't have child XIDs either; AssignTransactionId enforces this */
@@ -1394,6 +1399,7 @@ RecordTransactionCommit(void)
 
 		XactLogCommitRecord(xactStopTimestamp,
 							nchildren, children, nrels, rels,
+							ndroppedstats, droppedstats,
 							nmsgs, invalMessages,
 							RelcacheInitFileInval,
 							MyXactFlags,
@@ -1697,6 +1703,8 @@ RecordTransactionAbort(bool isSubXact)
 	TransactionId latestXid;
 	int			nrels;
 	RelFileNode *rels;
+	int			ndroppedstats = 0;
+	PgStat_DroppedStatsItem *droppedstats = NULL;
 	int			nchildren;
 	TransactionId *children;
 	TimestampTz xact_time;
@@ -1733,6 +1741,7 @@ RecordTransactionAbort(bool isSubXact)
 	/* Fetch the data we need for the abort record */
 	nrels = smgrGetPendingDeletes(false, &rels);
 	nchildren = xactGetCommittedChildren(&children);
+	ndroppedstats = pgstat_pending_stats_drops(false, &droppedstats);
 
 	/* XXX do we really need a critical section here? */
 	START_CRIT_SECTION();
@@ -1749,6 +1758,7 @@ RecordTransactionAbort(bool isSubXact)
 	XactLogAbortRecord(xact_time,
 					   nchildren, children,
 					   nrels, rels,
+					   ndroppedstats, droppedstats,
 					   MyXactFlags, InvalidTransactionId,
 					   NULL);
 
@@ -5571,6 +5581,7 @@ XLogRecPtr
 XactLogCommitRecord(TimestampTz commit_time,
 					int nsubxacts, TransactionId *subxacts,
 					int nrels, RelFileNode *rels,
+					int ndroppedstats, PgStat_DroppedStatsItem *droppedstats,
 					int nmsgs, SharedInvalidationMessage *msgs,
 					bool relcacheInval,
 					int xactflags, TransactionId twophase_xid,
@@ -5581,6 +5592,7 @@ XactLogCommitRecord(TimestampTz commit_time,
 	xl_xact_dbinfo xl_dbinfo;
 	xl_xact_subxacts xl_subxacts;
 	xl_xact_relfilenodes xl_relfilenodes;
+	xl_xact_dropped_stats xl_dropped_stats;
 	xl_xact_invals xl_invals;
 	xl_xact_twophase xl_twophase;
 	xl_xact_origin xl_origin;
@@ -5636,6 +5648,12 @@ XactLogCommitRecord(TimestampTz commit_time,
 		xl_xinfo.xinfo |= XACT_XINFO_HAS_RELFILENODES;
 		xl_relfilenodes.nrels = nrels;
 		info |= XLR_SPECIAL_REL_UPDATE;
+	}
+
+	if (ndroppedstats > 0)
+	{
+		xl_xinfo.xinfo |= XACT_XINFO_HAS_DROPPED_STATS;
+		xl_dropped_stats.ndropped = ndroppedstats;
 	}
 
 	if (nmsgs > 0)
@@ -5694,6 +5712,14 @@ XactLogCommitRecord(TimestampTz commit_time,
 						 nrels * sizeof(RelFileNode));
 	}
 
+	if (xl_xinfo.xinfo & XACT_XINFO_HAS_DROPPED_STATS)
+	{
+		XLogRegisterData((char *) (&xl_dropped_stats),
+						 MinSizeOfXactDroppedStats);
+		XLogRegisterData((char *) droppedstats,
+						 ndroppedstats * sizeof(PgStat_DroppedStatsItem));
+	}
+
 	if (xl_xinfo.xinfo & XACT_XINFO_HAS_INVALS)
 	{
 		XLogRegisterData((char *) (&xl_invals), MinSizeOfXactInvals);
@@ -5727,6 +5753,7 @@ XLogRecPtr
 XactLogAbortRecord(TimestampTz abort_time,
 				   int nsubxacts, TransactionId *subxacts,
 				   int nrels, RelFileNode *rels,
+				   int ndroppedstats, PgStat_DroppedStatsItem *droppedstats,
 				   int xactflags, TransactionId twophase_xid,
 				   const char *twophase_gid)
 {
@@ -5734,6 +5761,7 @@ XactLogAbortRecord(TimestampTz abort_time,
 	xl_xact_xinfo xl_xinfo;
 	xl_xact_subxacts xl_subxacts;
 	xl_xact_relfilenodes xl_relfilenodes;
+	xl_xact_dropped_stats xl_dropped_stats;
 	xl_xact_twophase xl_twophase;
 	xl_xact_dbinfo xl_dbinfo;
 	xl_xact_origin xl_origin;
@@ -5769,6 +5797,12 @@ XactLogAbortRecord(TimestampTz abort_time,
 		xl_xinfo.xinfo |= XACT_XINFO_HAS_RELFILENODES;
 		xl_relfilenodes.nrels = nrels;
 		info |= XLR_SPECIAL_REL_UPDATE;
+	}
+
+	if (ndroppedstats > 0)
+	{
+		xl_xinfo.xinfo |= XACT_XINFO_HAS_DROPPED_STATS;
+		xl_dropped_stats.ndropped = ndroppedstats;
 	}
 
 	if (TransactionIdIsValid(twophase_xid))
@@ -5830,6 +5864,14 @@ XactLogAbortRecord(TimestampTz abort_time,
 						 MinSizeOfXactRelfilenodes);
 		XLogRegisterData((char *) rels,
 						 nrels * sizeof(RelFileNode));
+	}
+
+	if (xl_xinfo.xinfo & XACT_XINFO_HAS_DROPPED_STATS)
+	{
+		XLogRegisterData((char *) (&xl_dropped_stats),
+						 MinSizeOfXactDroppedStats);
+		XLogRegisterData((char *) droppedstats,
+						 ndroppedstats * sizeof(PgStat_DroppedStatsItem));
 	}
 
 	if (xl_xinfo.xinfo & XACT_XINFO_HAS_TWOPHASE)
@@ -5965,6 +6007,13 @@ xact_redo_commit(xl_xact_parsed_commit *parsed,
 		DropRelationFiles(parsed->xnodes, parsed->nrels, true);
 	}
 
+	if (parsed->ndroppedstats > 0)
+	{
+		XLogFlush(lsn);
+
+		pgstat_perform_drops(parsed->ndroppedstats, parsed->droppedstats, true);
+	}
+
 	/*
 	 * We issue an XLogFlush() for the same reason we emit ForceSyncCommit()
 	 * in normal operation. For example, in CREATE DATABASE, we copy all files
@@ -6066,6 +6115,13 @@ xact_redo_abort(xl_xact_parsed_abort *parsed, TransactionId xid,
 		XLogFlush(lsn);
 
 		DropRelationFiles(parsed->xnodes, parsed->nrels, true);
+	}
+
+	if (parsed->ndroppedstats > 0)
+	{
+		XLogFlush(lsn);
+
+		pgstat_perform_drops(parsed->ndroppedstats, parsed->droppedstats, true);
 	}
 }
 

@@ -180,6 +180,7 @@ typedef struct SavedTransactionCharacteristics
 #define XACT_XINFO_HAS_ORIGIN			(1U << 5)
 #define XACT_XINFO_HAS_AE_LOCKS			(1U << 6)
 #define XACT_XINFO_HAS_GID				(1U << 7)
+#define XACT_XINFO_HAS_DROPPED_STATS	(1U << 8)
 
 /*
  * Also stored in xinfo, these indicating a variety of additional actions that
@@ -230,7 +231,7 @@ typedef struct xl_xact_assignment
 typedef struct xl_xact_xinfo
 {
 	/*
-	 * Even though we right now only require 1 byte of space in xinfo we use
+	 * Even though we right now only require two bytes of space in xinfo we use
 	 * four so following records don't have to care about alignment. Commit
 	 * records can be large, so copying large portions isn't attractive.
 	 */
@@ -256,6 +257,24 @@ typedef struct xl_xact_relfilenodes
 	RelFileNode xnodes[FLEXIBLE_ARRAY_MEMBER];
 } xl_xact_relfilenodes;
 #define MinSizeOfXactRelfilenodes offsetof(xl_xact_relfilenodes, xnodes)
+
+/* FIXME: circular dependency issues */
+/*
+ * A transactionally dropped statistics entry.
+ */
+typedef struct PgStat_DroppedStatsItem
+{
+	int			kind;
+	Oid			dboid;
+	Oid			objoid;
+} PgStat_DroppedStatsItem;
+
+typedef struct xl_xact_dropped_stats
+{
+	int		ndropped;
+	PgStat_DroppedStatsItem dropped_stats[FLEXIBLE_ARRAY_MEMBER];
+} xl_xact_dropped_stats;
+#define MinSizeOfXactDroppedStats offsetof(xl_xact_dropped_stats, dropped_stats)
 
 typedef struct xl_xact_invals
 {
@@ -283,6 +302,7 @@ typedef struct xl_xact_commit
 	/* xl_xact_dbinfo follows if XINFO_HAS_DBINFO */
 	/* xl_xact_subxacts follows if XINFO_HAS_SUBXACT */
 	/* xl_xact_relfilenodes follows if XINFO_HAS_RELFILENODES */
+	/* xl_xact_dropped_stats follows if XINFO_HAS_DROPPED_STATS */
 	/* xl_xact_invals follows if XINFO_HAS_INVALS */
 	/* xl_xact_twophase follows if XINFO_HAS_TWOPHASE */
 	/* twophase_gid follows if XINFO_HAS_GID. As a null-terminated string. */
@@ -298,6 +318,7 @@ typedef struct xl_xact_abort
 	/* xl_xact_dbinfo follows if XINFO_HAS_DBINFO */
 	/* xl_xact_subxacts follows if XINFO_HAS_SUBXACT */
 	/* xl_xact_relfilenodes follows if XINFO_HAS_RELFILENODES */
+	/* xl_xact_dropped_stats follows if XINFO_HAS_DROPPED_STATS */
 	/* No invalidation messages needed. */
 	/* xl_xact_twophase follows if XINFO_HAS_TWOPHASE */
 	/* twophase_gid follows if XINFO_HAS_GID. As a null-terminated string. */
@@ -316,6 +337,8 @@ typedef struct xl_xact_prepare
 	int32		nsubxacts;		/* number of following subxact XIDs */
 	int32		ncommitrels;	/* number of delete-on-commit rels */
 	int32		nabortrels;		/* number of delete-on-abort rels */
+	int32		ncommitdroppedstats;  /* number of stats to drop on commit */
+	int32		nabortdroppedstats;  /* number of stats to drop on abort */
 	int32		ninvalmsgs;		/* number of cache invalidation messages */
 	bool		initfileinval;	/* does relcache init file need invalidation? */
 	uint16		gidlen;			/* length of the GID - GID follows the header */
@@ -342,6 +365,9 @@ typedef struct xl_xact_parsed_commit
 	int			nrels;
 	RelFileNode *xnodes;
 
+	int			ndroppedstats;
+	PgStat_DroppedStatsItem *droppedstats;
+
 	int			nmsgs;
 	SharedInvalidationMessage *msgs;
 
@@ -349,6 +375,8 @@ typedef struct xl_xact_parsed_commit
 	char		twophase_gid[GIDSIZE];	/* only for 2PC */
 	int			nabortrels;		/* only for 2PC */
 	RelFileNode *abortnodes;	/* only for 2PC */
+	int			nabortdroppedstats;		/* only for 2PC */
+	PgStat_DroppedStatsItem *abortdroppedstats; /* only for 2PC */
 
 	XLogRecPtr	origin_lsn;
 	TimestampTz origin_timestamp;
@@ -369,6 +397,9 @@ typedef struct xl_xact_parsed_abort
 
 	int			nrels;
 	RelFileNode *xnodes;
+
+	int			ndroppedstats;
+	PgStat_DroppedStatsItem *droppedstats;
 
 	TransactionId twophase_xid; /* only for 2PC */
 	char		twophase_gid[GIDSIZE];	/* only for 2PC */
@@ -449,6 +480,8 @@ extern int	xactGetCommittedChildren(TransactionId **ptr);
 extern XLogRecPtr XactLogCommitRecord(TimestampTz commit_time,
 									  int nsubxacts, TransactionId *subxacts,
 									  int nrels, RelFileNode *rels,
+									  int ndroppedstats,
+									  PgStat_DroppedStatsItem *droppedstats,
 									  int nmsgs, SharedInvalidationMessage *msgs,
 									  bool relcacheInval,
 									  int xactflags,
@@ -458,6 +491,8 @@ extern XLogRecPtr XactLogCommitRecord(TimestampTz commit_time,
 extern XLogRecPtr XactLogAbortRecord(TimestampTz abort_time,
 									 int nsubxacts, TransactionId *subxacts,
 									 int nrels, RelFileNode *rels,
+									 int ndroppedstats,
+									 PgStat_DroppedStatsItem *droppedstats,
 									 int xactflags, TransactionId twophase_xid,
 									 const char *twophase_gid);
 extern void xact_redo(XLogReaderState *record);
