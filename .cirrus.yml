@@ -370,6 +370,7 @@ task:
     # "suites".
     T_C: "\"C:/Program Files/Git/usr/bin/timeout.exe\" -v -k60s 15m"
 
+    CIRRUS_AGENT_VERSION: 1.73.2
 
   only_if: $CIRRUS_CHANGE_MESSAGE !=~ '.*\nci-os-only:.*' || $CIRRUS_CHANGE_MESSAGE =~ '.*\nci-os-only:[^\n]*windows.*'
 
@@ -396,8 +397,6 @@ task:
     # Installation on windows currently only completely works from src/tools/msvc
     - cd src/tools/msvc && perl install.pl %CIRRUS_WORKING_DIR%/tmp_install
 
-  test_regress_parallel_script: |
-    %T_C% perl src/tools/msvc/vcregress.pl check parallel
   startcreate_script: |
     rem paths to binaries need backslashes
     tmp_install\bin\pg_ctl.exe initdb -D tmp_check/db -l tmp_check/initdb.log --options=--no-sync
@@ -405,6 +404,7 @@ task:
     tmp_install\bin\pg_ctl.exe start -D tmp_check/db -l tmp_check/postmaster.log
 
   test_pl_script: |
+    tasklist /v
     %T_C% perl src/tools/msvc/vcregress.pl plcheck
   test_isolation_script: |
     %T_C% perl src/tools/msvc/vcregress.pl isolationcheck
@@ -414,6 +414,10 @@ task:
     %T_C% perl src/tools/msvc/vcregress.pl contribcheck
   stop_script: |
     tmp_install\bin\pg_ctl.exe stop -D tmp_check/db -l tmp_check/postmaster.log
+
+  test_regress_parallel_script: |
+    %T_C% perl src/tools/msvc/vcregress.pl check parallel
+
   test_ssl_script: |
     set with_ssl=openssl
     %T_C% perl src/tools/msvc/vcregress.pl taptest ./src/test/ssl/
@@ -435,6 +439,9 @@ task:
     %T_C% perl vcregress.pl ecpgcheck
 
   on_failure:
+    tasklist_script:
+      - tasklist /v
+
     <<: *on_failure
     crashlog_artifacts:
       path: "crashlog-*.txt"
