@@ -384,6 +384,9 @@ task:
     powershell -Command get-psdrive -psprovider filesystem
     set
 
+  install_script:
+    - choco install wtrace
+
   configure_script:
     # copy errors out when using forward slashes
     - copy src\tools\ci\windows_build_config.pl src\tools\msvc\config.pl
@@ -396,12 +399,16 @@ task:
     # Installation on windows currently only completely works from src/tools/msvc
     - cd src/tools/msvc && perl install.pl %CIRRUS_WORKING_DIR%/tmp_install
 
-  test_regress_parallel_script: |
-    %T_C% perl src/tools/msvc/vcregress.pl check parallel
-  startcreate_script: |
+  create_script: |
     rem paths to binaries need backslashes
     tmp_install\bin\pg_ctl.exe initdb -D tmp_check/db -l tmp_check/initdb.log --options=--no-sync
     echo include '%TEMP_CONFIG%' >> tmp_check/db/postgresql.conf
+
+  wtrace_background_script:
+    wtrace
+
+  start_script: |
+    sleep 10
     tmp_install\bin\pg_ctl.exe start -D tmp_check/db -l tmp_check/postmaster.log
 
   test_pl_script: |
@@ -414,6 +421,10 @@ task:
     %T_C% perl src/tools/msvc/vcregress.pl contribcheck
   stop_script: |
     tmp_install\bin\pg_ctl.exe stop -D tmp_check/db -l tmp_check/postmaster.log
+
+  test_regress_parallel_script: |
+    %T_C% perl src/tools/msvc/vcregress.pl check parallel
+
   test_ssl_script: |
     set with_ssl=openssl
     %T_C% perl src/tools/msvc/vcregress.pl taptest ./src/test/ssl/
@@ -435,6 +446,11 @@ task:
     %T_C% perl vcregress.pl ecpgcheck
 
   on_failure:
+    eventlog_script:
+      - ps: Get-Eventlog -newest 50 application| Format-List -Property *
+      - ps: Get-Eventlog -newest 50 system | Format-List -Property *
+      - ps: Get-Eventlog -newest 50 application | Format-List -Property * | Out-File event_application.log -Encoding ASCII
+      - ps: Get-Eventlog -newest 50 system | Format-List -Property * | Out-File event_system.log -Encoding ASCII
     <<: *on_failure
     crashlog_artifacts:
       path: "crashlog-*.txt"

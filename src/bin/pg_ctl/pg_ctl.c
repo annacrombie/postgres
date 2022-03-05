@@ -1831,6 +1831,7 @@ CreateRestrictedProcess(char *cmd, PROCESS_INFORMATION *processInfo, bool as_ser
 	__QueryInformationJobObject _QueryInformationJobObject = NULL;
 	HANDLE		Kernel32Handle;
 	HANDLE		Advapi32Handle;
+	DWORD		create_process_flags = CREATE_NEW_PROCESS_GROUP | CREATE_NO_WINDOW | CREATE_BREAKAWAY_FROM_JOB;
 
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
@@ -1858,7 +1859,7 @@ CreateRestrictedProcess(char *cmd, PROCESS_INFORMATION *processInfo, bool as_ser
 		write_stderr(_("%s: WARNING: cannot create restricted tokens on this platform\n"), progname);
 		if (Advapi32Handle != NULL)
 			FreeLibrary(Advapi32Handle);
-		return CreateProcess(NULL, cmd, NULL, NULL, FALSE, CREATE_NEW_PROCESS_GROUP | CREATE_NO_WINDOW, NULL, NULL, &si, processInfo);
+		return CreateProcess(NULL, cmd, NULL, NULL, FALSE, create_process_flags, NULL, NULL, &si, processInfo);
 	}
 
 	/* Open the current token to use as a base for the restricted one */
@@ -1915,7 +1916,7 @@ CreateRestrictedProcess(char *cmd, PROCESS_INFORMATION *processInfo, bool as_ser
 	}
 
 	AddUserToTokenDacl(restrictedToken);
-	r = CreateProcessAsUser(restrictedToken, NULL, cmd, NULL, NULL, TRUE, CREATE_NEW_PROCESS_GROUP | CREATE_NO_WINDOW | CREATE_SUSPENDED, NULL, NULL, &si, processInfo);
+	r = CreateProcessAsUser(restrictedToken, NULL, cmd, NULL, NULL, TRUE, create_process_flags | CREATE_SUSPENDED, NULL, NULL, &si, processInfo);
 
 	Kernel32Handle = LoadLibrary("KERNEL32.DLL");
 	if (Kernel32Handle != NULL)
@@ -1948,6 +1949,8 @@ CreateRestrictedProcess(char *cmd, PROCESS_INFORMATION *processInfo, bool as_ser
 
 		if (_IsProcessInJob(processInfo->hProcess, NULL, &inJob))
 		{
+			fprintf(stderr, "job: %d\n", inJob);
+
 			if (!inJob)
 			{
 				/*
