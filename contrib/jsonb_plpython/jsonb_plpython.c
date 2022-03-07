@@ -28,11 +28,9 @@ static PyObject *PLyObject_FromJsonbContainer(JsonbContainer *jsonb);
 static JsonbValue *PLyObject_ToJsonbValue(PyObject *obj,
 										  JsonbParseState **jsonb_state, bool is_elem);
 
-#if PY_MAJOR_VERSION >= 3
 typedef PyObject *(*PLyUnicode_FromStringAndSize_t)
 			(const char *s, Py_ssize_t size);
 static PLyUnicode_FromStringAndSize_t PLyUnicode_FromStringAndSize_p;
-#endif
 
 /*
  * Module initialize function: fetch function pointers for cross-module calls.
@@ -45,13 +43,10 @@ _PG_init(void)
 	PLyObject_AsString_p = (PLyObject_AsString_t)
 		load_external_function("$libdir/" PLPYTHON_LIBNAME, "PLyObject_AsString",
 							   true, NULL);
-#if PY_MAJOR_VERSION >= 3
 	AssertVariableIsOfType(&PLyUnicode_FromStringAndSize, PLyUnicode_FromStringAndSize_t);
 	PLyUnicode_FromStringAndSize_p = (PLyUnicode_FromStringAndSize_t)
 		load_external_function("$libdir/" PLPYTHON_LIBNAME, "PLyUnicode_FromStringAndSize",
 							   true, NULL);
-#endif
-
 	AssertVariableIsOfType(&PLy_elog_impl, PLy_elog_impl_t);
 	PLy_elog_impl_p = (PLy_elog_impl_t)
 		load_external_function("$libdir/" PLPYTHON_LIBNAME, "PLy_elog_impl",
@@ -74,7 +69,7 @@ PLyString_FromJsonbValue(JsonbValue *jbv)
 {
 	Assert(jbv->type == jbvString);
 
-	return PyString_FromStringAndSize(jbv->val.string.val, jbv->val.string.len);
+	return PLyUnicode_FromStringAndSize(jbv->val.string.val, jbv->val.string.len);
 }
 
 /*
@@ -415,7 +410,7 @@ PLyObject_ToJsonbValue(PyObject *obj, JsonbParseState **jsonb_state, bool is_ele
 {
 	JsonbValue *out;
 
-	if (!(PyString_Check(obj) || PyUnicode_Check(obj)))
+	if (!PyUnicode_Check(obj))
 	{
 		if (PySequence_Check(obj))
 			return PLySequence_ToJsonbValue(obj, jsonb_state);
@@ -427,7 +422,7 @@ PLyObject_ToJsonbValue(PyObject *obj, JsonbParseState **jsonb_state, bool is_ele
 
 	if (obj == Py_None)
 		out->type = jbvNull;
-	else if (PyString_Check(obj) || PyUnicode_Check(obj))
+	else if (PyUnicode_Check(obj))
 		PLyString_ToJsonbValue(obj, out);
 
 	/*
