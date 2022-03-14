@@ -49,6 +49,24 @@ static instr_time total_func_time;
 
 
 /*
+ * Ensure that stats are dropped if transaction aborts.
+ */
+void
+pgstat_create_function(Oid proid)
+{
+	/* will do work in subsequent commit */
+}
+
+/*
+ * Ensure that stats are dropped if transaction commits.
+ */
+void
+pgstat_drop_function(Oid proid)
+{
+	/* will do work in subsequent commit */
+}
+
+/*
  * Initialize function call usage data.
  * Called by the executor before invoking a function.
  */

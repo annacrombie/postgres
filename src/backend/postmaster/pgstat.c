@@ -891,6 +891,24 @@ pgstat_clear_snapshot(void)
 	pgstat_clear_backend_activity_snapshot();
 }
 
+int
+pgstat_pending_stats_drops(bool isCommit, xl_xact_stats_item **items)
+{
+	/* will do work in subsequent commit */
+	return 0;
+}
+
+/*
+ * Execute scheduled drops post-commit. Called from xact_redo_commit() during
+ * recovery, and from FinishPreparedTransaction() during normal commit
+ * processing.
+ */
+void
+pgstat_perform_drops(int ndrops, struct xl_xact_stats_item *items, bool is_redo)
+{
+	/* will do work in subsequent commit */
+}
+
 /*
  * Ensure (sub)transaction stack entry for the given nest_level exists, adding
  * it if needed.

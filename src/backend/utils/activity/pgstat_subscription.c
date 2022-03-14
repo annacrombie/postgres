@@ -61,6 +61,12 @@ pgstat_report_subscription_error(Oid subid, bool is_apply_error)
 	pgstat_send(&msg, sizeof(PgStat_MsgSubscriptionError));
 }
 
+void
+pgstat_report_subscription_create(Oid subid)
+{
+	/* will do work in subsequent commit */
+}
+
 /* ----------
  * pgstat_report_subscription_drop() -
  *

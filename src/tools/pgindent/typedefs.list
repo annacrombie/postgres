@@ -3766,6 +3766,8 @@ xl_xact_parsed_commit
 xl_xact_parsed_prepare
 xl_xact_prepare
 xl_xact_relfilenodes
+xl_xact_stats_item
+xl_xact_stats_items
 xl_xact_subxacts
 xl_xact_twophase
 xl_xact_xinfo

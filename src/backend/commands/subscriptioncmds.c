@@ -639,6 +639,8 @@ CreateSubscription(ParseState *pstate, CreateSubscriptionStmt *stmt,
 
 	table_close(rel, RowExclusiveLock);
 
+	pgstat_report_subscription_create(subid);
+
 	if (opts.enabled)
 		ApplyLauncherWakeupAtCommit();
 
