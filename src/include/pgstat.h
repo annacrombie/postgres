@@ -419,6 +419,7 @@ extern void pgstat_perform_drops(int ndrops, struct xl_xact_stats_item *items, b
 
 /* Functions called from backends */
 extern long pgstat_report_stat(bool force);
+extern void pgstat_force_next_flush(void);
 
 extern void pgstat_reset_counters(void);
 extern void pgstat_reset_single_counter(PgStatKind kind, Oid objectid);

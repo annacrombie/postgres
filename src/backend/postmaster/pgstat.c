@@ -239,6 +239,12 @@ static dlist_head pgStatPending = DLIST_STATIC_INIT(pgStatPending);
 static PgStat_SubXactStatus *pgStatXactStack = NULL;
 
 /*
+ * Force the next stats flush to happen regardless of
+ * PGSTAT_MIN_INTERVAL. Useful in test scripts.
+ */
+static bool pgStatForceNextFlush = false;
+
+/*
  * For assertions that check pgstat is not used before initialization / after
  * shutdown.
  */
@@ -1146,6 +1152,13 @@ pgstat_report_stat(bool force)
 
 	pgstat_assert_is_up();
 
+	/* "absorb" the forced flush even if there's nothing to flush */
+	if (pgStatForceNextFlush)
+	{
+		force = true;
+		pgStatForceNextFlush = false;
+	}
+
 	/* Don't expend a clock check if nothing to do */
 	if (dlist_is_empty(&pgStatPending) &&
 		!have_slrustats &&
@@ -1242,6 +1255,16 @@ pgstat_report_stat(bool force)
 	pending_since = 0;
 
 	return 0;
+}
+
+/*
+ * Force locally pending stats to be flushed during the next
+ * pgstat_report_stat() call. This is useful for writing tests.
+ */
+void
+pgstat_force_next_flush(void)
+{
+	pgStatForceNextFlush = true;
 }
 
 /*
