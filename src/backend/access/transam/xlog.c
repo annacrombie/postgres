@@ -5133,6 +5133,20 @@ StartupXLOG(void)
 	 */
 	restoreTwoPhaseData();
 
+	/*
+	 * When starting with crash recovery, reset pgstat data - it might not be
+	 * valid. Otherwise restore pgstat data. It's safe to do this here,
+	 * because postmaster will not yet have started any other processes
+	 *
+	 * TODO: With a bit of extra work we could just start with a pgstat file
+	 * associated with the checkpoint redo location we're starting from.
+	 */
+	if (ControlFile->state == DB_SHUTDOWNED ||
+		ControlFile->state == DB_SHUTDOWNED_IN_RECOVERY)
+		pgstat_restore_stats();
+	else
+		pgstat_discard_stats();
+
 	lastFullPageWrites = checkPoint.fullPageWrites;
 
 	RedoRecPtr = XLogCtl->RedoRecPtr = XLogCtl->Insert.RedoRecPtr = checkPoint.redo;
@@ -5206,14 +5220,6 @@ StartupXLOG(void)
 			LocalMinRecoveryPoint = InvalidXLogRecPtr;
 			LocalMinRecoveryPointTLI = 0;
 		}
-
-		/*
-		 * Reset pgstat data, because it may be invalid after recovery. It's
-		 * safe to do this here, because postmaster will not yet have started
-		 * any other processes. NB: This basically just skips loading the data
-		 * from disk, see pgstat_restore_stats() call in clean-startup path.
-		 */
-		pgstat_discard_stats();
 
 		/* Check that the GUCs used to generate the WAL allow recovery */
 		CheckRequiredParameterValues();
@@ -5307,9 +5313,6 @@ StartupXLOG(void)
 	else
 	{
 		performedWalRecovery = false;
-
-		/* AFIXME: better location? */
-		pgstat_restore_stats();
 	}
 
 	/*
