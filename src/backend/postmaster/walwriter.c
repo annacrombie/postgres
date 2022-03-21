@@ -258,7 +258,7 @@ WalWriterMain(void)
 			left_till_hibernate--;
 
 		/* report WAL statistics */
-		pgstat_send_wal(false);
+		pgstat_report_wal(false);
 
 		/*
 		 * Sleep until we are signaled or WalWriterDelay has elapsed.  If we
@@ -301,7 +301,7 @@ HandleWalWriterInterrupts(void)
 		 * to avoid overloading to the stats system, there may exist
 		 * unreported stats counters for the WAL writer.
 		 */
-		pgstat_send_wal(true);
+		pgstat_report_wal(true);
 
 		proc_exit(0);
 	}

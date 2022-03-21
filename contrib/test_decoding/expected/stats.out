@@ -133,6 +133,7 @@ SELECT slot_name, spill_txns > 0 AS spill_txns, spill_count > 0 AS spill_count F
 -- Ensure stats can be repeatedly accessed using the same stats snapshot. See
 -- https://postgr.es/m/20210317230447.c7uc4g3vbs4wi32i%40alap3.anarazel.de
 BEGIN;
+SET LOCAL stats_fetch_consistency = snapshot;
 SELECT slot_name FROM pg_stat_replication_slots;
        slot_name       
 -----------------------

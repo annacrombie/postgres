@@ -243,7 +243,7 @@ BackgroundWriterMain(void)
 		/*
 		 * Send off activity statistics to the stats system
 		 */
-		pgstat_send_bgwriter();
+		pgstat_report_bgwriter();
 
 		if (FirstCallSinceLastCheckpoint())
 		{

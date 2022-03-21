@@ -356,7 +356,8 @@ ReplicationSlotCreate(const char *name, bool db_specific,
 	 * ReplicationSlotAllocationLock.
 	 */
 	if (SlotIsLogical(slot))
-		pgstat_report_replslot_create(NameStr(slot->data.name));
+		pgstat_report_replslot_create(NameStr(slot->data.name),
+									  slot - ReplicationSlotCtl->replication_slots);
 
 	/*
 	 * Now that the slot has been marked as in_use and active, it's safe to
@@ -480,6 +481,11 @@ retry:
 	}
 	else if (!nowait)
 		ConditionVariableCancelSleep(); /* no sleep needed after all */
+
+	/*
+	 * AFIXME: To make pgstat reporting for slots bulletproof we should calls
+	 * something like pgstat_report_replslot_acquire() here.
+	 */
 
 	/* Let everybody know we've modified this slot */
 	ConditionVariableBroadcast(&s->active_cv);
@@ -721,23 +727,13 @@ ReplicationSlotDropPtr(ReplicationSlot *slot)
 				(errmsg("could not remove directory \"%s\"", tmppath)));
 
 	/*
-	 * Send a message to drop the replication slot to the stats collector.
-	 * Since there is no guarantee of the order of message transfer on a UDP
-	 * connection, it's possible that a message for creating a new slot
-	 * reaches before a message for removing the old slot. We send the drop
-	 * and create messages while holding ReplicationSlotAllocationLock to
-	 * reduce that possibility. If the messages reached in reverse, we would
-	 * lose one statistics update message. But the next update message will
-	 * create the statistics for the replication slot.
-	 *
-	 * XXX In case, the messages for creation and drop slot of the same name
-	 * get lost and create happens before (auto)vacuum cleans up the dead
-	 * slot, the stats will be accumulated into the old slot. One can imagine
-	 * having OIDs for each slot to avoid the accumulation of stats but that
-	 * doesn't seem worth doing as in practice this won't happen frequently.
+	 * Drop the statistics entry for the replication slot.  Do this while
+	 * holding ReplicationSlotAllocationLock so that we don't drop a
+	 * statistics entry for another slot with the same name just created in
+	 * another session.
 	 */
 	if (SlotIsLogical(slot))
-		pgstat_report_replslot_drop(NameStr(slot->data.name));
+		pgstat_report_replslot_drop(slot - ReplicationSlotCtl->replication_slots);
 
 	/*
 	 * We release this at the very end, so that nobody starts trying to create

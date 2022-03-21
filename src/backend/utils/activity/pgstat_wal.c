@@ -21,122 +21,119 @@
 #include "executor/instrument.h"
 
 
-/*
- * WAL global statistics counters.  Stored directly in a stats message
- * structure so they can be sent without needing to copy things around.  We
- * assume these init to zeroes.
- */
-PgStat_MsgWal WalStats;
-
+PgStat_WalStats PendingWalStats = {0};
 
 /*
  * WAL usage counters saved from pgWALUsage at the previous call to
- * pgstat_send_wal(). This is used to calculate how much WAL usage
- * happens between pgstat_send_wal() calls, by subtracting
+ * pgstat_report_wal(). This is used to calculate how much WAL usage
+ * happens between pgstat_report_wal() calls, by subtracting
  * the previous counters from the current ones.
  */
 static WalUsage prevWalUsage;
 
 
 /* ----------
- * pgstat_send_wal() -
+ * pgstat_report_wal() -
  *
- *	Send WAL statistics to the collector.
+ * Calculate how much WAL usage counters have increased and update
+ * shared statistics.
  *
- * If 'force' is not set, WAL stats message is only sent if enough time has
- * passed since last one was sent to reach PGSTAT_STAT_INTERVAL.
+ * Must be called by processes that generate WAL.
  * ----------
  */
 void
-pgstat_send_wal(bool force)
+pgstat_report_wal(bool force)
 {
-	static TimestampTz sendTime = 0;
+	Assert(!pgStatShmem->is_shutdown);
+
+	pgstat_wal_flush(force);
+}
+
+/*
+ * ---------
+ * pgstat_fetch_stat_wal() -
+ *
+ *	Support function for the SQL-callable pgstat* functions. Returns
+ *	a pointer to the WAL statistics struct.
+ * ---------
+ */
+PgStat_WalStats *
+pgstat_fetch_stat_wal(void)
+{
+	pgstat_snapshot_global(PGSTAT_KIND_WAL);
+
+	return &stats_snapshot.wal;
+}
+
+/*
+ * Calculate how much WAL usage counters have increased by substracting the
+ * previous counters from the current ones.
+ *
+ * If nowait is true, this function returns true if the lock could not be
+ * acquired. Otherwise return false.
+ */
+bool
+pgstat_wal_flush(bool nowait)
+{
+	WalUsage	diff = {0};
+
+	Assert(IsUnderPostmaster || !IsPostmasterEnvironment);
+	Assert(pgStatShmem != NULL);
 
 	/*
-	 * This function can be called even if nothing at all has happened. In
-	 * this case, avoid sending a completely empty message to the stats
-	 * collector.
-	 *
-	 * Check wal_records counter to determine whether any WAL activity has
-	 * happened since last time. Note that other WalUsage counters don't need
-	 * to be checked because they are incremented always together with
-	 * wal_records counter.
-	 *
-	 * m_wal_buffers_full also doesn't need to be checked because it's
-	 * incremented only when at least one WAL record is generated (i.e.,
-	 * wal_records counter is incremented). But for safely, we assert that
-	 * m_wal_buffers_full is always zero when no WAL record is generated
-	 *
-	 * This function can be called by a process like walwriter that normally
-	 * generates no WAL records. To determine whether any WAL activity has
-	 * happened at that process since the last time, the numbers of WAL writes
-	 * and syncs are also checked.
+	 * This function can be called even if nothing at all has happened. Avoid
+	 * taking lock for nothing in that case.
 	 */
-	if (pgWalUsage.wal_records == prevWalUsage.wal_records &&
-		WalStats.m_wal_write == 0 && WalStats.m_wal_sync == 0)
-	{
-		Assert(WalStats.m_wal_buffers_full == 0);
-		return;
-	}
-
-	if (!force)
-	{
-		TimestampTz now = GetCurrentTimestamp();
-
-		/*
-		 * Don't send a message unless it's been at least PGSTAT_STAT_INTERVAL
-		 * msec since we last sent one to avoid overloading the stats
-		 * collector.
-		 */
-		if (!TimestampDifferenceExceeds(sendTime, now, PGSTAT_STAT_INTERVAL))
-			return;
-		sendTime = now;
-	}
+	if (!pgstat_wal_pending())
+		return false;
 
 	/*
-	 * Set the counters related to generated WAL data if the counters were
-	 * updated.
+	 * We don't update the WAL usage portion of the local WalStats elsewhere.
+	 * Calculate how much WAL usage counters were increased by subtracting the
+	 * previous counters from the current ones.
 	 */
-	if (pgWalUsage.wal_records != prevWalUsage.wal_records)
-	{
-		WalUsage	walusage;
+	WalUsageAccumDiff(&diff, &pgWalUsage, &prevWalUsage);
+	PendingWalStats.wal_records = diff.wal_records;
+	PendingWalStats.wal_fpi = diff.wal_fpi;
+	PendingWalStats.wal_bytes = diff.wal_bytes;
 
-		/*
-		 * Calculate how much WAL usage counters were increased by subtracting
-		 * the previous counters from the current ones. Fill the results in
-		 * WAL stats message.
-		 */
-		MemSet(&walusage, 0, sizeof(WalUsage));
-		WalUsageAccumDiff(&walusage, &pgWalUsage, &prevWalUsage);
+	/* lock the shared entry to protect the content, skip if failed */
+	if (!nowait)
+		LWLockAcquire(&pgStatShmem->wal.lock, LW_EXCLUSIVE);
+	else if (!LWLockConditionalAcquire(&pgStatShmem->wal.lock, LW_EXCLUSIVE))
+		return true;			/* failed to acquire lock, skip */
 
-		WalStats.m_wal_records = walusage.wal_records;
-		WalStats.m_wal_fpi = walusage.wal_fpi;
-		WalStats.m_wal_bytes = walusage.wal_bytes;
+#define WALSTAT_ACC(fld) pgStatShmem->wal.stats.fld += PendingWalStats.fld
+	WALSTAT_ACC(wal_records);
+	WALSTAT_ACC(wal_fpi);
+	WALSTAT_ACC(wal_bytes);
+	WALSTAT_ACC(wal_buffers_full);
+	WALSTAT_ACC(wal_write);
+	WALSTAT_ACC(wal_write_time);
+	WALSTAT_ACC(wal_sync);
+	WALSTAT_ACC(wal_sync_time);
+#undef WALSTAT_ACC
 
-		/*
-		 * Save the current counters for the subsequent calculation of WAL
-		 * usage.
-		 */
-		prevWalUsage = pgWalUsage;
-	}
+	LWLockRelease(&pgStatShmem->wal.lock);
 
 	/*
-	 * Prepare and send the message
+	 * Save the current counters for the subsequent calculation of WAL usage.
 	 */
-	pgstat_setheader(&WalStats.m_hdr, PGSTAT_MTYPE_WAL);
-	pgstat_send(&WalStats, sizeof(WalStats));
+	prevWalUsage = pgWalUsage;
 
 	/*
 	 * Clear out the statistics buffer, so it can be re-used.
 	 */
-	MemSet(&WalStats, 0, sizeof(WalStats));
+	MemSet(&PendingWalStats, 0, sizeof(PendingWalStats));
+
+	return false;
 }
 
 void
 pgstat_wal_initialize(void)
 {
 	/*
-	 * Initialize prevWalUsage with pgWalUsage so that pgstat_send_wal() can
+	 * Initialize prevWalUsage with pgWalUsage so that pgstat_wal_flush() can
 	 * calculate how much pgWalUsage counters are increased by subtracting
 	 * prevWalUsage from pgWalUsage.
 	 */
@@ -154,6 +151,23 @@ bool
 pgstat_wal_pending(void)
 {
 	return pgWalUsage.wal_records != prevWalUsage.wal_records ||
-		WalStats.m_wal_write != 0 ||
-		WalStats.m_wal_sync != 0;
+		PendingWalStats.wal_write != 0 ||
+		PendingWalStats.wal_sync != 0;
+}
+
+void
+pgstat_wal_reset_all_cb(TimestampTz now)
+{
+	LWLockAcquire(&pgStatShmem->wal.lock, LW_EXCLUSIVE);
+	MemSet(&pgStatShmem->wal.stats, 0, sizeof(PgStat_WalStats));
+	pgStatShmem->wal.stats.stat_reset_timestamp = now;
+	LWLockRelease(&pgStatShmem->wal.lock);
+}
+
+void
+pgstat_wal_snapshot_cb(void)
+{
+	LWLockAcquire(StatsLock, LW_SHARED);
+	memcpy(&stats_snapshot.wal, &pgStatShmem->wal.stats, sizeof(PgStat_WalStats));
+	LWLockRelease(StatsLock);
 }

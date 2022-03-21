@@ -18,6 +18,10 @@
 #include "postgres.h"
 
 #include "utils/pgstat_internal.h"
+#include "utils/timestamp.h"
+
+
+static bool match_sub_entries(PgStatShmHashEntry *p);
 
 
 /* ----------
@@ -33,15 +37,10 @@
 void
 pgstat_reset_subscription_counter(Oid subid)
 {
-	PgStat_MsgResetsubcounter msg;
-
-	if (pgStatSock == PGINVALID_SOCKET)
-		return;
-
-	msg.m_subid = subid;
-	pgstat_setheader(&msg.m_hdr, PGSTAT_MTYPE_RESETSUBCOUNTER);
-
-	pgstat_send(&msg, sizeof(msg));
+	if (subid == InvalidOid)
+		pgstat_reset_matching(match_sub_entries);
+	else
+		pgstat_reset_one(PGSTAT_KIND_SUBSCRIPTION, InvalidOid, subid);
 }
 
 /* ----------
@@ -53,18 +52,27 @@ pgstat_reset_subscription_counter(Oid subid)
 void
 pgstat_report_subscription_error(Oid subid, bool is_apply_error)
 {
-	PgStat_MsgSubscriptionError msg;
+	PgStatSharedRef *shared_ref;
+	PgStat_BackendSubEntry *pending;
 
-	pgstat_setheader(&msg.m_hdr, PGSTAT_MTYPE_SUBSCRIPTIONERROR);
-	msg.m_subid = subid;
-	msg.m_is_apply_error = is_apply_error;
-	pgstat_send(&msg, sizeof(PgStat_MsgSubscriptionError));
+	if (!pgstat_track_counts)
+		return;
+
+	shared_ref = pgstat_pending_prepare(PGSTAT_KIND_SUBSCRIPTION,
+										InvalidOid, subid, NULL);
+
+	pending = shared_ref->pending;
+	if (is_apply_error)
+		pending->apply_error_count++;
+	else
+		pending->sync_error_count++;
 }
 
 void
 pgstat_report_subscription_create(Oid subid)
 {
-	/* will do work in subsequent commit */
+	pgstat_schedule_stat_create(PGSTAT_KIND_SUBSCRIPTION,
+								InvalidOid, subid);
 }
 
 /* ----------
@@ -76,9 +84,66 @@ pgstat_report_subscription_create(Oid subid)
 void
 pgstat_report_subscription_drop(Oid subid)
 {
-	PgStat_MsgSubscriptionDrop msg;
 
-	pgstat_setheader(&msg.m_hdr, PGSTAT_MTYPE_SUBSCRIPTIONDROP);
-	msg.m_subid = subid;
-	pgstat_send(&msg, sizeof(PgStat_MsgSubscriptionDrop));
+	pgstat_schedule_stat_drop(PGSTAT_KIND_SUBSCRIPTION,
+							  InvalidOid, subid);
+}
+
+/*
+ * ---------
+ * pgstat_fetch_stat_subscription() -
+ *
+ *	Support function for the SQL-callable pgstat* functions. Returns
+ *	the collected statistics for one subscription or NULL.
+ * ---------
+ */
+PgStat_StatSubEntry *
+pgstat_fetch_stat_subscription(Oid subid)
+{
+	return (PgStat_StatSubEntry *)
+		pgstat_fetch_entry(PGSTAT_KIND_SUBSCRIPTION, InvalidOid, subid);
+}
+
+/*
+ * pgstat_subscription_flush_cb - flush out a local subscription stats entry
+ *
+ * If nowait is true, this function returns false on lock failure. Otherwise
+ * this function always returns true.
+ *
+ * Returns true if the entry is successfully flushed out.
+ */
+bool
+pgstat_subscription_flush_cb(PgStatSharedRef *shared_ref, bool nowait)
+{
+	PgStat_BackendSubEntry *localent;	/* local stats entry */
+	PgStatShm_StatSubEntry *shsubent = NULL;	/* shared stats entry */
+
+	Assert(shared_ref->shared_entry->key.kind == PGSTAT_KIND_SUBSCRIPTION);
+	localent = (PgStat_BackendSubEntry *) shared_ref->pending;
+
+	/* localent always has non-zero content */
+
+	if (!pgstat_shared_stat_lock(shared_ref, nowait))
+		return false;			/* failed to acquire lock, skip */
+
+	shsubent = (PgStatShm_StatSubEntry *) shared_ref->shared_stats;
+
+	shsubent->stats.apply_error_count += localent->apply_error_count;
+	shsubent->stats.sync_error_count += localent->sync_error_count;
+
+	pgstat_shared_stat_unlock(shared_ref);
+	return true;
+}
+
+void
+pgstat_subscription_reset_timestamp_cb(PgStatShm_StatEntryHeader *header, TimestampTz ts)
+{
+	((PgStatShm_StatSubEntry *) header)->stats.stat_reset_timestamp = ts;
+}
+
+/* Is entry for a sub? For pgstat_reset_subscription_counter(). */
+static bool
+match_sub_entries(PgStatShmHashEntry *p)
+{
+	return p->key.kind == PGSTAT_KIND_SUBSCRIPTION;
 }

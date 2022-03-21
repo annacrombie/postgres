@@ -2047,7 +2047,15 @@ pg_stat_get_xact_function_self_time(PG_FUNCTION_ARGS)
 Datum
 pg_stat_get_snapshot_timestamp(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TIMESTAMPTZ(pgstat_fetch_global()->stats_timestamp);
+	bool		have_snapshot;
+	TimestampTz ts;
+
+	ts = pgstat_get_stat_snapshot_timestamp(&have_snapshot);
+
+	if (!have_snapshot)
+		PG_RETURN_NULL();
+
+	PG_RETURN_TIMESTAMPTZ(ts);
 }
 
 /* Discard the active statistics snapshot */
@@ -2075,7 +2083,24 @@ pg_stat_reset_shared(PG_FUNCTION_ARGS)
 {
 	char	   *target = text_to_cstring(PG_GETARG_TEXT_PP(0));
 
-	pgstat_reset_shared_counters(target);
+	if (strcmp(target, "archiver") == 0)
+		pgstat_reset_shared_counters(PGSTAT_KIND_ARCHIVER);
+	else if (strcmp(target, "bgwriter") == 0)
+	{
+		/*
+		 * Historically checkpointer was part of bgwriter, continue to reset
+		 * both for now.
+		 */
+		pgstat_reset_shared_counters(PGSTAT_KIND_BGWRITER);
+		pgstat_reset_shared_counters(PGSTAT_KIND_CHECKPOINTER);
+	}
+	else if (strcmp(target, "wal") == 0)
+		pgstat_reset_shared_counters(PGSTAT_KIND_WAL);
+	else
+		ereport(ERROR,
+				(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+				 errmsg("unrecognized reset target: \"%s\"", target),
+				 errhint("Target must be \"archiver\", \"bgwriter\", or \"wal\".")));
 
 	PG_RETURN_VOID();
 }
@@ -2086,7 +2111,7 @@ pg_stat_reset_single_table_counters(PG_FUNCTION_ARGS)
 {
 	Oid			taboid = PG_GETARG_OID(0);
 
-	pgstat_reset_single_counter(taboid, RESET_TABLE);
+	pgstat_reset_single_counter(PGSTAT_KIND_TABLE, taboid);
 
 	PG_RETURN_VOID();
 }
@@ -2096,7 +2121,7 @@ pg_stat_reset_single_function_counters(PG_FUNCTION_ARGS)
 {
 	Oid			funcoid = PG_GETARG_OID(0);
 
-	pgstat_reset_single_counter(funcoid, RESET_FUNCTION);
+	pgstat_reset_single_counter(PGSTAT_KIND_FUNCTION, funcoid);
 
 	PG_RETURN_VOID();
 }
@@ -2107,10 +2132,13 @@ pg_stat_reset_slru(PG_FUNCTION_ARGS)
 {
 	char	   *target = NULL;
 
-	if (!PG_ARGISNULL(0))
+	if (PG_ARGISNULL(0))
+		pgstat_reset_shared_counters(PGSTAT_KIND_SLRU);
+	else
+	{
 		target = text_to_cstring(PG_GETARG_TEXT_PP(0));
-
-	pgstat_reset_slru_counter(target);
+		pgstat_reset_slru_counter(target);
+	}
 
 	PG_RETURN_VOID();
 }
@@ -2121,7 +2149,9 @@ pg_stat_reset_replication_slot(PG_FUNCTION_ARGS)
 {
 	char	   *target = NULL;
 
-	if (!PG_ARGISNULL(0))
+	if (PG_ARGISNULL(0))
+		pgstat_reset_shared_counters(PGSTAT_KIND_REPLSLOT);
+	else
 	{
 		ReplicationSlot *slot;
 
@@ -2147,9 +2177,9 @@ pg_stat_reset_replication_slot(PG_FUNCTION_ARGS)
 		 */
 		if (SlotIsPhysical(slot))
 			PG_RETURN_VOID();
-	}
 
-	pgstat_reset_replslot_counter(target);
+		pgstat_reset_replslot_counter(target);
+	}
 
 	PG_RETURN_VOID();
 }

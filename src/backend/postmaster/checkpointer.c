@@ -213,6 +213,16 @@ CheckpointerMain(void)
 	last_checkpoint_time = last_xlog_switch_time = (pg_time_t) time(NULL);
 
 	/*
+	 * Write out stats after shutdown. This needs to be called by exactly one
+	 * process during a normal shutdown, and since checkpointer is shut down
+	 * very late...
+	 *
+	 * XXX: Are there potential issues with walsenders reporting stats at a
+	 * later time?
+	 */
+	before_shmem_exit(pgstat_before_server_shutdown, 0);
+
+	/*
 	 * Create a memory context that we will do all our work in.  We do this so
 	 * that we can reset the context during error recovery and thereby avoid
 	 * possible memory leaks.  Formerly this code just ran in
@@ -358,7 +368,7 @@ CheckpointerMain(void)
 		if (((volatile CheckpointerShmemStruct *) CheckpointerShmem)->ckpt_flags)
 		{
 			do_checkpoint = true;
-			PendingCheckpointerStats.m_requested_checkpoints++;
+			PendingCheckpointerStats.requested_checkpoints++;
 		}
 
 		/*
@@ -372,7 +382,7 @@ CheckpointerMain(void)
 		if (elapsed_secs >= CheckPointTimeout)
 		{
 			if (!do_checkpoint)
-				PendingCheckpointerStats.m_timed_checkpoints++;
+				PendingCheckpointerStats.timed_checkpoints++;
 			do_checkpoint = true;
 			flags |= CHECKPOINT_CAUSE_TIME;
 		}
@@ -493,8 +503,8 @@ CheckpointerMain(void)
 		CheckArchiveTimeout();
 
 		/* Report pending stats */
-		pgstat_send_checkpointer();
-		pgstat_send_wal(true);
+		pgstat_report_checkpointer();
+		pgstat_report_wal(true);
 
 		/*
 		 * If any checkpoint flags have been set, redo the loop to handle the
@@ -569,10 +579,10 @@ HandleCheckpointerInterrupts(void)
 		 * updates the statistics, increment the checkpoint request and force
 		 * statistic to be reported.
 		 */
-		PendingCheckpointerStats.m_requested_checkpoints++;
+		PendingCheckpointerStats.requested_checkpoints++;
 		ShutdownXLOG(0, 0);
-		pgstat_send_checkpointer();
-		pgstat_send_wal(true);
+		pgstat_report_checkpointer();
+		pgstat_report_wal(true);
 
 		/* Normal exit from the checkpointer is here */
 		proc_exit(0);			/* done */
@@ -717,7 +727,7 @@ CheckpointWriteDelay(int flags, double progress)
 		/*
 		 * Report interim activity statistics.
 		 */
-		pgstat_send_checkpointer();
+		pgstat_report_checkpointer();
 
 		/*
 		 * This sleep used to be connected to bgwriter_delay, typically 200ms.
@@ -1264,9 +1274,9 @@ AbsorbSyncRequests(void)
 	LWLockAcquire(CheckpointerCommLock, LW_EXCLUSIVE);
 
 	/* Transfer stats counts into pending pgstats message */
-	PendingCheckpointerStats.m_buf_written_backend
+	PendingCheckpointerStats.buf_written_backend
 		+= CheckpointerShmem->num_backend_writes;
-	PendingCheckpointerStats.m_buf_fsync_backend
+	PendingCheckpointerStats.buf_fsync_backend
 		+= CheckpointerShmem->num_backend_fsync;
 
 	CheckpointerShmem->num_backend_writes = 0;
