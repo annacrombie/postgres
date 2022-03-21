@@ -635,11 +635,6 @@ extern PGDLLIMPORT bool pgstat_track_counts;
 extern PGDLLIMPORT int pgstat_track_functions;
 extern PGDLLIMPORT int pgstat_fetch_consistency;
 
-/* No longer used, but will be removed with GUC */
-extern char *pgstat_stat_directory;
-extern char *pgstat_stat_tmpname;
-extern char *pgstat_stat_filename;
-
 
 /*
  * Variables in pgstat_bgwriter.c

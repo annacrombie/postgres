@@ -176,18 +176,6 @@ int			pgstat_fetch_consistency = STATS_FETCH_CONSISTENCY_NONE;
 
 
 /* ----------
- * Built from GUC parameter
- * ----------
- */
-
-char	   *pgstat_stat_directory = NULL;
-
-/* No longer used, but will be removed with GUC */
-char	   *pgstat_stat_filename = NULL;
-char	   *pgstat_stat_tmpname = NULL;
-
-
-/* ----------
  * Stats shared memory state
  * ----------
  */
