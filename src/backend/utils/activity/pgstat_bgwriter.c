@@ -31,7 +31,7 @@ PgStat_MsgBgWriter PendingBgWriterStats;
 /* ----------
  * pgstat_send_bgwriter() -
  *
- *		Send bgwriter statistics to the collector
+ *		Report bgwriter statistics
  * ----------
  */
 void

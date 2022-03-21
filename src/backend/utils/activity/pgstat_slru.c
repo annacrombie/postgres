@@ -35,7 +35,7 @@ static PgStat_MsgSLRU SLRUStats[SLRU_NUM_ELEMENTS];
 /* ----------
  * pgstat_reset_slru_counter() -
  *
- *	Tell the statistics collector to reset a single SLRU counter, or all
+ *	Tell the statistics subsystem to reset a single SLRU counter, or all
  *	SLRU counters (when name is null).
  *
  *	Permission checking for this function is managed through the normal

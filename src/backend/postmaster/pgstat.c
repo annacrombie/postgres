@@ -704,7 +704,7 @@ allow_immediate_pgstat_restart(void)
 /*
  * Shut down a single backend's statistics reporting at process exit.
  *
- * Flush any remaining statistics counts out to the collector.
+ * Flush any remaining statistics counts out to the stats system.
  * Without this, operations triggered during backend exit (such as
  * temp table deletions) won't be counted.
  */
@@ -715,7 +715,7 @@ pgstat_shutdown_hook(int code, Datum arg)
 
 	/*
 	 * If we got as far as discovering our own database ID, we can report what
-	 * we did to the collector.  Otherwise, we'd be sending an invalid
+	 * we did to the stats system.  Otherwise, we'd be reporting an invalid
 	 * database ID, so forget it.  (This means that accesses to pg_database
 	 * during failed backend starts might never get counted.)
 	 */
@@ -1253,7 +1253,7 @@ pgstat_collect_oids(Oid catalogid, AttrNumber anum_oid)
 /* ----------
  * pgstat_reset_counters() -
  *
- *	Tell the statistics collector to reset counters for our database.
+ *	Tell the statistics system to reset counters for our database.
  *
  *	Permission checking for this function is managed through the normal
  *	GRANT system.
@@ -1275,7 +1275,7 @@ pgstat_reset_counters(void)
 /* ----------
  * pgstat_reset_single_counter() -
  *
- *	Tell the statistics collector to reset a single counter.
+ *	Tell the statistics system to reset a single counter.
  *
  *	Permission checking for this function is managed through the normal
  *	GRANT system.
@@ -1300,7 +1300,7 @@ pgstat_reset_single_counter(Oid objoid, PgStat_Single_Reset_Type type)
 /* ----------
  * pgstat_reset_shared_counters() -
  *
- *	Tell the statistics collector to reset cluster-wide shared counters.
+ *	Reset cluster-wide shared counters.
  *
  *	Permission checking for this function is managed through the normal
  *	GRANT system.
@@ -1371,8 +1371,8 @@ pgstat_send_inquiry(TimestampTz clock_time, TimestampTz cutoff_time, Oid databas
  *
  *	Support function for the SQL-callable pgstat* functions. Returns
  *	the collected statistics for one database or NULL. NULL doesn't mean
- *	that the database doesn't exist, it is just not yet known by the
- *	collector, so the caller is better off to report ZERO instead.
+ *	that the database doesn't exist, just that there are no statistics, so the
+ *	caller is better off to report ZERO instead.
  * ----------
  */
 PgStat_StatDBEntry *
@@ -1413,8 +1413,8 @@ pgstat_fetch_global(void)
  *
  *	Support function for the SQL-callable pgstat* functions. Returns
  *	the collected statistics for one table or NULL. NULL doesn't mean
- *	that the table doesn't exist, it is just not yet known by the
- *	collector, so the caller is better off to report ZERO instead.
+ *	that the table doesn't exist, just that there are no statistics, so the
+ *	caller is better off to report ZERO instead.
  * ----------
  */
 PgStat_StatTabEntry *

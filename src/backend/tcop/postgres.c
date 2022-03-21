@@ -2937,7 +2937,7 @@ die(SIGNAL_ARGS)
 		ProcDiePending = true;
 	}
 
-	/* for the statistics collector */
+	/* for the statistics subsystem */
 	pgStatSessionEndCause = DISCONNECT_KILLED;
 
 	/* If we're still here, waken anything waiting on the process latch */
@@ -4369,11 +4369,12 @@ PostgresMain(const char *dbname, const char *username)
 		 * Note: this includes fflush()'ing the last of the prior output.
 		 *
 		 * This is also a good time to send collected statistics to the
-		 * collector, and to update the PS stats display.  We avoid doing
-		 * those every time through the message loop because it'd slow down
-		 * processing of batched messages, and because we don't want to report
-		 * uncommitted updates (that confuses autovacuum).  The notification
-		 * processor wants a call too, if we are not in a transaction block.
+		 * activity statistics, and to update the PS stats display.  We avoid
+		 * doing those every time through the message loop because it'd slow
+		 * down processing of batched messages, and because we don't want to
+		 * report uncommitted updates (that confuses autovacuum).  The
+		 * notification processor wants a call too, if we are not in a
+		 * transaction block.
 		 *
 		 * Also, if an idle timeout is enabled, start the timer for that.
 		 */
@@ -4710,7 +4711,7 @@ PostgresMain(const char *dbname, const char *username)
 				 */
 			case EOF:
 
-				/* for the statistics collector */
+				/* for the statistics subsystem */
 				pgStatSessionEndCause = DISCONNECT_CLIENT_EOF;
 
 				/* FALLTHROUGH */

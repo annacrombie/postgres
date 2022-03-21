@@ -1301,7 +1301,7 @@ DropSubscription(DropSubscriptionStmt *stmt, bool isTopLevel)
 	 * slot stays dropped even if the transaction rolls back.  So we cannot
 	 * run DROP SUBSCRIPTION inside a transaction block if dropping the
 	 * replication slot.  Also, in this case, we report a message for dropping
-	 * the subscription to the stats collector.
+	 * the subscription to the stats subsystem.
 	 *
 	 * XXX The command name should really be something like "DROP SUBSCRIPTION
 	 * of a subscription that is associated with a replication slot", but we
@@ -1475,7 +1475,7 @@ DropSubscription(DropSubscriptionStmt *stmt, bool isTopLevel)
 	PG_END_TRY();
 
 	/*
-	 * Send a message for dropping this subscription to the stats collector.
+	 * Tell the stats subsystem that the subscription is getting dropped.
 	 * We can safely report dropping the subscription statistics here if the
 	 * subscription is associated with a replication slot since we cannot run
 	 * DROP SUBSCRIPTION inside a transaction block.  Subscription statistics

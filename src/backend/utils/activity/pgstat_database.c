@@ -60,7 +60,7 @@ pgstat_drop_database(Oid databaseid)
 /* --------
  * pgstat_report_recovery_conflict() -
  *
- *	Tell the collector about a Hot Standby recovery conflict.
+ * Report a Hot Standby recovery conflict.
  * --------
  */
 void
@@ -80,7 +80,7 @@ pgstat_report_recovery_conflict(int reason)
 /* --------
  * pgstat_report_deadlock() -
  *
- *	Tell the collector about a deadlock detected.
+ * Report a detected deadlock.
  * --------
  */
 void
@@ -99,7 +99,7 @@ pgstat_report_deadlock(void)
 /* --------
  * pgstat_report_checksum_failures_in_db() -
  *
- *	Tell the collector about one or more checksum failures.
+ * Report one or more checksum failures.
  * --------
  */
 void
@@ -121,7 +121,7 @@ pgstat_report_checksum_failures_in_db(Oid dboid, int failurecount)
 /* --------
  * pgstat_report_checksum_failure() -
  *
- *	Tell the collector about a checksum failure.
+ * Reports one checksum failure in the current database.
  * --------
  */
 void
@@ -133,7 +133,7 @@ pgstat_report_checksum_failure(void)
 /* --------
  * pgstat_report_tempfile() -
  *
- *	Tell the collector about a temporary file.
+ * Report a temporary file.
  * --------
  */
 void
@@ -153,7 +153,7 @@ pgstat_report_tempfile(size_t filesize)
 /* --------
  * pgstat_report_connect() -
  *
- *	Tell the collector about a new connection.
+ *	Notify stats system of a new connection.
  * --------
  */
 void
@@ -174,7 +174,7 @@ pgstat_report_connect(Oid dboid)
 /* --------
  * pgstat_report_disconnect() -
  *
- *	Tell the collector about a disconnect.
+ *	Notify the stats system of a disconnect.
  * --------
  */
 void

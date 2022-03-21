@@ -31,7 +31,7 @@ PgStat_MsgCheckpointer PendingCheckpointerStats;
 /* ----------
  * pgstat_send_checkpointer() -
  *
- *		Send checkpointer statistics to the collector
+ *		Report checkpointer statistics
  * ----------
  */
 void
