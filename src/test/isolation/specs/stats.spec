@@ -11,11 +11,14 @@ setup
 
     CREATE FUNCTION test_stat_func2() RETURNS VOID LANGUAGE plpgsql AS $$BEGIN END;$$;
     INSERT INTO test_stat_oid(name, oid) VALUES('test_stat_func2', 'test_stat_func2'::regproc);
+
+    CREATE TABLE test_slru_stats(slru TEXT, stat TEXT, value INT);
 }
 
 teardown
 {
     DROP TABLE test_stat_oid;
+    DROP TABLE test_slru_stats;
 
     DROP TABLE IF EXISTS test_stat_tab;
     DROP FUNCTION IF EXISTS test_stat_func();
@@ -58,7 +61,24 @@ step "s1_func_stats2" {
     FROM test_stat_oid AS tso
     WHERE tso.name = 'test_stat_func2'
 }
+step "s1_slru_save_stats" {
+	INSERT INTO test_slru_stats VALUES('Notify', 'blks_zeroed',
+    (SELECT blks_zeroed FROM pg_stat_slru WHERE name = 'Notify'));
+}
+step "s1_listen" { LISTEN big_notify; }
+step "s1_big_notify" { SELECT pg_notify('big_notify',
+                repeat('0', current_setting('block_size')::int / 2)) FROM generate_series(1, 2);
+                }
+
+step "s1_slru_check_stats" {
+	SELECT current.blks_zeroed > before.value
+  FROM test_slru_stats before
+  INNER JOIN pg_stat_slru current
+  ON before.slru = current.name
+  WHERE before.stat = 'blks_zeroed';
+	}
 #step "s1_func_stats_debug" {SELECT * FROM pg_stat_user_functions;}
+
 
 session "s2"
 setup { SET stats_fetch_consistency = 'none'; }
@@ -285,3 +305,14 @@ permutation
   "s1_func_stats"
   "s2_rollback_prepared_a"
   "s1_func_stats"
+
+######################
+# SLRU stats tests
+######################
+
+permutation
+  "s1_slru_save_stats"
+  "s1_listen"
+  "s1_big_notify"
+  "s1_ff"
+  "s1_slru_check_stats"
