@@ -9797,7 +9797,10 @@ GetConfigOptionByNum(int varnum, const char **values, bool *noshow)
 	values[4] = _(conf->short_desc);
 
 	/* extra_desc */
-	values[5] = _(conf->long_desc);
+	if (conf->long_desc)
+		values[5] = _(conf->long_desc);
+	else
+		values[5] = "";
 
 	/* context */
 	values[6] = GucContext_Names[conf->context];
