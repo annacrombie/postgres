@@ -48,6 +48,7 @@
 
 
 const char *progname;
+static bool reached_main = false;
 
 
 static void startup_hacks(const char *progname);
@@ -63,6 +64,8 @@ int
 main(int argc, char *argv[])
 {
 	bool		do_check_root = true;
+
+	reached_main = true;
 
 	/*
 	 * If supported on the current platform, set up a handler to be called if
@@ -442,4 +445,19 @@ check_root(const char *progname)
 		exit(1);
 	}
 #endif							/* WIN32 */
+}
+
+const char *__ubsan_default_options(void);
+const char *
+__ubsan_default_options(void)
+{
+	/* don't call libc before it's initialized */
+	if (!reached_main)
+		return "";
+
+	/*
+	 * Use our getenv because libsanitizer gets confused by ps_status.c
+	 * overwriting the environ block.
+	 */
+	return getenv("UBSAN_OPTIONS");
 }
