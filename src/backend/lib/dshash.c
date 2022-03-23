@@ -640,6 +640,9 @@ dshash_seq_next(dshash_seq_status *status)
 		Assert(status->curbucket == 0);
 		Assert(!status->hash_table->find_locked);
 
+		if (status->hash_table->size_log2 == 0)
+			return NULL;
+
 		/* first shot. grab the first item. */
 		partition =
 			PARTITION_FOR_BUCKET_INDEX(status->curbucket,
