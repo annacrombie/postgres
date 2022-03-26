@@ -63,6 +63,10 @@ SELECT pg_stat_reset_replication_slot('regression_slot_stats');
 SELECT wait_for_decode_stats(true, false);
 SELECT slot_name, spill_txns, spill_count, total_txns, total_bytes FROM pg_stat_replication_slots;
 
+-- verify functions handle NULL input correctly (past bug)
+SELECT pg_stat_get_replication_slot(NULL);
+SELECT * FROM pg_stat_get_subscription_stats(NULL);
+
 -- spilling the xact
 BEGIN;
 INSERT INTO stats_test SELECT 'serialize-topbig--1:'||g.i FROM generate_series(1, 5000) g(i);
