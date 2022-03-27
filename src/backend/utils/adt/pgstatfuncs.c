@@ -2410,3 +2410,33 @@ pg_stat_get_subscription_stats(PG_FUNCTION_ARGS)
 	/* Returns the record as Datum */
 	PG_RETURN_DATUM(HeapTupleGetDatum(heap_form_tuple(tupdesc, values, nulls)));
 }
+
+/*
+ * Checks for presence of stats for object with provided object oid of kind
+ * specified in the type string in database of provided database oid.
+ *
+ * For subscription stats, only the objoid will be used. For database stats,
+ * only the dboid will be used. The value passed in for the unused parameter is
+ * discarded.
+ * TODO: should it be 'pg_stat_stats_present' instead of 'pg_stat_stats_exist'?
+ */
+Datum
+pg_stat_stats_exist(PG_FUNCTION_ARGS)
+{
+	Oid			dboid = PG_GETARG_OID(0);
+	Oid			objoid = PG_GETARG_OID(1);
+	char	   *stats_type = text_to_cstring(PG_GETARG_TEXT_P(2));
+	PgStatKind	kind = pgstat_kind_from_str(stats_type);
+
+	/*
+	 * Ignore dboid or objoid for subscription and db stats
+	 * respectively. AFIXME: Why do we care?
+	 */
+	if (kind == PGSTAT_KIND_SUBSCRIPTION)
+		dboid = InvalidOid;
+
+	if (kind == PGSTAT_KIND_DB)
+		objoid = InvalidOid;
+
+	PG_RETURN_BOOL(pgstat_shared_stat_exists(kind, dboid, objoid));
+}

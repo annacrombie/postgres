@@ -1336,6 +1336,15 @@ pgstat_get_stat_snapshot_timestamp(bool *have_snapshot)
 	return 0;
 }
 
+bool
+pgstat_shared_stat_exists(PgStatKind kind, Oid dboid, Oid objoid)
+{
+	if (pgstat_kind_info_for(kind)->fixed_amount)
+		return true;
+
+	return pgstat_fetch_entry(kind, dboid, objoid) != NULL;
+}
+
 
 /* ------------------------------------------------------------
  * Helper functions
