@@ -397,6 +397,7 @@ static void
 dsm_backend_startup(void)
 {
 #ifdef EXEC_BACKEND
+	if (IsUnderPostmaster)
 	{
 		void	   *control_address = NULL;
 

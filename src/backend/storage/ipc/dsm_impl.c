@@ -959,6 +959,7 @@ dsm_impl_pin_segment(dsm_handle handle, void *impl_private,
 	{
 #ifdef USE_DSM_WINDOWS
 		case DSM_IMPL_WINDOWS:
+			if (IsUnderPostmaster)
 			{
 				HANDLE		hmap;
 
