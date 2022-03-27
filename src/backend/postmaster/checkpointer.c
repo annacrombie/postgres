@@ -465,6 +465,13 @@ CheckpointerMain(void)
 			smgrcloseall();
 
 			/*
+			 * Report checkpoint. Do this before updating ckpt_done, so that
+			 * tests can rely on checkpointer stats after CHECKPOINT;
+			 * completes.
+			 */
+			pgstat_report_checkpointer();
+
+			/*
 			 * Indicate checkpoint completion to any waiting backends.
 			 */
 			SpinLockAcquire(&CheckpointerShmem->ckpt_lck);
