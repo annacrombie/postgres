@@ -219,11 +219,13 @@ static pgstat_shared_ref_hash_hash *pgStatSharedRefHash = NULL;
 static int	pgStatSharedRefAge = 0; /* cache age of pgStatShmLookupCache */
 
 /*
- * Memory context containing the pgStatSharedRefHash table, the
- * pgStatSharedRef entries, and pending data. Mostly to make it easier to
- * track memory usage.
+ * Memory contexts containing the pgStatSharedRefHash table, the
+ * pgStatSharedRef entries, and pending data respectively. Mostly to make it
+ * easier to track / attribute memory usage.
  */
 static MemoryContext pgStatSharedRefContext = NULL;
+static MemoryContext pgStatSharedRefHashContext = NULL;
+static MemoryContext pgStatPendingContext = NULL;
 
 /*
  * List of PgStatSharedRefs with unflushed pending stats.
@@ -421,16 +423,19 @@ static const dshash_parameters dsh_params = {
 static Size
 pgstat_dsa_init_size(void)
 {
+	Size		sz;
+
 	/*
 	 * The dshash header / initial buckets array needs to fit into "plain"
 	 * shared memory, but it's beneficial to not need dsm segments
-	 * immediately. A size of 256kB seems to work reasonably well and not
+	 * immediately. A size of 256kB seems works well and is not
 	 * disproportional compared to other constant sized shared memory
 	 * allocations. NB: To avoid DSMs further, the user can configure
 	 * min_dynamic_shared_memory.
 	 */
-	Assert(dsa_minimum_size() < 256 * 1024);
-	return MAXALIGN(256 * 1024);
+	sz = 256 * 1024;
+	Assert(dsa_minimum_size() <= sz);
+	return MAXALIGN(sz);
 }
 
 static Size
@@ -1349,13 +1354,17 @@ pgstat_setup_memcxt(void)
 	if (unlikely(!pgStatSharedRefContext))
 		pgStatSharedRefContext =
 			AllocSetContextCreate(CacheMemoryContext,
-								  "Backend statistics data",
+								  "PgStat Shared Ref",
 								  ALLOCSET_SMALL_SIZES);
-
-	if (unlikely(!pgStatSnapshotContext))
-		pgStatSnapshotContext =
-			AllocSetContextCreate(TopMemoryContext,
-								  "Backend statistics snapshot",
+	if (unlikely(!pgStatSharedRefHashContext))
+		pgStatSharedRefHashContext =
+			AllocSetContextCreate(CacheMemoryContext,
+								  "PgStat Shared Ref Hash",
+								  ALLOCSET_SMALL_SIZES);
+	if (unlikely(!pgStatPendingContext))
+		pgStatPendingContext =
+			AllocSetContextCreate(CacheMemoryContext,
+								  "PgStat Pending",
 								  ALLOCSET_SMALL_SIZES);
 }
 
@@ -1830,7 +1839,7 @@ pgstat_setup_shared_refs(void)
 		return;
 
 	pgStatSharedRefHash =
-		pgstat_shared_ref_hash_create(pgStatSharedRefContext,
+		pgstat_shared_ref_hash_create(pgStatSharedRefHashContext,
 									  PGSTAT_SHARED_REF_HASH_SIZE, NULL);
 	pgStatSharedRefAge = pg_atomic_read_u64(&pgStatShmem->gc_count);
 	Assert(pgStatSharedRefAge != 0);
@@ -2269,7 +2278,7 @@ pgstat_pending_prepare(PgStatKind kind, Oid dboid, Oid objoid, bool *created_sha
 
 		Assert(entrysize != (size_t) -1);
 
-		shared_ref->pending = MemoryContextAllocZero(TopMemoryContext, entrysize);
+		shared_ref->pending = MemoryContextAllocZero(pgStatPendingContext, entrysize);
 		dlist_push_tail(&pgStatPending, &shared_ref->pending_node);
 	}
 
@@ -2600,11 +2609,14 @@ pgstat_reset_matching(bool (*do_reset) (PgStatShmHashEntry *))
 static void
 pgstat_fetch_prepare(void)
 {
-	pgstat_setup_memcxt();
-
-	if (pgstat_fetch_consistency ==STATS_FETCH_CONSISTENCY_NONE ||
+	if (pgstat_fetch_consistency == STATS_FETCH_CONSISTENCY_NONE ||
 		stats_snapshot.stats != NULL)
 		return;
+
+	if (!pgStatSnapshotContext)
+		pgStatSnapshotContext = AllocSetContextCreate(TopMemoryContext,
+													  "PgStat Snapshot",
+													  ALLOCSET_SMALL_SIZES);
 
 	stats_snapshot.stats = pgstat_snapshot_create(pgStatSnapshotContext,
 												  PGSTAT_SNAPSHOT_HASH_SIZE,
@@ -2636,11 +2648,11 @@ pgstat_snapshot_build(void)
 	dshash_seq_init(&hstat, pgStatSharedHash, false);
 	while ((p = dshash_seq_next(&hstat)) != NULL)
 	{
-		bool		found;
-		PgStatSnapshotEntry *entry = NULL;
-		PgStatShm_StatEntryHeader *stats_data;
 		PgStatKind	kind = p->key.kind;
 		const PgStatKindInfo *kind_info = pgstat_kind_info_for(kind);
+		bool		found;
+		PgStatSnapshotEntry *entry;
+		PgStatShm_StatEntryHeader *stats_data;
 
 		/*
 		 * Check if the stats object should be included in the snapshot.
@@ -2793,11 +2805,15 @@ pgstat_fetch_entry(PgStatKind kind, Oid dboid, Oid objoid)
 	}
 
 	/*
-	 * AFIXME: For STATS_FETCH_CONSISTENCY_NONE, should we instead allocate
-	 * stats in calling context?
+	 * Allocate in caller's context for STATS_FETCH_CONSISTENCY_NONE,
+	 * otherwise we could quickly end up with a fair bit of memory used due to
+	 * repeated accesses.
 	 */
-
-	stats_data = MemoryContextAlloc(pgStatSnapshotContext, kind_info->shared_data_len);
+	if (pgstat_fetch_consistency == STATS_FETCH_CONSISTENCY_NONE)
+		stats_data = palloc(kind_info->shared_data_len);
+	else
+		stats_data = MemoryContextAlloc(pgStatSnapshotContext,
+										kind_info->shared_data_len);
 	memcpy(stats_data,
 		   shared_stat_entry_data(kind, shared_ref->shared_stats),
 		   kind_info->shared_data_len);

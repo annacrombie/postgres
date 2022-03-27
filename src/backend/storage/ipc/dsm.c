@@ -496,8 +496,13 @@ dsm_create(Size size, int flags)
 	FreePageManager *dsm_main_space_fpm = dsm_main_space_begin;
 	bool		using_main_dsm_region = false;
 
-	/* Unsafe in postmaster (and pointless in a stand-alone backend). */
-	Assert(IsUnderPostmaster);
+	/*
+	 * AFIXME: previously this wasn't allowed in !IsPostmasterEnvironment. But
+	 * either we need to stop stats activity during single user mode, or allow
+	 * something here.
+	 */
+	/* Unsafe in postmaster */
+	Assert(IsUnderPostmaster || !IsPostmasterEnvironment);
 
 	if (!dsm_init_done)
 		dsm_backend_startup();
