@@ -471,6 +471,12 @@ task:
     CCACHE_DIR: C:/msys64/ccache
     BUILD_DIR: "%CIRRUS_WORKING_DIR%/build"
 
+  matrix:
+    - name: Windows - Server 2019, MinGW64 - debug
+    - name: Windows - Server 2019, MinGW64 - debug opt
+      env:
+        CFLAGS: -O1
+
   ccache_cache:
     folder: ${CCACHE_DIR}
 
