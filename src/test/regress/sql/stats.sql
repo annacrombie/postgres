@@ -317,5 +317,115 @@ SELECT pg_stat_have_stats('database', (SELECT oid FROM pg_database WHERE datname
 SELECT pg_stat_get_replication_slot(NULL);
 SELECT pg_stat_get_subscription_stats(NULL);
 
+-----
+-- Test that various stats views are being properly populated
+-----
+
+-- Test that sessions is incremented when a new session is started in pg_stat_database
+SELECT sessions AS db_stat_sessions FROM pg_stat_database WHERE datname = (SELECT current_database()) \gset
+\c
+SELECT sessions > :db_stat_sessions FROM pg_stat_database WHERE datname = (SELECT current_database());
+
+-- Test pg_stat_bgwriter checkpointer-related stat
+
+SELECT checkpoints_req AS rqst_ckpts_before FROM pg_stat_bgwriter \gset
+
+-- Test pg_stat_wal
+
+SELECT wal_bytes AS wal_bytes_before FROM pg_stat_wal \gset
+
+CREATE TABLE test_stats_temp(a int);
+INSERT INTO test_stats_temp SELECT 1 FROM generate_series(1,1000)i;
+
+-- Checkpoint twice: The checkpointer reports stats after reporting completion
+-- of the checkpoint. But after a second checkpoint we'll see at least the
+-- results of the first.
+CHECKPOINT;
+CHECKPOINT;
+
+SELECT checkpoints_req > :rqst_ckpts_before FROM pg_stat_bgwriter;
+SELECT wal_bytes > :wal_bytes_before FROM pg_stat_wal;
+
+-----
+-- Test that resetting stats works for reset timestamp
+-----
+
+SELECT stats_reset AS slru_commit_ts_reset_ts FROM pg_stat_slru WHERE name = 'CommitTs' \gset
+
+SELECT stats_reset AS slru_notify_reset_ts FROM pg_stat_slru WHERE name = 'Notify' \gset
+
+-- Test that reset_slru with a specified SLRU works.
+SELECT pg_stat_reset_slru('CommitTs');
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'slru_commit_ts_reset_ts'::timestamptz FROM pg_stat_slru WHERE name = 'CommitTs';
+
+SELECT stats_reset AS slru_commit_ts_reset_ts FROM pg_stat_slru WHERE name = 'CommitTs' \gset
+
+-- Test that multiple SLRUs are reset when no specific SLRU provided to reset function
+SELECT pg_stat_reset_slru(NULL);
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'slru_commit_ts_reset_ts'::timestamptz FROM pg_stat_slru WHERE name = 'CommitTs';
+SELECT stats_reset > :'slru_notify_reset_ts'::timestamptz FROM pg_stat_slru WHERE name = 'Notify';
+
+SELECT stats_reset AS archiver_reset_ts FROM pg_stat_archiver \gset
+
+-- Test that reset_shared with archiver specified as the stats type works
+SELECT pg_stat_reset_shared('archiver');
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'archiver_reset_ts'::timestamptz FROM pg_stat_archiver;
+
+SELECT stats_reset AS archiver_reset_ts FROM pg_stat_archiver \gset
+
+SELECT stats_reset AS bgwriter_reset_ts FROM pg_stat_bgwriter \gset
+
+-- Test that reset_shared with bgwriter specified as the stats type works
+SELECT pg_stat_reset_shared('bgwriter');
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'bgwriter_reset_ts'::timestamptz FROM pg_stat_bgwriter;
+
+SELECT stats_reset AS bgwriter_reset_ts FROM pg_stat_bgwriter \gset
+
+SELECT stats_reset AS wal_reset_ts FROM pg_stat_wal \gset
+
+-- Test that reset_shared with wal specified as the stats type works
+SELECT pg_stat_reset_shared('wal');
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'wal_reset_ts'::timestamptz FROM pg_stat_wal;
+
+SELECT stats_reset AS wal_reset_ts FROM pg_stat_wal \gset
+
+-- Test that reset_shared with no specified stats type resets all of them
+SELECT pg_stat_reset_shared(NULL);
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'archiver_reset_ts'::timestamptz FROM pg_stat_archiver;
+SELECT stats_reset > :'bgwriter_reset_ts'::timestamptz FROM pg_stat_bgwriter;
+SELECT stats_reset > :'wal_reset_ts'::timestamptz FROM pg_stat_wal;
+
+-- Test that reset works for pg_stat_database
+
+-- Since pg_stat_database stats_reset starts out as NULL, reset it once first so we have something to compare it to
+SELECT pg_stat_reset();
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset AS db_reset_ts FROM pg_stat_database WHERE datname = (SELECT current_database()) \gset
+
+SELECT pg_stat_reset();
+
+SELECT pg_stat_force_next_flush();
+
+SELECT stats_reset > :'db_reset_ts'::timestamptz FROM pg_stat_database WHERE datname = (SELECT current_database());
 
 -- End of Stats Test
