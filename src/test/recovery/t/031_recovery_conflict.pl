@@ -33,7 +33,7 @@ temp_tablespaces = $tablespace1
 # nice to get some minimal coverage of that code.
 log_recovery_conflict_waits = on
 deadlock_timeout = 10ms
-log_min_messages=debug5
+log_min_messages=debug1
 ]);
 $node_primary->start;
 
@@ -46,6 +46,11 @@ $node_primary->backup($backup_name);
 my $node_standby = PostgreSQL::Test::Cluster->new('standby');
 $node_standby->init_from_backup($node_primary, $backup_name,
 	has_streaming => 1);
+
+$node_standby->append_conf(
+	'postgresql.conf', qq[
+log_min_messages=debug1
+]);
 
 $node_standby->start;
 

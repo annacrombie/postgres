@@ -4336,6 +4336,7 @@ LockBufferForCleanup(Buffer buffer)
 			ResolveRecoveryConflictWithBufferPin();
 			/* Reset the published bufid */
 			SetStartupBufferPinWaitBufId(-1);
+			elog(DEBUG1, "one cycle of LockBufferForCleanup() iterating in HS");
 		}
 		else
 			ProcWaitForSignal(PG_WAIT_BUFFER_PIN);

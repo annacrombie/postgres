@@ -3003,6 +3003,15 @@ RecoveryConflictInterrupt(ProcSignalReason reason)
 {
 	int			save_errno = errno;
 
+	{
+		char message[1024];
+		int ret;
+
+		ret = snprintf(message, sizeof(message), "%d: received interrupt %u\n",
+					   getpid(), reason);
+		write(2, message, ret);
+	}
+
 	/*
 	 * Don't joggle the elbow of proc_exit
 	 */
@@ -3040,6 +3049,14 @@ RecoveryConflictInterrupt(ProcSignalReason reason)
 					if (reason == PROCSIG_RECOVERY_CONFLICT_STARTUP_DEADLOCK &&
 						GetStartupBufferPinWaitBufId() < 0)
 						CheckDeadLockAlert();
+					{
+						char message[1024];
+						int ret;
+
+						ret = snprintf(message, sizeof(message), "%d: no conflicting pin\n",
+									   getpid());
+						write(2, message, ret);
+					}
 					return;
 				}
 

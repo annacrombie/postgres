@@ -335,6 +335,11 @@ schedule_alarm(TimestampTz now)
 		signal_due_at = nearest_timeout;
 		signal_pending = true;
 
+		if (AmStartupProcess())
+		{
+			ereport(DEBUG1, errmsg("setting timeout() in %ld %d", secs, usecs));
+		}
+
 		/* Set the alarm timer */
 		if (setitimer(ITIMER_REAL, &timeval, NULL) != 0)
 		{

@@ -617,6 +617,11 @@ SetLatch(Latch *latch)
 		return;
 	else if (owner_pid == MyProcPid)
 	{
+		if (AmStartupProcess())
+		{
+			ereport(DEBUG1, errmsg("setting latch()"));
+		}
+
 #if defined(WAIT_USE_POLL)
 		if (waiting)
 			sendSelfPipeByte();

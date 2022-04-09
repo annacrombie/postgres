@@ -287,7 +287,14 @@ SendProcSignal(pid_t pid, ProcSignalReason reason, BackendId backendId)
 			/* Atomically set the proper flag */
 			slot->pss_signalFlags[reason] = true;
 			/* Send signal */
-			return kill(pid, SIGUSR1);
+			if (kill(pid, SIGUSR1) == 0)
+				return 0;
+			else
+			{
+				elog(DEBUG1, "failed to kill procsignal %d to pid %d backendid %d: %m",
+					 reason, pid, backendId);
+				return -1;
+			}
 		}
 	}
 	else
@@ -311,10 +318,21 @@ SendProcSignal(pid_t pid, ProcSignalReason reason, BackendId backendId)
 				/* Atomically set the proper flag */
 				slot->pss_signalFlags[reason] = true;
 				/* Send signal */
-				return kill(pid, SIGUSR1);
+				if (kill(pid, SIGUSR1) == 0)
+					return 0;
+				else
+				{
+					elog(DEBUG1, "failed to kill procsignal %d to pid %d backendid %d: %m",
+						 reason, pid, backendId);
+					return -1;
+				}
 			}
 		}
 	}
+
+	if (AmStartupProcess())
+		elog(DEBUG1, "failed to send procsignal %d to pid %d backendid %d",
+			 reason, pid, backendId);
 
 	errno = ESRCH;
 	return -1;
