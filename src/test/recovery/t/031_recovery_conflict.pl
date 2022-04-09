@@ -33,6 +33,7 @@ temp_tablespaces = $tablespace1
 # nice to get some minimal coverage of that code.
 log_recovery_conflict_waits = on
 deadlock_timeout = 10ms
+log_min_messages=debug5
 ]);
 $node_primary->start;
 
