@@ -95,13 +95,13 @@ bki_data = files(
 
 input = []
 output_files = ['postgres.bki', 'schemapg.h', 'system_fk_info.h', 'system_constraints.sql']
-output_install = [get_option('datadir'), get_option('includedir'), get_option('includedir'), get_option('datadir')]
+output_install = [get_option('datadir'), get_option('includedir') / 'server/catalog', get_option('includedir') / 'server/catalog', get_option('datadir')]
 
 foreach h : catalog_headers
   fname = h.split('.h')[0]+'_d.h'
   input += files(h)
   output_files += fname
-  output_install += get_option('includedir')
+  output_install += get_option('includedir') / 'server/catalog'
 endforeach
 
 generated_headers += custom_target('generated_catalog_headers',
