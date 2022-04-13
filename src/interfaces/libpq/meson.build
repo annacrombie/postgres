@@ -103,8 +103,7 @@ libpq = declare_dependency(
 )
 
 install_headers('libpq-fe.h', 'libpq-events.h')
-# FIXME: adjust path
-install_headers('libpq-int.h', 'pqexpbuffer.h')
+install_headers('libpq-int.h', 'pqexpbuffer.h', install_dir: get_option('includedir') / 'internal')
 install_data('pg_service.conf.sample', install_dir: get_option('datadir'))
 
 
