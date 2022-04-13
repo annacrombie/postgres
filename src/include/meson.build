@@ -43,6 +43,8 @@ configure_file(
   install: false
 )
 
+install_headers('postgres_ext.h')
+
 
 subdir('utils')
 subdir('storage')

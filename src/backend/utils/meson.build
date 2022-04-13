@@ -1,3 +1,5 @@
+install_data('errcodes.txt', install_dir: 'share/')
+
 subdir('activity')
 subdir('adt')
 subdir('cache')

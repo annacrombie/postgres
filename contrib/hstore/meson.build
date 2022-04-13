@@ -17,6 +17,7 @@ hstore = shared_module('hstore',
 install_data(
   'hstore.control',
   'hstore--1.1--1.2.sql',
+  'hstore--1.2--1.3.sql',
   'hstore--1.3--1.4.sql',
   'hstore--1.4.sql',
   'hstore--1.4--1.5.sql',
