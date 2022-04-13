@@ -52,6 +52,8 @@ executable('psql',
   kwargs: default_bin_args,
 )
 
+install_data('psqlrc.sample', install_dir: 'share/')
+
 tests += {
   'name': 'psql',
   'sd': meson.current_source_dir(),
