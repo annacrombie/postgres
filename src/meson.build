@@ -8,3 +8,5 @@ subdir('backend')
 subdir('bin')
 
 subdir('pl')
+
+subdir('interfaces')
