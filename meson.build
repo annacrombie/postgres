@@ -1641,6 +1641,16 @@ else
   cdata.set('STRERROR_R_INT', false)
 endif
 
+# Check for the locale_t type and find the right header file.  macOS
+# needs xlocale.h; standard is locale.h, but glibc also has an
+# xlocale.h file that we should not use.
+if cc.has_type('locale_t', prefix: '#include <locale.h>')
+  cdata.set('HAVE_LOCALE_T', true)
+elif cc.has_type('locale_t', prefix: '#include <xlocale.h>')
+  cdata.set('HAVE_LOCALE_T', true)
+  cdata.set('LOCALE_T_IN_XLOCALE', true)
+endif
+
 # MSVC doesn't cope well with defining restrict to __restrict, the
 # spelling it understands, because it conflicts with
 # __declspec(restrict). Therefore we define pg_restrict to the
