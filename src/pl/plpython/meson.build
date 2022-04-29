@@ -78,3 +78,5 @@ tests += {
     'sql': plpython_regress,
   },
 }
+
+subdir('po', if_found: libintl)

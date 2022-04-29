@@ -51,3 +51,5 @@ tests += {
     'regress_args': ['--load-extension=pltcl'],
   },
 }
+
+subdir('po', if_found: libintl)
