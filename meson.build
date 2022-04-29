@@ -1873,6 +1873,32 @@ endif
 
 
 ###############################################################
+# NLS / Gettext
+###############################################################
+
+i18n = import('i18n')
+nlsopt = get_option('nls')
+libintl = dependency('', required: false)
+
+if not nlsopt.disabled()
+  # meson 0.59 has this wrapped in dependency('int')
+  if cc.check_header('libintl.h', args: g_c_args, required: nlsopt)
+    # in libc
+    if cc.has_function('ngettext')
+      libintl = declare_dependency()
+    else
+      libintl = cc.find_library('intl', has_headers: ['libintl.h'], required: nlsopt)
+    endif
+  endif
+
+  if libintl.found()
+    cdata.set('ENABLE_NLS', 1)
+  endif
+endif
+
+
+
+###############################################################
 # Build
 ###############################################################
 
@@ -2004,7 +2030,7 @@ frontend_shlib_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [pgport_shlib, common_shlib],
   sources: generated_headers,
-  dependencies: os_deps,
+  dependencies: [os_deps, libintl],
 )
 
 subdir('src/interfaces/libpq')
@@ -2016,7 +2042,7 @@ frontend_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [pgport_static, common_static, fe_utils],
   sources: generated_headers,
-  dependencies: os_deps,
+  dependencies: [os_deps, libintl],
 )
 
 backend_code = declare_dependency(
@@ -2024,7 +2050,7 @@ backend_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [],
   sources: generated_headers + generated_backend_headers,
-  dependencies: [os_deps, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, zstd, systemd],
+  dependencies: [os_deps, libintl, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, zstd, systemd],
 )
 
 # Note there's intentionally no dependency on pgport/common here - we want the
@@ -2365,6 +2391,7 @@ if meson.version().version_compare('>=0.57')
       'libxslt': libxslt,
       'llvm': llvm,
       'lz4': lz4,
+      'nls' : libintl,
       'perl': perl_dep,
       'python3': python3_dep,
       'readline': readline,

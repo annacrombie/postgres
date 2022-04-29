@@ -53,7 +53,7 @@ libpq_def = custom_target('libpq.def',
 
 # port needs to be in include path due to pthread-win32.h
 libpq_inc = include_directories('.', '../../port')
-libpq_deps = [frontend_shlib_code, thread_dep, ssl, ldap, gssapi]
+libpq_deps = [frontend_shlib_code, thread_dep, ssl, ldap, gssapi, libintl]
 libpq_link_depends = []
 
 libpq_kwargs = default_lib_args + {
@@ -119,3 +119,5 @@ tests += {
     'env' : {'with_ssl': get_option('ssl')},
   },
 }
+
+subdir('po', if_found: libintl)

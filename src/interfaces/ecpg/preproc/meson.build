@@ -69,3 +69,5 @@ executable('ecpg',
   dependencies: [frontend_shlib_code, libpq],
   kwargs: default_bin_args,
 )
+
+subdir('po', if_found: libintl)

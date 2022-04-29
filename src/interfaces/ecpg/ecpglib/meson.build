@@ -19,3 +19,5 @@ ecpglib = shared_library('ecpg',
   soversion: 6,
   install: true,
 )
+
+subdir('po', if_found: libintl)

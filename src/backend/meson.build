@@ -31,6 +31,8 @@ subdir('tcop')
 subdir('tsearch')
 subdir('utils')
 
+subdir('po', if_found: libintl)
+
 
 postgres_link_args = []
 postgres_link_depends = []

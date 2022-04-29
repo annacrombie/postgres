@@ -71,6 +71,9 @@ option('llvm', type : 'feature', value: 'disabled',
 option('lz4', type : 'feature', value: 'auto',
   description: 'LZ4 support')
 
+option('nls', type: 'feature', value: 'auto',
+  description: 'national language support')
+
 option('plperl', type : 'feature', value: 'auto',
   description: 'build Perl modules (PL/Perl)')
 
