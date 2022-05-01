@@ -1142,8 +1142,9 @@ static void call_log(void)
     emit_log(0, "error: %s: %m", "foo");
 }
 '''
+attrib_error_args = cc.get_supported_arguments('-Werror=format', '-Werror=ignored-attributes')
 foreach a : printf_attributes
-  if cc.compiles(testsrc.format(a), args: g_c_args + ['-Werror=format'], name: 'format ' + a)
+  if cc.compiles(testsrc.format(a), args: g_c_args + attrib_error_args, name: 'format ' + a)
     cdata.set('PG_PRINTF_ATTRIBUTE', a)
     break
   endif
