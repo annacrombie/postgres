@@ -88,7 +88,7 @@ else
   }
 endif
 
-libpq_so = shared_library('pq',
+libpq_both = both_libraries('pq',
   libpq_sources,
   include_directories : [libpq_inc, postgres_inc],
   c_args: ['-DFRONTEND'],
@@ -96,6 +96,8 @@ libpq_so = shared_library('pq',
   dependencies: libpq_deps,
   kwargs: libpq_kwargs,
 )
+
+libpq_so = libpq_both.get_shared_lib()
 
 libpq = declare_dependency(
   link_with: [libpq_so],
