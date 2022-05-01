@@ -72,12 +72,14 @@ snowball_create = custom_target('snowball_create',
   depfile: 'snowball_create.dep',
   command: [perl, '@INPUT0@', '--input', '@CURRENT_SOURCE_DIR@', '--output', '@OUTDIR@'],
   install: true,
-  install_dir: get_option('datadir'))
+  install_dir: dir_data,
+)
 
 # FIXME: check whether the logic to select languages currently in Makefile is needed
 install_subdir('stopwords',
-  install_dir: get_option('datadir') / 'tsearch_data',
-  strip_directory: true)
+  install_dir: dir_data / 'tsearch_data',
+  strip_directory: true,
+)
 
 backend_targets += dict_snowball
 backend_targets += snowball_create

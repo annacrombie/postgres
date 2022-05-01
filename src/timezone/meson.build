@@ -45,6 +45,7 @@ tzdata = custom_target('tzdata',
   output: ['timezone'],
   command: [zic, '-d', '@OUTPUT@', '@INPUT@'],
   install: true,
-  install_dir: get_option('datadir'))
+  install_dir: dir_data,
+)
 
 subdir('tznames')

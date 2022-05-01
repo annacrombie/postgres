@@ -33,7 +33,7 @@ if llvm.found()
       'output': 'llvmjit_types.bc',
       'depends': [postgres],
       'install': true,
-      'install_dir': get_option('libdir')
+      'install_dir': dir_lib_pkg,
     }
   )
   backend_targets += llvmjit_types

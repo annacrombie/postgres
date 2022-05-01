@@ -12,7 +12,7 @@ install_data(
 install_data(
   'xsyn_sample.rules',
   kwargs: contrib_data_args + {
-    'install_dir': get_option('datadir') / 'tsearch_data'
+    'install_dir': dir_data / 'tsearch_data'
   }
 )
 

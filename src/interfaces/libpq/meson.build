@@ -102,9 +102,20 @@ libpq = declare_dependency(
   include_directories: [include_directories('.')]
 )
 
-install_headers('libpq-fe.h', 'libpq-events.h')
-install_headers('libpq-int.h', 'pqexpbuffer.h', install_dir: get_option('includedir') / 'internal')
-install_data('pg_service.conf.sample', install_dir: get_option('datadir'))
+install_headers(
+  'libpq-fe.h',
+  'libpq-events.h',
+)
+
+install_headers(
+  'libpq-int.h',
+  'pqexpbuffer.h',
+  'fe-auth-sasl.h',
+  install_dir: dir_include_internal,
+)
+install_data('pg_service.conf.sample',
+  install_dir: dir_data,
+)
 
 
 tests += {

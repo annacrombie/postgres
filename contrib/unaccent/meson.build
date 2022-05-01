@@ -15,7 +15,7 @@ install_data(
 
 install_data(
   'unaccent.rules',
-   install_dir: get_option('datadir') / 'tsearch_data'
+  install_dir: dir_data / 'tsearch_data'
 )
 
 # XXX: Implement downlo

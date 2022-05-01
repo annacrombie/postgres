@@ -1,41 +1,41 @@
-configure_file(input : 'pg_config_ext.h.meson',
+pg_config_ext = configure_file(input: 'pg_config_ext.h.meson',
   output : 'pg_config_ext.h',
-  configuration : cdata)
+  configuration : cdata,
+  install: true,
+  install_dir: dir_include)
 
 system = host_machine.system()
 if system == 'windows'
   system = 'win32'
 endif
 
-configure_file(
+pg_config_os = configure_file(
   output : 'pg_config_os.h',
   input: files('port/@0@.h'.format(system)),
   install: true,
-  install_dir : get_option('includedir'),
+  install_dir : dir_include,
   copy : true)
 
-configure_file(
+pg_config = configure_file(
   output : 'pg_config.h',
   install : true,
-  install_dir : get_option('includedir'),
+  install_dir : dir_include,
   configuration : cdata)
 
 
 config_paths_data = configuration_data()
-config_paths_data.set_quoted('PGBINDIR', get_option('prefix') / get_option('bindir'))
-config_paths_data.set_quoted('PGSHAREDIR', get_option('prefix') / get_option('datadir'))
-config_paths_data.set_quoted('SYSCONFDIR', get_option('prefix') / get_option('sysconfdir'))
-config_paths_data.set_quoted('INCLUDEDIR', get_option('prefix') / get_option('includedir'))
-# FIXME: shouldn't be the same
-config_paths_data.set_quoted('PKGINCLUDEDIR', get_option('prefix') / get_option('includedir'))
-config_paths_data.set_quoted('INCLUDEDIRSERVER', get_option('prefix') / get_option('includedir'))
-config_paths_data.set_quoted('LIBDIR', get_option('prefix') / get_option('libdir'))
-# FIXME: figure out logic for pkglibdir
-config_paths_data.set_quoted('PKGLIBDIR', get_option('prefix') / get_option('libdir'))
-config_paths_data.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
-config_paths_data.set_quoted('DOCDIR', get_option('prefix') / get_option('datadir') / 'doc/postgresql')
-config_paths_data.set_quoted('HTMLDIR', get_option('prefix') / get_option('datadir') / 'doc/postgresql')
-config_paths_data.set_quoted('MANDIR', get_option('prefix') / get_option('datadir') / 'doc/postgresql')
+config_paths_data.set_quoted('PGBINDIR', dir_prefix / dir_bin)
+config_paths_data.set_quoted('PGSHAREDIR', dir_prefix / dir_data)
+config_paths_data.set_quoted('SYSCONFDIR', dir_prefix / dir_sysconf)
+config_paths_data.set_quoted('INCLUDEDIR', dir_prefix / dir_include)
+config_paths_data.set_quoted('PKGINCLUDEDIR', dir_prefix / dir_include_pkg)
+config_paths_data.set_quoted('INCLUDEDIRSERVER', dir_prefix / dir_include_server)
+config_paths_data.set_quoted('LIBDIR', dir_prefix / dir_lib)
+config_paths_data.set_quoted('PKGLIBDIR', dir_prefix / dir_lib_pkg)
+config_paths_data.set_quoted('LOCALEDIR', dir_prefix / dir_locale)
+config_paths_data.set_quoted('DOCDIR', dir_prefix / dir_doc)
+config_paths_data.set_quoted('HTMLDIR', dir_prefix / dir_doc_html)
+config_paths_data.set_quoted('MANDIR', dir_prefix / dir_man)
 
 configure_file(
   output: 'pg_config_paths.h',
@@ -43,8 +43,40 @@ configure_file(
   install: false
 )
 
-install_headers('postgres_ext.h')
+install_headers(
+  'pg_config_manual.h',
+  'postgres_ext.h',
+  'pg_config_manual.h',
+)
 
+install_headers(
+  'libpq/libpq-fs.h',
+  install_dir: dir_include / 'libpq',
+)
+
+install_headers(
+  'c.h',
+  'port.h',
+  'postgres_fe.h',
+  install_dir: dir_include_internal
+)
+
+install_headers(
+  'libpq/pqcomm.h',
+  install_dir: dir_include_internal / 'libpq',
+)
+
+install_headers(
+  'c.h',
+  'port.h',
+  'postgres_fe.h',
+  'pg_config_manual.h',
+  'postgres_ext.h',
+  pg_config_ext,
+  pg_config_os,
+  pg_config,
+  install_dir: dir_include_server,
+)
 
 subdir('utils')
 subdir('storage')

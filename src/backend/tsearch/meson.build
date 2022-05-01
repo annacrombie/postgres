@@ -17,5 +17,5 @@ backend_sources += files(
 )
 
 install_subdir('dicts',
-  install_dir: get_option('datadir') / 'tsearch_data',
+  install_dir: dir_data / 'tsearch_data',
   strip_directory: true)
