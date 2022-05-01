@@ -9,7 +9,7 @@ bloom_sources = files(
 
 bloom = shared_module('bloom',
   bloom_sources,
-  c_pch: '../../src/include/pch/c_pch.h',
+  c_pch: pch_c_h,
   kwargs: contrib_mod_args,
 )
 

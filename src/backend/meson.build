@@ -72,7 +72,7 @@ if cc.get_id() == 'msvc' # or true
   postgres_lib = static_library('postgres_lib',
     backend_sources + timezone_sources + generated_backend_sources,
     link_whole: backend_link_with,
-    c_pch: '../include/pch/postgres_pch.h',
+    c_pch: pch_postgres_h,
     c_args: backend_c_args,
     implicit_include_directories: false,
     dependencies: backend_build_deps,
@@ -111,7 +111,7 @@ else
 
   postgres = executable('postgres',
     backend_sources + generated_backend_sources + timezone_sources,
-    c_pch: '../include/pch/postgres_pch.h',
+    c_pch: pch_postgres_h,
     c_args: backend_c_args,
     link_args: postgres_link_args,
     link_with: backend_link_with,

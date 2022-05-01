@@ -2,7 +2,7 @@ tablefunc = shared_module('tablefunc',
   files(
     'tablefunc.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args,
 )
 

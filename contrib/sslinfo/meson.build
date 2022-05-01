@@ -6,7 +6,7 @@ sslinfo = shared_module('sslinfo',
   files(
     'sslinfo.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args + {
     'dependencies': [ssl, pg_mod_args['dependencies']],
   }

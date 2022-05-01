@@ -18,7 +18,7 @@ pg_upgrade_sources = files(
 
 pg_upgrade = executable('pg_upgrade',
   pg_upgrade_sources,
-  c_pch: '../../include/pch/c_pch.h',
+  c_pch: pch_c_h,
   dependencies: [frontend_code, libpq],
   kwargs: default_bin_args,
 )

@@ -2,7 +2,7 @@ pg_freespacemap = shared_module('pg_freespacemap',
   files(
     'pg_freespacemap.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args,
 )
 

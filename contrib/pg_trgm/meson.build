@@ -5,7 +5,7 @@ pg_trgm = shared_module('pg_trgm',
     'trgm_op.c',
     'trgm_regexp.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args,
 )
 

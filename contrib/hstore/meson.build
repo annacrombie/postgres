@@ -10,7 +10,7 @@ hstore = shared_module('hstore',
     'hstore_op.c',
     'hstore_subs.c',
   ),
-  c_pch: '../../src/include/pch/c_pch.h',
+  c_pch: pch_c_h,
   kwargs: contrib_mod_args,
 )
 

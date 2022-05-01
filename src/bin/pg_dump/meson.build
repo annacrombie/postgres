@@ -13,7 +13,7 @@ pg_dump_common_sources = files(
 
 pg_dump_common = static_library('pg_dump_common',
   pg_dump_common_sources,
-  c_pch: '../../include/pch/c_pch.h',
+  c_pch: pch_c_h,
   dependencies: [frontend_code, libpq, zlib],
   kwargs: internal_lib_args,
 )
