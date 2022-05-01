@@ -92,7 +92,6 @@ libpq_both = both_libraries('pq',
   libpq_sources,
   include_directories : [libpq_inc, postgres_inc],
   c_args: ['-DFRONTEND'],
-  c_pch: '../../include/pch/c_pch.h',
   dependencies: libpq_deps,
   kwargs: libpq_kwargs,
 )
