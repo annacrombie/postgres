@@ -128,7 +128,7 @@ foreach name, opts : pgcommon_variants
     endif
     c_args = opts.get('c_args', []) + common_cflags[cflagname]
     cflag_libs += static_library('pgcommon_@0@_@1@'.format(cflagname, name),
-      c_pch: '../include/pch/c_pch.h',
+      c_pch: pch_c_h,
       include_directories: include_directories('.'),
       kwargs: opts + {
         'sources': sources,
@@ -141,7 +141,7 @@ foreach name, opts : pgcommon_variants
 
   lib = static_library('pgcommon_@0@'.format(name),
       link_with: cflag_libs,
-      c_pch: '../include/pch/c_pch.h',
+      c_pch: pch_c_h,
       include_directories: include_directories('.'),
       kwargs: opts + {
         'dependencies': opts['dependencies'] + [ssl],

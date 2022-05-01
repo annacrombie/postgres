@@ -7,7 +7,7 @@ xml2 = shared_module('pgxml',
     'xpath.c',
     'xslt_proc.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args + {
     'dependencies': [libxml, libxslt, contrib_mod_args['dependencies']],
   },

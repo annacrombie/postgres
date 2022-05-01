@@ -38,7 +38,7 @@ parser_sources += backend_parser_header[1]
 
 parser = static_library('parser',
   parser_sources + generated_headers,
-  c_pch: '../../include/pch/c_pch.h',
+  c_pch: pch_c_h,
   dependencies: [backend_code],
   kwargs: default_lib_args + {'install': false},
 )

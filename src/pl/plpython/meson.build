@@ -30,7 +30,7 @@ plpython_inc = include_directories('.')
 
 shared_module('plpython3',
   plpython_sources,
-  c_pch: '../../include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   include_directories: [plpython_inc, postgres_inc],
   kwargs: pg_mod_args + {
     'dependencies': [python3_dep, pg_mod_args['dependencies']],

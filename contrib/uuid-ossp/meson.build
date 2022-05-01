@@ -6,7 +6,7 @@ uuid_ossp = shared_module('uuid-ossp',
   files(
     'uuid-ossp.c',
   ),
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args + {
     'dependencies': [uuid, pg_mod_args['dependencies']],
   },

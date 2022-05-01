@@ -16,7 +16,7 @@ sepgsql_sources = files(
 
 sepgsql = shared_module('sepgsql',
   sepgsql_sources,
-  c_pch: '../../src/include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   kwargs: contrib_mod_args + {
     'dependencies': [selinux, pg_mod_args['dependencies']],
   }

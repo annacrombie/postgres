@@ -33,7 +33,7 @@ plpgsql_sources += custom_target('pl_unreserved_kwlist',
 
 shared_module('plpgsql',
   plpgsql_sources,
-  c_pch: '../../../include/pch/postgres_pch.h',
+  c_pch: pch_postgres_h,
   include_directories: include_directories('.'),
   kwargs: pg_mod_args,
 )
