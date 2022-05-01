@@ -7,10 +7,11 @@ ecpg_pgtypes_sources = files(
   'timestamp.c',
 )
 
-ecpg_pgtypes = shared_library('pgtypes',
+ecpg_pgtypes = both_libraries('pgtypes',
   ecpg_pgtypes_sources,
   include_directories : ['.', ecpg_inc, postgres_inc],
   dependencies: [frontend_shlib_code],
+  version: '3.'+pg_version_major.to_string(),
   soversion: 3,
   install: true,
 )
