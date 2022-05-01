@@ -2012,14 +2012,14 @@ else
 
   # PG binaries might need to link to libpq, use relative path to reference
   bin_to_lib = run_command(python, files('src/tools/relpath.py'),
-    get_option('bindir'), get_option('libdir'), check: true).stdout().strip()
+    dir_bin, dir_lib, check: true).stdout().strip()
   default_bin_args += {'install_rpath':  rpath_var / bin_to_lib}
 
   # PG extensions might need to link to libpq, use relative path to reference
   # (often just .)
   mod_to_lib = run_command(python, files('src/tools/relpath.py'),
-    get_option('libdir'), get_option('libdir'), check: true).stdout().strip()
-  default_mod_args += {'install_rpath': rpath_var}
+    dir_lib_pkg, dir_lib, check: true).stdout().strip()
+  default_mod_args += {'install_rpath': rpath_var / mod_to_lib}
 endif
 
 
