@@ -51,13 +51,13 @@ shared_module('plperl',
 install_data(
   'plperl.control',
   'plperl--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+  install_dir: dir_data_extension,
 )
 
 install_data(
   'plperlu.control',
   'plperlu--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+  install_dir: dir_data_extension,
 )
 
 tests += {

@@ -4,7 +4,7 @@ backend_parser_header = custom_target('gram',
   command: [bison, bisonflags, '-d', '-o', '@OUTPUT0@', '@INPUT0@'],
   install: true,
   # Only install gram.h, not gram.c
-  install_dir: [false, get_option('includedir') / 'server/parser']
+  install_dir: [false, dir_include_server / 'parser'],
 )
 
 #generated_backend_headers += backend_parser[1]

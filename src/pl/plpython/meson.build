@@ -41,7 +41,7 @@ shared_module('plpython3',
 install_data(
   'plpython3u.control',
   'plpython3u--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+  install_dir: dir_data_extension,
 )
 
 plpython_regress = [

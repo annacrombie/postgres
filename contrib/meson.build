@@ -1,8 +1,8 @@
 contrib_mod_args = pg_mod_args
 
-contrib_data_dir = get_option('datadir') / 'extension'
+contrib_data_dir = dir_data_extension
 contrib_data_args = {
-  'install_dir': contrib_data_dir
+  'install_dir': contrib_data_dir,
 }
 
 subdir('adminpack')

@@ -1,4 +1,6 @@
-install_data('errcodes.txt', install_dir: 'share/')
+install_data('errcodes.txt',
+  install_dir: dir_data,
+)
 
 subdir('activity')
 subdir('adt')

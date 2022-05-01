@@ -25,4 +25,6 @@ generated_backend_sources += guc_scan
 backend_build_deps += declare_dependency(sources: [guc_scan],
   include_directories: include_directories('.'))
 
-install_data('postgresql.conf.sample', install_dir: 'share/')
+install_data('postgresql.conf.sample',
+  install_dir: dir_data,
+)

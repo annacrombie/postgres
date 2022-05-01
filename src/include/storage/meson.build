@@ -8,7 +8,7 @@ lwlocknames = custom_target('lwlocknames',
   command : [perl, files('../../backend/storage/lmgr/generate-lwlocknames.pl'), '-o', '@OUTDIR@', '@INPUT@'],
   build_by_default: true,
   install: true,
-  install_dir: [get_option('includedir') / 'server/storage', false],
+  install_dir: [dir_include_server / 'storage', false],
 )
 
 lwlocknames_h = lwlocknames[0]

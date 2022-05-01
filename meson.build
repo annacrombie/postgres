@@ -247,6 +247,61 @@ cdata.set_quoted('PG_KRB_SRVNAM', 'postgres')
 
 
 ###############################################################
+# Directories
+###############################################################
+
+# These are set by the equivalent --xxxdir configure options.  We
+# append "postgresql" to some of them, if the string does not already
+# contain "pgsql" or "postgres", in order to avoid directory clutter.
+
+pkg = 'postgresql'
+
+dir_prefix = get_option('prefix')
+
+dir_bin = get_option('bindir')
+
+dir_data = get_option('datadir')
+if not (dir_data.contains('pgsql') or dir_data.contains('pgsql'))
+  dir_data = dir_data / pkg
+endif
+
+dir_sysconf = get_option('sysconfdir')
+if not (dir_sysconf.contains('pgsql') or dir_sysconf.contains('pgsql'))
+  dir_sysconf = dir_sysconf / pkg
+endif
+
+dir_lib = get_option('libdir')
+
+dir_lib_pkg = dir_lib
+if not (dir_lib_pkg.contains('pgsql') or dir_lib_pkg.contains('pgsql'))
+  dir_lib_pkg = dir_lib_pkg / pkg
+endif
+
+dir_include = get_option('includedir')
+
+dir_include_pkg = dir_include
+if not (dir_include_pkg.contains('pgsql') or dir_include_pkg.contains('pgsql'))
+  dir_include_pkg = dir_include_pkg / pkg
+endif
+
+dir_man = get_option('mandir')
+
+# FIXME: These used to be separately configurable - worth adding?
+dir_doc = dir_data / 'doc' / 'postgresql'
+dir_doc_html = dir_doc / 'html'
+
+dir_locale = get_option('localedir')
+
+
+# Derived values
+dir_bitcode = dir_lib / 'bitcode'
+dir_include_internal = dir_include_pkg / 'internal'
+dir_include_server = dir_include_pkg / 'server'
+dir_data_extension = dir_data / 'extension'
+
+
+
+###############################################################
 # Library: GSSAPI
 ###############################################################
 
@@ -385,7 +440,7 @@ if not llvmopt.disabled()
         '@INPUT@',
       ],
       'install': true,
-      'install_dir': get_option('libdir'),
+      'install_dir': dir_lib_pkg,
     }
 
   endif
@@ -1931,9 +1986,11 @@ internal_lib_args = default_lib_args + {
 
 default_mod_args = default_lib_args + {
   'name_prefix': '',
+  'install_dir': dir_lib_pkg,
 }
 
 default_bin_args = default_target_args + {
+  'install_dir': dir_bin,
 }
 
 library_path_var = ''

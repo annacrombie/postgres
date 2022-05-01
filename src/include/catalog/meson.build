@@ -94,25 +94,31 @@ bki_data = files(
 
 
 input = []
-output_files = ['postgres.bki', 'schemapg.h', 'system_fk_info.h', 'system_constraints.sql']
-output_install = [get_option('datadir'), get_option('includedir') / 'server/catalog', get_option('includedir') / 'server/catalog', get_option('datadir')]
+output_files = ['postgres.bki', 'system_constraints.sql', 'schemapg.h', 'system_fk_info.h']
+output_install = [dir_data, dir_data, dir_include_server / 'catalog', dir_include_server / 'catalog']
 
 foreach h : catalog_headers
   fname = h.split('.h')[0]+'_d.h'
   input += files(h)
   output_files += fname
-  output_install += get_option('includedir') / 'server/catalog'
+  output_install += dir_include_server / 'catalog'
 endforeach
 
 generated_headers += custom_target('generated_catalog_headers',
-    input: input,
-    depend_files: bki_data,
-    build_by_default: true,
-    install: true,
-    output: output_files,
-    install_dir: output_install,
-    command: [perl, files('../../backend/catalog/genbki.pl'), '--include-path=@SOURCE_ROOT@/src/include', '--set-version='+pg_version_major.to_string(), '--output=@OUTDIR@', '@INPUT@']
-    )
+  output: output_files,
+  install_dir: output_install,
+  input: input,
+  depend_files: bki_data,
+  build_by_default: true,
+  install: true,
+  command: [
+    perl,
+    files('../../backend/catalog/genbki.pl'),
+    '--include-path=@SOURCE_ROOT@/src/include',
+    '--set-version='+pg_version_major.to_string(),
+    '--output=@OUTDIR@', '@INPUT@'
+  ],
+)
 
 
 # 'reformat-dat-files' is a convenience target for rewriting the

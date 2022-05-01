@@ -28,7 +28,7 @@ install_data(
   'pltcl--1.0.sql',
   'pltclu.control',
   'pltclu--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+  install_dir: dir_data_extension,
 )
 
 pltcl_regress = [

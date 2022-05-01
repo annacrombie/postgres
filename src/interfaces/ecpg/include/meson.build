@@ -19,7 +19,7 @@ endforeach
 configure_file(
   output: 'ecpg_config.h',
   configuration: ecpg_conf_data,
-  install_dir: get_option('includedir'),
+  install_dir: dir_include,
 )
 
 install_headers(
@@ -44,5 +44,5 @@ install_headers(
   'datetime.h',
   'decimal.h',
   'sqltypes.h',
-  subdir: 'informix/esql',
+  install_dir: dir_include_pkg / 'informix' / 'esql',
 )

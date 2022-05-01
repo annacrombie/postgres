@@ -13,8 +13,10 @@ insert_username = shared_module('insert_username',
   kwargs: contrib_mod_args,
 )
 
-install_data('insert_username.control', 'insert_username--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+install_data(
+  'insert_username.control',
+  'insert_username--1.0.sql',
+  kwargs: contrib_data_args,
 )
 
 
@@ -23,8 +25,10 @@ moddatetime = shared_module('moddatetime',
   kwargs: contrib_mod_args,
 )
 
-install_data('moddatetime.control', 'moddatetime--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+install_data(
+  'moddatetime.control',
+  'moddatetime--1.0.sql',
+  kwargs: contrib_data_args,
 )
 
 # this is needed for the regression tests;

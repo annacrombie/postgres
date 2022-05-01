@@ -52,7 +52,9 @@ executable('psql',
   kwargs: default_bin_args,
 )
 
-install_data('psqlrc.sample', install_dir: 'share/')
+install_data('psqlrc.sample',
+  install_dir: dir_data,
+)
 
 tests += {
   'name': 'psql',

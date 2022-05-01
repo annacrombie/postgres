@@ -38,12 +38,16 @@ shared_module('plpgsql',
   kwargs: pg_mod_args,
 )
 
-install_data('plpgsql.control', 'plpgsql--1.0.sql',
-  install_dir: get_option('datadir') / 'extension'
+install_data(
+  'plpgsql.control',
+  'plpgsql--1.0.sql',
+  install_dir: dir_data_extension,
 )
 
-install_headers('plpgsql.h',
-  install_dir: get_option('includedir') / 'server')
+install_headers(
+  'plpgsql.h',
+  install_dir: dir_include_server
+)
 
 
 tests += {

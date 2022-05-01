@@ -25,4 +25,8 @@ if gssapi.found()
   )
 endif
 
-install_data('pg_hba.conf.sample', 'pg_ident.conf.sample', install_dir: 'share/')
+install_data(
+  'pg_hba.conf.sample',
+  'pg_ident.conf.sample',
+  install_dir: dir_data,
+)
