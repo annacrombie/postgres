@@ -224,7 +224,7 @@ meson_bin = find_program(meson_binpath, native: true)
 # Option Handling
 ###############################################################
 
-cdata.set('USE_ASSERT_CHECKING', get_option('cassert'))
+cdata.set('USE_ASSERT_CHECKING', get_option('cassert') ? 1 : false)
 
 cdata.set('BLCKSZ', 8192, description: '''
  Size of a disk block --- this also limits the size of a tuple.  You
@@ -243,7 +243,7 @@ cdata.set('BLCKSZ', 8192, description: '''
 cdata.set('XLOG_BLCKSZ', get_option('wal-blocksize') * 1024)
 cdata.set('RELSEG_SIZE', get_option('segsize') * 131072)
 cdata.set('DEF_PGPORT', get_option('pgport'))
-cdata.set_quoted('DEF_PGPORT_STR', '5432')
+cdata.set_quoted('DEF_PGPORT_STR', get_option('pgport'))
 cdata.set_quoted('PG_KRB_SRVNAM', 'postgres')
 
 
@@ -872,8 +872,6 @@ if get_option('ssl') == 'openssl'
     ssl_int = [ssl]
   endif
 
-  cdata.set_quoted('WITH_SSL', get_option('ssl'))
-
   check_funcs = [
     ['CRYPTO_new_ex_data', {'required': true}],
     ['SSL_new', {'required': true}],
@@ -1383,7 +1381,7 @@ int main(void)
     cdata.set(check['name'],
       cc.links(test,
         name: check['desc'],
-        args: g_c_args + ['-DINT64=@0@'.format(cdata.get('PG_INT64_TYPE'))])
+        args: g_c_args + ['-DINT64=@0@'.format(cdata.get('PG_INT64_TYPE'))]) ? 1 : false
     )
   endforeach
 
@@ -1611,7 +1609,8 @@ endif
 
 if cc.has_member('struct sockaddr_storage', 'ss_family',
     args: g_c_args, include_directories: g_c_inc,
-    prefix: '''#include <sys/types.h>
+    prefix: '''
+#include <sys/types.h>
 #include <sys/socket.h>''')
   cdata.set('HAVE_STRUCT_SOCKADDR_STORAGE_SS_FAMILY', 1)
 endif
@@ -1622,6 +1621,30 @@ if cc.has_member('struct sockaddr_storage', '__ss_family',
 #include <sys/types.h>
 #include <sys/socket.h>''')
   cdata.set('HAVE_STRUCT_SOCKADDR_STORAGE___SS_FAMILY', 1)
+endif
+
+if cc.has_member('struct sockaddr_storage', 'ss_len',
+    args: g_c_args, include_directories: g_c_inc,
+    prefix: '''
+#include <sys/types.h>
+#include <sys/socket.h>''')
+  cdata.set('HAVE_STRUCT_SOCKADDR_STORAGE_SS_LEN', 1)
+endif
+
+if cc.has_member('struct sockaddr_storage', '__ss_len',
+    args: g_c_args, include_directories: g_c_inc,
+    prefix: '''
+#include <sys/types.h>
+#include <sys/socket.h>''')
+  cdata.set('HAVE_STRUCT_SOCKADDR_STORAGE___SS_LEN', 1)
+endif
+
+if cc.has_member('struct sockaddr', 'sa_len',
+    args: g_c_args, include_directories: g_c_inc,
+    prefix: '''
+#include <sys/types.h>
+#include <sys/socket.h>''')
+  cdata.set('HAVE_STRUCT_SOCKADDR_SA_LEN', 1)
 endif
 
 if cc.has_type('struct sockaddr_un',
@@ -1703,10 +1726,10 @@ endif
 # needs xlocale.h; standard is locale.h, but glibc also has an
 # xlocale.h file that we should not use.
 if cc.has_type('locale_t', prefix: '#include <locale.h>')
-  cdata.set('HAVE_LOCALE_T', true)
+  cdata.set('HAVE_LOCALE_T', 1)
 elif cc.has_type('locale_t', prefix: '#include <xlocale.h>')
-  cdata.set('HAVE_LOCALE_T', true)
-  cdata.set('LOCALE_T_IN_XLOCALE', true)
+  cdata.set('HAVE_LOCALE_T', 1)
+  cdata.set('LOCALE_T_IN_XLOCALE', 1)
 endif
 
 # MSVC doesn't cope well with defining restrict to __restrict, the
@@ -1783,6 +1806,7 @@ func_checks = [
   ['getrusage'],
   ['gettimeofday'], # XXX: This seems to be in the autoconf case
   ['inet_aton'],
+  ['inet_pton'],
   ['kqueue'],
   ['link'],
   ['mbstowcs_l'],
@@ -1853,6 +1877,10 @@ foreach c : func_checks
             description: 'Define to 1 if you have the `@0@\' function.'.format(func))
 endforeach
 
+
+if cc.has_function('syslog', args: g_c_args) and cc.check_header('syslog.h', args: g_c_args)
+  cdata.set('HAVE_SYSLOG', 1)
+endif
 
 
 
