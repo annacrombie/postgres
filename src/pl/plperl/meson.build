@@ -60,6 +60,13 @@ install_data(
   install_dir: dir_data_extension,
 )
 
+install_headers(
+  'plperl.h',
+  'plperl_helpers.h',
+  'ppport.h',
+  install_dir: dir_include_server,
+)
+
 tests += {
   'name': 'plperl',
   'sd': meson.current_source_dir(),

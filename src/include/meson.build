@@ -68,10 +68,23 @@ install_headers(
 
 install_headers(
   'c.h',
-  'port.h',
-  'postgres_fe.h',
+  'fmgr.h',
+  'funcapi.h',
+  'getaddrinfo.h',
+  'getopt_long.h',
+  'miscadmin.h',
   'pg_config_manual.h',
+  'pg_getopt.h',
+  'pg_trace.h',
+  'pgstat.h',
+  'pgtar.h',
+  'pgtime.h',
+  'port.h',
+  'postgres.h',
   'postgres_ext.h',
+  'postgres_fe.h',
+  'rusagestub.h',
+  'windowapi.h',
   pg_config_ext,
   pg_config_os,
   pg_config,
@@ -83,3 +96,50 @@ subdir('storage')
 subdir('catalog')
 subdir('parser')
 subdir('pch')
+
+foreach d : [
+  'access', 'bootstrap', 'commands', 'common', 'datatype',
+  'executor', 'fe_utils', 'foreign', 'jit',
+  'lib', 'libpq', 'mb', 'nodes', 'optimizer', 'parser', 'partitioning', 'postmaster',
+  'regex', 'replication', 'rewrite',
+  'statistics', 'storage', 'tcop', 'snowball', 'tsearch',
+  'utils', 'port', 'portability',
+]
+  install_subdir(d, install_dir: dir_include_server,
+                 exclude_files: ['.gitignore', 'meson.build'])
+endforeach
+
+install_subdir('catalog', install_dir: dir_include_server,
+               exclude_files: [
+                 '.gitignore',
+                 'Makefile',
+                 'duplicate_oids',
+                 'meson.build',
+                 'pg_aggregate.dat',
+                 'pg_am.dat',
+                 'pg_amop.dat',
+                 'pg_amproc.dat',
+                 'pg_authid.dat',
+                 'pg_cast.dat',
+                 'pg_class.dat',
+                 'pg_collation.dat',
+                 'pg_conversion.dat',
+                 'pg_database.dat',
+                 'pg_language.dat',
+                 'pg_namespace.dat',
+                 'pg_opclass.dat',
+                 'pg_operator.dat',
+                 'pg_opfamily.dat',
+                 'pg_proc.dat',
+                 'pg_range.dat',
+                 'pg_tablespace.dat',
+                 'pg_ts_config.dat',
+                 'pg_ts_config_map.dat',
+                 'pg_ts_dict.dat',
+                 'pg_ts_parser.dat',
+                 'pg_ts_template.dat',
+                 'pg_type.dat',
+                 'reformat_dat_file.pl',
+                 'renumber_oids.pl',
+                 'unused_oids',
+               ])

@@ -30,6 +30,11 @@ install_data(
   kwargs: contrib_data_args,
 )
 
+install_headers(
+  'segdata.h',
+  install_dir: dir_include_extension / 'seg',
+)
+
 tests += {
   'name': 'seg',
   'sd': meson.current_source_dir(),
