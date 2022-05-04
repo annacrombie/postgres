@@ -31,6 +31,11 @@ install_data(
   kwargs: contrib_data_args,
 )
 
+install_headers(
+  'cubedata.h',
+  install_dir: dir_include_extension / 'cube',
+)
+
 tests += {
   'name': 'cube',
   'sd': meson.current_source_dir(),

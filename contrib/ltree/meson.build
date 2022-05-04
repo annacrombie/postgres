@@ -26,6 +26,11 @@ install_data(
   kwargs: contrib_data_args,
 )
 
+install_headers(
+  'ltree.h',
+  install_dir: dir_include_extension / 'ltree',
+)
+
 tests += {
   'name': 'ltree',
   'sd': meson.current_source_dir(),

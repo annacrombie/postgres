@@ -15,6 +15,11 @@ install_data(
   kwargs: contrib_data_args,
 )
 
+install_headers(
+  'isn.h',
+  install_dir: dir_include_extension / 'isn',
+)
+
 tests += {
   'name': 'isn',
   'sd': meson.current_source_dir(),

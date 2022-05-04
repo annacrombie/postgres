@@ -44,6 +44,23 @@ install_data(
   install_dir: dir_data_extension,
 )
 
+install_headers(
+  'plpy_cursorobject.h',
+  'plpy_elog.h',
+  'plpy_exec.h',
+  'plpy_main.h',
+  'plpy_planobject.h',
+  'plpy_plpymodule.h',
+  'plpy_procedure.h',
+  'plpy_resultobject.h',
+  'plpy_spi.h',
+  'plpy_subxactobject.h',
+  'plpy_typeio.h',
+  'plpy_util.h',
+  'plpython.h',
+  install_dir: dir_include_server,
+)
+
 plpython_regress = [
   'plpython_schema',
   'plpython_populate',
