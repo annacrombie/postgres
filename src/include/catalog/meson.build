@@ -65,7 +65,7 @@ catalog_headers = [
   'pg_subscription_rel.h',
 ]
 
-bki_data = files(
+bki_data = [
   'pg_aggregate.dat',
   'pg_am.dat',
   'pg_amop.dat',
@@ -90,7 +90,8 @@ bki_data = files(
   'pg_ts_parser.dat',
   'pg_ts_template.dat',
   'pg_type.dat',
-  )
+]
+bki_data_f = files(bki_data)
 
 
 input = []
@@ -108,7 +109,7 @@ generated_headers += custom_target('generated_catalog_headers',
   output: output_files,
   install_dir: output_install,
   input: input,
-  depend_files: bki_data,
+  depend_files: bki_data_f,
   build_by_default: true,
   install: true,
   command: [
@@ -125,12 +126,12 @@ generated_headers += custom_target('generated_catalog_headers',
 # catalog data files in our standard format.  This includes collapsing
 # out any entries that are redundant with a BKI_DEFAULT annotation.
 run_target('reformat-dat-files',
-  command: [perl, files('reformat_dat_file.pl'), '--output', '@CURRENT_SOURCE_DIR@', bki_data],
+  command: [perl, files('reformat_dat_file.pl'), '--output', '@CURRENT_SOURCE_DIR@', bki_data_f],
 )
 
 # 'expand-dat-files' is a convenience target for expanding out all
 # default values in the catalog data files.  This should be run before
 # altering or removing any BKI_DEFAULT annotation.
 run_target('expand-dat-files',
-  command: [perl, files('reformat_dat_file.pl'), '--output', '@CURRENT_SOURCE_DIR@', bki_data, '--full-tuples'],
+  command: [perl, files('reformat_dat_file.pl'), '--output', '@CURRENT_SOURCE_DIR@', bki_data_f, '--full-tuples'],
 )
