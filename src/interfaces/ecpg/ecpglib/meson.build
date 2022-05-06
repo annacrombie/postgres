@@ -21,4 +21,11 @@ ecpglib = both_libraries('ecpg',
   install: true,
 )
 
+pkgconfig.generate(
+  ecpglib.get_shared_lib(),
+  filebase: 'libecpg',
+  description: 'PostgreSQL libecpg library',
+  url: pg_url,
+)
+
 subdir('po', if_found: libintl)
