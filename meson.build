@@ -22,6 +22,7 @@ project('postgresql',
 ###############################################################
 
 fs = import('fs')
+pkgconfig = import('pkgconfig')
 windows = import('windows')
 
 thread_dep = dependency('threads')
@@ -72,10 +73,11 @@ cc = meson.get_compiler('c')
 
 cdata = configuration_data()
 
+pg_url = 'https://www.postgresql.org/'
 
 cdata.set_quoted('PACKAGE_NAME', 'PostgreSQL')
 cdata.set_quoted('PACKAGE_BUGREPORT', 'pgsql-bugs@lists.postgresql.org')
-cdata.set_quoted('PACKAGE_URL', 'https://www.postgresql.org/')
+cdata.set_quoted('PACKAGE_URL', pg_url)
 
 cdata.set_quoted('PG_VERSION', pg_version)
 cdata.set_quoted('PG_VERSION_STR', 'PostgreSQL @0@ on @1@, compiled by @2@-@3@'.format(
@@ -1977,8 +1979,10 @@ default_target_args = {
 }
 
 default_lib_args = default_target_args + {
-  'name_prefix': 'lib',
 }
+if host_machine.system() == 'windows'
+  default_lib_args = default_lib_args + {'name_prefix': 'lib'}
+endif
 
 internal_lib_args = default_lib_args + {
   'build_by_default': false,

@@ -15,3 +15,10 @@ ecpg_pgtypes = both_libraries('pgtypes',
   soversion: 3,
   install: true,
 )
+
+pkgconfig.generate(
+  ecpg_pgtypes.get_shared_lib(),
+  filebase: 'libpgtypes',
+  description: 'PostgreSQL libpgtypes library',
+  url: pg_url,
+)

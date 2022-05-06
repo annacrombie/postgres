@@ -103,6 +103,13 @@ libpq = declare_dependency(
   include_directories: [include_directories('.')]
 )
 
+pkgconfig.generate(
+  libpq_so,
+  filebase: 'libpq',
+  description: 'PostgreSQL libpq library',
+  url: pg_url,
+)
+
 install_headers(
   'libpq-fe.h',
   'libpq-events.h',
