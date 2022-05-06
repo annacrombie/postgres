@@ -1,13 +1,13 @@
-executable('uri-regress',
-  files('uri-regress.c'),
+executable('libpq_uri_regress',
+  files('libpq_uri_regress.c'),
   dependencies: [frontend_code, libpq],
   kwargs: default_bin_args + {
     'install': false,
   }
 )
 
-executable('testclient',
-  files('testclient.c'),
+executable('libpq_testclient',
+  files('libpq_testclient.c'),
   dependencies: [frontend_code, libpq],
   kwargs: default_bin_args + {
     'install': false,
