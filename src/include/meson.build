@@ -97,49 +97,58 @@ subdir('catalog')
 subdir('parser')
 subdir('pch')
 
-foreach d : [
-  'access', 'bootstrap', 'commands', 'common', 'datatype',
-  'executor', 'fe_utils', 'foreign', 'jit',
-  'lib', 'libpq', 'mb', 'nodes', 'optimizer', 'parser', 'partitioning', 'postmaster',
-  'regex', 'replication', 'rewrite',
-  'statistics', 'storage', 'tcop', 'snowball', 'tsearch',
-  'utils', 'port', 'portability',
+header_subdirs = [
+  'access',
+  'catalog',
+  'bootstrap',
+  'commands',
+  'common',
+  'datatype',
+  'executor',
+  'fe_utils',
+  'foreign',
+  'jit',
+  'lib',
+  'libpq',
+  'mb',
+  'nodes',
+  'optimizer',
+  'parser',
+  'partitioning',
+  'postmaster',
+  'regex',
+  'replication',
+  'rewrite',
+  'statistics',
+  'storage',
+  'tcop',
+  'snowball',
+  'tsearch',
+  'utils',
+  'port',
+  'portability',
 ]
+
+# XXX: installing headers this way has the danger of installing editor files
+# etc, unfortunately install_subdir() doesn't allow including / excluding by
+# pattern currently.
+foreach d : header_subdirs
+  if d == 'catalog'
+    continue
+  endif
   install_subdir(d, install_dir: dir_include_server,
                  exclude_files: ['.gitignore', 'meson.build'])
 endforeach
 
-install_subdir('catalog', install_dir: dir_include_server,
-               exclude_files: [
-                 '.gitignore',
-                 'Makefile',
-                 'duplicate_oids',
-                 'meson.build',
-                 'pg_aggregate.dat',
-                 'pg_am.dat',
-                 'pg_amop.dat',
-                 'pg_amproc.dat',
-                 'pg_authid.dat',
-                 'pg_cast.dat',
-                 'pg_class.dat',
-                 'pg_collation.dat',
-                 'pg_conversion.dat',
-                 'pg_database.dat',
-                 'pg_language.dat',
-                 'pg_namespace.dat',
-                 'pg_opclass.dat',
-                 'pg_operator.dat',
-                 'pg_opfamily.dat',
-                 'pg_proc.dat',
-                 'pg_range.dat',
-                 'pg_tablespace.dat',
-                 'pg_ts_config.dat',
-                 'pg_ts_config_map.dat',
-                 'pg_ts_dict.dat',
-                 'pg_ts_parser.dat',
-                 'pg_ts_template.dat',
-                 'pg_type.dat',
-                 'reformat_dat_file.pl',
-                 'renumber_oids.pl',
-                 'unused_oids',
-               ])
+install_subdir('catalog',
+  install_dir: dir_include_server,
+  exclude_files: [
+    '.gitignore',
+    'Makefile',
+    'duplicate_oids',
+    'meson.build',
+    'reformat_dat_file.pl',
+    'renumber_oids.pl',
+    'unused_oids',
+  ] + bki_data,
+)
