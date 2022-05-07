@@ -17,20 +17,20 @@
 #include "nodes/parsenodes.h"
 #include "utils/relcache.h"
 
-extern List *QueryRewrite(Query *parsetree);
-extern void AcquireRewriteLocks(Query *parsetree,
+extern PGDLLIMPORT List *QueryRewrite(Query *parsetree);
+extern PGDLLIMPORT void AcquireRewriteLocks(Query *parsetree,
 								bool forExecute,
 								bool forUpdatePushedDown);
 
-extern Node *build_column_default(Relation rel, int attrno);
+extern PGDLLIMPORT Node *build_column_default(Relation rel, int attrno);
 
-extern void fill_extraUpdatedCols(RangeTblEntry *target_rte,
+extern PGDLLIMPORT void fill_extraUpdatedCols(RangeTblEntry *target_rte,
 								  Relation target_relation);
 
-extern Query *get_view_query(Relation view);
-extern const char *view_query_is_auto_updatable(Query *viewquery,
+extern PGDLLIMPORT Query *get_view_query(Relation view);
+extern PGDLLIMPORT const char *view_query_is_auto_updatable(Query *viewquery,
 												bool check_cols);
-extern int	relation_is_updatable(Oid reloid,
+extern PGDLLIMPORT int	relation_is_updatable(Oid reloid,
 								  List *outer_reloids,
 								  bool include_triggers,
 								  Bitmapset *include_cols);

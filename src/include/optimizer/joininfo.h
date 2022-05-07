@@ -17,13 +17,13 @@
 #include "nodes/pathnodes.h"
 
 
-extern bool have_relevant_joinclause(PlannerInfo *root,
+extern PGDLLIMPORT bool have_relevant_joinclause(PlannerInfo *root,
 									 RelOptInfo *rel1, RelOptInfo *rel2);
 
-extern void add_join_clause_to_rels(PlannerInfo *root,
+extern PGDLLIMPORT void add_join_clause_to_rels(PlannerInfo *root,
 									RestrictInfo *restrictinfo,
 									Relids join_relids);
-extern void remove_join_clause_from_rels(PlannerInfo *root,
+extern PGDLLIMPORT void remove_join_clause_from_rels(PlannerInfo *root,
 										 RestrictInfo *restrictinfo,
 										 Relids join_relids);
 

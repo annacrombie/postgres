@@ -26,23 +26,23 @@ extern PGDLLIMPORT int max_standby_archive_delay;
 extern PGDLLIMPORT int max_standby_streaming_delay;
 extern PGDLLIMPORT bool log_recovery_conflict_waits;
 
-extern void InitRecoveryTransactionEnvironment(void);
-extern void ShutdownRecoveryTransactionEnvironment(void);
+extern PGDLLIMPORT void InitRecoveryTransactionEnvironment(void);
+extern PGDLLIMPORT void ShutdownRecoveryTransactionEnvironment(void);
 
-extern void ResolveRecoveryConflictWithSnapshot(TransactionId latestRemovedXid,
+extern PGDLLIMPORT void ResolveRecoveryConflictWithSnapshot(TransactionId latestRemovedXid,
 												RelFileNode node);
-extern void ResolveRecoveryConflictWithSnapshotFullXid(FullTransactionId latestRemovedFullXid,
+extern PGDLLIMPORT void ResolveRecoveryConflictWithSnapshotFullXid(FullTransactionId latestRemovedFullXid,
 													   RelFileNode node);
-extern void ResolveRecoveryConflictWithTablespace(Oid tsid);
-extern void ResolveRecoveryConflictWithDatabase(Oid dbid);
+extern PGDLLIMPORT void ResolveRecoveryConflictWithTablespace(Oid tsid);
+extern PGDLLIMPORT void ResolveRecoveryConflictWithDatabase(Oid dbid);
 
-extern void ResolveRecoveryConflictWithLock(LOCKTAG locktag, bool logging_conflict);
-extern void ResolveRecoveryConflictWithBufferPin(void);
-extern void CheckRecoveryConflictDeadlock(void);
-extern void StandbyDeadLockHandler(void);
-extern void StandbyTimeoutHandler(void);
-extern void StandbyLockTimeoutHandler(void);
-extern void LogRecoveryConflict(ProcSignalReason reason, TimestampTz wait_start,
+extern PGDLLIMPORT void ResolveRecoveryConflictWithLock(LOCKTAG locktag, bool logging_conflict);
+extern PGDLLIMPORT void ResolveRecoveryConflictWithBufferPin(void);
+extern PGDLLIMPORT void CheckRecoveryConflictDeadlock(void);
+extern PGDLLIMPORT void StandbyDeadLockHandler(void);
+extern PGDLLIMPORT void StandbyTimeoutHandler(void);
+extern PGDLLIMPORT void StandbyLockTimeoutHandler(void);
+extern PGDLLIMPORT void LogRecoveryConflict(ProcSignalReason reason, TimestampTz wait_start,
 								TimestampTz cur_ts, VirtualTransactionId *wait_list,
 								bool still_waiting);
 
@@ -53,11 +53,11 @@ extern void LogRecoveryConflict(ProcSignalReason reason, TimestampTz wait_start,
  * to make hot standby work. That includes logging AccessExclusiveLocks taken
  * by transactions and running-xacts snapshots.
  */
-extern void StandbyAcquireAccessExclusiveLock(TransactionId xid, Oid dbOid, Oid relOid);
-extern void StandbyReleaseLockTree(TransactionId xid,
+extern PGDLLIMPORT void StandbyAcquireAccessExclusiveLock(TransactionId xid, Oid dbOid, Oid relOid);
+extern PGDLLIMPORT void StandbyReleaseLockTree(TransactionId xid,
 								   int nsubxids, TransactionId *subxids);
-extern void StandbyReleaseAllLocks(void);
-extern void StandbyReleaseOldLocks(TransactionId oldxid);
+extern PGDLLIMPORT void StandbyReleaseAllLocks(void);
+extern PGDLLIMPORT void StandbyReleaseOldLocks(TransactionId oldxid);
 
 #define MinSizeOfXactRunningXacts offsetof(xl_running_xacts, xids)
 
@@ -88,11 +88,11 @@ typedef struct RunningTransactionsData
 
 typedef RunningTransactionsData *RunningTransactions;
 
-extern void LogAccessExclusiveLock(Oid dbOid, Oid relOid);
-extern void LogAccessExclusiveLockPrepare(void);
+extern PGDLLIMPORT void LogAccessExclusiveLock(Oid dbOid, Oid relOid);
+extern PGDLLIMPORT void LogAccessExclusiveLockPrepare(void);
 
-extern XLogRecPtr LogStandbySnapshot(void);
-extern void LogStandbyInvalidations(int nmsgs, SharedInvalidationMessage *msgs,
+extern PGDLLIMPORT XLogRecPtr LogStandbySnapshot(void);
+extern PGDLLIMPORT void LogStandbyInvalidations(int nmsgs, SharedInvalidationMessage *msgs,
 									bool relcacheInitFileInval);
 
 #endif							/* STANDBY_H */

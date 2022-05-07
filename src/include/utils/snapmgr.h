@@ -47,11 +47,11 @@
 extern PGDLLIMPORT int old_snapshot_threshold;
 
 
-extern Size SnapMgrShmemSize(void);
-extern void SnapMgrInit(void);
-extern TimestampTz GetSnapshotCurrentTimestamp(void);
-extern TimestampTz GetOldSnapshotThresholdTimestamp(void);
-extern void SnapshotTooOldMagicForTest(void);
+extern PGDLLIMPORT Size SnapMgrShmemSize(void);
+extern PGDLLIMPORT void SnapMgrInit(void);
+extern PGDLLIMPORT TimestampTz GetSnapshotCurrentTimestamp(void);
+extern PGDLLIMPORT TimestampTz GetOldSnapshotThresholdTimestamp(void);
+extern PGDLLIMPORT void SnapshotTooOldMagicForTest(void);
 
 extern PGDLLIMPORT bool FirstSnapshotSet;
 
@@ -103,77 +103,77 @@ OldSnapshotThresholdActive(void)
 	return old_snapshot_threshold >= 0;
 }
 
-extern Snapshot GetTransactionSnapshot(void);
-extern Snapshot GetLatestSnapshot(void);
-extern void SnapshotSetCommandId(CommandId curcid);
-extern Snapshot GetOldestSnapshot(void);
+extern PGDLLIMPORT Snapshot GetTransactionSnapshot(void);
+extern PGDLLIMPORT Snapshot GetLatestSnapshot(void);
+extern PGDLLIMPORT void SnapshotSetCommandId(CommandId curcid);
+extern PGDLLIMPORT Snapshot GetOldestSnapshot(void);
 
-extern Snapshot GetCatalogSnapshot(Oid relid);
-extern Snapshot GetNonHistoricCatalogSnapshot(Oid relid);
-extern void InvalidateCatalogSnapshot(void);
-extern void InvalidateCatalogSnapshotConditionally(void);
+extern PGDLLIMPORT Snapshot GetCatalogSnapshot(Oid relid);
+extern PGDLLIMPORT Snapshot GetNonHistoricCatalogSnapshot(Oid relid);
+extern PGDLLIMPORT void InvalidateCatalogSnapshot(void);
+extern PGDLLIMPORT void InvalidateCatalogSnapshotConditionally(void);
 
-extern void PushActiveSnapshot(Snapshot snapshot);
-extern void PushActiveSnapshotWithLevel(Snapshot snapshot, int snap_level);
-extern void PushCopiedSnapshot(Snapshot snapshot);
-extern void UpdateActiveSnapshotCommandId(void);
-extern void PopActiveSnapshot(void);
-extern Snapshot GetActiveSnapshot(void);
-extern bool ActiveSnapshotSet(void);
+extern PGDLLIMPORT void PushActiveSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT void PushActiveSnapshotWithLevel(Snapshot snapshot, int snap_level);
+extern PGDLLIMPORT void PushCopiedSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT void UpdateActiveSnapshotCommandId(void);
+extern PGDLLIMPORT void PopActiveSnapshot(void);
+extern PGDLLIMPORT Snapshot GetActiveSnapshot(void);
+extern PGDLLIMPORT bool ActiveSnapshotSet(void);
 
-extern Snapshot RegisterSnapshot(Snapshot snapshot);
-extern void UnregisterSnapshot(Snapshot snapshot);
-extern Snapshot RegisterSnapshotOnOwner(Snapshot snapshot, ResourceOwner owner);
-extern void UnregisterSnapshotFromOwner(Snapshot snapshot, ResourceOwner owner);
+extern PGDLLIMPORT Snapshot RegisterSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT void UnregisterSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT Snapshot RegisterSnapshotOnOwner(Snapshot snapshot, ResourceOwner owner);
+extern PGDLLIMPORT void UnregisterSnapshotFromOwner(Snapshot snapshot, ResourceOwner owner);
 
-extern void AtSubCommit_Snapshot(int level);
-extern void AtSubAbort_Snapshot(int level);
-extern void AtEOXact_Snapshot(bool isCommit, bool resetXmin);
+extern PGDLLIMPORT void AtSubCommit_Snapshot(int level);
+extern PGDLLIMPORT void AtSubAbort_Snapshot(int level);
+extern PGDLLIMPORT void AtEOXact_Snapshot(bool isCommit, bool resetXmin);
 
-extern void ImportSnapshot(const char *idstr);
-extern bool XactHasExportedSnapshots(void);
-extern void DeleteAllExportedSnapshotFiles(void);
-extern void WaitForOlderSnapshots(TransactionId limitXmin, bool progress);
-extern bool ThereAreNoPriorRegisteredSnapshots(void);
-extern bool HaveRegisteredOrActiveSnapshot(void);
-extern bool TransactionIdLimitedForOldSnapshots(TransactionId recentXmin,
+extern PGDLLIMPORT void ImportSnapshot(const char *idstr);
+extern PGDLLIMPORT bool XactHasExportedSnapshots(void);
+extern PGDLLIMPORT void DeleteAllExportedSnapshotFiles(void);
+extern PGDLLIMPORT void WaitForOlderSnapshots(TransactionId limitXmin, bool progress);
+extern PGDLLIMPORT bool ThereAreNoPriorRegisteredSnapshots(void);
+extern PGDLLIMPORT bool HaveRegisteredOrActiveSnapshot(void);
+extern PGDLLIMPORT bool TransactionIdLimitedForOldSnapshots(TransactionId recentXmin,
 												Relation relation,
 												TransactionId *limit_xid,
 												TimestampTz *limit_ts);
-extern void SetOldSnapshotThresholdTimestamp(TimestampTz ts, TransactionId xlimit);
-extern void MaintainOldSnapshotTimeMapping(TimestampTz whenTaken,
+extern PGDLLIMPORT void SetOldSnapshotThresholdTimestamp(TimestampTz ts, TransactionId xlimit);
+extern PGDLLIMPORT void MaintainOldSnapshotTimeMapping(TimestampTz whenTaken,
 										   TransactionId xmin);
 
-extern char *ExportSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT char *ExportSnapshot(Snapshot snapshot);
 
 /*
  * These live in procarray.c because they're intimately linked to the
  * procarray contents, but thematically they better fit into snapmgr.h.
  */
 typedef struct GlobalVisState GlobalVisState;
-extern GlobalVisState *GlobalVisTestFor(Relation rel);
-extern bool GlobalVisTestIsRemovableXid(GlobalVisState *state, TransactionId xid);
-extern bool GlobalVisTestIsRemovableFullXid(GlobalVisState *state, FullTransactionId fxid);
-extern FullTransactionId GlobalVisTestNonRemovableFullHorizon(GlobalVisState *state);
-extern TransactionId GlobalVisTestNonRemovableHorizon(GlobalVisState *state);
-extern bool GlobalVisCheckRemovableXid(Relation rel, TransactionId xid);
-extern bool GlobalVisCheckRemovableFullXid(Relation rel, FullTransactionId fxid);
+extern PGDLLIMPORT GlobalVisState *GlobalVisTestFor(Relation rel);
+extern PGDLLIMPORT bool GlobalVisTestIsRemovableXid(GlobalVisState *state, TransactionId xid);
+extern PGDLLIMPORT bool GlobalVisTestIsRemovableFullXid(GlobalVisState *state, FullTransactionId fxid);
+extern PGDLLIMPORT FullTransactionId GlobalVisTestNonRemovableFullHorizon(GlobalVisState *state);
+extern PGDLLIMPORT TransactionId GlobalVisTestNonRemovableHorizon(GlobalVisState *state);
+extern PGDLLIMPORT bool GlobalVisCheckRemovableXid(Relation rel, TransactionId xid);
+extern PGDLLIMPORT bool GlobalVisCheckRemovableFullXid(Relation rel, FullTransactionId fxid);
 
 /*
  * Utility functions for implementing visibility routines in table AMs.
  */
-extern bool XidInMVCCSnapshot(TransactionId xid, Snapshot snapshot);
+extern PGDLLIMPORT bool XidInMVCCSnapshot(TransactionId xid, Snapshot snapshot);
 
 /* Support for catalog timetravel for logical decoding */
 struct HTAB;
-extern struct HTAB *HistoricSnapshotGetTupleCids(void);
-extern void SetupHistoricSnapshot(Snapshot snapshot_now, struct HTAB *tuplecids);
-extern void TeardownHistoricSnapshot(bool is_error);
-extern bool HistoricSnapshotActive(void);
+extern PGDLLIMPORT struct HTAB *HistoricSnapshotGetTupleCids(void);
+extern PGDLLIMPORT void SetupHistoricSnapshot(Snapshot snapshot_now, struct HTAB *tuplecids);
+extern PGDLLIMPORT void TeardownHistoricSnapshot(bool is_error);
+extern PGDLLIMPORT bool HistoricSnapshotActive(void);
 
-extern Size EstimateSnapshotSpace(Snapshot snapshot);
-extern void SerializeSnapshot(Snapshot snapshot, char *start_address);
-extern Snapshot RestoreSnapshot(char *start_address);
-extern void RestoreTransactionSnapshot(Snapshot snapshot, void *source_pgproc);
+extern PGDLLIMPORT Size EstimateSnapshotSpace(Snapshot snapshot);
+extern PGDLLIMPORT void SerializeSnapshot(Snapshot snapshot, char *start_address);
+extern PGDLLIMPORT Snapshot RestoreSnapshot(char *start_address);
+extern PGDLLIMPORT void RestoreTransactionSnapshot(Snapshot snapshot, void *source_pgproc);
 
 #endif							/* SNAPMGR_H */

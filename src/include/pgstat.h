@@ -401,69 +401,69 @@ typedef struct PgStat_WalStats
  */
 
 /* functions called from postmaster */
-extern Size StatsShmemSize(void);
-extern void StatsShmemInit(void);
+extern PGDLLIMPORT Size StatsShmemSize(void);
+extern PGDLLIMPORT void StatsShmemInit(void);
 
 /* Functions called during server startup / shutdown */
-extern void pgstat_restore_stats(void);
-extern void pgstat_discard_stats(void);
-extern void pgstat_before_server_shutdown(int code, Datum arg);
+extern PGDLLIMPORT void pgstat_restore_stats(void);
+extern PGDLLIMPORT void pgstat_discard_stats(void);
+extern PGDLLIMPORT void pgstat_before_server_shutdown(int code, Datum arg);
 
 /* Functions for backend initialization */
-extern void pgstat_initialize(void);
+extern PGDLLIMPORT void pgstat_initialize(void);
 
 /* Functions called from backends */
-extern long pgstat_report_stat(bool force);
-extern void pgstat_force_next_flush(void);
+extern PGDLLIMPORT long pgstat_report_stat(bool force);
+extern PGDLLIMPORT void pgstat_force_next_flush(void);
 
-extern void pgstat_reset_counters(void);
-extern void pgstat_reset(PgStat_Kind kind, Oid dboid, Oid objectid);
-extern void pgstat_reset_of_kind(PgStat_Kind kind);
+extern PGDLLIMPORT void pgstat_reset_counters(void);
+extern PGDLLIMPORT void pgstat_reset(PgStat_Kind kind, Oid dboid, Oid objectid);
+extern PGDLLIMPORT void pgstat_reset_of_kind(PgStat_Kind kind);
 
 /* stats accessors */
-extern void pgstat_clear_snapshot(void);
-extern TimestampTz pgstat_get_stat_snapshot_timestamp(bool *have_snapshot);
+extern PGDLLIMPORT void pgstat_clear_snapshot(void);
+extern PGDLLIMPORT TimestampTz pgstat_get_stat_snapshot_timestamp(bool *have_snapshot);
 
 /* helpers */
-extern PgStat_Kind pgstat_get_kind_from_str(char *kind_str);
-extern bool pgstat_have_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT PgStat_Kind pgstat_get_kind_from_str(char *kind_str);
+extern PGDLLIMPORT bool pgstat_have_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
 
 
 /*
  * Functions in pgstat_archiver.c
  */
 
-extern void pgstat_report_archiver(const char *xlog, bool failed);
-extern PgStat_ArchiverStats *pgstat_fetch_stat_archiver(void);
+extern PGDLLIMPORT void pgstat_report_archiver(const char *xlog, bool failed);
+extern PGDLLIMPORT PgStat_ArchiverStats *pgstat_fetch_stat_archiver(void);
 
 
 /*
  * Functions in pgstat_bgwriter.c
  */
 
-extern void pgstat_report_bgwriter(void);
-extern PgStat_BgWriterStats *pgstat_fetch_stat_bgwriter(void);
+extern PGDLLIMPORT void pgstat_report_bgwriter(void);
+extern PGDLLIMPORT PgStat_BgWriterStats *pgstat_fetch_stat_bgwriter(void);
 
 
 /*
  * Functions in pgstat_checkpointer.c
  */
 
-extern void pgstat_report_checkpointer(void);
-extern PgStat_CheckpointerStats *pgstat_fetch_stat_checkpointer(void);
+extern PGDLLIMPORT void pgstat_report_checkpointer(void);
+extern PGDLLIMPORT PgStat_CheckpointerStats *pgstat_fetch_stat_checkpointer(void);
 
 
 /*
  * Functions in pgstat_database.c
  */
 
-extern void pgstat_drop_database(Oid databaseid);
-extern void pgstat_report_autovac(Oid dboid);
-extern void pgstat_report_recovery_conflict(int reason);
-extern void pgstat_report_deadlock(void);
-extern void pgstat_report_checksum_failures_in_db(Oid dboid, int failurecount);
-extern void pgstat_report_checksum_failure(void);
-extern void pgstat_report_connect(Oid dboid);
+extern PGDLLIMPORT void pgstat_drop_database(Oid databaseid);
+extern PGDLLIMPORT void pgstat_report_autovac(Oid dboid);
+extern PGDLLIMPORT void pgstat_report_recovery_conflict(int reason);
+extern PGDLLIMPORT void pgstat_report_deadlock(void);
+extern PGDLLIMPORT void pgstat_report_checksum_failures_in_db(Oid dboid, int failurecount);
+extern PGDLLIMPORT void pgstat_report_checksum_failure(void);
+extern PGDLLIMPORT void pgstat_report_connect(Oid dboid);
 
 #define pgstat_count_buffer_read_time(n)							\
 	(pgStatBlockReadTime += (n))
@@ -474,40 +474,40 @@ extern void pgstat_report_connect(Oid dboid);
 #define pgstat_count_conn_txn_idle_time(n)							\
 	(pgStatTransactionIdleTime += (n))
 
-extern PgStat_StatDBEntry *pgstat_fetch_stat_dbentry(Oid dbid);
+extern PGDLLIMPORT PgStat_StatDBEntry *pgstat_fetch_stat_dbentry(Oid dbid);
 
 /*
  * Functions in pgstat_function.c
  */
 
-extern void pgstat_create_function(Oid proid);
-extern void pgstat_drop_function(Oid proid);
+extern PGDLLIMPORT void pgstat_create_function(Oid proid);
+extern PGDLLIMPORT void pgstat_drop_function(Oid proid);
 
 struct FunctionCallInfoBaseData;
-extern void pgstat_init_function_usage(struct FunctionCallInfoBaseData *fcinfo,
+extern PGDLLIMPORT void pgstat_init_function_usage(struct FunctionCallInfoBaseData *fcinfo,
 									   PgStat_FunctionCallUsage *fcu);
-extern void pgstat_end_function_usage(PgStat_FunctionCallUsage *fcu,
+extern PGDLLIMPORT void pgstat_end_function_usage(PgStat_FunctionCallUsage *fcu,
 									  bool finalize);
 
-extern PgStat_StatFuncEntry *pgstat_fetch_stat_funcentry(Oid funcid);
-extern PgStat_BackendFunctionEntry *find_funcstat_entry(Oid func_id);
+extern PGDLLIMPORT PgStat_StatFuncEntry *pgstat_fetch_stat_funcentry(Oid funcid);
+extern PGDLLIMPORT PgStat_BackendFunctionEntry *find_funcstat_entry(Oid func_id);
 
 
 /*
  * Functions in pgstat_relation.c
  */
 
-extern void pgstat_create_relation(Relation rel);
-extern void pgstat_drop_relation(Relation rel);
-extern void pgstat_copy_relation_stats(Relation dstrel, Relation srcrel);
+extern PGDLLIMPORT void pgstat_create_relation(Relation rel);
+extern PGDLLIMPORT void pgstat_drop_relation(Relation rel);
+extern PGDLLIMPORT void pgstat_copy_relation_stats(Relation dstrel, Relation srcrel);
 
-extern void pgstat_init_relation(Relation rel);
-extern void pgstat_assoc_relation(Relation rel);
-extern void pgstat_unlink_relation(Relation rel);
+extern PGDLLIMPORT void pgstat_init_relation(Relation rel);
+extern PGDLLIMPORT void pgstat_assoc_relation(Relation rel);
+extern PGDLLIMPORT void pgstat_unlink_relation(Relation rel);
 
-extern void pgstat_report_vacuum(Oid tableoid, bool shared,
+extern PGDLLIMPORT void pgstat_report_vacuum(Oid tableoid, bool shared,
 								 PgStat_Counter livetuples, PgStat_Counter deadtuples);
-extern void pgstat_report_analyze(Relation rel,
+extern PGDLLIMPORT void pgstat_report_analyze(Relation rel,
 								  PgStat_Counter livetuples, PgStat_Counter deadtuples,
 								  bool resetcounter);
 
@@ -558,82 +558,82 @@ extern void pgstat_report_analyze(Relation rel,
 			(rel)->pgstat_info->t_counts.t_blocks_hit++;			\
 	} while (0)
 
-extern void pgstat_count_heap_insert(Relation rel, PgStat_Counter n);
-extern void pgstat_count_heap_update(Relation rel, bool hot);
-extern void pgstat_count_heap_delete(Relation rel);
-extern void pgstat_count_truncate(Relation rel);
-extern void pgstat_update_heap_dead_tuples(Relation rel, int delta);
+extern PGDLLIMPORT void pgstat_count_heap_insert(Relation rel, PgStat_Counter n);
+extern PGDLLIMPORT void pgstat_count_heap_update(Relation rel, bool hot);
+extern PGDLLIMPORT void pgstat_count_heap_delete(Relation rel);
+extern PGDLLIMPORT void pgstat_count_truncate(Relation rel);
+extern PGDLLIMPORT void pgstat_update_heap_dead_tuples(Relation rel, int delta);
 
-extern void pgstat_twophase_postcommit(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void pgstat_twophase_postcommit(TransactionId xid, uint16 info,
 									   void *recdata, uint32 len);
-extern void pgstat_twophase_postabort(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void pgstat_twophase_postabort(TransactionId xid, uint16 info,
 									  void *recdata, uint32 len);
 
-extern PgStat_StatTabEntry *pgstat_fetch_stat_tabentry(Oid relid);
-extern PgStat_StatTabEntry *pgstat_fetch_stat_tabentry_ext(bool shared,
+extern PGDLLIMPORT PgStat_StatTabEntry *pgstat_fetch_stat_tabentry(Oid relid);
+extern PGDLLIMPORT PgStat_StatTabEntry *pgstat_fetch_stat_tabentry_ext(bool shared,
 														   Oid relid);
-extern PgStat_TableStatus *find_tabstat_entry(Oid rel_id);
+extern PGDLLIMPORT PgStat_TableStatus *find_tabstat_entry(Oid rel_id);
 
 
 /*
  * Functions in pgstat_replslot.c
  */
 
-extern void pgstat_reset_replslot(const char *name);
+extern PGDLLIMPORT void pgstat_reset_replslot(const char *name);
 struct ReplicationSlot;
-extern void pgstat_report_replslot(struct ReplicationSlot *slot, const PgStat_StatReplSlotEntry *repSlotStat);
-extern void pgstat_create_replslot(struct ReplicationSlot *slot);
-extern void pgstat_acquire_replslot(struct ReplicationSlot *slot);
-extern void pgstat_drop_replslot(struct ReplicationSlot *slot);
-extern PgStat_StatReplSlotEntry *pgstat_fetch_replslot(NameData slotname);
+extern PGDLLIMPORT void pgstat_report_replslot(struct ReplicationSlot *slot, const PgStat_StatReplSlotEntry *repSlotStat);
+extern PGDLLIMPORT void pgstat_create_replslot(struct ReplicationSlot *slot);
+extern PGDLLIMPORT void pgstat_acquire_replslot(struct ReplicationSlot *slot);
+extern PGDLLIMPORT void pgstat_drop_replslot(struct ReplicationSlot *slot);
+extern PGDLLIMPORT PgStat_StatReplSlotEntry *pgstat_fetch_replslot(NameData slotname);
 
 
 /*
  * Functions in pgstat_slru.c
  */
 
-extern void pgstat_reset_slru(const char *);
-extern void pgstat_count_slru_page_zeroed(int slru_idx);
-extern void pgstat_count_slru_page_hit(int slru_idx);
-extern void pgstat_count_slru_page_read(int slru_idx);
-extern void pgstat_count_slru_page_written(int slru_idx);
-extern void pgstat_count_slru_page_exists(int slru_idx);
-extern void pgstat_count_slru_flush(int slru_idx);
-extern void pgstat_count_slru_truncate(int slru_idx);
-extern const char *pgstat_get_slru_name(int slru_idx);
-extern int	pgstat_get_slru_index(const char *name);
-extern PgStat_SLRUStats *pgstat_fetch_slru(void);
+extern PGDLLIMPORT void pgstat_reset_slru(const char *);
+extern PGDLLIMPORT void pgstat_count_slru_page_zeroed(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_page_hit(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_page_read(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_page_written(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_page_exists(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_flush(int slru_idx);
+extern PGDLLIMPORT void pgstat_count_slru_truncate(int slru_idx);
+extern PGDLLIMPORT const char *pgstat_get_slru_name(int slru_idx);
+extern PGDLLIMPORT int	pgstat_get_slru_index(const char *name);
+extern PGDLLIMPORT PgStat_SLRUStats *pgstat_fetch_slru(void);
 
 
 /*
  * Functions in pgstat_subscription.c
  */
 
-extern void pgstat_report_subscription_error(Oid subid, bool is_apply_error);
-extern void pgstat_create_subscription(Oid subid);
-extern void pgstat_drop_subscription(Oid subid);
-extern PgStat_StatSubEntry *pgstat_fetch_stat_subscription(Oid subid);
+extern PGDLLIMPORT void pgstat_report_subscription_error(Oid subid, bool is_apply_error);
+extern PGDLLIMPORT void pgstat_create_subscription(Oid subid);
+extern PGDLLIMPORT void pgstat_drop_subscription(Oid subid);
+extern PGDLLIMPORT PgStat_StatSubEntry *pgstat_fetch_stat_subscription(Oid subid);
 
 
 /*
  * Functions in pgstat_xact.c
  */
 
-extern void AtEOXact_PgStat(bool isCommit, bool parallel);
-extern void AtEOSubXact_PgStat(bool isCommit, int nestDepth);
-extern void AtPrepare_PgStat(void);
-extern void PostPrepare_PgStat(void);
+extern PGDLLIMPORT void AtEOXact_PgStat(bool isCommit, bool parallel);
+extern PGDLLIMPORT void AtEOSubXact_PgStat(bool isCommit, int nestDepth);
+extern PGDLLIMPORT void AtPrepare_PgStat(void);
+extern PGDLLIMPORT void PostPrepare_PgStat(void);
 struct xl_xact_stats_item;
-extern int	pgstat_get_transactional_drops(bool isCommit, struct xl_xact_stats_item **items);
-extern void pgstat_execute_transactional_drops(int ndrops, struct xl_xact_stats_item *items, bool is_redo);
+extern PGDLLIMPORT int	pgstat_get_transactional_drops(bool isCommit, struct xl_xact_stats_item **items);
+extern PGDLLIMPORT void pgstat_execute_transactional_drops(int ndrops, struct xl_xact_stats_item *items, bool is_redo);
 
 
 /*
  * Functions in pgstat_wal.c
  */
 
-extern void pgstat_report_wal(bool force);
-extern PgStat_WalStats *pgstat_fetch_stat_wal(void);
+extern PGDLLIMPORT void pgstat_report_wal(bool force);
+extern PGDLLIMPORT PgStat_WalStats *pgstat_fetch_stat_wal(void);
 
 
 /*

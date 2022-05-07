@@ -23,19 +23,19 @@
 /* struct definition lives in brin_revmap.c */
 typedef struct BrinRevmap BrinRevmap;
 
-extern BrinRevmap *brinRevmapInitialize(Relation idxrel,
+extern PGDLLIMPORT BrinRevmap *brinRevmapInitialize(Relation idxrel,
 										BlockNumber *pagesPerRange, Snapshot snapshot);
-extern void brinRevmapTerminate(BrinRevmap *revmap);
+extern PGDLLIMPORT void brinRevmapTerminate(BrinRevmap *revmap);
 
-extern void brinRevmapExtend(BrinRevmap *revmap,
+extern PGDLLIMPORT void brinRevmapExtend(BrinRevmap *revmap,
 							 BlockNumber heapBlk);
-extern Buffer brinLockRevmapPageForUpdate(BrinRevmap *revmap,
+extern PGDLLIMPORT Buffer brinLockRevmapPageForUpdate(BrinRevmap *revmap,
 										  BlockNumber heapBlk);
-extern void brinSetHeapBlockItemptr(Buffer buf, BlockNumber pagesPerRange,
+extern PGDLLIMPORT void brinSetHeapBlockItemptr(Buffer buf, BlockNumber pagesPerRange,
 									BlockNumber heapBlk, ItemPointerData tid);
-extern BrinTuple *brinGetTupleForHeapBlock(BrinRevmap *revmap,
+extern PGDLLIMPORT BrinTuple *brinGetTupleForHeapBlock(BrinRevmap *revmap,
 										   BlockNumber heapBlk, Buffer *buf, OffsetNumber *off,
 										   Size *size, int mode, Snapshot snapshot);
-extern bool brinRevmapDesummarizeRange(Relation idxrel, BlockNumber heapBlk);
+extern PGDLLIMPORT bool brinRevmapDesummarizeRange(Relation idxrel, BlockNumber heapBlk);
 
 #endif							/* BRIN_REVMAP_H */

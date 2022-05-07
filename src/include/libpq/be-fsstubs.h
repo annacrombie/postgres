@@ -19,14 +19,14 @@
  * Probably these should have had the underscore-free names,
  * but too late now...
  */
-extern int	lo_read(int fd, char *buf, int len);
-extern int	lo_write(int fd, const char *buf, int len);
+extern PGDLLIMPORT int	lo_read(int fd, char *buf, int len);
+extern PGDLLIMPORT int	lo_write(int fd, const char *buf, int len);
 
 /*
  * Cleanup LOs at xact commit/abort
  */
-extern void AtEOXact_LargeObject(bool isCommit);
-extern void AtEOSubXact_LargeObject(bool isCommit, SubTransactionId mySubid,
+extern PGDLLIMPORT void AtEOXact_LargeObject(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_LargeObject(bool isCommit, SubTransactionId mySubid,
 									SubTransactionId parentSubid);
 
 #endif							/* BE_FSSTUBS_H */

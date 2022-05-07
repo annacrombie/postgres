@@ -235,13 +235,13 @@ typedef struct
 	size_t		avail;			/* free space remaining at firstfree */
 } IspellDict;
 
-extern TSLexeme *NINormalizeWord(IspellDict *Conf, char *word);
+extern PGDLLIMPORT TSLexeme *NINormalizeWord(IspellDict *Conf, char *word);
 
-extern void NIStartBuild(IspellDict *Conf);
-extern void NIImportAffixes(IspellDict *Conf, const char *filename);
-extern void NIImportDictionary(IspellDict *Conf, const char *filename);
-extern void NISortDictionary(IspellDict *Conf);
-extern void NISortAffixes(IspellDict *Conf);
-extern void NIFinishBuild(IspellDict *Conf);
+extern PGDLLIMPORT void NIStartBuild(IspellDict *Conf);
+extern PGDLLIMPORT void NIImportAffixes(IspellDict *Conf, const char *filename);
+extern PGDLLIMPORT void NIImportDictionary(IspellDict *Conf, const char *filename);
+extern PGDLLIMPORT void NISortDictionary(IspellDict *Conf);
+extern PGDLLIMPORT void NISortAffixes(IspellDict *Conf);
+extern PGDLLIMPORT void NIFinishBuild(IspellDict *Conf);
 
 #endif

@@ -16,9 +16,9 @@
 
 #include "nodes/execnodes.h"
 
-extern BitmapOrState *ExecInitBitmapOr(BitmapOr *node, EState *estate, int eflags);
-extern Node *MultiExecBitmapOr(BitmapOrState *node);
-extern void ExecEndBitmapOr(BitmapOrState *node);
-extern void ExecReScanBitmapOr(BitmapOrState *node);
+extern PGDLLIMPORT BitmapOrState *ExecInitBitmapOr(BitmapOr *node, EState *estate, int eflags);
+extern PGDLLIMPORT Node *MultiExecBitmapOr(BitmapOrState *node);
+extern PGDLLIMPORT void ExecEndBitmapOr(BitmapOrState *node);
+extern PGDLLIMPORT void ExecReScanBitmapOr(BitmapOrState *node);
 
 #endif							/* NODEBITMAPOR_H */

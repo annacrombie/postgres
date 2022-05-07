@@ -35,27 +35,27 @@ typedef struct
 
 
 /* Utility statements PREPARE, EXECUTE, DEALLOCATE, EXPLAIN EXECUTE */
-extern void PrepareQuery(ParseState *pstate, PrepareStmt *stmt,
+extern PGDLLIMPORT void PrepareQuery(ParseState *pstate, PrepareStmt *stmt,
 						 int stmt_location, int stmt_len);
-extern void ExecuteQuery(ParseState *pstate,
+extern PGDLLIMPORT void ExecuteQuery(ParseState *pstate,
 						 ExecuteStmt *stmt, IntoClause *intoClause,
 						 ParamListInfo params,
 						 DestReceiver *dest, QueryCompletion *qc);
-extern void DeallocateQuery(DeallocateStmt *stmt);
-extern void ExplainExecuteQuery(ExecuteStmt *execstmt, IntoClause *into,
+extern PGDLLIMPORT void DeallocateQuery(DeallocateStmt *stmt);
+extern PGDLLIMPORT void ExplainExecuteQuery(ExecuteStmt *execstmt, IntoClause *into,
 								ExplainState *es, const char *queryString,
 								ParamListInfo params, QueryEnvironment *queryEnv);
 
 /* Low-level access to stored prepared statements */
-extern void StorePreparedStatement(const char *stmt_name,
+extern PGDLLIMPORT void StorePreparedStatement(const char *stmt_name,
 								   CachedPlanSource *plansource,
 								   bool from_sql);
-extern PreparedStatement *FetchPreparedStatement(const char *stmt_name,
+extern PGDLLIMPORT PreparedStatement *FetchPreparedStatement(const char *stmt_name,
 												 bool throwError);
-extern void DropPreparedStatement(const char *stmt_name, bool showError);
-extern TupleDesc FetchPreparedStatementResultDesc(PreparedStatement *stmt);
-extern List *FetchPreparedStatementTargetList(PreparedStatement *stmt);
+extern PGDLLIMPORT void DropPreparedStatement(const char *stmt_name, bool showError);
+extern PGDLLIMPORT TupleDesc FetchPreparedStatementResultDesc(PreparedStatement *stmt);
+extern PGDLLIMPORT List *FetchPreparedStatementTargetList(PreparedStatement *stmt);
 
-extern void DropAllPreparedStatements(void);
+extern PGDLLIMPORT void DropAllPreparedStatements(void);
 
 #endif							/* PREPARE_H */

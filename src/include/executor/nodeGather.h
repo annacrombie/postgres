@@ -16,9 +16,9 @@
 
 #include "nodes/execnodes.h"
 
-extern GatherState *ExecInitGather(Gather *node, EState *estate, int eflags);
-extern void ExecEndGather(GatherState *node);
-extern void ExecShutdownGather(GatherState *node);
-extern void ExecReScanGather(GatherState *node);
+extern PGDLLIMPORT GatherState *ExecInitGather(Gather *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndGather(GatherState *node);
+extern PGDLLIMPORT void ExecShutdownGather(GatherState *node);
+extern PGDLLIMPORT void ExecReScanGather(GatherState *node);
 
 #endif							/* NODEGATHER_H */

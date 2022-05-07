@@ -18,37 +18,37 @@
 #include "nodes/parsenodes.h"
 
 
-extern A_Expr *makeA_Expr(A_Expr_Kind kind, List *name,
+extern PGDLLIMPORT A_Expr *makeA_Expr(A_Expr_Kind kind, List *name,
 						  Node *lexpr, Node *rexpr, int location);
 
-extern A_Expr *makeSimpleA_Expr(A_Expr_Kind kind, char *name,
+extern PGDLLIMPORT A_Expr *makeSimpleA_Expr(A_Expr_Kind kind, char *name,
 								Node *lexpr, Node *rexpr, int location);
 
-extern Var *makeVar(int varno,
+extern PGDLLIMPORT Var *makeVar(int varno,
 					AttrNumber varattno,
 					Oid vartype,
 					int32 vartypmod,
 					Oid varcollid,
 					Index varlevelsup);
 
-extern Var *makeVarFromTargetEntry(int varno,
+extern PGDLLIMPORT Var *makeVarFromTargetEntry(int varno,
 								   TargetEntry *tle);
 
-extern Var *makeWholeRowVar(RangeTblEntry *rte,
+extern PGDLLIMPORT Var *makeWholeRowVar(RangeTblEntry *rte,
 							int varno,
 							Index varlevelsup,
 							bool allowScalar);
 
-extern TargetEntry *makeTargetEntry(Expr *expr,
+extern PGDLLIMPORT TargetEntry *makeTargetEntry(Expr *expr,
 									AttrNumber resno,
 									char *resname,
 									bool resjunk);
 
-extern TargetEntry *flatCopyTargetEntry(TargetEntry *src_tle);
+extern PGDLLIMPORT TargetEntry *flatCopyTargetEntry(TargetEntry *src_tle);
 
-extern FromExpr *makeFromExpr(List *fromlist, Node *quals);
+extern PGDLLIMPORT FromExpr *makeFromExpr(List *fromlist, Node *quals);
 
-extern Const *makeConst(Oid consttype,
+extern PGDLLIMPORT Const *makeConst(Oid consttype,
 						int32 consttypmod,
 						Oid constcollid,
 						int constlen,
@@ -56,66 +56,66 @@ extern Const *makeConst(Oid consttype,
 						bool constisnull,
 						bool constbyval);
 
-extern Const *makeNullConst(Oid consttype, int32 consttypmod, Oid constcollid);
+extern PGDLLIMPORT Const *makeNullConst(Oid consttype, int32 consttypmod, Oid constcollid);
 
-extern Node *makeBoolConst(bool value, bool isnull);
+extern PGDLLIMPORT Node *makeBoolConst(bool value, bool isnull);
 
-extern Expr *makeBoolExpr(BoolExprType boolop, List *args, int location);
+extern PGDLLIMPORT Expr *makeBoolExpr(BoolExprType boolop, List *args, int location);
 
-extern Alias *makeAlias(const char *aliasname, List *colnames);
+extern PGDLLIMPORT Alias *makeAlias(const char *aliasname, List *colnames);
 
-extern RelabelType *makeRelabelType(Expr *arg, Oid rtype, int32 rtypmod,
+extern PGDLLIMPORT RelabelType *makeRelabelType(Expr *arg, Oid rtype, int32 rtypmod,
 									Oid rcollid, CoercionForm rformat);
 
-extern RangeVar *makeRangeVar(char *schemaname, char *relname, int location);
+extern PGDLLIMPORT RangeVar *makeRangeVar(char *schemaname, char *relname, int location);
 
-extern TypeName *makeTypeName(char *typnam);
-extern TypeName *makeTypeNameFromNameList(List *names);
-extern TypeName *makeTypeNameFromOid(Oid typeOid, int32 typmod);
+extern PGDLLIMPORT TypeName *makeTypeName(char *typnam);
+extern PGDLLIMPORT TypeName *makeTypeNameFromNameList(List *names);
+extern PGDLLIMPORT TypeName *makeTypeNameFromOid(Oid typeOid, int32 typmod);
 
-extern ColumnDef *makeColumnDef(const char *colname,
+extern PGDLLIMPORT ColumnDef *makeColumnDef(const char *colname,
 								Oid typeOid, int32 typmod, Oid collOid);
 
-extern FuncExpr *makeFuncExpr(Oid funcid, Oid rettype, List *args,
+extern PGDLLIMPORT FuncExpr *makeFuncExpr(Oid funcid, Oid rettype, List *args,
 							  Oid funccollid, Oid inputcollid, CoercionForm fformat);
 
-extern FuncCall *makeFuncCall(List *name, List *args,
+extern PGDLLIMPORT FuncCall *makeFuncCall(List *name, List *args,
 							  CoercionForm funcformat, int location);
 
-extern Expr *make_opclause(Oid opno, Oid opresulttype, bool opretset,
+extern PGDLLIMPORT Expr *make_opclause(Oid opno, Oid opresulttype, bool opretset,
 						   Expr *leftop, Expr *rightop,
 						   Oid opcollid, Oid inputcollid);
 
-extern Expr *make_andclause(List *andclauses);
-extern Expr *make_orclause(List *orclauses);
-extern Expr *make_notclause(Expr *notclause);
+extern PGDLLIMPORT Expr *make_andclause(List *andclauses);
+extern PGDLLIMPORT Expr *make_orclause(List *orclauses);
+extern PGDLLIMPORT Expr *make_notclause(Expr *notclause);
 
-extern Node *make_and_qual(Node *qual1, Node *qual2);
-extern Expr *make_ands_explicit(List *andclauses);
-extern List *make_ands_implicit(Expr *clause);
+extern PGDLLIMPORT Node *make_and_qual(Node *qual1, Node *qual2);
+extern PGDLLIMPORT Expr *make_ands_explicit(List *andclauses);
+extern PGDLLIMPORT List *make_ands_implicit(Expr *clause);
 
-extern IndexInfo *makeIndexInfo(int numattrs, int numkeyattrs, Oid amoid,
+extern PGDLLIMPORT IndexInfo *makeIndexInfo(int numattrs, int numkeyattrs, Oid amoid,
 								List *expressions, List *predicates,
 								bool unique, bool nulls_not_distinct, bool isready, bool concurrent);
 
-extern DefElem *makeDefElem(char *name, Node *arg, int location);
-extern DefElem *makeDefElemExtended(char *nameSpace, char *name, Node *arg,
+extern PGDLLIMPORT DefElem *makeDefElem(char *name, Node *arg, int location);
+extern PGDLLIMPORT DefElem *makeDefElemExtended(char *nameSpace, char *name, Node *arg,
 									DefElemAction defaction, int location);
 
-extern GroupingSet *makeGroupingSet(GroupingSetKind kind, List *content, int location);
+extern PGDLLIMPORT GroupingSet *makeGroupingSet(GroupingSetKind kind, List *content, int location);
 
-extern VacuumRelation *makeVacuumRelation(RangeVar *relation, Oid oid, List *va_cols);
+extern PGDLLIMPORT VacuumRelation *makeVacuumRelation(RangeVar *relation, Oid oid, List *va_cols);
 
-extern JsonFormat *makeJsonFormat(JsonFormatType type, JsonEncoding encoding,
+extern PGDLLIMPORT JsonFormat *makeJsonFormat(JsonFormatType type, JsonEncoding encoding,
 								  int location);
-extern JsonValueExpr *makeJsonValueExpr(Expr *expr, JsonFormat *format);
-extern JsonBehavior *makeJsonBehavior(JsonBehaviorType type, Node *expr);
-extern Node *makeJsonTableJoinedPlan(JsonTablePlanJoinType type,
+extern PGDLLIMPORT JsonValueExpr *makeJsonValueExpr(Expr *expr, JsonFormat *format);
+extern PGDLLIMPORT JsonBehavior *makeJsonBehavior(JsonBehaviorType type, Node *expr);
+extern PGDLLIMPORT Node *makeJsonTableJoinedPlan(JsonTablePlanJoinType type,
 									 Node *plan1, Node *plan2, int location);
-extern Node *makeJsonKeyValue(Node *key, Node *value);
-extern Node *makeJsonIsPredicate(Node *expr, JsonFormat *format,
+extern PGDLLIMPORT Node *makeJsonKeyValue(Node *key, Node *value);
+extern PGDLLIMPORT Node *makeJsonIsPredicate(Node *expr, JsonFormat *format,
 								 JsonValueType vtype, bool unique_keys,
 								 int location);
-extern JsonEncoding makeJsonEncoding(char *name);
+extern PGDLLIMPORT JsonEncoding makeJsonEncoding(char *name);
 
 #endif							/* MAKEFUNC_H */

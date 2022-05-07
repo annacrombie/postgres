@@ -255,14 +255,14 @@ extern PGDLLIMPORT const char *const GucContext_Names[];
 extern PGDLLIMPORT const char *const GucSource_Names[];
 
 /* get the current set of variables */
-extern struct config_generic **get_guc_variables(void);
+extern PGDLLIMPORT struct config_generic **get_guc_variables(void);
 
-extern void build_guc_variables(void);
+extern PGDLLIMPORT void build_guc_variables(void);
 
 /* search in enum options */
-extern const char *config_enum_lookup_by_value(struct config_enum *record, int val);
-extern bool config_enum_lookup_by_name(struct config_enum *record,
+extern PGDLLIMPORT const char *config_enum_lookup_by_value(struct config_enum *record, int val);
+extern PGDLLIMPORT bool config_enum_lookup_by_name(struct config_enum *record,
 									   const char *value, int *retval);
-extern struct config_generic **get_explain_guc_options(int *num);
+extern PGDLLIMPORT struct config_generic **get_explain_guc_options(int *num);
 
 #endif							/* GUC_TABLES_H */

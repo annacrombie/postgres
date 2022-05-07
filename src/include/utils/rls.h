@@ -45,6 +45,6 @@ enum CheckEnableRlsResult
 	RLS_ENABLED
 };
 
-extern int	check_enable_rls(Oid relid, Oid checkAsUser, bool noError);
+extern PGDLLIMPORT int	check_enable_rls(Oid relid, Oid checkAsUser, bool noError);
 
 #endif							/* RLS_H */

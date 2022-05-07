@@ -31,7 +31,7 @@
  */
 #define PG_HAVE_MEMORY_BARRIER_EMULATION
 
-extern void pg_spinlock_barrier(void);
+extern PGDLLIMPORT void pg_spinlock_barrier(void);
 #define pg_memory_barrier_impl pg_spinlock_barrier
 #endif
 
@@ -46,7 +46,7 @@ extern void pg_spinlock_barrier(void);
  * A native compiler barrier for sure is a lot faster than this...
  */
 #define PG_HAVE_COMPILER_BARRIER_EMULATION
-extern void pg_extern_compiler_barrier(void);
+extern PGDLLIMPORT void pg_extern_compiler_barrier(void);
 #define pg_compiler_barrier_impl pg_extern_compiler_barrier
 #endif
 
@@ -124,33 +124,33 @@ typedef struct pg_atomic_uint64
 #ifdef PG_HAVE_ATOMIC_FLAG_SIMULATION
 
 #define PG_HAVE_ATOMIC_INIT_FLAG
-extern void pg_atomic_init_flag_impl(volatile pg_atomic_flag *ptr);
+extern PGDLLIMPORT void pg_atomic_init_flag_impl(volatile pg_atomic_flag *ptr);
 
 #define PG_HAVE_ATOMIC_TEST_SET_FLAG
-extern bool pg_atomic_test_set_flag_impl(volatile pg_atomic_flag *ptr);
+extern PGDLLIMPORT bool pg_atomic_test_set_flag_impl(volatile pg_atomic_flag *ptr);
 
 #define PG_HAVE_ATOMIC_CLEAR_FLAG
-extern void pg_atomic_clear_flag_impl(volatile pg_atomic_flag *ptr);
+extern PGDLLIMPORT void pg_atomic_clear_flag_impl(volatile pg_atomic_flag *ptr);
 
 #define PG_HAVE_ATOMIC_UNLOCKED_TEST_FLAG
-extern bool pg_atomic_unlocked_test_flag_impl(volatile pg_atomic_flag *ptr);
+extern PGDLLIMPORT bool pg_atomic_unlocked_test_flag_impl(volatile pg_atomic_flag *ptr);
 
 #endif /* PG_HAVE_ATOMIC_FLAG_SIMULATION */
 
 #ifdef PG_HAVE_ATOMIC_U32_SIMULATION
 
 #define PG_HAVE_ATOMIC_INIT_U32
-extern void pg_atomic_init_u32_impl(volatile pg_atomic_uint32 *ptr, uint32 val_);
+extern PGDLLIMPORT void pg_atomic_init_u32_impl(volatile pg_atomic_uint32 *ptr, uint32 val_);
 
 #define PG_HAVE_ATOMIC_WRITE_U32
-extern void pg_atomic_write_u32_impl(volatile pg_atomic_uint32 *ptr, uint32 val);
+extern PGDLLIMPORT void pg_atomic_write_u32_impl(volatile pg_atomic_uint32 *ptr, uint32 val);
 
 #define PG_HAVE_ATOMIC_COMPARE_EXCHANGE_U32
-extern bool pg_atomic_compare_exchange_u32_impl(volatile pg_atomic_uint32 *ptr,
+extern PGDLLIMPORT bool pg_atomic_compare_exchange_u32_impl(volatile pg_atomic_uint32 *ptr,
 												uint32 *expected, uint32 newval);
 
 #define PG_HAVE_ATOMIC_FETCH_ADD_U32
-extern uint32 pg_atomic_fetch_add_u32_impl(volatile pg_atomic_uint32 *ptr, int32 add_);
+extern PGDLLIMPORT uint32 pg_atomic_fetch_add_u32_impl(volatile pg_atomic_uint32 *ptr, int32 add_);
 
 #endif /* PG_HAVE_ATOMIC_U32_SIMULATION */
 
@@ -158,13 +158,13 @@ extern uint32 pg_atomic_fetch_add_u32_impl(volatile pg_atomic_uint32 *ptr, int32
 #ifdef PG_HAVE_ATOMIC_U64_SIMULATION
 
 #define PG_HAVE_ATOMIC_INIT_U64
-extern void pg_atomic_init_u64_impl(volatile pg_atomic_uint64 *ptr, uint64 val_);
+extern PGDLLIMPORT void pg_atomic_init_u64_impl(volatile pg_atomic_uint64 *ptr, uint64 val_);
 
 #define PG_HAVE_ATOMIC_COMPARE_EXCHANGE_U64
-extern bool pg_atomic_compare_exchange_u64_impl(volatile pg_atomic_uint64 *ptr,
+extern PGDLLIMPORT bool pg_atomic_compare_exchange_u64_impl(volatile pg_atomic_uint64 *ptr,
 												uint64 *expected, uint64 newval);
 
 #define PG_HAVE_ATOMIC_FETCH_ADD_U64
-extern uint64 pg_atomic_fetch_add_u64_impl(volatile pg_atomic_uint64 *ptr, int64 add_);
+extern PGDLLIMPORT uint64 pg_atomic_fetch_add_u64_impl(volatile pg_atomic_uint64 *ptr, int64 add_);
 
 #endif /* PG_HAVE_ATOMIC_U64_SIMULATION */

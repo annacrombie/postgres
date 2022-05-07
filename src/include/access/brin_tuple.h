@@ -91,20 +91,20 @@ typedef struct BrinTuple
 #define BrinTupleIsPlaceholder(tup) (((((BrinTuple *) (tup))->bt_info & BRIN_PLACEHOLDER_MASK)) != 0)
 
 
-extern BrinTuple *brin_form_tuple(BrinDesc *brdesc, BlockNumber blkno,
+extern PGDLLIMPORT BrinTuple *brin_form_tuple(BrinDesc *brdesc, BlockNumber blkno,
 								  BrinMemTuple *tuple, Size *size);
-extern BrinTuple *brin_form_placeholder_tuple(BrinDesc *brdesc,
+extern PGDLLIMPORT BrinTuple *brin_form_placeholder_tuple(BrinDesc *brdesc,
 											  BlockNumber blkno, Size *size);
-extern void brin_free_tuple(BrinTuple *tuple);
-extern BrinTuple *brin_copy_tuple(BrinTuple *tuple, Size len,
+extern PGDLLIMPORT void brin_free_tuple(BrinTuple *tuple);
+extern PGDLLIMPORT BrinTuple *brin_copy_tuple(BrinTuple *tuple, Size len,
 								  BrinTuple *dest, Size *destsz);
-extern bool brin_tuples_equal(const BrinTuple *a, Size alen,
+extern PGDLLIMPORT bool brin_tuples_equal(const BrinTuple *a, Size alen,
 							  const BrinTuple *b, Size blen);
 
-extern BrinMemTuple *brin_new_memtuple(BrinDesc *brdesc);
-extern BrinMemTuple *brin_memtuple_initialize(BrinMemTuple *dtuple,
+extern PGDLLIMPORT BrinMemTuple *brin_new_memtuple(BrinDesc *brdesc);
+extern PGDLLIMPORT BrinMemTuple *brin_memtuple_initialize(BrinMemTuple *dtuple,
 											  BrinDesc *brdesc);
-extern BrinMemTuple *brin_deform_tuple(BrinDesc *brdesc,
+extern PGDLLIMPORT BrinMemTuple *brin_deform_tuple(BrinDesc *brdesc,
 									   BrinTuple *tuple, BrinMemTuple *dMemtuple);
 
 #endif							/* BRIN_TUPLE_H */

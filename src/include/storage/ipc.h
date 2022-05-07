@@ -65,20 +65,20 @@ typedef void (*shmem_startup_hook_type) (void);
 extern PGDLLIMPORT bool proc_exit_inprogress;
 extern PGDLLIMPORT bool shmem_exit_inprogress;
 
-extern void proc_exit(int code) pg_attribute_noreturn();
-extern void shmem_exit(int code);
-extern void on_proc_exit(pg_on_exit_callback function, Datum arg);
-extern void on_shmem_exit(pg_on_exit_callback function, Datum arg);
-extern void before_shmem_exit(pg_on_exit_callback function, Datum arg);
-extern void cancel_before_shmem_exit(pg_on_exit_callback function, Datum arg);
-extern void on_exit_reset(void);
-extern void check_on_shmem_exit_lists_are_empty(void);
+extern PGDLLIMPORT void proc_exit(int code) pg_attribute_noreturn();
+extern PGDLLIMPORT void shmem_exit(int code);
+extern PGDLLIMPORT void on_proc_exit(pg_on_exit_callback function, Datum arg);
+extern PGDLLIMPORT void on_shmem_exit(pg_on_exit_callback function, Datum arg);
+extern PGDLLIMPORT void before_shmem_exit(pg_on_exit_callback function, Datum arg);
+extern PGDLLIMPORT void cancel_before_shmem_exit(pg_on_exit_callback function, Datum arg);
+extern PGDLLIMPORT void on_exit_reset(void);
+extern PGDLLIMPORT void check_on_shmem_exit_lists_are_empty(void);
 
 /* ipci.c */
 extern PGDLLIMPORT shmem_startup_hook_type shmem_startup_hook;
 
-extern Size CalculateShmemSize(int *num_semaphores);
-extern void CreateSharedMemoryAndSemaphores(void);
-extern void InitializeShmemGUCs(void);
+extern PGDLLIMPORT Size CalculateShmemSize(int *num_semaphores);
+extern PGDLLIMPORT void CreateSharedMemoryAndSemaphores(void);
+extern PGDLLIMPORT void InitializeShmemGUCs(void);
 
 #endif							/* IPC_H */

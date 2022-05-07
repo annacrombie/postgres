@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern UniqueState *ExecInitUnique(Unique *node, EState *estate, int eflags);
-extern void ExecEndUnique(UniqueState *node);
-extern void ExecReScanUnique(UniqueState *node);
+extern PGDLLIMPORT UniqueState *ExecInitUnique(Unique *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndUnique(UniqueState *node);
+extern PGDLLIMPORT void ExecReScanUnique(UniqueState *node);
 
 #endif							/* NODEUNIQUE_H */

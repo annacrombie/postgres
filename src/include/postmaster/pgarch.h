@@ -26,12 +26,12 @@
 #define MAX_XFN_CHARS	40
 #define VALID_XFN_CHARS "0123456789ABCDEF.history.backup.partial"
 
-extern Size PgArchShmemSize(void);
-extern void PgArchShmemInit(void);
-extern bool PgArchCanRestart(void);
-extern void PgArchiverMain(void) pg_attribute_noreturn();
-extern void PgArchWakeup(void);
-extern void PgArchForceDirScan(void);
+extern PGDLLIMPORT Size PgArchShmemSize(void);
+extern PGDLLIMPORT void PgArchShmemInit(void);
+extern PGDLLIMPORT bool PgArchCanRestart(void);
+extern PGDLLIMPORT void PgArchiverMain(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void PgArchWakeup(void);
+extern PGDLLIMPORT void PgArchForceDirScan(void);
 
 /*
  * The value of the archive_library GUC.
@@ -68,6 +68,6 @@ typedef void (*ArchiveModuleInit) (ArchiveModuleCallbacks * cb);
  * and does not need to be loaded via a shared library, it has a special
  * initialization function.
  */
-extern void shell_archive_init(ArchiveModuleCallbacks * cb);
+extern PGDLLIMPORT void shell_archive_init(ArchiveModuleCallbacks * cb);
 
 #endif							/* _PGARCH_H */

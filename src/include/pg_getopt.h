@@ -50,7 +50,7 @@ extern PGDLLIMPORT int optreset;
 
 /* Provide getopt() declaration if the platform doesn't have it */
 #ifndef HAVE_GETOPT
-extern int	getopt(int nargc, char *const *nargv, const char *ostr);
+extern PGDLLIMPORT int	getopt(int nargc, char *const *nargv, const char *ostr);
 #endif
 
 #endif							/* PG_GETOPT_H */

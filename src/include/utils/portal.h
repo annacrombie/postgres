@@ -213,40 +213,40 @@ typedef struct PortalData
 
 
 /* Prototypes for functions in utils/mmgr/portalmem.c */
-extern void EnablePortalManager(void);
-extern bool PreCommit_Portals(bool isPrepare);
-extern void AtAbort_Portals(void);
-extern void AtCleanup_Portals(void);
-extern void PortalErrorCleanup(void);
-extern void AtSubCommit_Portals(SubTransactionId mySubid,
+extern PGDLLIMPORT void EnablePortalManager(void);
+extern PGDLLIMPORT bool PreCommit_Portals(bool isPrepare);
+extern PGDLLIMPORT void AtAbort_Portals(void);
+extern PGDLLIMPORT void AtCleanup_Portals(void);
+extern PGDLLIMPORT void PortalErrorCleanup(void);
+extern PGDLLIMPORT void AtSubCommit_Portals(SubTransactionId mySubid,
 								SubTransactionId parentSubid,
 								int parentLevel,
 								ResourceOwner parentXactOwner);
-extern void AtSubAbort_Portals(SubTransactionId mySubid,
+extern PGDLLIMPORT void AtSubAbort_Portals(SubTransactionId mySubid,
 							   SubTransactionId parentSubid,
 							   ResourceOwner myXactOwner,
 							   ResourceOwner parentXactOwner);
-extern void AtSubCleanup_Portals(SubTransactionId mySubid);
-extern Portal CreatePortal(const char *name, bool allowDup, bool dupSilent);
-extern Portal CreateNewPortal(void);
-extern void PinPortal(Portal portal);
-extern void UnpinPortal(Portal portal);
-extern void MarkPortalActive(Portal portal);
-extern void MarkPortalDone(Portal portal);
-extern void MarkPortalFailed(Portal portal);
-extern void PortalDrop(Portal portal, bool isTopCommit);
-extern Portal GetPortalByName(const char *name);
-extern void PortalDefineQuery(Portal portal,
+extern PGDLLIMPORT void AtSubCleanup_Portals(SubTransactionId mySubid);
+extern PGDLLIMPORT Portal CreatePortal(const char *name, bool allowDup, bool dupSilent);
+extern PGDLLIMPORT Portal CreateNewPortal(void);
+extern PGDLLIMPORT void PinPortal(Portal portal);
+extern PGDLLIMPORT void UnpinPortal(Portal portal);
+extern PGDLLIMPORT void MarkPortalActive(Portal portal);
+extern PGDLLIMPORT void MarkPortalDone(Portal portal);
+extern PGDLLIMPORT void MarkPortalFailed(Portal portal);
+extern PGDLLIMPORT void PortalDrop(Portal portal, bool isTopCommit);
+extern PGDLLIMPORT Portal GetPortalByName(const char *name);
+extern PGDLLIMPORT void PortalDefineQuery(Portal portal,
 							  const char *prepStmtName,
 							  const char *sourceText,
 							  CommandTag commandTag,
 							  List *stmts,
 							  CachedPlan *cplan);
-extern PlannedStmt *PortalGetPrimaryStmt(Portal portal);
-extern void PortalCreateHoldStore(Portal portal);
-extern void PortalHashTableDeleteAll(void);
-extern bool ThereAreNoReadyPortals(void);
-extern void HoldPinnedPortals(void);
-extern void ForgetPortalSnapshots(void);
+extern PGDLLIMPORT PlannedStmt *PortalGetPrimaryStmt(Portal portal);
+extern PGDLLIMPORT void PortalCreateHoldStore(Portal portal);
+extern PGDLLIMPORT void PortalHashTableDeleteAll(void);
+extern PGDLLIMPORT bool ThereAreNoReadyPortals(void);
+extern PGDLLIMPORT void HoldPinnedPortals(void);
+extern PGDLLIMPORT void ForgetPortalSnapshots(void);
 
 #endif							/* PORTAL_H */

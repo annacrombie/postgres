@@ -59,21 +59,21 @@ typedef void (*rbt_combiner) (RBTNode *existing, const RBTNode *newdata, void *a
 typedef RBTNode *(*rbt_allocfunc) (void *arg);
 typedef void (*rbt_freefunc) (RBTNode *x, void *arg);
 
-extern RBTree *rbt_create(Size node_size,
+extern PGDLLIMPORT RBTree *rbt_create(Size node_size,
 						  rbt_comparator comparator,
 						  rbt_combiner combiner,
 						  rbt_allocfunc allocfunc,
 						  rbt_freefunc freefunc,
 						  void *arg);
 
-extern RBTNode *rbt_find(RBTree *rbt, const RBTNode *data);
-extern RBTNode *rbt_leftmost(RBTree *rbt);
+extern PGDLLIMPORT RBTNode *rbt_find(RBTree *rbt, const RBTNode *data);
+extern PGDLLIMPORT RBTNode *rbt_leftmost(RBTree *rbt);
 
-extern RBTNode *rbt_insert(RBTree *rbt, const RBTNode *data, bool *isNew);
-extern void rbt_delete(RBTree *rbt, RBTNode *node);
+extern PGDLLIMPORT RBTNode *rbt_insert(RBTree *rbt, const RBTNode *data, bool *isNew);
+extern PGDLLIMPORT void rbt_delete(RBTree *rbt, RBTNode *node);
 
-extern void rbt_begin_iterate(RBTree *rbt, RBTOrderControl ctrl,
+extern PGDLLIMPORT void rbt_begin_iterate(RBTree *rbt, RBTOrderControl ctrl,
 							  RBTreeIterator *iter);
-extern RBTNode *rbt_iterate(RBTreeIterator *iter);
+extern PGDLLIMPORT RBTNode *rbt_iterate(RBTreeIterator *iter);
 
 #endif							/* RBTREE_H */

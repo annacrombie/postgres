@@ -28,9 +28,9 @@ typedef struct pg_prng_state
  */
 extern PGDLLIMPORT pg_prng_state pg_global_prng_state;
 
-extern void pg_prng_seed(pg_prng_state *state, uint64 seed);
-extern void pg_prng_fseed(pg_prng_state *state, double fseed);
-extern bool pg_prng_seed_check(pg_prng_state *state);
+extern PGDLLIMPORT void pg_prng_seed(pg_prng_state *state, uint64 seed);
+extern PGDLLIMPORT void pg_prng_fseed(pg_prng_state *state, double fseed);
+extern PGDLLIMPORT bool pg_prng_seed_check(pg_prng_state *state);
 
 /*
  * Initialize the PRNG state from the pg_strong_random source,
@@ -47,14 +47,14 @@ extern bool pg_prng_seed_check(pg_prng_state *state);
 	(pg_strong_random((void *) (state), sizeof(pg_prng_state)) ? \
 	 pg_prng_seed_check(state) : false)
 
-extern uint64 pg_prng_uint64(pg_prng_state *state);
-extern uint64 pg_prng_uint64_range(pg_prng_state *state, uint64 rmin, uint64 rmax);
-extern int64 pg_prng_int64(pg_prng_state *state);
-extern int64 pg_prng_int64p(pg_prng_state *state);
-extern uint32 pg_prng_uint32(pg_prng_state *state);
-extern int32 pg_prng_int32(pg_prng_state *state);
-extern int32 pg_prng_int32p(pg_prng_state *state);
-extern double pg_prng_double(pg_prng_state *state);
-extern bool pg_prng_bool(pg_prng_state *state);
+extern PGDLLIMPORT uint64 pg_prng_uint64(pg_prng_state *state);
+extern PGDLLIMPORT uint64 pg_prng_uint64_range(pg_prng_state *state, uint64 rmin, uint64 rmax);
+extern PGDLLIMPORT int64 pg_prng_int64(pg_prng_state *state);
+extern PGDLLIMPORT int64 pg_prng_int64p(pg_prng_state *state);
+extern PGDLLIMPORT uint32 pg_prng_uint32(pg_prng_state *state);
+extern PGDLLIMPORT int32 pg_prng_int32(pg_prng_state *state);
+extern PGDLLIMPORT int32 pg_prng_int32p(pg_prng_state *state);
+extern PGDLLIMPORT double pg_prng_double(pg_prng_state *state);
+extern PGDLLIMPORT bool pg_prng_bool(pg_prng_state *state);
 
 #endif							/* PG_PRNG_H */

@@ -38,24 +38,24 @@ typedef HANDLE PGSemaphore;
 
 
 /* Report amount of shared memory needed */
-extern Size PGSemaphoreShmemSize(int maxSemas);
+extern PGDLLIMPORT Size PGSemaphoreShmemSize(int maxSemas);
 
 /* Module initialization (called during postmaster start or shmem reinit) */
-extern void PGReserveSemaphores(int maxSemas);
+extern PGDLLIMPORT void PGReserveSemaphores(int maxSemas);
 
 /* Allocate a PGSemaphore structure with initial count 1 */
-extern PGSemaphore PGSemaphoreCreate(void);
+extern PGDLLIMPORT PGSemaphore PGSemaphoreCreate(void);
 
 /* Reset a previously-initialized PGSemaphore to have count 0 */
-extern void PGSemaphoreReset(PGSemaphore sema);
+extern PGDLLIMPORT void PGSemaphoreReset(PGSemaphore sema);
 
 /* Lock a semaphore (decrement count), blocking if count would be < 0 */
-extern void PGSemaphoreLock(PGSemaphore sema);
+extern PGDLLIMPORT void PGSemaphoreLock(PGSemaphore sema);
 
 /* Unlock a semaphore (increment count) */
-extern void PGSemaphoreUnlock(PGSemaphore sema);
+extern PGDLLIMPORT void PGSemaphoreUnlock(PGSemaphore sema);
 
 /* Lock a semaphore only if able to do so without blocking */
-extern bool PGSemaphoreTryLock(PGSemaphore sema);
+extern PGDLLIMPORT bool PGSemaphoreTryLock(PGSemaphore sema);
 
 #endif							/* PG_SEMA_H */

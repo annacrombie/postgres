@@ -36,22 +36,22 @@ typedef struct BufFile BufFile;
  * prototypes for functions in buffile.c
  */
 
-extern BufFile *BufFileCreateTemp(bool interXact);
-extern void BufFileClose(BufFile *file);
-extern size_t BufFileRead(BufFile *file, void *ptr, size_t size);
-extern void BufFileWrite(BufFile *file, void *ptr, size_t size);
-extern int	BufFileSeek(BufFile *file, int fileno, off_t offset, int whence);
-extern void BufFileTell(BufFile *file, int *fileno, off_t *offset);
-extern int	BufFileSeekBlock(BufFile *file, long blknum);
-extern int64 BufFileSize(BufFile *file);
-extern long BufFileAppend(BufFile *target, BufFile *source);
+extern PGDLLIMPORT BufFile *BufFileCreateTemp(bool interXact);
+extern PGDLLIMPORT void BufFileClose(BufFile *file);
+extern PGDLLIMPORT size_t BufFileRead(BufFile *file, void *ptr, size_t size);
+extern PGDLLIMPORT void BufFileWrite(BufFile *file, void *ptr, size_t size);
+extern PGDLLIMPORT int	BufFileSeek(BufFile *file, int fileno, off_t offset, int whence);
+extern PGDLLIMPORT void BufFileTell(BufFile *file, int *fileno, off_t *offset);
+extern PGDLLIMPORT int	BufFileSeekBlock(BufFile *file, long blknum);
+extern PGDLLIMPORT int64 BufFileSize(BufFile *file);
+extern PGDLLIMPORT long BufFileAppend(BufFile *target, BufFile *source);
 
-extern BufFile *BufFileCreateFileSet(FileSet *fileset, const char *name);
-extern void BufFileExportFileSet(BufFile *file);
-extern BufFile *BufFileOpenFileSet(FileSet *fileset, const char *name,
+extern PGDLLIMPORT BufFile *BufFileCreateFileSet(FileSet *fileset, const char *name);
+extern PGDLLIMPORT void BufFileExportFileSet(BufFile *file);
+extern PGDLLIMPORT BufFile *BufFileOpenFileSet(FileSet *fileset, const char *name,
 								   int mode, bool missing_ok);
-extern void BufFileDeleteFileSet(FileSet *fileset, const char *name,
+extern PGDLLIMPORT void BufFileDeleteFileSet(FileSet *fileset, const char *name,
 								 bool missing_ok);
-extern void BufFileTruncateFileSet(BufFile *file, int fileno, off_t offset);
+extern PGDLLIMPORT void BufFileTruncateFileSet(BufFile *file, int fileno, off_t offset);
 
 #endif							/* BUFFILE_H */

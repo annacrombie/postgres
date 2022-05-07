@@ -23,31 +23,31 @@
 extern PGDLLIMPORT bool Trace_notify;
 extern PGDLLIMPORT volatile sig_atomic_t notifyInterruptPending;
 
-extern Size AsyncShmemSize(void);
-extern void AsyncShmemInit(void);
+extern PGDLLIMPORT Size AsyncShmemSize(void);
+extern PGDLLIMPORT void AsyncShmemInit(void);
 
-extern void NotifyMyFrontEnd(const char *channel,
+extern PGDLLIMPORT void NotifyMyFrontEnd(const char *channel,
 							 const char *payload,
 							 int32 srcPid);
 
 /* notify-related SQL statements */
-extern void Async_Notify(const char *channel, const char *payload);
-extern void Async_Listen(const char *channel);
-extern void Async_Unlisten(const char *channel);
-extern void Async_UnlistenAll(void);
+extern PGDLLIMPORT void Async_Notify(const char *channel, const char *payload);
+extern PGDLLIMPORT void Async_Listen(const char *channel);
+extern PGDLLIMPORT void Async_Unlisten(const char *channel);
+extern PGDLLIMPORT void Async_UnlistenAll(void);
 
 /* perform (or cancel) outbound notify processing at transaction commit */
-extern void PreCommit_Notify(void);
-extern void AtCommit_Notify(void);
-extern void AtAbort_Notify(void);
-extern void AtSubCommit_Notify(void);
-extern void AtSubAbort_Notify(void);
-extern void AtPrepare_Notify(void);
+extern PGDLLIMPORT void PreCommit_Notify(void);
+extern PGDLLIMPORT void AtCommit_Notify(void);
+extern PGDLLIMPORT void AtAbort_Notify(void);
+extern PGDLLIMPORT void AtSubCommit_Notify(void);
+extern PGDLLIMPORT void AtSubAbort_Notify(void);
+extern PGDLLIMPORT void AtPrepare_Notify(void);
 
 /* signal handler for inbound notifies (PROCSIG_NOTIFY_INTERRUPT) */
-extern void HandleNotifyInterrupt(void);
+extern PGDLLIMPORT void HandleNotifyInterrupt(void);
 
 /* process interrupts */
-extern void ProcessNotifyInterrupt(bool flush);
+extern PGDLLIMPORT void ProcessNotifyInterrupt(bool flush);
 
 #endif							/* ASYNC_H */

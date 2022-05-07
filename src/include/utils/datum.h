@@ -21,21 +21,21 @@
 /*
  * datumGetSize - find the "real" length of a datum
  */
-extern Size datumGetSize(Datum value, bool typByVal, int typLen);
+extern PGDLLIMPORT Size datumGetSize(Datum value, bool typByVal, int typLen);
 
 /*
  * datumCopy - make a copy of a non-NULL datum.
  *
  * If the datatype is pass-by-reference, memory is obtained with palloc().
  */
-extern Datum datumCopy(Datum value, bool typByVal, int typLen);
+extern PGDLLIMPORT Datum datumCopy(Datum value, bool typByVal, int typLen);
 
 /*
  * datumTransfer - transfer a non-NULL datum into the current memory context.
  *
  * Differs from datumCopy() in its handling of read-write expanded objects.
  */
-extern Datum datumTransfer(Datum value, bool typByVal, int typLen);
+extern PGDLLIMPORT Datum datumTransfer(Datum value, bool typByVal, int typLen);
 
 /*
  * datumIsEqual
@@ -43,7 +43,7 @@ extern Datum datumTransfer(Datum value, bool typByVal, int typLen);
  *
  * XXX : See comments in the code for restrictions!
  */
-extern bool datumIsEqual(Datum value1, Datum value2,
+extern PGDLLIMPORT bool datumIsEqual(Datum value1, Datum value2,
 						 bool typByVal, int typLen);
 
 /*
@@ -52,7 +52,7 @@ extern bool datumIsEqual(Datum value1, Datum value2,
  * Compares two datums for identical contents, based on byte images.  Return
  * true if the two datums are equal, false otherwise.
  */
-extern bool datum_image_eq(Datum value1, Datum value2,
+extern PGDLLIMPORT bool datum_image_eq(Datum value1, Datum value2,
 						   bool typByVal, int typLen);
 
 /*
@@ -61,16 +61,16 @@ extern bool datum_image_eq(Datum value1, Datum value2,
  * Generates hash value for 'value' based on its bits rather than logical
  * value.
  */
-extern uint32 datum_image_hash(Datum value, bool typByVal, int typLen);
+extern PGDLLIMPORT uint32 datum_image_hash(Datum value, bool typByVal, int typLen);
 
 /*
  * Serialize and restore datums so that we can transfer them to parallel
  * workers.
  */
-extern Size datumEstimateSpace(Datum value, bool isnull, bool typByVal,
+extern PGDLLIMPORT Size datumEstimateSpace(Datum value, bool isnull, bool typByVal,
 							   int typLen);
-extern void datumSerialize(Datum value, bool isnull, bool typByVal,
+extern PGDLLIMPORT void datumSerialize(Datum value, bool isnull, bool typByVal,
 						   int typLen, char **start_address);
-extern Datum datumRestore(char **start_address, bool *isnull);
+extern PGDLLIMPORT Datum datumRestore(char **start_address, bool *isnull);
 
 #endif							/* DATUM_H */

@@ -32,24 +32,24 @@ struct XLogPrefetcher;
 typedef struct XLogPrefetcher XLogPrefetcher;
 
 
-extern void XLogPrefetchReconfigure(void);
+extern PGDLLIMPORT void XLogPrefetchReconfigure(void);
 
-extern size_t XLogPrefetchShmemSize(void);
-extern void XLogPrefetchShmemInit(void);
+extern PGDLLIMPORT size_t XLogPrefetchShmemSize(void);
+extern PGDLLIMPORT void XLogPrefetchShmemInit(void);
 
-extern void XLogPrefetchResetStats(void);
+extern PGDLLIMPORT void XLogPrefetchResetStats(void);
 
-extern XLogPrefetcher *XLogPrefetcherAllocate(XLogReaderState *reader);
-extern void XLogPrefetcherFree(XLogPrefetcher *prefetcher);
+extern PGDLLIMPORT XLogPrefetcher *XLogPrefetcherAllocate(XLogReaderState *reader);
+extern PGDLLIMPORT void XLogPrefetcherFree(XLogPrefetcher *prefetcher);
 
-extern XLogReaderState *XLogPrefetcherGetReader(XLogPrefetcher *prefetcher);
+extern PGDLLIMPORT XLogReaderState *XLogPrefetcherGetReader(XLogPrefetcher *prefetcher);
 
-extern void XLogPrefetcherBeginRead(XLogPrefetcher *prefetcher,
+extern PGDLLIMPORT void XLogPrefetcherBeginRead(XLogPrefetcher *prefetcher,
 									XLogRecPtr recPtr);
 
-extern XLogRecord *XLogPrefetcherReadRecord(XLogPrefetcher *prefetcher,
+extern PGDLLIMPORT XLogRecord *XLogPrefetcherReadRecord(XLogPrefetcher *prefetcher,
 											char **errmsg);
 
-extern void XLogPrefetcherComputeStats(XLogPrefetcher *prefetcher);
+extern PGDLLIMPORT void XLogPrefetcherComputeStats(XLogPrefetcher *prefetcher);
 
 #endif

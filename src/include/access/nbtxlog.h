@@ -341,11 +341,11 @@ typedef struct xl_btree_newroot
 /*
  * prototypes for functions in nbtxlog.c
  */
-extern void btree_redo(XLogReaderState *record);
-extern void btree_desc(StringInfo buf, XLogReaderState *record);
-extern const char *btree_identify(uint8 info);
-extern void btree_xlog_startup(void);
-extern void btree_xlog_cleanup(void);
-extern void btree_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void btree_redo(XLogReaderState *record);
+extern PGDLLIMPORT void btree_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *btree_identify(uint8 info);
+extern PGDLLIMPORT void btree_xlog_startup(void);
+extern PGDLLIMPORT void btree_xlog_cleanup(void);
+extern PGDLLIMPORT void btree_mask(char *pagedata, BlockNumber blkno);
 
 #endif							/* NBTXLOG_H */

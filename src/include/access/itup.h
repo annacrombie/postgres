@@ -148,17 +148,17 @@ typedef IndexAttributeBitMapData * IndexAttributeBitMap;
 
 
 /* routines in indextuple.c */
-extern IndexTuple index_form_tuple(TupleDesc tupleDescriptor,
+extern PGDLLIMPORT IndexTuple index_form_tuple(TupleDesc tupleDescriptor,
 								   Datum *values, bool *isnull);
-extern Datum nocache_index_getattr(IndexTuple tup, int attnum,
+extern PGDLLIMPORT Datum nocache_index_getattr(IndexTuple tup, int attnum,
 								   TupleDesc tupleDesc);
-extern void index_deform_tuple(IndexTuple tup, TupleDesc tupleDescriptor,
+extern PGDLLIMPORT void index_deform_tuple(IndexTuple tup, TupleDesc tupleDescriptor,
 							   Datum *values, bool *isnull);
-extern void index_deform_tuple_internal(TupleDesc tupleDescriptor,
+extern PGDLLIMPORT void index_deform_tuple_internal(TupleDesc tupleDescriptor,
 										Datum *values, bool *isnull,
 										char *tp, bits8 *bp, int hasnulls);
-extern IndexTuple CopyIndexTuple(IndexTuple source);
-extern IndexTuple index_truncate_tuple(TupleDesc sourceDescriptor,
+extern PGDLLIMPORT IndexTuple CopyIndexTuple(IndexTuple source);
+extern PGDLLIMPORT IndexTuple index_truncate_tuple(TupleDesc sourceDescriptor,
 									   IndexTuple source, int leavenatts);
 
 #endif							/* ITUP_H */

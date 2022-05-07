@@ -90,17 +90,17 @@ extern PGDLLIMPORT ExecutorCheckPerms_hook_type ExecutorCheckPerms_hook;
  */
 struct Path;					/* avoid including pathnodes.h here */
 
-extern void ExecReScan(PlanState *node);
-extern void ExecMarkPos(PlanState *node);
-extern void ExecRestrPos(PlanState *node);
-extern bool ExecSupportsMarkRestore(struct Path *pathnode);
-extern bool ExecSupportsBackwardScan(Plan *node);
-extern bool ExecMaterializesOutput(NodeTag plantype);
+extern PGDLLIMPORT void ExecReScan(PlanState *node);
+extern PGDLLIMPORT void ExecMarkPos(PlanState *node);
+extern PGDLLIMPORT void ExecRestrPos(PlanState *node);
+extern PGDLLIMPORT bool ExecSupportsMarkRestore(struct Path *pathnode);
+extern PGDLLIMPORT bool ExecSupportsBackwardScan(Plan *node);
+extern PGDLLIMPORT bool ExecMaterializesOutput(NodeTag plantype);
 
 /*
  * prototypes from functions in execCurrent.c
  */
-extern bool execCurrentOf(CurrentOfExpr *cexpr,
+extern PGDLLIMPORT bool execCurrentOf(CurrentOfExpr *cexpr,
 						  ExprContext *econtext,
 						  Oid table_oid,
 						  ItemPointer current_tid);
@@ -108,17 +108,17 @@ extern bool execCurrentOf(CurrentOfExpr *cexpr,
 /*
  * prototypes from functions in execGrouping.c
  */
-extern ExprState *execTuplesMatchPrepare(TupleDesc desc,
+extern PGDLLIMPORT ExprState *execTuplesMatchPrepare(TupleDesc desc,
 										 int numCols,
 										 const AttrNumber *keyColIdx,
 										 const Oid *eqOperators,
 										 const Oid *collations,
 										 PlanState *parent);
-extern void execTuplesHashPrepare(int numCols,
+extern PGDLLIMPORT void execTuplesHashPrepare(int numCols,
 								  const Oid *eqOperators,
 								  Oid **eqFuncOids,
 								  FmgrInfo **hashFunctions);
-extern TupleHashTable BuildTupleHashTable(PlanState *parent,
+extern PGDLLIMPORT TupleHashTable BuildTupleHashTable(PlanState *parent,
 										  TupleDesc inputDesc,
 										  int numCols, AttrNumber *keyColIdx,
 										  const Oid *eqfuncoids,
@@ -127,7 +127,7 @@ extern TupleHashTable BuildTupleHashTable(PlanState *parent,
 										  long nbuckets, Size additionalsize,
 										  MemoryContext tablecxt,
 										  MemoryContext tempcxt, bool use_variable_hash_iv);
-extern TupleHashTable BuildTupleHashTableExt(PlanState *parent,
+extern PGDLLIMPORT TupleHashTable BuildTupleHashTableExt(PlanState *parent,
 											 TupleDesc inputDesc,
 											 int numCols, AttrNumber *keyColIdx,
 											 const Oid *eqfuncoids,
@@ -137,33 +137,33 @@ extern TupleHashTable BuildTupleHashTableExt(PlanState *parent,
 											 MemoryContext metacxt,
 											 MemoryContext tablecxt,
 											 MemoryContext tempcxt, bool use_variable_hash_iv);
-extern TupleHashEntry LookupTupleHashEntry(TupleHashTable hashtable,
+extern PGDLLIMPORT TupleHashEntry LookupTupleHashEntry(TupleHashTable hashtable,
 										   TupleTableSlot *slot,
 										   bool *isnew, uint32 *hash);
-extern uint32 TupleHashTableHash(TupleHashTable hashtable,
+extern PGDLLIMPORT uint32 TupleHashTableHash(TupleHashTable hashtable,
 								 TupleTableSlot *slot);
-extern TupleHashEntry LookupTupleHashEntryHash(TupleHashTable hashtable,
+extern PGDLLIMPORT TupleHashEntry LookupTupleHashEntryHash(TupleHashTable hashtable,
 											   TupleTableSlot *slot,
 											   bool *isnew, uint32 hash);
-extern TupleHashEntry FindTupleHashEntry(TupleHashTable hashtable,
+extern PGDLLIMPORT TupleHashEntry FindTupleHashEntry(TupleHashTable hashtable,
 										 TupleTableSlot *slot,
 										 ExprState *eqcomp,
 										 FmgrInfo *hashfunctions);
-extern void ResetTupleHashTable(TupleHashTable hashtable);
+extern PGDLLIMPORT void ResetTupleHashTable(TupleHashTable hashtable);
 
 /*
  * prototypes from functions in execJunk.c
  */
-extern JunkFilter *ExecInitJunkFilter(List *targetList,
+extern PGDLLIMPORT JunkFilter *ExecInitJunkFilter(List *targetList,
 									  TupleTableSlot *slot);
-extern JunkFilter *ExecInitJunkFilterConversion(List *targetList,
+extern PGDLLIMPORT JunkFilter *ExecInitJunkFilterConversion(List *targetList,
 												TupleDesc cleanTupType,
 												TupleTableSlot *slot);
-extern AttrNumber ExecFindJunkAttribute(JunkFilter *junkfilter,
+extern PGDLLIMPORT AttrNumber ExecFindJunkAttribute(JunkFilter *junkfilter,
 										const char *attrName);
-extern AttrNumber ExecFindJunkAttributeInTlist(List *targetlist,
+extern PGDLLIMPORT AttrNumber ExecFindJunkAttributeInTlist(List *targetlist,
 											   const char *attrName);
-extern TupleTableSlot *ExecFilterJunk(JunkFilter *junkfilter,
+extern PGDLLIMPORT TupleTableSlot *ExecFilterJunk(JunkFilter *junkfilter,
 									  TupleTableSlot *slot);
 
 /*
@@ -185,62 +185,62 @@ ExecGetJunkAttribute(TupleTableSlot *slot, AttrNumber attno, bool *isNull)
 /*
  * prototypes from functions in execMain.c
  */
-extern void ExecutorStart(QueryDesc *queryDesc, int eflags);
-extern void standard_ExecutorStart(QueryDesc *queryDesc, int eflags);
-extern void ExecutorRun(QueryDesc *queryDesc,
+extern PGDLLIMPORT void ExecutorStart(QueryDesc *queryDesc, int eflags);
+extern PGDLLIMPORT void standard_ExecutorStart(QueryDesc *queryDesc, int eflags);
+extern PGDLLIMPORT void ExecutorRun(QueryDesc *queryDesc,
 						ScanDirection direction, uint64 count, bool execute_once);
-extern void standard_ExecutorRun(QueryDesc *queryDesc,
+extern PGDLLIMPORT void standard_ExecutorRun(QueryDesc *queryDesc,
 								 ScanDirection direction, uint64 count, bool execute_once);
-extern void ExecutorFinish(QueryDesc *queryDesc);
-extern void standard_ExecutorFinish(QueryDesc *queryDesc);
-extern void ExecutorEnd(QueryDesc *queryDesc);
-extern void standard_ExecutorEnd(QueryDesc *queryDesc);
-extern void ExecutorRewind(QueryDesc *queryDesc);
-extern bool ExecCheckRTPerms(List *rangeTable, bool ereport_on_violation);
-extern void CheckValidResultRel(ResultRelInfo *resultRelInfo, CmdType operation);
-extern void InitResultRelInfo(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecutorFinish(QueryDesc *queryDesc);
+extern PGDLLIMPORT void standard_ExecutorFinish(QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExecutorEnd(QueryDesc *queryDesc);
+extern PGDLLIMPORT void standard_ExecutorEnd(QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExecutorRewind(QueryDesc *queryDesc);
+extern PGDLLIMPORT bool ExecCheckRTPerms(List *rangeTable, bool ereport_on_violation);
+extern PGDLLIMPORT void CheckValidResultRel(ResultRelInfo *resultRelInfo, CmdType operation);
+extern PGDLLIMPORT void InitResultRelInfo(ResultRelInfo *resultRelInfo,
 							  Relation resultRelationDesc,
 							  Index resultRelationIndex,
 							  ResultRelInfo *partition_root_rri,
 							  int instrument_options);
-extern ResultRelInfo *ExecGetTriggerResultRel(EState *estate, Oid relid,
+extern PGDLLIMPORT ResultRelInfo *ExecGetTriggerResultRel(EState *estate, Oid relid,
 											  ResultRelInfo *rootRelInfo);
-extern List *ExecGetAncestorResultRels(EState *estate, ResultRelInfo *resultRelInfo);
-extern void ExecConstraints(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT List *ExecGetAncestorResultRels(EState *estate, ResultRelInfo *resultRelInfo);
+extern PGDLLIMPORT void ExecConstraints(ResultRelInfo *resultRelInfo,
 							TupleTableSlot *slot, EState *estate);
-extern bool ExecPartitionCheck(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT bool ExecPartitionCheck(ResultRelInfo *resultRelInfo,
 							   TupleTableSlot *slot, EState *estate, bool emitError);
-extern void ExecPartitionCheckEmitError(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecPartitionCheckEmitError(ResultRelInfo *resultRelInfo,
 										TupleTableSlot *slot, EState *estate);
-extern void ExecWithCheckOptions(WCOKind kind, ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecWithCheckOptions(WCOKind kind, ResultRelInfo *resultRelInfo,
 								 TupleTableSlot *slot, EState *estate);
-extern LockTupleMode ExecUpdateLockMode(EState *estate, ResultRelInfo *relinfo);
-extern ExecRowMark *ExecFindRowMark(EState *estate, Index rti, bool missing_ok);
-extern ExecAuxRowMark *ExecBuildAuxRowMark(ExecRowMark *erm, List *targetlist);
-extern TupleTableSlot *EvalPlanQual(EPQState *epqstate, Relation relation,
+extern PGDLLIMPORT LockTupleMode ExecUpdateLockMode(EState *estate, ResultRelInfo *relinfo);
+extern PGDLLIMPORT ExecRowMark *ExecFindRowMark(EState *estate, Index rti, bool missing_ok);
+extern PGDLLIMPORT ExecAuxRowMark *ExecBuildAuxRowMark(ExecRowMark *erm, List *targetlist);
+extern PGDLLIMPORT TupleTableSlot *EvalPlanQual(EPQState *epqstate, Relation relation,
 									Index rti, TupleTableSlot *testslot);
-extern void EvalPlanQualInit(EPQState *epqstate, EState *parentestate,
+extern PGDLLIMPORT void EvalPlanQualInit(EPQState *epqstate, EState *parentestate,
 							 Plan *subplan, List *auxrowmarks, int epqParam);
-extern void EvalPlanQualSetPlan(EPQState *epqstate,
+extern PGDLLIMPORT void EvalPlanQualSetPlan(EPQState *epqstate,
 								Plan *subplan, List *auxrowmarks);
-extern TupleTableSlot *EvalPlanQualSlot(EPQState *epqstate,
+extern PGDLLIMPORT TupleTableSlot *EvalPlanQualSlot(EPQState *epqstate,
 										Relation relation, Index rti);
 
 #define EvalPlanQualSetSlot(epqstate, slot)  ((epqstate)->origslot = (slot))
-extern bool EvalPlanQualFetchRowMark(EPQState *epqstate, Index rti, TupleTableSlot *slot);
-extern TupleTableSlot *EvalPlanQualNext(EPQState *epqstate);
-extern void EvalPlanQualBegin(EPQState *epqstate);
-extern void EvalPlanQualEnd(EPQState *epqstate);
+extern PGDLLIMPORT bool EvalPlanQualFetchRowMark(EPQState *epqstate, Index rti, TupleTableSlot *slot);
+extern PGDLLIMPORT TupleTableSlot *EvalPlanQualNext(EPQState *epqstate);
+extern PGDLLIMPORT void EvalPlanQualBegin(EPQState *epqstate);
+extern PGDLLIMPORT void EvalPlanQualEnd(EPQState *epqstate);
 
 /*
  * functions in execProcnode.c
  */
-extern PlanState *ExecInitNode(Plan *node, EState *estate, int eflags);
-extern void ExecSetExecProcNode(PlanState *node, ExecProcNodeMtd function);
-extern Node *MultiExecProcNode(PlanState *node);
-extern void ExecEndNode(PlanState *node);
-extern bool ExecShutdownNode(PlanState *node);
-extern void ExecSetTupleBound(int64 tuples_needed, PlanState *child_node);
+extern PGDLLIMPORT PlanState *ExecInitNode(Plan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecSetExecProcNode(PlanState *node, ExecProcNodeMtd function);
+extern PGDLLIMPORT Node *MultiExecProcNode(PlanState *node);
+extern PGDLLIMPORT void ExecEndNode(PlanState *node);
+extern PGDLLIMPORT bool ExecShutdownNode(PlanState *node);
+extern PGDLLIMPORT void ExecSetTupleBound(int64 tuples_needed, PlanState *child_node);
 
 
 /* ----------------------------------------------------------------
@@ -263,45 +263,45 @@ ExecProcNode(PlanState *node)
 /*
  * prototypes from functions in execExpr.c
  */
-extern ExprState *ExecInitExpr(Expr *node, PlanState *parent);
-extern ExprState *ExecInitExprWithParams(Expr *node, ParamListInfo ext_params);
-extern ExprState *ExecInitExprWithCaseValue(Expr *node, PlanState *parent,
+extern PGDLLIMPORT ExprState *ExecInitExpr(Expr *node, PlanState *parent);
+extern PGDLLIMPORT ExprState *ExecInitExprWithParams(Expr *node, ParamListInfo ext_params);
+extern PGDLLIMPORT ExprState *ExecInitExprWithCaseValue(Expr *node, PlanState *parent,
 						  Datum *caseval, bool *casenull);
-extern ExprState *ExecInitQual(List *qual, PlanState *parent);
-extern ExprState *ExecInitCheck(List *qual, PlanState *parent);
-extern List *ExecInitExprList(List *nodes, PlanState *parent);
-extern ExprState *ExecBuildAggTrans(AggState *aggstate, struct AggStatePerPhaseData *phase,
+extern PGDLLIMPORT ExprState *ExecInitQual(List *qual, PlanState *parent);
+extern PGDLLIMPORT ExprState *ExecInitCheck(List *qual, PlanState *parent);
+extern PGDLLIMPORT List *ExecInitExprList(List *nodes, PlanState *parent);
+extern PGDLLIMPORT ExprState *ExecBuildAggTrans(AggState *aggstate, struct AggStatePerPhaseData *phase,
 									bool doSort, bool doHash, bool nullcheck);
-extern ExprState *ExecBuildGroupingEqual(TupleDesc ldesc, TupleDesc rdesc,
+extern PGDLLIMPORT ExprState *ExecBuildGroupingEqual(TupleDesc ldesc, TupleDesc rdesc,
 										 const TupleTableSlotOps *lops, const TupleTableSlotOps *rops,
 										 int numCols,
 										 const AttrNumber *keyColIdx,
 										 const Oid *eqfunctions,
 										 const Oid *collations,
 										 PlanState *parent);
-extern ExprState *ExecBuildParamSetEqual(TupleDesc desc,
+extern PGDLLIMPORT ExprState *ExecBuildParamSetEqual(TupleDesc desc,
 										 const TupleTableSlotOps *lops,
 										 const TupleTableSlotOps *rops,
 										 const Oid *eqfunctions,
 										 const Oid *collations,
 										 const List *param_exprs,
 										 PlanState *parent);
-extern ProjectionInfo *ExecBuildProjectionInfo(List *targetList,
+extern PGDLLIMPORT ProjectionInfo *ExecBuildProjectionInfo(List *targetList,
 											   ExprContext *econtext,
 											   TupleTableSlot *slot,
 											   PlanState *parent,
 											   TupleDesc inputDesc);
-extern ProjectionInfo *ExecBuildUpdateProjection(List *targetList,
+extern PGDLLIMPORT ProjectionInfo *ExecBuildUpdateProjection(List *targetList,
 												 bool evalTargetList,
 												 List *targetColnos,
 												 TupleDesc relDesc,
 												 ExprContext *econtext,
 												 TupleTableSlot *slot,
 												 PlanState *parent);
-extern ExprState *ExecPrepareExpr(Expr *node, EState *estate);
-extern ExprState *ExecPrepareQual(List *qual, EState *estate);
-extern ExprState *ExecPrepareCheck(List *qual, EState *estate);
-extern List *ExecPrepareExprList(List *nodes, EState *estate);
+extern PGDLLIMPORT ExprState *ExecPrepareExpr(Expr *node, EState *estate);
+extern PGDLLIMPORT ExprState *ExecPrepareQual(List *qual, EState *estate);
+extern PGDLLIMPORT ExprState *ExecPrepareCheck(List *qual, EState *estate);
+extern PGDLLIMPORT List *ExecPrepareExprList(List *nodes, EState *estate);
 
 /*
  * ExecEvalExpr
@@ -434,21 +434,21 @@ ExecQualAndReset(ExprState *state, ExprContext *econtext)
 }
 #endif
 
-extern bool ExecCheck(ExprState *state, ExprContext *context);
+extern PGDLLIMPORT bool ExecCheck(ExprState *state, ExprContext *context);
 
 /*
  * prototypes from functions in execSRF.c
  */
-extern SetExprState *ExecInitTableFunctionResult(Expr *expr,
+extern PGDLLIMPORT SetExprState *ExecInitTableFunctionResult(Expr *expr,
 												 ExprContext *econtext, PlanState *parent);
-extern Tuplestorestate *ExecMakeTableFunctionResult(SetExprState *setexpr,
+extern PGDLLIMPORT Tuplestorestate *ExecMakeTableFunctionResult(SetExprState *setexpr,
 													ExprContext *econtext,
 													MemoryContext argContext,
 													TupleDesc expectedDesc,
 													bool randomAccess);
-extern SetExprState *ExecInitFunctionResultSet(Expr *expr,
+extern PGDLLIMPORT SetExprState *ExecInitFunctionResultSet(Expr *expr,
 											   ExprContext *econtext, PlanState *parent);
-extern Datum ExecMakeFunctionResultSet(SetExprState *fcache,
+extern PGDLLIMPORT Datum ExecMakeFunctionResultSet(SetExprState *fcache,
 									   ExprContext *econtext,
 									   MemoryContext argContext,
 									   bool *isNull,
@@ -460,33 +460,33 @@ extern Datum ExecMakeFunctionResultSet(SetExprState *fcache,
 typedef TupleTableSlot *(*ExecScanAccessMtd) (ScanState *node);
 typedef bool (*ExecScanRecheckMtd) (ScanState *node, TupleTableSlot *slot);
 
-extern TupleTableSlot *ExecScan(ScanState *node, ExecScanAccessMtd accessMtd,
+extern PGDLLIMPORT TupleTableSlot *ExecScan(ScanState *node, ExecScanAccessMtd accessMtd,
 								ExecScanRecheckMtd recheckMtd);
-extern void ExecAssignScanProjectionInfo(ScanState *node);
-extern void ExecAssignScanProjectionInfoWithVarno(ScanState *node, int varno);
-extern void ExecScanReScan(ScanState *node);
+extern PGDLLIMPORT void ExecAssignScanProjectionInfo(ScanState *node);
+extern PGDLLIMPORT void ExecAssignScanProjectionInfoWithVarno(ScanState *node, int varno);
+extern PGDLLIMPORT void ExecScanReScan(ScanState *node);
 
 /*
  * prototypes from functions in execTuples.c
  */
-extern void ExecInitResultTypeTL(PlanState *planstate);
-extern void ExecInitResultSlot(PlanState *planstate,
+extern PGDLLIMPORT void ExecInitResultTypeTL(PlanState *planstate);
+extern PGDLLIMPORT void ExecInitResultSlot(PlanState *planstate,
 							   const TupleTableSlotOps *tts_ops);
-extern void ExecInitResultTupleSlotTL(PlanState *planstate,
+extern PGDLLIMPORT void ExecInitResultTupleSlotTL(PlanState *planstate,
 									  const TupleTableSlotOps *tts_ops);
-extern void ExecInitScanTupleSlot(EState *estate, ScanState *scanstate,
+extern PGDLLIMPORT void ExecInitScanTupleSlot(EState *estate, ScanState *scanstate,
 								  TupleDesc tupleDesc,
 								  const TupleTableSlotOps *tts_ops);
-extern TupleTableSlot *ExecInitExtraTupleSlot(EState *estate,
+extern PGDLLIMPORT TupleTableSlot *ExecInitExtraTupleSlot(EState *estate,
 											  TupleDesc tupledesc,
 											  const TupleTableSlotOps *tts_ops);
-extern TupleTableSlot *ExecInitNullTupleSlot(EState *estate, TupleDesc tupType,
+extern PGDLLIMPORT TupleTableSlot *ExecInitNullTupleSlot(EState *estate, TupleDesc tupType,
 											 const TupleTableSlotOps *tts_ops);
-extern TupleDesc ExecTypeFromTL(List *targetList);
-extern TupleDesc ExecCleanTypeFromTL(List *targetList);
-extern TupleDesc ExecTypeFromExprList(List *exprList);
-extern void ExecTypeSetColNames(TupleDesc typeInfo, List *namesList);
-extern void UpdateChangedParamSet(PlanState *node, Bitmapset *newchg);
+extern PGDLLIMPORT TupleDesc ExecTypeFromTL(List *targetList);
+extern PGDLLIMPORT TupleDesc ExecCleanTypeFromTL(List *targetList);
+extern PGDLLIMPORT TupleDesc ExecTypeFromExprList(List *exprList);
+extern PGDLLIMPORT void ExecTypeSetColNames(TupleDesc typeInfo, List *namesList);
+extern PGDLLIMPORT void UpdateChangedParamSet(PlanState *node, Bitmapset *newchg);
 
 typedef struct TupOutputState
 {
@@ -494,12 +494,12 @@ typedef struct TupOutputState
 	DestReceiver *dest;
 } TupOutputState;
 
-extern TupOutputState *begin_tup_output_tupdesc(DestReceiver *dest,
+extern PGDLLIMPORT TupOutputState *begin_tup_output_tupdesc(DestReceiver *dest,
 												TupleDesc tupdesc,
 												const TupleTableSlotOps *tts_ops);
-extern void do_tup_output(TupOutputState *tstate, Datum *values, bool *isnull);
-extern void do_text_output_multiline(TupOutputState *tstate, const char *txt);
-extern void end_tup_output(TupOutputState *tstate);
+extern PGDLLIMPORT void do_tup_output(TupOutputState *tstate, Datum *values, bool *isnull);
+extern PGDLLIMPORT void do_text_output_multiline(TupOutputState *tstate, const char *txt);
+extern PGDLLIMPORT void end_tup_output(TupOutputState *tstate);
 
 /*
  * Write a single line of text given as a C string.
@@ -520,18 +520,18 @@ extern void end_tup_output(TupOutputState *tstate);
 /*
  * prototypes from functions in execUtils.c
  */
-extern EState *CreateExecutorState(void);
-extern void FreeExecutorState(EState *estate);
-extern ExprContext *CreateExprContext(EState *estate);
-extern ExprContext *CreateWorkExprContext(EState *estate);
-extern ExprContext *CreateStandaloneExprContext(void);
-extern void FreeExprContext(ExprContext *econtext, bool isCommit);
-extern void ReScanExprContext(ExprContext *econtext);
+extern PGDLLIMPORT EState *CreateExecutorState(void);
+extern PGDLLIMPORT void FreeExecutorState(EState *estate);
+extern PGDLLIMPORT ExprContext *CreateExprContext(EState *estate);
+extern PGDLLIMPORT ExprContext *CreateWorkExprContext(EState *estate);
+extern PGDLLIMPORT ExprContext *CreateStandaloneExprContext(void);
+extern PGDLLIMPORT void FreeExprContext(ExprContext *econtext, bool isCommit);
+extern PGDLLIMPORT void ReScanExprContext(ExprContext *econtext);
 
 #define ResetExprContext(econtext) \
 	MemoryContextReset((econtext)->ecxt_per_tuple_memory)
 
-extern ExprContext *MakePerTupleExprContext(EState *estate);
+extern PGDLLIMPORT ExprContext *MakePerTupleExprContext(EState *estate);
 
 /* Get an EState's per-output-tuple exprcontext, making it if first use */
 #define GetPerTupleExprContext(estate) \
@@ -549,27 +549,27 @@ extern ExprContext *MakePerTupleExprContext(EState *estate);
 			ResetExprContext((estate)->es_per_tuple_exprcontext); \
 	} while (0)
 
-extern void ExecAssignExprContext(EState *estate, PlanState *planstate);
-extern TupleDesc ExecGetResultType(PlanState *planstate);
-extern const TupleTableSlotOps *ExecGetResultSlotOps(PlanState *planstate,
+extern PGDLLIMPORT void ExecAssignExprContext(EState *estate, PlanState *planstate);
+extern PGDLLIMPORT TupleDesc ExecGetResultType(PlanState *planstate);
+extern PGDLLIMPORT const TupleTableSlotOps *ExecGetResultSlotOps(PlanState *planstate,
 													 bool *isfixed);
-extern void ExecAssignProjectionInfo(PlanState *planstate,
+extern PGDLLIMPORT void ExecAssignProjectionInfo(PlanState *planstate,
 									 TupleDesc inputDesc);
-extern void ExecConditionalAssignProjectionInfo(PlanState *planstate,
+extern PGDLLIMPORT void ExecConditionalAssignProjectionInfo(PlanState *planstate,
 												TupleDesc inputDesc, int varno);
-extern void ExecFreeExprContext(PlanState *planstate);
-extern void ExecAssignScanType(ScanState *scanstate, TupleDesc tupDesc);
-extern void ExecCreateScanSlotFromOuterPlan(EState *estate,
+extern PGDLLIMPORT void ExecFreeExprContext(PlanState *planstate);
+extern PGDLLIMPORT void ExecAssignScanType(ScanState *scanstate, TupleDesc tupDesc);
+extern PGDLLIMPORT void ExecCreateScanSlotFromOuterPlan(EState *estate,
 											ScanState *scanstate,
 											const TupleTableSlotOps *tts_ops);
 
-extern bool ExecRelationIsTargetRelation(EState *estate, Index scanrelid);
+extern PGDLLIMPORT bool ExecRelationIsTargetRelation(EState *estate, Index scanrelid);
 
-extern Relation ExecOpenScanRelation(EState *estate, Index scanrelid, int eflags);
+extern PGDLLIMPORT Relation ExecOpenScanRelation(EState *estate, Index scanrelid, int eflags);
 
-extern void ExecInitRangeTable(EState *estate, List *rangeTable);
-extern void ExecCloseRangeTableRelations(EState *estate);
-extern void ExecCloseResultRelations(EState *estate);
+extern PGDLLIMPORT void ExecInitRangeTable(EState *estate, List *rangeTable);
+extern PGDLLIMPORT void ExecCloseRangeTableRelations(EState *estate);
+extern PGDLLIMPORT void ExecCloseResultRelations(EState *estate);
 
 static inline RangeTblEntry *
 exec_rt_fetch(Index rti, EState *estate)
@@ -577,52 +577,52 @@ exec_rt_fetch(Index rti, EState *estate)
 	return (RangeTblEntry *) list_nth(estate->es_range_table, rti - 1);
 }
 
-extern Relation ExecGetRangeTableRelation(EState *estate, Index rti);
-extern void ExecInitResultRelation(EState *estate, ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT Relation ExecGetRangeTableRelation(EState *estate, Index rti);
+extern PGDLLIMPORT void ExecInitResultRelation(EState *estate, ResultRelInfo *resultRelInfo,
 								   Index rti);
 
-extern int	executor_errposition(EState *estate, int location);
+extern PGDLLIMPORT int	executor_errposition(EState *estate, int location);
 
-extern void RegisterExprContextCallback(ExprContext *econtext,
+extern PGDLLIMPORT void RegisterExprContextCallback(ExprContext *econtext,
 										ExprContextCallbackFunction function,
 										Datum arg);
-extern void UnregisterExprContextCallback(ExprContext *econtext,
+extern PGDLLIMPORT void UnregisterExprContextCallback(ExprContext *econtext,
 										  ExprContextCallbackFunction function,
 										  Datum arg);
 
-extern Datum GetAttributeByName(HeapTupleHeader tuple, const char *attname,
+extern PGDLLIMPORT Datum GetAttributeByName(HeapTupleHeader tuple, const char *attname,
 								bool *isNull);
-extern Datum GetAttributeByNum(HeapTupleHeader tuple, AttrNumber attrno,
+extern PGDLLIMPORT Datum GetAttributeByNum(HeapTupleHeader tuple, AttrNumber attrno,
 							   bool *isNull);
 
-extern int	ExecTargetListLength(List *targetlist);
-extern int	ExecCleanTargetListLength(List *targetlist);
+extern PGDLLIMPORT int	ExecTargetListLength(List *targetlist);
+extern PGDLLIMPORT int	ExecCleanTargetListLength(List *targetlist);
 
-extern TupleTableSlot *ExecGetTriggerOldSlot(EState *estate, ResultRelInfo *relInfo);
-extern TupleTableSlot *ExecGetTriggerNewSlot(EState *estate, ResultRelInfo *relInfo);
-extern TupleTableSlot *ExecGetReturningSlot(EState *estate, ResultRelInfo *relInfo);
-extern TupleConversionMap *ExecGetChildToRootMap(ResultRelInfo *resultRelInfo);
+extern PGDLLIMPORT TupleTableSlot *ExecGetTriggerOldSlot(EState *estate, ResultRelInfo *relInfo);
+extern PGDLLIMPORT TupleTableSlot *ExecGetTriggerNewSlot(EState *estate, ResultRelInfo *relInfo);
+extern PGDLLIMPORT TupleTableSlot *ExecGetReturningSlot(EState *estate, ResultRelInfo *relInfo);
+extern PGDLLIMPORT TupleConversionMap *ExecGetChildToRootMap(ResultRelInfo *resultRelInfo);
 
-extern Bitmapset *ExecGetInsertedCols(ResultRelInfo *relinfo, EState *estate);
-extern Bitmapset *ExecGetUpdatedCols(ResultRelInfo *relinfo, EState *estate);
-extern Bitmapset *ExecGetExtraUpdatedCols(ResultRelInfo *relinfo, EState *estate);
-extern Bitmapset *ExecGetAllUpdatedCols(ResultRelInfo *relinfo, EState *estate);
+extern PGDLLIMPORT Bitmapset *ExecGetInsertedCols(ResultRelInfo *relinfo, EState *estate);
+extern PGDLLIMPORT Bitmapset *ExecGetUpdatedCols(ResultRelInfo *relinfo, EState *estate);
+extern PGDLLIMPORT Bitmapset *ExecGetExtraUpdatedCols(ResultRelInfo *relinfo, EState *estate);
+extern PGDLLIMPORT Bitmapset *ExecGetAllUpdatedCols(ResultRelInfo *relinfo, EState *estate);
 
 /*
  * prototypes from functions in execIndexing.c
  */
-extern void ExecOpenIndices(ResultRelInfo *resultRelInfo, bool speculative);
-extern void ExecCloseIndices(ResultRelInfo *resultRelInfo);
-extern List *ExecInsertIndexTuples(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecOpenIndices(ResultRelInfo *resultRelInfo, bool speculative);
+extern PGDLLIMPORT void ExecCloseIndices(ResultRelInfo *resultRelInfo);
+extern PGDLLIMPORT List *ExecInsertIndexTuples(ResultRelInfo *resultRelInfo,
 								   TupleTableSlot *slot, EState *estate,
 								   bool update,
 								   bool noDupErr,
 								   bool *specConflict, List *arbiterIndexes);
-extern bool ExecCheckIndexConstraints(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT bool ExecCheckIndexConstraints(ResultRelInfo *resultRelInfo,
 									  TupleTableSlot *slot,
 									  EState *estate, ItemPointer conflictTid,
 									  List *arbiterIndexes);
-extern void check_exclusion_constraint(Relation heap, Relation index,
+extern PGDLLIMPORT void check_exclusion_constraint(Relation heap, Relation index,
 									   IndexInfo *indexInfo,
 									   ItemPointer tupleid,
 									   Datum *values, bool *isnull,
@@ -631,33 +631,33 @@ extern void check_exclusion_constraint(Relation heap, Relation index,
 /*
  * prototypes from functions in execReplication.c
  */
-extern bool RelationFindReplTupleByIndex(Relation rel, Oid idxoid,
+extern PGDLLIMPORT bool RelationFindReplTupleByIndex(Relation rel, Oid idxoid,
 										 LockTupleMode lockmode,
 										 TupleTableSlot *searchslot,
 										 TupleTableSlot *outslot);
-extern bool RelationFindReplTupleSeq(Relation rel, LockTupleMode lockmode,
+extern PGDLLIMPORT bool RelationFindReplTupleSeq(Relation rel, LockTupleMode lockmode,
 									 TupleTableSlot *searchslot, TupleTableSlot *outslot);
 
-extern void ExecSimpleRelationInsert(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecSimpleRelationInsert(ResultRelInfo *resultRelInfo,
 									 EState *estate, TupleTableSlot *slot);
-extern void ExecSimpleRelationUpdate(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecSimpleRelationUpdate(ResultRelInfo *resultRelInfo,
 									 EState *estate, EPQState *epqstate,
 									 TupleTableSlot *searchslot, TupleTableSlot *slot);
-extern void ExecSimpleRelationDelete(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecSimpleRelationDelete(ResultRelInfo *resultRelInfo,
 									 EState *estate, EPQState *epqstate,
 									 TupleTableSlot *searchslot);
-extern void CheckCmdReplicaIdentity(Relation rel, CmdType cmd);
+extern PGDLLIMPORT void CheckCmdReplicaIdentity(Relation rel, CmdType cmd);
 
-extern void CheckSubscriptionRelkind(char relkind, const char *nspname,
+extern PGDLLIMPORT void CheckSubscriptionRelkind(char relkind, const char *nspname,
 									 const char *relname);
 
 /*
  * prototypes from functions in nodeModifyTable.c
  */
-extern TupleTableSlot *ExecGetUpdateNewTuple(ResultRelInfo *relinfo,
+extern PGDLLIMPORT TupleTableSlot *ExecGetUpdateNewTuple(ResultRelInfo *relinfo,
 											 TupleTableSlot *planSlot,
 											 TupleTableSlot *oldSlot);
-extern ResultRelInfo *ExecLookupResultRelByOid(ModifyTableState *node,
+extern PGDLLIMPORT ResultRelInfo *ExecLookupResultRelByOid(ModifyTableState *node,
 											   Oid resultoid,
 											   bool missing_ok,
 											   bool update_cache);

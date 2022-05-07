@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern WindowAggState *ExecInitWindowAgg(WindowAgg *node, EState *estate, int eflags);
-extern void ExecEndWindowAgg(WindowAggState *node);
-extern void ExecReScanWindowAgg(WindowAggState *node);
+extern PGDLLIMPORT WindowAggState *ExecInitWindowAgg(WindowAgg *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndWindowAgg(WindowAggState *node);
+extern PGDLLIMPORT void ExecReScanWindowAgg(WindowAggState *node);
 
 #endif							/* NODEWINDOWAGG_H */

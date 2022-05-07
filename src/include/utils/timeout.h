@@ -72,24 +72,24 @@ typedef struct
 } DisableTimeoutParams;
 
 /* timeout setup */
-extern void InitializeTimeouts(void);
-extern TimeoutId RegisterTimeout(TimeoutId id, timeout_handler_proc handler);
-extern void reschedule_timeouts(void);
+extern PGDLLIMPORT void InitializeTimeouts(void);
+extern PGDLLIMPORT TimeoutId RegisterTimeout(TimeoutId id, timeout_handler_proc handler);
+extern PGDLLIMPORT void reschedule_timeouts(void);
 
 /* timeout operation */
-extern void enable_timeout_after(TimeoutId id, int delay_ms);
-extern void enable_timeout_every(TimeoutId id, TimestampTz fin_time,
+extern PGDLLIMPORT void enable_timeout_after(TimeoutId id, int delay_ms);
+extern PGDLLIMPORT void enable_timeout_every(TimeoutId id, TimestampTz fin_time,
 								 int delay_ms);
-extern void enable_timeout_at(TimeoutId id, TimestampTz fin_time);
-extern void enable_timeouts(const EnableTimeoutParams *timeouts, int count);
-extern void disable_timeout(TimeoutId id, bool keep_indicator);
-extern void disable_timeouts(const DisableTimeoutParams *timeouts, int count);
-extern void disable_all_timeouts(bool keep_indicators);
+extern PGDLLIMPORT void enable_timeout_at(TimeoutId id, TimestampTz fin_time);
+extern PGDLLIMPORT void enable_timeouts(const EnableTimeoutParams *timeouts, int count);
+extern PGDLLIMPORT void disable_timeout(TimeoutId id, bool keep_indicator);
+extern PGDLLIMPORT void disable_timeouts(const DisableTimeoutParams *timeouts, int count);
+extern PGDLLIMPORT void disable_all_timeouts(bool keep_indicators);
 
 /* accessors */
-extern bool get_timeout_active(TimeoutId id);
-extern bool get_timeout_indicator(TimeoutId id, bool reset_indicator);
-extern TimestampTz get_timeout_start_time(TimeoutId id);
-extern TimestampTz get_timeout_finish_time(TimeoutId id);
+extern PGDLLIMPORT bool get_timeout_active(TimeoutId id);
+extern PGDLLIMPORT bool get_timeout_indicator(TimeoutId id, bool reset_indicator);
+extern PGDLLIMPORT TimestampTz get_timeout_start_time(TimeoutId id);
+extern PGDLLIMPORT TimestampTz get_timeout_finish_time(TimeoutId id);
 
 #endif							/* TIMEOUT_H */

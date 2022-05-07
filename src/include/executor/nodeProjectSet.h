@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern ProjectSetState *ExecInitProjectSet(ProjectSet *node, EState *estate, int eflags);
-extern void ExecEndProjectSet(ProjectSetState *node);
-extern void ExecReScanProjectSet(ProjectSetState *node);
+extern PGDLLIMPORT ProjectSetState *ExecInitProjectSet(ProjectSet *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndProjectSet(ProjectSetState *node);
+extern PGDLLIMPORT void ExecReScanProjectSet(ProjectSetState *node);
 
 #endif							/* NODEPROJECTSET_H */

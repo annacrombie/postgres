@@ -913,7 +913,7 @@ typedef unsigned int slock_t;
 typedef unsigned char slock_t;
 #endif
 
-extern slock_t pg_atomic_cas(volatile slock_t *lock, slock_t with,
+extern PGDLLIMPORT slock_t pg_atomic_cas(volatile slock_t *lock, slock_t with,
 									  slock_t cmp);
 
 #define TAS(a) (pg_atomic_cas((a), 1, 0) != 0)
@@ -974,10 +974,10 @@ spin_delay(void)
  */
 typedef int slock_t;
 
-extern bool s_lock_free_sema(volatile slock_t *lock);
-extern void s_unlock_sema(volatile slock_t *lock);
-extern void s_init_lock_sema(volatile slock_t *lock, bool nested);
-extern int	tas_sema(volatile slock_t *lock);
+extern PGDLLIMPORT bool s_lock_free_sema(volatile slock_t *lock);
+extern PGDLLIMPORT void s_unlock_sema(volatile slock_t *lock);
+extern PGDLLIMPORT void s_init_lock_sema(volatile slock_t *lock, bool nested);
+extern PGDLLIMPORT int	tas_sema(volatile slock_t *lock);
 
 #define S_LOCK_FREE(lock)	s_lock_free_sema(lock)
 #define S_UNLOCK(lock)	 s_unlock_sema(lock)
@@ -1019,7 +1019,7 @@ extern int	tas_sema(volatile slock_t *lock);
  * which the PostgreSQL project does not have access.
  */
 #define USE_DEFAULT_S_UNLOCK
-extern void s_unlock(volatile slock_t *lock);
+extern PGDLLIMPORT void s_unlock(volatile slock_t *lock);
 #define S_UNLOCK(lock)		s_unlock(lock)
 #endif	 /* S_UNLOCK */
 
@@ -1032,7 +1032,7 @@ extern void s_unlock(volatile slock_t *lock);
 #endif	 /* SPIN_DELAY */
 
 #if !defined(TAS)
-extern int	tas(volatile slock_t *lock);		/* in port/.../tas.s, or
+extern PGDLLIMPORT int	tas(volatile slock_t *lock);		/* in port/.../tas.s, or
 												 * s_lock.c */
 
 #define TAS(lock)		tas(lock)
@@ -1047,13 +1047,13 @@ extern PGDLLIMPORT slock_t dummy_spinlock;
 /*
  * Platform-independent out-of-line support routines
  */
-extern int s_lock(volatile slock_t *lock, const char *file, int line, const char *func);
+extern PGDLLIMPORT int s_lock(volatile slock_t *lock, const char *file, int line, const char *func);
 
 /* Support for dynamic adjustment of spins_per_delay */
 #define DEFAULT_SPINS_PER_DELAY  100
 
-extern void set_spins_per_delay(int shared_spins_per_delay);
-extern int	update_spins_per_delay(int shared_spins_per_delay);
+extern PGDLLIMPORT void set_spins_per_delay(int shared_spins_per_delay);
+extern PGDLLIMPORT int	update_spins_per_delay(int shared_spins_per_delay);
 
 /*
  * Support for spin delay which is useful in various places where
@@ -1082,7 +1082,7 @@ init_spin_delay(SpinDelayStatus *status,
 }
 
 #define init_local_spin_delay(status) init_spin_delay(status, __FILE__, __LINE__, PG_FUNCNAME_MACRO)
-extern void perform_spin_delay(SpinDelayStatus *status);
-extern void finish_spin_delay(SpinDelayStatus *status);
+extern PGDLLIMPORT void perform_spin_delay(SpinDelayStatus *status);
+extern PGDLLIMPORT void finish_spin_delay(SpinDelayStatus *status);
 
 #endif	 /* S_LOCK_H */

@@ -50,17 +50,17 @@ DECLARE_UNIQUE_INDEX(pg_enum_typid_sortorder_index, 3534, EnumTypIdSortOrderInde
 /*
  * prototypes for functions in pg_enum.c
  */
-extern void EnumValuesCreate(Oid enumTypeOid, List *vals);
-extern void EnumValuesDelete(Oid enumTypeOid);
-extern void AddEnumLabel(Oid enumTypeOid, const char *newVal,
+extern PGDLLIMPORT void EnumValuesCreate(Oid enumTypeOid, List *vals);
+extern PGDLLIMPORT void EnumValuesDelete(Oid enumTypeOid);
+extern PGDLLIMPORT void AddEnumLabel(Oid enumTypeOid, const char *newVal,
 						 const char *neighbor, bool newValIsAfter,
 						 bool skipIfExists);
-extern void RenameEnumLabel(Oid enumTypeOid,
+extern PGDLLIMPORT void RenameEnumLabel(Oid enumTypeOid,
 							const char *oldVal, const char *newVal);
-extern bool EnumUncommitted(Oid enum_id);
-extern Size EstimateUncommittedEnumsSpace(void);
-extern void SerializeUncommittedEnums(void *space, Size size);
-extern void RestoreUncommittedEnums(void *space);
-extern void AtEOXact_Enum(void);
+extern PGDLLIMPORT bool EnumUncommitted(Oid enum_id);
+extern PGDLLIMPORT Size EstimateUncommittedEnumsSpace(void);
+extern PGDLLIMPORT void SerializeUncommittedEnums(void *space, Size size);
+extern PGDLLIMPORT void RestoreUncommittedEnums(void *space);
+extern PGDLLIMPORT void AtEOXact_Enum(void);
 
 #endif							/* PG_ENUM_H */

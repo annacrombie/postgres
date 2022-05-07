@@ -15,27 +15,27 @@
 
 #include "parser/parse_node.h"
 
-extern void transformAggregateCall(ParseState *pstate, Aggref *agg,
+extern PGDLLIMPORT void transformAggregateCall(ParseState *pstate, Aggref *agg,
 								   List *args, List *aggorder,
 								   bool agg_distinct);
 
-extern Node *transformGroupingFunc(ParseState *pstate, GroupingFunc *g);
+extern PGDLLIMPORT Node *transformGroupingFunc(ParseState *pstate, GroupingFunc *g);
 
-extern void transformWindowFuncCall(ParseState *pstate, WindowFunc *wfunc,
+extern PGDLLIMPORT void transformWindowFuncCall(ParseState *pstate, WindowFunc *wfunc,
 									WindowDef *windef);
 
-extern void parseCheckAggregates(ParseState *pstate, Query *qry);
+extern PGDLLIMPORT void parseCheckAggregates(ParseState *pstate, Query *qry);
 
-extern List *expand_grouping_sets(List *groupingSets, bool groupDistinct, int limit);
+extern PGDLLIMPORT List *expand_grouping_sets(List *groupingSets, bool groupDistinct, int limit);
 
-extern int	get_aggregate_argtypes(Aggref *aggref, Oid *inputTypes);
+extern PGDLLIMPORT int	get_aggregate_argtypes(Aggref *aggref, Oid *inputTypes);
 
-extern Oid	resolve_aggregate_transtype(Oid aggfuncid,
+extern PGDLLIMPORT Oid	resolve_aggregate_transtype(Oid aggfuncid,
 										Oid aggtranstype,
 										Oid *inputTypes,
 										int numArguments);
 
-extern void build_aggregate_transfn_expr(Oid *agg_input_types,
+extern PGDLLIMPORT void build_aggregate_transfn_expr(Oid *agg_input_types,
 										 int agg_num_inputs,
 										 int agg_num_direct_inputs,
 										 bool agg_variadic,
@@ -46,13 +46,13 @@ extern void build_aggregate_transfn_expr(Oid *agg_input_types,
 										 Expr **transfnexpr,
 										 Expr **invtransfnexpr);
 
-extern void build_aggregate_serialfn_expr(Oid serialfn_oid,
+extern PGDLLIMPORT void build_aggregate_serialfn_expr(Oid serialfn_oid,
 										  Expr **serialfnexpr);
 
-extern void build_aggregate_deserialfn_expr(Oid deserialfn_oid,
+extern PGDLLIMPORT void build_aggregate_deserialfn_expr(Oid deserialfn_oid,
 											Expr **deserialfnexpr);
 
-extern void build_aggregate_finalfn_expr(Oid *agg_input_types,
+extern PGDLLIMPORT void build_aggregate_finalfn_expr(Oid *agg_input_types,
 										 int num_finalfn_inputs,
 										 Oid agg_state_type,
 										 Oid agg_result_type,

@@ -21,10 +21,10 @@
 #include "utils/array.h"
 
 /* commands/dropcmds.c */
-extern void RemoveObjects(DropStmt *stmt);
+extern PGDLLIMPORT void RemoveObjects(DropStmt *stmt);
 
 /* commands/indexcmds.c */
-extern ObjectAddress DefineIndex(Oid relationId,
+extern PGDLLIMPORT ObjectAddress DefineIndex(Oid relationId,
 								 IndexStmt *stmt,
 								 Oid indexRelationId,
 								 Oid parentIndexId,
@@ -34,33 +34,33 @@ extern ObjectAddress DefineIndex(Oid relationId,
 								 bool check_not_in_use,
 								 bool skip_build,
 								 bool quiet);
-extern void ExecReindex(ParseState *pstate, ReindexStmt *stmt, bool isTopLevel);
-extern char *makeObjectName(const char *name1, const char *name2,
+extern PGDLLIMPORT void ExecReindex(ParseState *pstate, ReindexStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT char *makeObjectName(const char *name1, const char *name2,
 							const char *label);
-extern char *ChooseRelationName(const char *name1, const char *name2,
+extern PGDLLIMPORT char *ChooseRelationName(const char *name1, const char *name2,
 								const char *label, Oid namespaceid,
 								bool isconstraint);
-extern bool CheckIndexCompatible(Oid oldId,
+extern PGDLLIMPORT bool CheckIndexCompatible(Oid oldId,
 								 const char *accessMethodName,
 								 List *attributeList,
 								 List *exclusionOpNames);
-extern Oid	GetDefaultOpClass(Oid type_id, Oid am_id);
-extern Oid	ResolveOpClass(List *opclass, Oid attrType,
+extern PGDLLIMPORT Oid	GetDefaultOpClass(Oid type_id, Oid am_id);
+extern PGDLLIMPORT Oid	ResolveOpClass(List *opclass, Oid attrType,
 						   const char *accessMethodName, Oid accessMethodId);
 
 /* commands/functioncmds.c */
-extern ObjectAddress CreateFunction(ParseState *pstate, CreateFunctionStmt *stmt);
-extern void RemoveFunctionById(Oid funcOid);
-extern ObjectAddress AlterFunction(ParseState *pstate, AlterFunctionStmt *stmt);
-extern ObjectAddress CreateCast(CreateCastStmt *stmt);
-extern ObjectAddress CreateTransform(CreateTransformStmt *stmt);
-extern void IsThereFunctionInNamespace(const char *proname, int pronargs,
+extern PGDLLIMPORT ObjectAddress CreateFunction(ParseState *pstate, CreateFunctionStmt *stmt);
+extern PGDLLIMPORT void RemoveFunctionById(Oid funcOid);
+extern PGDLLIMPORT ObjectAddress AlterFunction(ParseState *pstate, AlterFunctionStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateCast(CreateCastStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateTransform(CreateTransformStmt *stmt);
+extern PGDLLIMPORT void IsThereFunctionInNamespace(const char *proname, int pronargs,
 									   oidvector *proargtypes, Oid nspOid);
-extern void ExecuteDoStmt(ParseState *pstate, DoStmt *stmt, bool atomic);
-extern void ExecuteCallStmt(CallStmt *stmt, ParamListInfo params, bool atomic, DestReceiver *dest);
-extern TupleDesc CallStmtResultDesc(CallStmt *stmt);
-extern Oid	get_transform_oid(Oid type_id, Oid lang_id, bool missing_ok);
-extern void interpret_function_parameter_list(ParseState *pstate,
+extern PGDLLIMPORT void ExecuteDoStmt(ParseState *pstate, DoStmt *stmt, bool atomic);
+extern PGDLLIMPORT void ExecuteCallStmt(CallStmt *stmt, ParamListInfo params, bool atomic, DestReceiver *dest);
+extern PGDLLIMPORT TupleDesc CallStmtResultDesc(CallStmt *stmt);
+extern PGDLLIMPORT Oid	get_transform_oid(Oid type_id, Oid lang_id, bool missing_ok);
+extern PGDLLIMPORT void interpret_function_parameter_list(ParseState *pstate,
 											  List *parameters,
 											  Oid languageOid,
 											  ObjectType objtype,
@@ -75,85 +75,85 @@ extern void interpret_function_parameter_list(ParseState *pstate,
 											  Oid *requiredResultType);
 
 /* commands/operatorcmds.c */
-extern ObjectAddress DefineOperator(List *names, List *parameters);
-extern void RemoveOperatorById(Oid operOid);
-extern ObjectAddress AlterOperator(AlterOperatorStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineOperator(List *names, List *parameters);
+extern PGDLLIMPORT void RemoveOperatorById(Oid operOid);
+extern PGDLLIMPORT ObjectAddress AlterOperator(AlterOperatorStmt *stmt);
 
 /* commands/statscmds.c */
-extern ObjectAddress CreateStatistics(CreateStatsStmt *stmt);
-extern ObjectAddress AlterStatistics(AlterStatsStmt *stmt);
-extern void RemoveStatisticsById(Oid statsOid);
-extern void RemoveStatisticsDataById(Oid statsOid, bool inh);
-extern Oid	StatisticsGetRelation(Oid statId, bool missing_ok);
+extern PGDLLIMPORT ObjectAddress CreateStatistics(CreateStatsStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterStatistics(AlterStatsStmt *stmt);
+extern PGDLLIMPORT void RemoveStatisticsById(Oid statsOid);
+extern PGDLLIMPORT void RemoveStatisticsDataById(Oid statsOid, bool inh);
+extern PGDLLIMPORT Oid	StatisticsGetRelation(Oid statId, bool missing_ok);
 
 /* commands/aggregatecmds.c */
-extern ObjectAddress DefineAggregate(ParseState *pstate, List *name, List *args, bool oldstyle,
+extern PGDLLIMPORT ObjectAddress DefineAggregate(ParseState *pstate, List *name, List *args, bool oldstyle,
 									 List *parameters, bool replace);
 
 /* commands/opclasscmds.c */
-extern ObjectAddress DefineOpClass(CreateOpClassStmt *stmt);
-extern ObjectAddress DefineOpFamily(CreateOpFamilyStmt *stmt);
-extern Oid	AlterOpFamily(AlterOpFamilyStmt *stmt);
-extern void IsThereOpClassInNamespace(const char *opcname, Oid opcmethod,
+extern PGDLLIMPORT ObjectAddress DefineOpClass(CreateOpClassStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineOpFamily(CreateOpFamilyStmt *stmt);
+extern PGDLLIMPORT Oid	AlterOpFamily(AlterOpFamilyStmt *stmt);
+extern PGDLLIMPORT void IsThereOpClassInNamespace(const char *opcname, Oid opcmethod,
 									  Oid opcnamespace);
-extern void IsThereOpFamilyInNamespace(const char *opfname, Oid opfmethod,
+extern PGDLLIMPORT void IsThereOpFamilyInNamespace(const char *opfname, Oid opfmethod,
 									   Oid opfnamespace);
-extern Oid	get_opclass_oid(Oid amID, List *opclassname, bool missing_ok);
-extern Oid	get_opfamily_oid(Oid amID, List *opfamilyname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_opclass_oid(Oid amID, List *opclassname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_opfamily_oid(Oid amID, List *opfamilyname, bool missing_ok);
 
 /* commands/tsearchcmds.c */
-extern ObjectAddress DefineTSParser(List *names, List *parameters);
+extern PGDLLIMPORT ObjectAddress DefineTSParser(List *names, List *parameters);
 
-extern ObjectAddress DefineTSDictionary(List *names, List *parameters);
-extern ObjectAddress AlterTSDictionary(AlterTSDictionaryStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineTSDictionary(List *names, List *parameters);
+extern PGDLLIMPORT ObjectAddress AlterTSDictionary(AlterTSDictionaryStmt *stmt);
 
-extern ObjectAddress DefineTSTemplate(List *names, List *parameters);
+extern PGDLLIMPORT ObjectAddress DefineTSTemplate(List *names, List *parameters);
 
-extern ObjectAddress DefineTSConfiguration(List *names, List *parameters,
+extern PGDLLIMPORT ObjectAddress DefineTSConfiguration(List *names, List *parameters,
 										   ObjectAddress *copied);
-extern void RemoveTSConfigurationById(Oid cfgId);
-extern ObjectAddress AlterTSConfiguration(AlterTSConfigurationStmt *stmt);
+extern PGDLLIMPORT void RemoveTSConfigurationById(Oid cfgId);
+extern PGDLLIMPORT ObjectAddress AlterTSConfiguration(AlterTSConfigurationStmt *stmt);
 
-extern text *serialize_deflist(List *deflist);
-extern List *deserialize_deflist(Datum txt);
+extern PGDLLIMPORT text *serialize_deflist(List *deflist);
+extern PGDLLIMPORT List *deserialize_deflist(Datum txt);
 
 /* commands/foreigncmds.c */
-extern ObjectAddress AlterForeignServerOwner(const char *name, Oid newOwnerId);
-extern void AlterForeignServerOwner_oid(Oid, Oid newOwnerId);
-extern ObjectAddress AlterForeignDataWrapperOwner(const char *name, Oid newOwnerId);
-extern void AlterForeignDataWrapperOwner_oid(Oid fwdId, Oid newOwnerId);
-extern ObjectAddress CreateForeignDataWrapper(ParseState *pstate, CreateFdwStmt *stmt);
-extern ObjectAddress AlterForeignDataWrapper(ParseState *pstate, AlterFdwStmt *stmt);
-extern ObjectAddress CreateForeignServer(CreateForeignServerStmt *stmt);
-extern ObjectAddress AlterForeignServer(AlterForeignServerStmt *stmt);
-extern ObjectAddress CreateUserMapping(CreateUserMappingStmt *stmt);
-extern ObjectAddress AlterUserMapping(AlterUserMappingStmt *stmt);
-extern Oid	RemoveUserMapping(DropUserMappingStmt *stmt);
-extern void CreateForeignTable(CreateForeignTableStmt *stmt, Oid relid);
-extern void ImportForeignSchema(ImportForeignSchemaStmt *stmt);
-extern Datum transformGenericOptions(Oid catalogId,
+extern PGDLLIMPORT ObjectAddress AlterForeignServerOwner(const char *name, Oid newOwnerId);
+extern PGDLLIMPORT void AlterForeignServerOwner_oid(Oid, Oid newOwnerId);
+extern PGDLLIMPORT ObjectAddress AlterForeignDataWrapperOwner(const char *name, Oid newOwnerId);
+extern PGDLLIMPORT void AlterForeignDataWrapperOwner_oid(Oid fwdId, Oid newOwnerId);
+extern PGDLLIMPORT ObjectAddress CreateForeignDataWrapper(ParseState *pstate, CreateFdwStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterForeignDataWrapper(ParseState *pstate, AlterFdwStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateForeignServer(CreateForeignServerStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterForeignServer(AlterForeignServerStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateUserMapping(CreateUserMappingStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterUserMapping(AlterUserMappingStmt *stmt);
+extern PGDLLIMPORT Oid	RemoveUserMapping(DropUserMappingStmt *stmt);
+extern PGDLLIMPORT void CreateForeignTable(CreateForeignTableStmt *stmt, Oid relid);
+extern PGDLLIMPORT void ImportForeignSchema(ImportForeignSchemaStmt *stmt);
+extern PGDLLIMPORT Datum transformGenericOptions(Oid catalogId,
 									 Datum oldOptions,
 									 List *options,
 									 Oid fdwvalidator);
 
 /* commands/amcmds.c */
-extern ObjectAddress CreateAccessMethod(CreateAmStmt *stmt);
-extern Oid	get_index_am_oid(const char *amname, bool missing_ok);
-extern Oid	get_table_am_oid(const char *amname, bool missing_ok);
-extern Oid	get_am_oid(const char *amname, bool missing_ok);
-extern char *get_am_name(Oid amOid);
+extern PGDLLIMPORT ObjectAddress CreateAccessMethod(CreateAmStmt *stmt);
+extern PGDLLIMPORT Oid	get_index_am_oid(const char *amname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_table_am_oid(const char *amname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_am_oid(const char *amname, bool missing_ok);
+extern PGDLLIMPORT char *get_am_name(Oid amOid);
 
 /* support routines in commands/define.c */
 
-extern char *defGetString(DefElem *def);
-extern double defGetNumeric(DefElem *def);
-extern bool defGetBoolean(DefElem *def);
-extern int32 defGetInt32(DefElem *def);
-extern int64 defGetInt64(DefElem *def);
-extern List *defGetQualifiedName(DefElem *def);
-extern TypeName *defGetTypeName(DefElem *def);
-extern int	defGetTypeLength(DefElem *def);
-extern List *defGetStringList(DefElem *def);
-extern void errorConflictingDefElem(DefElem *defel, ParseState *pstate) pg_attribute_noreturn();
+extern PGDLLIMPORT char *defGetString(DefElem *def);
+extern PGDLLIMPORT double defGetNumeric(DefElem *def);
+extern PGDLLIMPORT bool defGetBoolean(DefElem *def);
+extern PGDLLIMPORT int32 defGetInt32(DefElem *def);
+extern PGDLLIMPORT int64 defGetInt64(DefElem *def);
+extern PGDLLIMPORT List *defGetQualifiedName(DefElem *def);
+extern PGDLLIMPORT TypeName *defGetTypeName(DefElem *def);
+extern PGDLLIMPORT int	defGetTypeLength(DefElem *def);
+extern PGDLLIMPORT List *defGetStringList(DefElem *def);
+extern PGDLLIMPORT void errorConflictingDefElem(DefElem *defel, ParseState *pstate) pg_attribute_noreturn();
 
 #endif							/* DEFREM_H */

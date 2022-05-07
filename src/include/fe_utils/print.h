@@ -185,36 +185,36 @@ extern PGDLLIMPORT printTextFormat pg_utf8format;	/* ideally would be const,
 													 * but... */
 
 
-extern void disable_sigpipe_trap(void);
-extern void restore_sigpipe_trap(void);
-extern void set_sigpipe_trap_state(bool ignore);
+extern PGDLLIMPORT void disable_sigpipe_trap(void);
+extern PGDLLIMPORT void restore_sigpipe_trap(void);
+extern PGDLLIMPORT void set_sigpipe_trap_state(bool ignore);
 
-extern FILE *PageOutput(int lines, const printTableOpt *topt);
-extern void ClosePager(FILE *pagerpipe);
+extern PGDLLIMPORT FILE *PageOutput(int lines, const printTableOpt *topt);
+extern PGDLLIMPORT void ClosePager(FILE *pagerpipe);
 
-extern void html_escaped_print(const char *in, FILE *fout);
+extern PGDLLIMPORT void html_escaped_print(const char *in, FILE *fout);
 
-extern void printTableInit(printTableContent *const content,
+extern PGDLLIMPORT void printTableInit(printTableContent *const content,
 						   const printTableOpt *opt, const char *title,
 						   const int ncolumns, const int nrows);
-extern void printTableAddHeader(printTableContent *const content,
+extern PGDLLIMPORT void printTableAddHeader(printTableContent *const content,
 								char *header, const bool translate, const char align);
-extern void printTableAddCell(printTableContent *const content,
+extern PGDLLIMPORT void printTableAddCell(printTableContent *const content,
 							  char *cell, const bool translate, const bool mustfree);
-extern void printTableAddFooter(printTableContent *const content,
+extern PGDLLIMPORT void printTableAddFooter(printTableContent *const content,
 								const char *footer);
-extern void printTableSetFooter(printTableContent *const content,
+extern PGDLLIMPORT void printTableSetFooter(printTableContent *const content,
 								const char *footer);
-extern void printTableCleanup(printTableContent *const content);
-extern void printTable(const printTableContent *cont,
+extern PGDLLIMPORT void printTableCleanup(printTableContent *const content);
+extern PGDLLIMPORT void printTable(const printTableContent *cont,
 					   FILE *fout, bool is_pager, FILE *flog);
-extern void printQuery(const PGresult *result, const printQueryOpt *opt,
+extern PGDLLIMPORT void printQuery(const PGresult *result, const printQueryOpt *opt,
 					   FILE *fout, bool is_pager, FILE *flog);
 
-extern char column_type_alignment(Oid);
+extern PGDLLIMPORT char column_type_alignment(Oid);
 
-extern void setDecimalLocale(void);
-extern const printTextFormat *get_line_style(const printTableOpt *opt);
-extern void refresh_utf8format(const printTableOpt *opt);
+extern PGDLLIMPORT void setDecimalLocale(void);
+extern PGDLLIMPORT const printTextFormat *get_line_style(const printTableOpt *opt);
+extern PGDLLIMPORT void refresh_utf8format(const printTableOpt *opt);
 
 #endif							/* PRINT_H */

@@ -259,9 +259,9 @@ typedef struct xl_hash_vacuum_one_page
 #define SizeOfHashVacuumOnePage \
 	(offsetof(xl_hash_vacuum_one_page, ntuples) + sizeof(int))
 
-extern void hash_redo(XLogReaderState *record);
-extern void hash_desc(StringInfo buf, XLogReaderState *record);
-extern const char *hash_identify(uint8 info);
-extern void hash_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void hash_redo(XLogReaderState *record);
+extern PGDLLIMPORT void hash_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *hash_identify(uint8 info);
+extern PGDLLIMPORT void hash_mask(char *pagedata, BlockNumber blkno);
 
 #endif							/* HASH_XLOG_H */

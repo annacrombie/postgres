@@ -67,34 +67,34 @@ typedef struct CopyToStateData *CopyToState;
 
 typedef int (*copy_data_source_cb) (void *outbuf, int minread, int maxread);
 
-extern void DoCopy(ParseState *state, const CopyStmt *stmt,
+extern PGDLLIMPORT void DoCopy(ParseState *state, const CopyStmt *stmt,
 				   int stmt_location, int stmt_len,
 				   uint64 *processed);
 
-extern void ProcessCopyOptions(ParseState *pstate, CopyFormatOptions *ops_out, bool is_from, List *options);
-extern CopyFromState BeginCopyFrom(ParseState *pstate, Relation rel, Node *whereClause,
+extern PGDLLIMPORT void ProcessCopyOptions(ParseState *pstate, CopyFormatOptions *ops_out, bool is_from, List *options);
+extern PGDLLIMPORT CopyFromState BeginCopyFrom(ParseState *pstate, Relation rel, Node *whereClause,
 								   const char *filename,
 								   bool is_program, copy_data_source_cb data_source_cb, List *attnamelist, List *options);
-extern void EndCopyFrom(CopyFromState cstate);
-extern bool NextCopyFrom(CopyFromState cstate, ExprContext *econtext,
+extern PGDLLIMPORT void EndCopyFrom(CopyFromState cstate);
+extern PGDLLIMPORT bool NextCopyFrom(CopyFromState cstate, ExprContext *econtext,
 						 Datum *values, bool *nulls);
-extern bool NextCopyFromRawFields(CopyFromState cstate,
+extern PGDLLIMPORT bool NextCopyFromRawFields(CopyFromState cstate,
 								  char ***fields, int *nfields);
-extern void CopyFromErrorCallback(void *arg);
+extern PGDLLIMPORT void CopyFromErrorCallback(void *arg);
 
-extern uint64 CopyFrom(CopyFromState cstate);
+extern PGDLLIMPORT uint64 CopyFrom(CopyFromState cstate);
 
-extern DestReceiver *CreateCopyDestReceiver(void);
+extern PGDLLIMPORT DestReceiver *CreateCopyDestReceiver(void);
 
 /*
  * internal prototypes
  */
-extern CopyToState BeginCopyTo(ParseState *pstate, Relation rel, RawStmt *query,
+extern PGDLLIMPORT CopyToState BeginCopyTo(ParseState *pstate, Relation rel, RawStmt *query,
 							   Oid queryRelId, const char *filename, bool is_program,
 							   List *attnamelist, List *options);
-extern void EndCopyTo(CopyToState cstate);
-extern uint64 DoCopyTo(CopyToState cstate);
-extern List *CopyGetAttnums(TupleDesc tupDesc, Relation rel,
+extern PGDLLIMPORT void EndCopyTo(CopyToState cstate);
+extern PGDLLIMPORT uint64 DoCopyTo(CopyToState cstate);
+extern PGDLLIMPORT List *CopyGetAttnums(TupleDesc tupDesc, Relation rel,
 							List *attnamelist);
 
 #endif							/* COPY_H */

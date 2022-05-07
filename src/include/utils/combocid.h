@@ -20,9 +20,9 @@
  * those functions replaced used to be.
  */
 
-extern void AtEOXact_ComboCid(void);
-extern void RestoreComboCIDState(char *comboCIDstate);
-extern void SerializeComboCIDState(Size maxsize, char *start_address);
-extern Size EstimateComboCIDStateSpace(void);
+extern PGDLLIMPORT void AtEOXact_ComboCid(void);
+extern PGDLLIMPORT void RestoreComboCIDState(char *comboCIDstate);
+extern PGDLLIMPORT void SerializeComboCIDState(Size maxsize, char *start_address);
+extern PGDLLIMPORT Size EstimateComboCIDStateSpace(void);
 
 #endif							/* COMBOCID_H */

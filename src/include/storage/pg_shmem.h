@@ -79,14 +79,14 @@ extern PGDLLIMPORT void *UsedShmemSegAddr;
 #endif
 
 #ifdef EXEC_BACKEND
-extern void PGSharedMemoryReAttach(void);
-extern void PGSharedMemoryNoReAttach(void);
+extern PGDLLIMPORT void PGSharedMemoryReAttach(void);
+extern PGDLLIMPORT void PGSharedMemoryNoReAttach(void);
 #endif
 
-extern PGShmemHeader *PGSharedMemoryCreate(Size size,
+extern PGDLLIMPORT PGShmemHeader *PGSharedMemoryCreate(Size size,
 										   PGShmemHeader **shim);
-extern bool PGSharedMemoryIsInUse(unsigned long id1, unsigned long id2);
-extern void PGSharedMemoryDetach(void);
-extern void GetHugePageSize(Size *hugepagesize, int *mmap_flags);
+extern PGDLLIMPORT bool PGSharedMemoryIsInUse(unsigned long id1, unsigned long id2);
+extern PGDLLIMPORT void PGSharedMemoryDetach(void);
+extern PGDLLIMPORT void GetHugePageSize(Size *hugepagesize, int *mmap_flags);
 
 #endif							/* PG_SHMEM_H */

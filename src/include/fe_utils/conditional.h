@@ -71,32 +71,32 @@ typedef struct ConditionalStackData
 typedef struct ConditionalStackData *ConditionalStack;
 
 
-extern ConditionalStack conditional_stack_create(void);
+extern PGDLLIMPORT ConditionalStack conditional_stack_create(void);
 
-extern void conditional_stack_reset(ConditionalStack cstack);
+extern PGDLLIMPORT void conditional_stack_reset(ConditionalStack cstack);
 
-extern void conditional_stack_destroy(ConditionalStack cstack);
+extern PGDLLIMPORT void conditional_stack_destroy(ConditionalStack cstack);
 
-extern int	conditional_stack_depth(ConditionalStack cstack);
+extern PGDLLIMPORT int	conditional_stack_depth(ConditionalStack cstack);
 
-extern void conditional_stack_push(ConditionalStack cstack, ifState new_state);
+extern PGDLLIMPORT void conditional_stack_push(ConditionalStack cstack, ifState new_state);
 
-extern bool conditional_stack_pop(ConditionalStack cstack);
+extern PGDLLIMPORT bool conditional_stack_pop(ConditionalStack cstack);
 
-extern ifState conditional_stack_peek(ConditionalStack cstack);
+extern PGDLLIMPORT ifState conditional_stack_peek(ConditionalStack cstack);
 
-extern bool conditional_stack_poke(ConditionalStack cstack, ifState new_state);
+extern PGDLLIMPORT bool conditional_stack_poke(ConditionalStack cstack, ifState new_state);
 
-extern bool conditional_stack_empty(ConditionalStack cstack);
+extern PGDLLIMPORT bool conditional_stack_empty(ConditionalStack cstack);
 
-extern bool conditional_active(ConditionalStack cstack);
+extern PGDLLIMPORT bool conditional_active(ConditionalStack cstack);
 
-extern void conditional_stack_set_query_len(ConditionalStack cstack, int len);
+extern PGDLLIMPORT void conditional_stack_set_query_len(ConditionalStack cstack, int len);
 
-extern int	conditional_stack_get_query_len(ConditionalStack cstack);
+extern PGDLLIMPORT int	conditional_stack_get_query_len(ConditionalStack cstack);
 
-extern void conditional_stack_set_paren_depth(ConditionalStack cstack, int depth);
+extern PGDLLIMPORT void conditional_stack_set_paren_depth(ConditionalStack cstack, int depth);
 
-extern int	conditional_stack_get_paren_depth(ConditionalStack cstack);
+extern PGDLLIMPORT int	conditional_stack_get_paren_depth(ConditionalStack cstack);
 
 #endif							/* CONDITIONAL_H */

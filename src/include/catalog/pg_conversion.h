@@ -65,11 +65,11 @@ DECLARE_UNIQUE_INDEX(pg_conversion_name_nsp_index, 2669, ConversionNameNspIndexI
 DECLARE_UNIQUE_INDEX_PKEY(pg_conversion_oid_index, 2670, ConversionOidIndexId, on pg_conversion using btree(oid oid_ops));
 
 
-extern ObjectAddress ConversionCreate(const char *conname, Oid connamespace,
+extern PGDLLIMPORT ObjectAddress ConversionCreate(const char *conname, Oid connamespace,
 									  Oid conowner,
 									  int32 conforencoding, int32 contoencoding,
 									  Oid conproc, bool def);
-extern Oid	FindDefaultConversion(Oid connamespace, int32 for_encoding,
+extern PGDLLIMPORT Oid	FindDefaultConversion(Oid connamespace, int32 for_encoding,
 								  int32 to_encoding);
 
 #endif							/* PG_CONVERSION_H */

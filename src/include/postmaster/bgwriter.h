@@ -27,19 +27,19 @@ extern PGDLLIMPORT int CheckPointTimeout;
 extern PGDLLIMPORT int CheckPointWarning;
 extern PGDLLIMPORT double CheckPointCompletionTarget;
 
-extern void BackgroundWriterMain(void) pg_attribute_noreturn();
-extern void CheckpointerMain(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void BackgroundWriterMain(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void CheckpointerMain(void) pg_attribute_noreturn();
 
-extern void RequestCheckpoint(int flags);
-extern void CheckpointWriteDelay(int flags, double progress);
+extern PGDLLIMPORT void RequestCheckpoint(int flags);
+extern PGDLLIMPORT void CheckpointWriteDelay(int flags, double progress);
 
-extern bool ForwardSyncRequest(const FileTag *ftag, SyncRequestType type);
+extern PGDLLIMPORT bool ForwardSyncRequest(const FileTag *ftag, SyncRequestType type);
 
-extern void AbsorbSyncRequests(void);
+extern PGDLLIMPORT void AbsorbSyncRequests(void);
 
-extern Size CheckpointerShmemSize(void);
-extern void CheckpointerShmemInit(void);
+extern PGDLLIMPORT Size CheckpointerShmemSize(void);
+extern PGDLLIMPORT void CheckpointerShmemInit(void);
 
-extern bool FirstCallSinceLastCheckpoint(void);
+extern PGDLLIMPORT bool FirstCallSinceLastCheckpoint(void);
 
 #endif							/* _BGWRITER_H */

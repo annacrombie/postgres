@@ -55,12 +55,12 @@ typedef struct FileTag
 	uint32		segno;
 } FileTag;
 
-extern void InitSync(void);
-extern void SyncPreCheckpoint(void);
-extern void SyncPostCheckpoint(void);
-extern void ProcessSyncRequests(void);
-extern void RememberSyncRequest(const FileTag *ftag, SyncRequestType type);
-extern bool RegisterSyncRequest(const FileTag *ftag, SyncRequestType type,
+extern PGDLLIMPORT void InitSync(void);
+extern PGDLLIMPORT void SyncPreCheckpoint(void);
+extern PGDLLIMPORT void SyncPostCheckpoint(void);
+extern PGDLLIMPORT void ProcessSyncRequests(void);
+extern PGDLLIMPORT void RememberSyncRequest(const FileTag *ftag, SyncRequestType type);
+extern PGDLLIMPORT bool RegisterSyncRequest(const FileTag *ftag, SyncRequestType type,
 								bool retryOnError);
 
 #endif							/* SYNC_H */

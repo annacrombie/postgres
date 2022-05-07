@@ -179,69 +179,69 @@ typedef struct local_relopts
 	((optstruct)->member == 0 ? NULL : \
 	 (char *)(optstruct) + (optstruct)->member)
 
-extern relopt_kind add_reloption_kind(void);
-extern void add_bool_reloption(bits32 kinds, const char *name, const char *desc,
+extern PGDLLIMPORT relopt_kind add_reloption_kind(void);
+extern PGDLLIMPORT void add_bool_reloption(bits32 kinds, const char *name, const char *desc,
 							   bool default_val, LOCKMODE lockmode);
-extern void add_int_reloption(bits32 kinds, const char *name, const char *desc,
+extern PGDLLIMPORT void add_int_reloption(bits32 kinds, const char *name, const char *desc,
 							  int default_val, int min_val, int max_val,
 							  LOCKMODE lockmode);
-extern void add_real_reloption(bits32 kinds, const char *name, const char *desc,
+extern PGDLLIMPORT void add_real_reloption(bits32 kinds, const char *name, const char *desc,
 							   double default_val, double min_val, double max_val,
 							   LOCKMODE lockmode);
-extern void add_enum_reloption(bits32 kinds, const char *name, const char *desc,
+extern PGDLLIMPORT void add_enum_reloption(bits32 kinds, const char *name, const char *desc,
 							   relopt_enum_elt_def *members, int default_val,
 							   const char *detailmsg, LOCKMODE lockmode);
-extern void add_string_reloption(bits32 kinds, const char *name, const char *desc,
+extern PGDLLIMPORT void add_string_reloption(bits32 kinds, const char *name, const char *desc,
 								 const char *default_val, validate_string_relopt validator,
 								 LOCKMODE lockmode);
 
-extern void init_local_reloptions(local_relopts *opts, Size relopt_struct_size);
-extern void register_reloptions_validator(local_relopts *opts,
+extern PGDLLIMPORT void init_local_reloptions(local_relopts *opts, Size relopt_struct_size);
+extern PGDLLIMPORT void register_reloptions_validator(local_relopts *opts,
 										  relopts_validator validator);
-extern void add_local_bool_reloption(local_relopts *opts, const char *name,
+extern PGDLLIMPORT void add_local_bool_reloption(local_relopts *opts, const char *name,
 									 const char *desc, bool default_val,
 									 int offset);
-extern void add_local_int_reloption(local_relopts *opts, const char *name,
+extern PGDLLIMPORT void add_local_int_reloption(local_relopts *opts, const char *name,
 									const char *desc, int default_val,
 									int min_val, int max_val, int offset);
-extern void add_local_real_reloption(local_relopts *opts, const char *name,
+extern PGDLLIMPORT void add_local_real_reloption(local_relopts *opts, const char *name,
 									 const char *desc, double default_val,
 									 double min_val, double max_val,
 									 int offset);
-extern void add_local_enum_reloption(local_relopts *relopts,
+extern PGDLLIMPORT void add_local_enum_reloption(local_relopts *relopts,
 									 const char *name, const char *desc,
 									 relopt_enum_elt_def *members,
 									 int default_val, const char *detailmsg,
 									 int offset);
-extern void add_local_string_reloption(local_relopts *opts, const char *name,
+extern PGDLLIMPORT void add_local_string_reloption(local_relopts *opts, const char *name,
 									   const char *desc,
 									   const char *default_val,
 									   validate_string_relopt validator,
 									   fill_string_relopt filler, int offset);
 
-extern Datum transformRelOptions(Datum oldOptions, List *defList,
+extern PGDLLIMPORT Datum transformRelOptions(Datum oldOptions, List *defList,
 								 const char *namspace, char *validnsps[],
 								 bool acceptOidsOff, bool isReset);
-extern List *untransformRelOptions(Datum options);
-extern bytea *extractRelOptions(HeapTuple tuple, TupleDesc tupdesc,
+extern PGDLLIMPORT List *untransformRelOptions(Datum options);
+extern PGDLLIMPORT bytea *extractRelOptions(HeapTuple tuple, TupleDesc tupdesc,
 								amoptions_function amoptions);
-extern void *build_reloptions(Datum reloptions, bool validate,
+extern PGDLLIMPORT void *build_reloptions(Datum reloptions, bool validate,
 							  relopt_kind kind,
 							  Size relopt_struct_size,
 							  const relopt_parse_elt *relopt_elems,
 							  int num_relopt_elems);
-extern void *build_local_reloptions(local_relopts *relopts, Datum options,
+extern PGDLLIMPORT void *build_local_reloptions(local_relopts *relopts, Datum options,
 									bool validate);
 
-extern bytea *default_reloptions(Datum reloptions, bool validate,
+extern PGDLLIMPORT bytea *default_reloptions(Datum reloptions, bool validate,
 								 relopt_kind kind);
-extern bytea *heap_reloptions(char relkind, Datum reloptions, bool validate);
-extern bytea *view_reloptions(Datum reloptions, bool validate);
-extern bytea *partitioned_table_reloptions(Datum reloptions, bool validate);
-extern bytea *index_reloptions(amoptions_function amoptions, Datum reloptions,
+extern PGDLLIMPORT bytea *heap_reloptions(char relkind, Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *view_reloptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *partitioned_table_reloptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *index_reloptions(amoptions_function amoptions, Datum reloptions,
 							   bool validate);
-extern bytea *attribute_reloptions(Datum reloptions, bool validate);
-extern bytea *tablespace_reloptions(Datum reloptions, bool validate);
-extern LOCKMODE AlterTableGetRelOptionsLockLevel(List *defList);
+extern PGDLLIMPORT bytea *attribute_reloptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *tablespace_reloptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT LOCKMODE AlterTableGetRelOptionsLockLevel(List *defList);
 
 #endif							/* RELOPTIONS_H */

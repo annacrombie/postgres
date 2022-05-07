@@ -19,29 +19,29 @@
 
 extern PGDLLIMPORT bool track_commit_timestamp;
 
-extern void TransactionTreeSetCommitTsData(TransactionId xid, int nsubxids,
+extern PGDLLIMPORT void TransactionTreeSetCommitTsData(TransactionId xid, int nsubxids,
 										   TransactionId *subxids, TimestampTz timestamp,
 										   RepOriginId nodeid);
-extern bool TransactionIdGetCommitTsData(TransactionId xid,
+extern PGDLLIMPORT bool TransactionIdGetCommitTsData(TransactionId xid,
 										 TimestampTz *ts, RepOriginId *nodeid);
-extern TransactionId GetLatestCommitTsData(TimestampTz *ts,
+extern PGDLLIMPORT TransactionId GetLatestCommitTsData(TimestampTz *ts,
 										   RepOriginId *nodeid);
 
-extern Size CommitTsShmemBuffers(void);
-extern Size CommitTsShmemSize(void);
-extern void CommitTsShmemInit(void);
-extern void BootStrapCommitTs(void);
-extern void StartupCommitTs(void);
-extern void CommitTsParameterChange(bool newvalue, bool oldvalue);
-extern void CompleteCommitTsInitialization(void);
-extern void CheckPointCommitTs(void);
-extern void ExtendCommitTs(TransactionId newestXact);
-extern void TruncateCommitTs(TransactionId oldestXact);
-extern void SetCommitTsLimit(TransactionId oldestXact,
+extern PGDLLIMPORT Size CommitTsShmemBuffers(void);
+extern PGDLLIMPORT Size CommitTsShmemSize(void);
+extern PGDLLIMPORT void CommitTsShmemInit(void);
+extern PGDLLIMPORT void BootStrapCommitTs(void);
+extern PGDLLIMPORT void StartupCommitTs(void);
+extern PGDLLIMPORT void CommitTsParameterChange(bool newvalue, bool oldvalue);
+extern PGDLLIMPORT void CompleteCommitTsInitialization(void);
+extern PGDLLIMPORT void CheckPointCommitTs(void);
+extern PGDLLIMPORT void ExtendCommitTs(TransactionId newestXact);
+extern PGDLLIMPORT void TruncateCommitTs(TransactionId oldestXact);
+extern PGDLLIMPORT void SetCommitTsLimit(TransactionId oldestXact,
 							 TransactionId newestXact);
-extern void AdvanceOldestCommitTsXid(TransactionId oldestXact);
+extern PGDLLIMPORT void AdvanceOldestCommitTsXid(TransactionId oldestXact);
 
-extern int	committssyncfiletag(const FileTag *ftag, char *path);
+extern PGDLLIMPORT int	committssyncfiletag(const FileTag *ftag, char *path);
 
 /* XLOG stuff */
 #define COMMIT_TS_ZEROPAGE		0x00
@@ -67,8 +67,8 @@ typedef struct xl_commit_ts_truncate
 #define SizeOfCommitTsTruncate	(offsetof(xl_commit_ts_truncate, oldestXid) + \
 								 sizeof(TransactionId))
 
-extern void commit_ts_redo(XLogReaderState *record);
-extern void commit_ts_desc(StringInfo buf, XLogReaderState *record);
-extern const char *commit_ts_identify(uint8 info);
+extern PGDLLIMPORT void commit_ts_redo(XLogReaderState *record);
+extern PGDLLIMPORT void commit_ts_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *commit_ts_identify(uint8 info);
 
 #endif							/* COMMIT_TS_H */

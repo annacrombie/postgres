@@ -22,14 +22,14 @@
 typedef struct PartitionDispatchData *PartitionDispatch;
 typedef struct PartitionTupleRouting PartitionTupleRouting;
 
-extern PartitionTupleRouting *ExecSetupPartitionTupleRouting(EState *estate,
+extern PGDLLIMPORT PartitionTupleRouting *ExecSetupPartitionTupleRouting(EState *estate,
 															 Relation rel);
-extern ResultRelInfo *ExecFindPartition(ModifyTableState *mtstate,
+extern PGDLLIMPORT ResultRelInfo *ExecFindPartition(ModifyTableState *mtstate,
 										ResultRelInfo *rootResultRelInfo,
 										PartitionTupleRouting *proute,
 										TupleTableSlot *slot,
 										EState *estate);
-extern void ExecCleanupTupleRouting(ModifyTableState *mtstate,
+extern PGDLLIMPORT void ExecCleanupTupleRouting(ModifyTableState *mtstate,
 									PartitionTupleRouting *proute);
 
 
@@ -121,11 +121,11 @@ typedef struct PartitionPruneState
 	PartitionPruningData *partprunedata[FLEXIBLE_ARRAY_MEMBER];
 } PartitionPruneState;
 
-extern PartitionPruneState *ExecInitPartitionPruning(PlanState *planstate,
+extern PGDLLIMPORT PartitionPruneState *ExecInitPartitionPruning(PlanState *planstate,
 													 int n_total_subplans,
 													 PartitionPruneInfo *pruneinfo,
 													 Bitmapset **initially_valid_subplans);
-extern Bitmapset *ExecFindMatchingSubPlans(PartitionPruneState *prunestate,
+extern PGDLLIMPORT Bitmapset *ExecFindMatchingSubPlans(PartitionPruneState *prunestate,
 										   bool initial_prune);
 
 #endif							/* EXECPARTITION_H */

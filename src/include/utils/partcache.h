@@ -47,9 +47,9 @@ typedef struct PartitionKeyData
 }			PartitionKeyData;
 
 
-extern PartitionKey RelationGetPartitionKey(Relation rel);
-extern List *RelationGetPartitionQual(Relation rel);
-extern Expr *get_partition_qual_relid(Oid relid);
+extern PGDLLIMPORT PartitionKey RelationGetPartitionKey(Relation rel);
+extern PGDLLIMPORT List *RelationGetPartitionQual(Relation rel);
+extern PGDLLIMPORT Expr *get_partition_qual_relid(Oid relid);
 
 /*
  * PartitionKey inquiry functions

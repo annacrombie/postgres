@@ -35,20 +35,20 @@ typedef struct backup_manifest_info
 	bool		still_checksumming;
 } backup_manifest_info;
 
-extern void InitializeBackupManifest(backup_manifest_info *manifest,
+extern PGDLLIMPORT void InitializeBackupManifest(backup_manifest_info *manifest,
 									 backup_manifest_option want_manifest,
 									 pg_checksum_type manifest_checksum_type);
-extern void AddFileToBackupManifest(backup_manifest_info *manifest,
+extern PGDLLIMPORT void AddFileToBackupManifest(backup_manifest_info *manifest,
 									const char *spcoid,
 									const char *pathname, size_t size,
 									pg_time_t mtime,
 									pg_checksum_context *checksum_ctx);
-extern void AddWALInfoToBackupManifest(backup_manifest_info *manifest,
+extern PGDLLIMPORT void AddWALInfoToBackupManifest(backup_manifest_info *manifest,
 									   XLogRecPtr startptr,
 									   TimeLineID starttli, XLogRecPtr endptr,
 									   TimeLineID endtli);
 
-extern void SendBackupManifest(backup_manifest_info *manifest, bbsink *sink);
-extern void FreeBackupManifest(backup_manifest_info *manifest);
+extern PGDLLIMPORT void SendBackupManifest(backup_manifest_info *manifest, bbsink *sink);
+extern PGDLLIMPORT void FreeBackupManifest(backup_manifest_info *manifest);
 
 #endif

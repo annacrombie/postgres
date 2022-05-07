@@ -19,23 +19,23 @@
 struct AttrMap;					/* avoid including attmap.h here */
 
 
-extern List *transformCreateStmt(CreateStmt *stmt, const char *queryString);
-extern AlterTableStmt *transformAlterTableStmt(Oid relid, AlterTableStmt *stmt,
+extern PGDLLIMPORT List *transformCreateStmt(CreateStmt *stmt, const char *queryString);
+extern PGDLLIMPORT AlterTableStmt *transformAlterTableStmt(Oid relid, AlterTableStmt *stmt,
 											   const char *queryString,
 											   List **beforeStmts,
 											   List **afterStmts);
-extern IndexStmt *transformIndexStmt(Oid relid, IndexStmt *stmt,
+extern PGDLLIMPORT IndexStmt *transformIndexStmt(Oid relid, IndexStmt *stmt,
 									 const char *queryString);
-extern CreateStatsStmt *transformStatsStmt(Oid relid, CreateStatsStmt *stmt,
+extern PGDLLIMPORT CreateStatsStmt *transformStatsStmt(Oid relid, CreateStatsStmt *stmt,
 										   const char *queryString);
-extern void transformRuleStmt(RuleStmt *stmt, const char *queryString,
+extern PGDLLIMPORT void transformRuleStmt(RuleStmt *stmt, const char *queryString,
 							  List **actions, Node **whereClause);
-extern List *transformCreateSchemaStmt(CreateSchemaStmt *stmt);
-extern PartitionBoundSpec *transformPartitionBound(ParseState *pstate, Relation parent,
+extern PGDLLIMPORT List *transformCreateSchemaStmt(CreateSchemaStmt *stmt);
+extern PGDLLIMPORT PartitionBoundSpec *transformPartitionBound(ParseState *pstate, Relation parent,
 												   PartitionBoundSpec *spec);
-extern List *expandTableLikeClause(RangeVar *heapRel,
+extern PGDLLIMPORT List *expandTableLikeClause(RangeVar *heapRel,
 								   TableLikeClause *table_like_clause);
-extern IndexStmt *generateClonedIndexStmt(RangeVar *heapRel,
+extern PGDLLIMPORT IndexStmt *generateClonedIndexStmt(RangeVar *heapRel,
 										  Relation source_idx,
 										  const struct AttrMap *attmap,
 										  Oid *constraintOid);

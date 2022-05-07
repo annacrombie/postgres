@@ -77,11 +77,11 @@ extern PGDLLIMPORT bool reachedConsistency;
 /* Are we currently in standby mode? */
 extern PGDLLIMPORT bool StandbyMode;
 
-extern Size XLogRecoveryShmemSize(void);
-extern void XLogRecoveryShmemInit(void);
+extern PGDLLIMPORT Size XLogRecoveryShmemSize(void);
+extern PGDLLIMPORT void XLogRecoveryShmemInit(void);
 
-extern void InitWalRecovery(ControlFileData *ControlFile, bool *wasShutdownPtr, bool *haveBackupLabel, bool *haveTblspcMap);
-extern void PerformWalRecovery(void);
+extern PGDLLIMPORT void InitWalRecovery(ControlFileData *ControlFile, bool *wasShutdownPtr, bool *haveBackupLabel, bool *haveTblspcMap);
+extern PGDLLIMPORT void PerformWalRecovery(void);
 
 /*
  * FinishWalRecovery() returns this.  It contains information about the point
@@ -130,28 +130,28 @@ typedef struct
 	bool		recovery_signal_file_found;
 } EndOfWalRecoveryInfo;
 
-extern EndOfWalRecoveryInfo *FinishWalRecovery(void);
-extern void ShutdownWalRecovery(void);
-extern void RemovePromoteSignalFiles(void);
+extern PGDLLIMPORT EndOfWalRecoveryInfo *FinishWalRecovery(void);
+extern PGDLLIMPORT void ShutdownWalRecovery(void);
+extern PGDLLIMPORT void RemovePromoteSignalFiles(void);
 
-extern bool HotStandbyActive(void);
-extern XLogRecPtr GetXLogReplayRecPtr(TimeLineID *replayTLI);
-extern RecoveryPauseState GetRecoveryPauseState(void);
-extern void SetRecoveryPause(bool recoveryPause);
-extern void GetXLogReceiptTime(TimestampTz *rtime, bool *fromStream);
-extern TimestampTz GetLatestXTime(void);
-extern TimestampTz GetCurrentChunkReplayStartTime(void);
-extern XLogRecPtr GetCurrentReplayRecPtr(TimeLineID *replayEndTLI);
+extern PGDLLIMPORT bool HotStandbyActive(void);
+extern PGDLLIMPORT XLogRecPtr GetXLogReplayRecPtr(TimeLineID *replayTLI);
+extern PGDLLIMPORT RecoveryPauseState GetRecoveryPauseState(void);
+extern PGDLLIMPORT void SetRecoveryPause(bool recoveryPause);
+extern PGDLLIMPORT void GetXLogReceiptTime(TimestampTz *rtime, bool *fromStream);
+extern PGDLLIMPORT TimestampTz GetLatestXTime(void);
+extern PGDLLIMPORT TimestampTz GetCurrentChunkReplayStartTime(void);
+extern PGDLLIMPORT XLogRecPtr GetCurrentReplayRecPtr(TimeLineID *replayEndTLI);
 
-extern bool PromoteIsTriggered(void);
-extern bool CheckPromoteSignal(void);
-extern void WakeupRecovery(void);
+extern PGDLLIMPORT bool PromoteIsTriggered(void);
+extern PGDLLIMPORT bool CheckPromoteSignal(void);
+extern PGDLLIMPORT void WakeupRecovery(void);
 
-extern void StartupRequestWalReceiverRestart(void);
-extern void XLogRequestWalReceiverReply(void);
+extern PGDLLIMPORT void StartupRequestWalReceiverRestart(void);
+extern PGDLLIMPORT void XLogRequestWalReceiverReply(void);
 
-extern void RecoveryRequiresIntParameter(const char *param_name, int currValue, int minValue);
+extern PGDLLIMPORT void RecoveryRequiresIntParameter(const char *param_name, int currValue, int minValue);
 
-extern void xlog_outdesc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT void xlog_outdesc(StringInfo buf, XLogReaderState *record);
 
 #endif							/* XLOGRECOVERY_H */

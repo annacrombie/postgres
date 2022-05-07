@@ -34,13 +34,13 @@ typedef struct pg_compress_specification
 	char	   *parse_error;	/* NULL if parsing was OK, else message */
 } pg_compress_specification;
 
-extern bool parse_compress_algorithm(char *name, pg_compress_algorithm *algorithm);
-extern const char *get_compress_algorithm_name(pg_compress_algorithm algorithm);
+extern PGDLLIMPORT bool parse_compress_algorithm(char *name, pg_compress_algorithm *algorithm);
+extern PGDLLIMPORT const char *get_compress_algorithm_name(pg_compress_algorithm algorithm);
 
-extern void parse_compress_specification(pg_compress_algorithm algorithm,
+extern PGDLLIMPORT void parse_compress_specification(pg_compress_algorithm algorithm,
 										 char *specification,
 										 pg_compress_specification *result);
 
-extern char *validate_compress_specification(pg_compress_specification *);
+extern PGDLLIMPORT char *validate_compress_specification(pg_compress_specification *);
 
 #endif

@@ -53,7 +53,7 @@ typedef struct ValidateIndexState
 				tups_inserted;
 } ValidateIndexState;
 
-extern void index_check_primary_key(Relation heapRel,
+extern PGDLLIMPORT void index_check_primary_key(Relation heapRel,
 									IndexInfo *indexInfo,
 									bool is_alter_table,
 									IndexStmt *stmt);
@@ -66,7 +66,7 @@ extern void index_check_primary_key(Relation heapRel,
 #define	INDEX_CREATE_PARTITIONED			(1 << 5)
 #define INDEX_CREATE_INVALID				(1 << 6)
 
-extern Oid	index_create(Relation heapRelation,
+extern PGDLLIMPORT Oid	index_create(Relation heapRelation,
 						 const char *indexRelationName,
 						 Oid indexRelationId,
 						 Oid parentIndexRelid,
@@ -92,22 +92,22 @@ extern Oid	index_create(Relation heapRelation,
 #define	INDEX_CONSTR_CREATE_UPDATE_INDEX	(1 << 3)
 #define	INDEX_CONSTR_CREATE_REMOVE_OLD_DEPS	(1 << 4)
 
-extern Oid	index_concurrently_create_copy(Relation heapRelation,
+extern PGDLLIMPORT Oid	index_concurrently_create_copy(Relation heapRelation,
 										   Oid oldIndexId,
 										   Oid tablespaceOid,
 										   const char *newName);
 
-extern void index_concurrently_build(Oid heapRelationId,
+extern PGDLLIMPORT void index_concurrently_build(Oid heapRelationId,
 									 Oid indexRelationId);
 
-extern void index_concurrently_swap(Oid newIndexId,
+extern PGDLLIMPORT void index_concurrently_swap(Oid newIndexId,
 									Oid oldIndexId,
 									const char *oldName);
 
-extern void index_concurrently_set_dead(Oid heapId,
+extern PGDLLIMPORT void index_concurrently_set_dead(Oid heapId,
 										Oid indexId);
 
-extern ObjectAddress index_constraint_create(Relation heapRelation,
+extern PGDLLIMPORT ObjectAddress index_constraint_create(Relation heapRelation,
 											 Oid indexRelationId,
 											 Oid parentConstraintId,
 											 IndexInfo *indexInfo,
@@ -117,38 +117,38 @@ extern ObjectAddress index_constraint_create(Relation heapRelation,
 											 bool allow_system_table_mods,
 											 bool is_internal);
 
-extern void index_drop(Oid indexId, bool concurrent, bool concurrent_lock_mode);
+extern PGDLLIMPORT void index_drop(Oid indexId, bool concurrent, bool concurrent_lock_mode);
 
-extern IndexInfo *BuildIndexInfo(Relation index);
+extern PGDLLIMPORT IndexInfo *BuildIndexInfo(Relation index);
 
-extern IndexInfo *BuildDummyIndexInfo(Relation index);
+extern PGDLLIMPORT IndexInfo *BuildDummyIndexInfo(Relation index);
 
-extern bool CompareIndexInfo(IndexInfo *info1, IndexInfo *info2,
+extern PGDLLIMPORT bool CompareIndexInfo(IndexInfo *info1, IndexInfo *info2,
 							 Oid *collations1, Oid *collations2,
 							 Oid *opfamilies1, Oid *opfamilies2,
 							 AttrMap *attmap);
 
-extern void BuildSpeculativeIndexInfo(Relation index, IndexInfo *ii);
+extern PGDLLIMPORT void BuildSpeculativeIndexInfo(Relation index, IndexInfo *ii);
 
-extern void FormIndexDatum(IndexInfo *indexInfo,
+extern PGDLLIMPORT void FormIndexDatum(IndexInfo *indexInfo,
 						   TupleTableSlot *slot,
 						   EState *estate,
 						   Datum *values,
 						   bool *isnull);
 
-extern void index_build(Relation heapRelation,
+extern PGDLLIMPORT void index_build(Relation heapRelation,
 						Relation indexRelation,
 						IndexInfo *indexInfo,
 						bool isreindex,
 						bool parallel);
 
-extern void validate_index(Oid heapId, Oid indexId, Snapshot snapshot);
+extern PGDLLIMPORT void validate_index(Oid heapId, Oid indexId, Snapshot snapshot);
 
-extern void index_set_state_flags(Oid indexId, IndexStateFlagsAction action);
+extern PGDLLIMPORT void index_set_state_flags(Oid indexId, IndexStateFlagsAction action);
 
-extern Oid	IndexGetRelation(Oid indexId, bool missing_ok);
+extern PGDLLIMPORT Oid	IndexGetRelation(Oid indexId, bool missing_ok);
 
-extern void reindex_index(Oid indexId, bool skip_constraint_checks,
+extern PGDLLIMPORT void reindex_index(Oid indexId, bool skip_constraint_checks,
 						  char relpersistence, ReindexParams *params);
 
 /* Flag bits for reindex_relation(): */
@@ -158,17 +158,17 @@ extern void reindex_index(Oid indexId, bool skip_constraint_checks,
 #define REINDEX_REL_FORCE_INDEXES_UNLOGGED	0x08
 #define REINDEX_REL_FORCE_INDEXES_PERMANENT 0x10
 
-extern bool reindex_relation(Oid relid, int flags, ReindexParams *params);
+extern PGDLLIMPORT bool reindex_relation(Oid relid, int flags, ReindexParams *params);
 
-extern bool ReindexIsProcessingHeap(Oid heapOid);
-extern bool ReindexIsProcessingIndex(Oid indexOid);
+extern PGDLLIMPORT bool ReindexIsProcessingHeap(Oid heapOid);
+extern PGDLLIMPORT bool ReindexIsProcessingIndex(Oid indexOid);
 
-extern void ResetReindexState(int nestLevel);
-extern Size EstimateReindexStateSpace(void);
-extern void SerializeReindexState(Size maxsize, char *start_address);
-extern void RestoreReindexState(void *reindexstate);
+extern PGDLLIMPORT void ResetReindexState(int nestLevel);
+extern PGDLLIMPORT Size EstimateReindexStateSpace(void);
+extern PGDLLIMPORT void SerializeReindexState(Size maxsize, char *start_address);
+extern PGDLLIMPORT void RestoreReindexState(void *reindexstate);
 
-extern void IndexSetParentIndex(Relation idx, Oid parentOid);
+extern PGDLLIMPORT void IndexSetParentIndex(Relation idx, Oid parentOid);
 
 
 /*

@@ -64,7 +64,7 @@ typedef struct
 /*
  * Common useful things for tsearch subsystem
  */
-extern char *get_tsearch_config_filename(const char *basename,
+extern PGDLLIMPORT char *get_tsearch_config_filename(const char *basename,
 										 const char *extension);
 
 /*
@@ -76,9 +76,9 @@ typedef struct
 	char	  **stop;
 } StopList;
 
-extern void readstoplist(const char *fname, StopList *s,
+extern PGDLLIMPORT void readstoplist(const char *fname, StopList *s,
 						 char *(*wordop) (const char *));
-extern bool searchstoplist(StopList *s, char *key);
+extern PGDLLIMPORT bool searchstoplist(StopList *s, char *key);
 
 /*
  * Interface with dictionaries

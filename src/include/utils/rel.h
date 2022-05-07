@@ -690,7 +690,7 @@ RelationGetSmgr(Relation rel)
 	 !IsCatalogRelation(relation))
 
 /* routines in utils/cache/relcache.c */
-extern void RelationIncrementReferenceCount(Relation rel);
-extern void RelationDecrementReferenceCount(Relation rel);
+extern PGDLLIMPORT void RelationIncrementReferenceCount(Relation rel);
+extern PGDLLIMPORT void RelationDecrementReferenceCount(Relation rel);
 
 #endif							/* REL_H */

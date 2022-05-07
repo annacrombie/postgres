@@ -15,6 +15,6 @@
 
 #include "lib/stringinfo.h"
 
-extern void HandleFunctionRequest(StringInfo msgBuf);
+extern PGDLLIMPORT void HandleFunctionRequest(StringInfo msgBuf);
 
 #endif							/* FASTPATH_H */

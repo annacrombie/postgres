@@ -86,7 +86,7 @@ DECLARE_UNIQUE_INDEX_PKEY(pg_operator_oid_index, 2688, OperatorOidIndexId, on pg
 DECLARE_UNIQUE_INDEX(pg_operator_oprname_l_r_n_index, 2689, OperatorNameNspIndexId, on pg_operator using btree(oprname name_ops, oprleft oid_ops, oprright oid_ops, oprnamespace oid_ops));
 
 
-extern ObjectAddress OperatorCreate(const char *operatorName,
+extern PGDLLIMPORT ObjectAddress OperatorCreate(const char *operatorName,
 									Oid operatorNamespace,
 									Oid leftTypeId,
 									Oid rightTypeId,
@@ -98,10 +98,10 @@ extern ObjectAddress OperatorCreate(const char *operatorName,
 									bool canMerge,
 									bool canHash);
 
-extern ObjectAddress makeOperatorDependencies(HeapTuple tuple,
+extern PGDLLIMPORT ObjectAddress makeOperatorDependencies(HeapTuple tuple,
 											  bool makeExtensionDep,
 											  bool isUpdate);
 
-extern void OperatorUpd(Oid baseId, Oid commId, Oid negId, bool isDelete);
+extern PGDLLIMPORT void OperatorUpd(Oid baseId, Oid commId, Oid negId, bool isDelete);
 
 #endif							/* PG_OPERATOR_H */

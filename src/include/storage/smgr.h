@@ -77,33 +77,33 @@ typedef SMgrRelationData *SMgrRelation;
 #define SmgrIsTemp(smgr) \
 	RelFileNodeBackendIsTemp((smgr)->smgr_rnode)
 
-extern void smgrinit(void);
-extern SMgrRelation smgropen(RelFileNode rnode, BackendId backend);
-extern bool smgrexists(SMgrRelation reln, ForkNumber forknum);
-extern void smgrsetowner(SMgrRelation *owner, SMgrRelation reln);
-extern void smgrclearowner(SMgrRelation *owner, SMgrRelation reln);
-extern void smgrclose(SMgrRelation reln);
-extern void smgrcloseall(void);
-extern void smgrclosenode(RelFileNodeBackend rnode);
-extern void smgrcreate(SMgrRelation reln, ForkNumber forknum, bool isRedo);
-extern void smgrdosyncall(SMgrRelation *rels, int nrels);
-extern void smgrdounlinkall(SMgrRelation *rels, int nrels, bool isRedo);
-extern void smgrextend(SMgrRelation reln, ForkNumber forknum,
+extern PGDLLIMPORT void smgrinit(void);
+extern PGDLLIMPORT SMgrRelation smgropen(RelFileNode rnode, BackendId backend);
+extern PGDLLIMPORT bool smgrexists(SMgrRelation reln, ForkNumber forknum);
+extern PGDLLIMPORT void smgrsetowner(SMgrRelation *owner, SMgrRelation reln);
+extern PGDLLIMPORT void smgrclearowner(SMgrRelation *owner, SMgrRelation reln);
+extern PGDLLIMPORT void smgrclose(SMgrRelation reln);
+extern PGDLLIMPORT void smgrcloseall(void);
+extern PGDLLIMPORT void smgrclosenode(RelFileNodeBackend rnode);
+extern PGDLLIMPORT void smgrcreate(SMgrRelation reln, ForkNumber forknum, bool isRedo);
+extern PGDLLIMPORT void smgrdosyncall(SMgrRelation *rels, int nrels);
+extern PGDLLIMPORT void smgrdounlinkall(SMgrRelation *rels, int nrels, bool isRedo);
+extern PGDLLIMPORT void smgrextend(SMgrRelation reln, ForkNumber forknum,
 					   BlockNumber blocknum, char *buffer, bool skipFsync);
-extern bool smgrprefetch(SMgrRelation reln, ForkNumber forknum,
+extern PGDLLIMPORT bool smgrprefetch(SMgrRelation reln, ForkNumber forknum,
 						 BlockNumber blocknum);
-extern void smgrread(SMgrRelation reln, ForkNumber forknum,
+extern PGDLLIMPORT void smgrread(SMgrRelation reln, ForkNumber forknum,
 					 BlockNumber blocknum, char *buffer);
-extern void smgrwrite(SMgrRelation reln, ForkNumber forknum,
+extern PGDLLIMPORT void smgrwrite(SMgrRelation reln, ForkNumber forknum,
 					  BlockNumber blocknum, char *buffer, bool skipFsync);
-extern void smgrwriteback(SMgrRelation reln, ForkNumber forknum,
+extern PGDLLIMPORT void smgrwriteback(SMgrRelation reln, ForkNumber forknum,
 						  BlockNumber blocknum, BlockNumber nblocks);
-extern BlockNumber smgrnblocks(SMgrRelation reln, ForkNumber forknum);
-extern BlockNumber smgrnblocks_cached(SMgrRelation reln, ForkNumber forknum);
-extern void smgrtruncate(SMgrRelation reln, ForkNumber *forknum,
+extern PGDLLIMPORT BlockNumber smgrnblocks(SMgrRelation reln, ForkNumber forknum);
+extern PGDLLIMPORT BlockNumber smgrnblocks_cached(SMgrRelation reln, ForkNumber forknum);
+extern PGDLLIMPORT void smgrtruncate(SMgrRelation reln, ForkNumber *forknum,
 						 int nforks, BlockNumber *nblocks);
-extern void smgrimmedsync(SMgrRelation reln, ForkNumber forknum);
-extern void AtEOXact_SMgr(void);
-extern bool ProcessBarrierSmgrRelease(void);
+extern PGDLLIMPORT void smgrimmedsync(SMgrRelation reln, ForkNumber forknum);
+extern PGDLLIMPORT void AtEOXact_SMgr(void);
+extern PGDLLIMPORT bool ProcessBarrierSmgrRelease(void);
 
 #endif							/* SMGR_H */

@@ -17,14 +17,14 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern AppendState *ExecInitAppend(Append *node, EState *estate, int eflags);
-extern void ExecEndAppend(AppendState *node);
-extern void ExecReScanAppend(AppendState *node);
-extern void ExecAppendEstimate(AppendState *node, ParallelContext *pcxt);
-extern void ExecAppendInitializeDSM(AppendState *node, ParallelContext *pcxt);
-extern void ExecAppendReInitializeDSM(AppendState *node, ParallelContext *pcxt);
-extern void ExecAppendInitializeWorker(AppendState *node, ParallelWorkerContext *pwcxt);
+extern PGDLLIMPORT AppendState *ExecInitAppend(Append *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndAppend(AppendState *node);
+extern PGDLLIMPORT void ExecReScanAppend(AppendState *node);
+extern PGDLLIMPORT void ExecAppendEstimate(AppendState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecAppendInitializeDSM(AppendState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecAppendReInitializeDSM(AppendState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecAppendInitializeWorker(AppendState *node, ParallelWorkerContext *pwcxt);
 
-extern void ExecAsyncAppendResponse(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncAppendResponse(AsyncRequest *areq);
 
 #endif							/* NODEAPPEND_H */

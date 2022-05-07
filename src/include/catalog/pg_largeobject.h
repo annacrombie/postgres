@@ -46,8 +46,8 @@ typedef FormData_pg_largeobject *Form_pg_largeobject;
 
 DECLARE_UNIQUE_INDEX_PKEY(pg_largeobject_loid_pn_index, 2683, LargeObjectLOidPNIndexId, on pg_largeobject using btree(loid oid_ops, pageno int4_ops));
 
-extern Oid	LargeObjectCreate(Oid loid);
-extern void LargeObjectDrop(Oid loid);
-extern bool LargeObjectExists(Oid loid);
+extern PGDLLIMPORT Oid	LargeObjectCreate(Oid loid);
+extern PGDLLIMPORT void LargeObjectDrop(Oid loid);
+extern PGDLLIMPORT bool LargeObjectExists(Oid loid);
 
 #endif							/* PG_LARGEOBJECT_H */

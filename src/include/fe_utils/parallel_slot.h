@@ -58,20 +58,20 @@ ParallelSlotClearHandler(ParallelSlot *slot)
 	slot->handler_context = NULL;
 }
 
-extern ParallelSlot *ParallelSlotsGetIdle(ParallelSlotArray *slots,
+extern PGDLLIMPORT ParallelSlot *ParallelSlotsGetIdle(ParallelSlotArray *slots,
 										  const char *dbname);
 
-extern ParallelSlotArray *ParallelSlotsSetup(int numslots, ConnParams *cparams,
+extern PGDLLIMPORT ParallelSlotArray *ParallelSlotsSetup(int numslots, ConnParams *cparams,
 											 const char *progname, bool echo,
 											 const char *initcmd);
 
-extern void ParallelSlotsAdoptConn(ParallelSlotArray *sa, PGconn *conn);
+extern PGDLLIMPORT void ParallelSlotsAdoptConn(ParallelSlotArray *sa, PGconn *conn);
 
-extern void ParallelSlotsTerminate(ParallelSlotArray *sa);
+extern PGDLLIMPORT void ParallelSlotsTerminate(ParallelSlotArray *sa);
 
-extern bool ParallelSlotsWaitCompletion(ParallelSlotArray *sa);
+extern PGDLLIMPORT bool ParallelSlotsWaitCompletion(ParallelSlotArray *sa);
 
-extern bool TableCommandResultHandler(PGresult *res, PGconn *conn,
+extern PGDLLIMPORT bool TableCommandResultHandler(PGresult *res, PGconn *conn,
 									  void *context);
 
 #endif							/* PARALLEL_SLOT_H */

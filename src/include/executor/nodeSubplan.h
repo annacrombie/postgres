@@ -16,14 +16,14 @@
 
 #include "nodes/execnodes.h"
 
-extern SubPlanState *ExecInitSubPlan(SubPlan *subplan, PlanState *parent);
+extern PGDLLIMPORT SubPlanState *ExecInitSubPlan(SubPlan *subplan, PlanState *parent);
 
-extern Datum ExecSubPlan(SubPlanState *node, ExprContext *econtext, bool *isNull);
+extern PGDLLIMPORT Datum ExecSubPlan(SubPlanState *node, ExprContext *econtext, bool *isNull);
 
-extern void ExecReScanSetParamPlan(SubPlanState *node, PlanState *parent);
+extern PGDLLIMPORT void ExecReScanSetParamPlan(SubPlanState *node, PlanState *parent);
 
-extern void ExecSetParamPlan(SubPlanState *node, ExprContext *econtext);
+extern PGDLLIMPORT void ExecSetParamPlan(SubPlanState *node, ExprContext *econtext);
 
-extern void ExecSetParamPlanMulti(const Bitmapset *params, ExprContext *econtext);
+extern PGDLLIMPORT void ExecSetParamPlanMulti(const Bitmapset *params, ExprContext *econtext);
 
 #endif							/* NODESUBPLAN_H */

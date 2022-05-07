@@ -84,7 +84,7 @@ collprovider_name(char c)
 #endif							/* EXPOSE_TO_CLIENT_CODE */
 
 
-extern Oid	CollationCreate(const char *collname, Oid collnamespace,
+extern PGDLLIMPORT Oid	CollationCreate(const char *collname, Oid collnamespace,
 							Oid collowner,
 							char collprovider,
 							bool collisdeterministic,

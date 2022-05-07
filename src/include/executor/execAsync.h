@@ -15,11 +15,11 @@
 
 #include "nodes/execnodes.h"
 
-extern void ExecAsyncRequest(AsyncRequest *areq);
-extern void ExecAsyncConfigureWait(AsyncRequest *areq);
-extern void ExecAsyncNotify(AsyncRequest *areq);
-extern void ExecAsyncResponse(AsyncRequest *areq);
-extern void ExecAsyncRequestDone(AsyncRequest *areq, TupleTableSlot *result);
-extern void ExecAsyncRequestPending(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncRequest(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncConfigureWait(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncNotify(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncResponse(AsyncRequest *areq);
+extern PGDLLIMPORT void ExecAsyncRequestDone(AsyncRequest *areq, TupleTableSlot *result);
+extern PGDLLIMPORT void ExecAsyncRequestPending(AsyncRequest *areq);
 
 #endif							/* EXECASYNC_H */

@@ -76,52 +76,52 @@ typedef const char *(*explain_get_index_name_hook_type) (Oid indexId);
 extern PGDLLIMPORT explain_get_index_name_hook_type explain_get_index_name_hook;
 
 
-extern void ExplainQuery(ParseState *pstate, ExplainStmt *stmt,
+extern PGDLLIMPORT void ExplainQuery(ParseState *pstate, ExplainStmt *stmt,
 						 ParamListInfo params, DestReceiver *dest);
 
-extern ExplainState *NewExplainState(void);
+extern PGDLLIMPORT ExplainState *NewExplainState(void);
 
-extern TupleDesc ExplainResultDesc(ExplainStmt *stmt);
+extern PGDLLIMPORT TupleDesc ExplainResultDesc(ExplainStmt *stmt);
 
-extern void ExplainOneUtility(Node *utilityStmt, IntoClause *into,
+extern PGDLLIMPORT void ExplainOneUtility(Node *utilityStmt, IntoClause *into,
 							  ExplainState *es, const char *queryString,
 							  ParamListInfo params, QueryEnvironment *queryEnv);
 
-extern void ExplainOnePlan(PlannedStmt *plannedstmt, IntoClause *into,
+extern PGDLLIMPORT void ExplainOnePlan(PlannedStmt *plannedstmt, IntoClause *into,
 						   ExplainState *es, const char *queryString,
 						   ParamListInfo params, QueryEnvironment *queryEnv,
 						   const instr_time *planduration,
 						   const BufferUsage *bufusage);
 
-extern void ExplainPrintPlan(ExplainState *es, QueryDesc *queryDesc);
-extern void ExplainPrintTriggers(ExplainState *es, QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExplainPrintPlan(ExplainState *es, QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExplainPrintTriggers(ExplainState *es, QueryDesc *queryDesc);
 
-extern void ExplainPrintJITSummary(ExplainState *es, QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExplainPrintJITSummary(ExplainState *es, QueryDesc *queryDesc);
 
-extern void ExplainQueryText(ExplainState *es, QueryDesc *queryDesc);
+extern PGDLLIMPORT void ExplainQueryText(ExplainState *es, QueryDesc *queryDesc);
 
-extern void ExplainBeginOutput(ExplainState *es);
-extern void ExplainEndOutput(ExplainState *es);
-extern void ExplainSeparatePlans(ExplainState *es);
+extern PGDLLIMPORT void ExplainBeginOutput(ExplainState *es);
+extern PGDLLIMPORT void ExplainEndOutput(ExplainState *es);
+extern PGDLLIMPORT void ExplainSeparatePlans(ExplainState *es);
 
-extern void ExplainPropertyList(const char *qlabel, List *data,
+extern PGDLLIMPORT void ExplainPropertyList(const char *qlabel, List *data,
 								ExplainState *es);
-extern void ExplainPropertyListNested(const char *qlabel, List *data,
+extern PGDLLIMPORT void ExplainPropertyListNested(const char *qlabel, List *data,
 									  ExplainState *es);
-extern void ExplainPropertyText(const char *qlabel, const char *value,
+extern PGDLLIMPORT void ExplainPropertyText(const char *qlabel, const char *value,
 								ExplainState *es);
-extern void ExplainPropertyInteger(const char *qlabel, const char *unit,
+extern PGDLLIMPORT void ExplainPropertyInteger(const char *qlabel, const char *unit,
 								   int64 value, ExplainState *es);
-extern void ExplainPropertyUInteger(const char *qlabel, const char *unit,
+extern PGDLLIMPORT void ExplainPropertyUInteger(const char *qlabel, const char *unit,
 									uint64 value, ExplainState *es);
-extern void ExplainPropertyFloat(const char *qlabel, const char *unit,
+extern PGDLLIMPORT void ExplainPropertyFloat(const char *qlabel, const char *unit,
 								 double value, int ndigits, ExplainState *es);
-extern void ExplainPropertyBool(const char *qlabel, bool value,
+extern PGDLLIMPORT void ExplainPropertyBool(const char *qlabel, bool value,
 								ExplainState *es);
 
-extern void ExplainOpenGroup(const char *objtype, const char *labelname,
+extern PGDLLIMPORT void ExplainOpenGroup(const char *objtype, const char *labelname,
 							 bool labeled, ExplainState *es);
-extern void ExplainCloseGroup(const char *objtype, const char *labelname,
+extern PGDLLIMPORT void ExplainCloseGroup(const char *objtype, const char *labelname,
 							  bool labeled, ExplainState *es);
 
 #endif							/* EXPLAIN_H */

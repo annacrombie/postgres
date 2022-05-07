@@ -50,6 +50,6 @@ typedef struct BrinStatsData
 	  false)
 
 
-extern void brinGetStats(Relation index, BrinStatsData *stats);
+extern PGDLLIMPORT void brinGetStats(Relation index, BrinStatsData *stats);
 
 #endif							/* BRIN_H */

@@ -110,9 +110,9 @@ typedef struct PublicationRelInfo
 	List	   *columns;
 } PublicationRelInfo;
 
-extern Publication *GetPublication(Oid pubid);
-extern Publication *GetPublicationByName(const char *pubname, bool missing_ok);
-extern List *GetRelationPublications(Oid relid);
+extern PGDLLIMPORT Publication *GetPublication(Oid pubid);
+extern PGDLLIMPORT Publication *GetPublicationByName(const char *pubname, bool missing_ok);
+extern PGDLLIMPORT List *GetRelationPublications(Oid relid);
 
 /*---------
  * Expected values for pub_partopt parameter of GetRelationPublications(),
@@ -130,32 +130,32 @@ typedef enum PublicationPartOpt
 	PUBLICATION_PART_ALL,
 } PublicationPartOpt;
 
-extern List *GetPublicationRelations(Oid pubid, PublicationPartOpt pub_partopt);
-extern List *GetAllTablesPublications(void);
-extern List *GetAllTablesPublicationRelations(bool pubviaroot);
-extern List *GetPublicationSchemas(Oid pubid);
-extern List *GetSchemaPublications(Oid schemaid);
-extern List *GetSchemaPublicationRelations(Oid schemaid,
+extern PGDLLIMPORT List *GetPublicationRelations(Oid pubid, PublicationPartOpt pub_partopt);
+extern PGDLLIMPORT List *GetAllTablesPublications(void);
+extern PGDLLIMPORT List *GetAllTablesPublicationRelations(bool pubviaroot);
+extern PGDLLIMPORT List *GetPublicationSchemas(Oid pubid);
+extern PGDLLIMPORT List *GetSchemaPublications(Oid schemaid);
+extern PGDLLIMPORT List *GetSchemaPublicationRelations(Oid schemaid,
 										   PublicationPartOpt pub_partopt);
-extern List *GetAllSchemaPublicationRelations(Oid puboid,
+extern PGDLLIMPORT List *GetAllSchemaPublicationRelations(Oid puboid,
 											  PublicationPartOpt pub_partopt);
-extern List *GetPubPartitionOptionRelations(List *result,
+extern PGDLLIMPORT List *GetPubPartitionOptionRelations(List *result,
 											PublicationPartOpt pub_partopt,
 											Oid relid);
-extern Oid	GetTopMostAncestorInPublication(Oid puboid, List *ancestors,
+extern PGDLLIMPORT Oid	GetTopMostAncestorInPublication(Oid puboid, List *ancestors,
 											int *ancestor_level);
 
-extern bool is_publishable_relation(Relation rel);
-extern bool is_schema_publication(Oid pubid);
-extern ObjectAddress publication_add_relation(Oid pubid, PublicationRelInfo *pri,
+extern PGDLLIMPORT bool is_publishable_relation(Relation rel);
+extern PGDLLIMPORT bool is_schema_publication(Oid pubid);
+extern PGDLLIMPORT ObjectAddress publication_add_relation(Oid pubid, PublicationRelInfo *pri,
 											  bool if_not_exists);
-extern ObjectAddress publication_add_schema(Oid pubid, Oid schemaid,
+extern PGDLLIMPORT ObjectAddress publication_add_schema(Oid pubid, Oid schemaid,
 											bool if_not_exists);
 
-extern Bitmapset *pub_collist_to_bitmapset(Bitmapset *columns, Datum pubcols,
+extern PGDLLIMPORT Bitmapset *pub_collist_to_bitmapset(Bitmapset *columns, Datum pubcols,
 										   MemoryContext mcxt);
 
-extern Oid	get_publication_oid(const char *pubname, bool missing_ok);
-extern char *get_publication_name(Oid pubid, bool missing_ok);
+extern PGDLLIMPORT Oid	get_publication_oid(const char *pubname, bool missing_ok);
+extern PGDLLIMPORT char *get_publication_name(Oid pubid, bool missing_ok);
 
 #endif							/* PG_PUBLICATION_H */

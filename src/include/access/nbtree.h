@@ -1119,161 +1119,161 @@ typedef struct BTOptions
 /*
  * external entry points for btree, in nbtree.c
  */
-extern void btbuildempty(Relation index);
-extern bool btinsert(Relation rel, Datum *values, bool *isnull,
+extern PGDLLIMPORT void btbuildempty(Relation index);
+extern PGDLLIMPORT bool btinsert(Relation rel, Datum *values, bool *isnull,
 					 ItemPointer ht_ctid, Relation heapRel,
 					 IndexUniqueCheck checkUnique,
 					 bool indexUnchanged,
 					 struct IndexInfo *indexInfo);
-extern IndexScanDesc btbeginscan(Relation rel, int nkeys, int norderbys);
-extern Size btestimateparallelscan(void);
-extern void btinitparallelscan(void *target);
-extern bool btgettuple(IndexScanDesc scan, ScanDirection dir);
-extern int64 btgetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
-extern void btrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
+extern PGDLLIMPORT IndexScanDesc btbeginscan(Relation rel, int nkeys, int norderbys);
+extern PGDLLIMPORT Size btestimateparallelscan(void);
+extern PGDLLIMPORT void btinitparallelscan(void *target);
+extern PGDLLIMPORT bool btgettuple(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT int64 btgetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
+extern PGDLLIMPORT void btrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
 					 ScanKey orderbys, int norderbys);
-extern void btparallelrescan(IndexScanDesc scan);
-extern void btendscan(IndexScanDesc scan);
-extern void btmarkpos(IndexScanDesc scan);
-extern void btrestrpos(IndexScanDesc scan);
-extern IndexBulkDeleteResult *btbulkdelete(IndexVacuumInfo *info,
+extern PGDLLIMPORT void btparallelrescan(IndexScanDesc scan);
+extern PGDLLIMPORT void btendscan(IndexScanDesc scan);
+extern PGDLLIMPORT void btmarkpos(IndexScanDesc scan);
+extern PGDLLIMPORT void btrestrpos(IndexScanDesc scan);
+extern PGDLLIMPORT IndexBulkDeleteResult *btbulkdelete(IndexVacuumInfo *info,
 										   IndexBulkDeleteResult *stats,
 										   IndexBulkDeleteCallback callback,
 										   void *callback_state);
-extern IndexBulkDeleteResult *btvacuumcleanup(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *btvacuumcleanup(IndexVacuumInfo *info,
 											  IndexBulkDeleteResult *stats);
-extern bool btcanreturn(Relation index, int attno);
+extern PGDLLIMPORT bool btcanreturn(Relation index, int attno);
 
 /*
  * prototypes for internal functions in nbtree.c
  */
-extern bool _bt_parallel_seize(IndexScanDesc scan, BlockNumber *pageno);
-extern void _bt_parallel_release(IndexScanDesc scan, BlockNumber scan_page);
-extern void _bt_parallel_done(IndexScanDesc scan);
-extern void _bt_parallel_advance_array_keys(IndexScanDesc scan);
+extern PGDLLIMPORT bool _bt_parallel_seize(IndexScanDesc scan, BlockNumber *pageno);
+extern PGDLLIMPORT void _bt_parallel_release(IndexScanDesc scan, BlockNumber scan_page);
+extern PGDLLIMPORT void _bt_parallel_done(IndexScanDesc scan);
+extern PGDLLIMPORT void _bt_parallel_advance_array_keys(IndexScanDesc scan);
 
 /*
  * prototypes for functions in nbtdedup.c
  */
-extern void _bt_dedup_pass(Relation rel, Buffer buf, Relation heapRel,
+extern PGDLLIMPORT void _bt_dedup_pass(Relation rel, Buffer buf, Relation heapRel,
 						   IndexTuple newitem, Size newitemsz,
 						   bool bottomupdedup);
-extern bool _bt_bottomupdel_pass(Relation rel, Buffer buf, Relation heapRel,
+extern PGDLLIMPORT bool _bt_bottomupdel_pass(Relation rel, Buffer buf, Relation heapRel,
 								 Size newitemsz);
-extern void _bt_dedup_start_pending(BTDedupState state, IndexTuple base,
+extern PGDLLIMPORT void _bt_dedup_start_pending(BTDedupState state, IndexTuple base,
 									OffsetNumber baseoff);
-extern bool _bt_dedup_save_htid(BTDedupState state, IndexTuple itup);
-extern Size _bt_dedup_finish_pending(Page newpage, BTDedupState state);
-extern IndexTuple _bt_form_posting(IndexTuple base, ItemPointer htids,
+extern PGDLLIMPORT bool _bt_dedup_save_htid(BTDedupState state, IndexTuple itup);
+extern PGDLLIMPORT Size _bt_dedup_finish_pending(Page newpage, BTDedupState state);
+extern PGDLLIMPORT IndexTuple _bt_form_posting(IndexTuple base, ItemPointer htids,
 								   int nhtids);
-extern void _bt_update_posting(BTVacuumPosting vacposting);
-extern IndexTuple _bt_swap_posting(IndexTuple newitem, IndexTuple oposting,
+extern PGDLLIMPORT void _bt_update_posting(BTVacuumPosting vacposting);
+extern PGDLLIMPORT IndexTuple _bt_swap_posting(IndexTuple newitem, IndexTuple oposting,
 								   int postingoff);
 
 /*
  * prototypes for functions in nbtinsert.c
  */
-extern bool _bt_doinsert(Relation rel, IndexTuple itup,
+extern PGDLLIMPORT bool _bt_doinsert(Relation rel, IndexTuple itup,
 						 IndexUniqueCheck checkUnique, bool indexUnchanged,
 						 Relation heapRel);
-extern void _bt_finish_split(Relation rel, Buffer lbuf, BTStack stack);
-extern Buffer _bt_getstackbuf(Relation rel, BTStack stack, BlockNumber child);
+extern PGDLLIMPORT void _bt_finish_split(Relation rel, Buffer lbuf, BTStack stack);
+extern PGDLLIMPORT Buffer _bt_getstackbuf(Relation rel, BTStack stack, BlockNumber child);
 
 /*
  * prototypes for functions in nbtsplitloc.c
  */
-extern OffsetNumber _bt_findsplitloc(Relation rel, Page origpage,
+extern PGDLLIMPORT OffsetNumber _bt_findsplitloc(Relation rel, Page origpage,
 									 OffsetNumber newitemoff, Size newitemsz, IndexTuple newitem,
 									 bool *newitemonleft);
 
 /*
  * prototypes for functions in nbtpage.c
  */
-extern void _bt_initmetapage(Page page, BlockNumber rootbknum, uint32 level,
+extern PGDLLIMPORT void _bt_initmetapage(Page page, BlockNumber rootbknum, uint32 level,
 							 bool allequalimage);
-extern bool _bt_vacuum_needs_cleanup(Relation rel);
-extern void _bt_set_cleanup_info(Relation rel, BlockNumber num_delpages);
-extern void _bt_upgrademetapage(Page page);
-extern Buffer _bt_getroot(Relation rel, int access);
-extern Buffer _bt_gettrueroot(Relation rel);
-extern int	_bt_getrootheight(Relation rel);
-extern void _bt_metaversion(Relation rel, bool *heapkeyspace,
+extern PGDLLIMPORT bool _bt_vacuum_needs_cleanup(Relation rel);
+extern PGDLLIMPORT void _bt_set_cleanup_info(Relation rel, BlockNumber num_delpages);
+extern PGDLLIMPORT void _bt_upgrademetapage(Page page);
+extern PGDLLIMPORT Buffer _bt_getroot(Relation rel, int access);
+extern PGDLLIMPORT Buffer _bt_gettrueroot(Relation rel);
+extern PGDLLIMPORT int	_bt_getrootheight(Relation rel);
+extern PGDLLIMPORT void _bt_metaversion(Relation rel, bool *heapkeyspace,
 							bool *allequalimage);
-extern void _bt_checkpage(Relation rel, Buffer buf);
-extern Buffer _bt_getbuf(Relation rel, BlockNumber blkno, int access);
-extern Buffer _bt_relandgetbuf(Relation rel, Buffer obuf,
+extern PGDLLIMPORT void _bt_checkpage(Relation rel, Buffer buf);
+extern PGDLLIMPORT Buffer _bt_getbuf(Relation rel, BlockNumber blkno, int access);
+extern PGDLLIMPORT Buffer _bt_relandgetbuf(Relation rel, Buffer obuf,
 							   BlockNumber blkno, int access);
-extern void _bt_relbuf(Relation rel, Buffer buf);
-extern void _bt_lockbuf(Relation rel, Buffer buf, int access);
-extern void _bt_unlockbuf(Relation rel, Buffer buf);
-extern bool _bt_conditionallockbuf(Relation rel, Buffer buf);
-extern void _bt_upgradelockbufcleanup(Relation rel, Buffer buf);
-extern void _bt_pageinit(Page page, Size size);
-extern void _bt_delitems_vacuum(Relation rel, Buffer buf,
+extern PGDLLIMPORT void _bt_relbuf(Relation rel, Buffer buf);
+extern PGDLLIMPORT void _bt_lockbuf(Relation rel, Buffer buf, int access);
+extern PGDLLIMPORT void _bt_unlockbuf(Relation rel, Buffer buf);
+extern PGDLLIMPORT bool _bt_conditionallockbuf(Relation rel, Buffer buf);
+extern PGDLLIMPORT void _bt_upgradelockbufcleanup(Relation rel, Buffer buf);
+extern PGDLLIMPORT void _bt_pageinit(Page page, Size size);
+extern PGDLLIMPORT void _bt_delitems_vacuum(Relation rel, Buffer buf,
 								OffsetNumber *deletable, int ndeletable,
 								BTVacuumPosting *updatable, int nupdatable);
-extern void _bt_delitems_delete_check(Relation rel, Buffer buf,
+extern PGDLLIMPORT void _bt_delitems_delete_check(Relation rel, Buffer buf,
 									  Relation heapRel,
 									  TM_IndexDeleteOp *delstate);
-extern void _bt_pagedel(Relation rel, Buffer leafbuf, BTVacState *vstate);
-extern void _bt_pendingfsm_init(Relation rel, BTVacState *vstate,
+extern PGDLLIMPORT void _bt_pagedel(Relation rel, Buffer leafbuf, BTVacState *vstate);
+extern PGDLLIMPORT void _bt_pendingfsm_init(Relation rel, BTVacState *vstate,
 								bool cleanuponly);
-extern void _bt_pendingfsm_finalize(Relation rel, BTVacState *vstate);
+extern PGDLLIMPORT void _bt_pendingfsm_finalize(Relation rel, BTVacState *vstate);
 
 /*
  * prototypes for functions in nbtsearch.c
  */
-extern BTStack _bt_search(Relation rel, BTScanInsert key, Buffer *bufP,
+extern PGDLLIMPORT BTStack _bt_search(Relation rel, BTScanInsert key, Buffer *bufP,
 						  int access, Snapshot snapshot);
-extern Buffer _bt_moveright(Relation rel, BTScanInsert key, Buffer buf,
+extern PGDLLIMPORT Buffer _bt_moveright(Relation rel, BTScanInsert key, Buffer buf,
 							bool forupdate, BTStack stack, int access, Snapshot snapshot);
-extern OffsetNumber _bt_binsrch_insert(Relation rel, BTInsertState insertstate);
-extern int32 _bt_compare(Relation rel, BTScanInsert key, Page page, OffsetNumber offnum);
-extern bool _bt_first(IndexScanDesc scan, ScanDirection dir);
-extern bool _bt_next(IndexScanDesc scan, ScanDirection dir);
-extern Buffer _bt_get_endpoint(Relation rel, uint32 level, bool rightmost,
+extern PGDLLIMPORT OffsetNumber _bt_binsrch_insert(Relation rel, BTInsertState insertstate);
+extern PGDLLIMPORT int32 _bt_compare(Relation rel, BTScanInsert key, Page page, OffsetNumber offnum);
+extern PGDLLIMPORT bool _bt_first(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT bool _bt_next(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT Buffer _bt_get_endpoint(Relation rel, uint32 level, bool rightmost,
 							   Snapshot snapshot);
 
 /*
  * prototypes for functions in nbtutils.c
  */
-extern BTScanInsert _bt_mkscankey(Relation rel, IndexTuple itup);
-extern void _bt_freestack(BTStack stack);
-extern void _bt_preprocess_array_keys(IndexScanDesc scan);
-extern void _bt_start_array_keys(IndexScanDesc scan, ScanDirection dir);
-extern bool _bt_advance_array_keys(IndexScanDesc scan, ScanDirection dir);
-extern void _bt_mark_array_keys(IndexScanDesc scan);
-extern void _bt_restore_array_keys(IndexScanDesc scan);
-extern void _bt_preprocess_keys(IndexScanDesc scan);
-extern bool _bt_checkkeys(IndexScanDesc scan, IndexTuple tuple,
+extern PGDLLIMPORT BTScanInsert _bt_mkscankey(Relation rel, IndexTuple itup);
+extern PGDLLIMPORT void _bt_freestack(BTStack stack);
+extern PGDLLIMPORT void _bt_preprocess_array_keys(IndexScanDesc scan);
+extern PGDLLIMPORT void _bt_start_array_keys(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT bool _bt_advance_array_keys(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT void _bt_mark_array_keys(IndexScanDesc scan);
+extern PGDLLIMPORT void _bt_restore_array_keys(IndexScanDesc scan);
+extern PGDLLIMPORT void _bt_preprocess_keys(IndexScanDesc scan);
+extern PGDLLIMPORT bool _bt_checkkeys(IndexScanDesc scan, IndexTuple tuple,
 						  int tupnatts, ScanDirection dir, bool *continuescan);
-extern void _bt_killitems(IndexScanDesc scan);
-extern BTCycleId _bt_vacuum_cycleid(Relation rel);
-extern BTCycleId _bt_start_vacuum(Relation rel);
-extern void _bt_end_vacuum(Relation rel);
-extern void _bt_end_vacuum_callback(int code, Datum arg);
-extern Size BTreeShmemSize(void);
-extern void BTreeShmemInit(void);
-extern bytea *btoptions(Datum reloptions, bool validate);
-extern bool btproperty(Oid index_oid, int attno,
+extern PGDLLIMPORT void _bt_killitems(IndexScanDesc scan);
+extern PGDLLIMPORT BTCycleId _bt_vacuum_cycleid(Relation rel);
+extern PGDLLIMPORT BTCycleId _bt_start_vacuum(Relation rel);
+extern PGDLLIMPORT void _bt_end_vacuum(Relation rel);
+extern PGDLLIMPORT void _bt_end_vacuum_callback(int code, Datum arg);
+extern PGDLLIMPORT Size BTreeShmemSize(void);
+extern PGDLLIMPORT void BTreeShmemInit(void);
+extern PGDLLIMPORT bytea *btoptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bool btproperty(Oid index_oid, int attno,
 					   IndexAMProperty prop, const char *propname,
 					   bool *res, bool *isnull);
-extern char *btbuildphasename(int64 phasenum);
-extern IndexTuple _bt_truncate(Relation rel, IndexTuple lastleft,
+extern PGDLLIMPORT char *btbuildphasename(int64 phasenum);
+extern PGDLLIMPORT IndexTuple _bt_truncate(Relation rel, IndexTuple lastleft,
 							   IndexTuple firstright, BTScanInsert itup_key);
-extern int	_bt_keep_natts_fast(Relation rel, IndexTuple lastleft,
+extern PGDLLIMPORT int	_bt_keep_natts_fast(Relation rel, IndexTuple lastleft,
 								IndexTuple firstright);
-extern bool _bt_check_natts(Relation rel, bool heapkeyspace, Page page,
+extern PGDLLIMPORT bool _bt_check_natts(Relation rel, bool heapkeyspace, Page page,
 							OffsetNumber offnum);
-extern void _bt_check_third_page(Relation rel, Relation heap,
+extern PGDLLIMPORT void _bt_check_third_page(Relation rel, Relation heap,
 								 bool needheaptidspace, Page page, IndexTuple newtup);
-extern bool _bt_allequalimage(Relation rel, bool debugmessage);
+extern PGDLLIMPORT bool _bt_allequalimage(Relation rel, bool debugmessage);
 
 /*
  * prototypes for functions in nbtvalidate.c
  */
-extern bool btvalidate(Oid opclassoid);
-extern void btadjustmembers(Oid opfamilyoid,
+extern PGDLLIMPORT bool btvalidate(Oid opclassoid);
+extern PGDLLIMPORT void btadjustmembers(Oid opfamilyoid,
 							Oid opclassoid,
 							List *operators,
 							List *functions);
@@ -1281,8 +1281,8 @@ extern void btadjustmembers(Oid opfamilyoid,
 /*
  * prototypes for functions in nbtsort.c
  */
-extern IndexBuildResult *btbuild(Relation heap, Relation index,
+extern PGDLLIMPORT IndexBuildResult *btbuild(Relation heap, Relation index,
 								 struct IndexInfo *indexInfo);
-extern void _bt_parallel_build_main(dsm_segment *seg, shm_toc *toc);
+extern PGDLLIMPORT void _bt_parallel_build_main(dsm_segment *seg, shm_toc *toc);
 
 #endif							/* NBTREE_H */

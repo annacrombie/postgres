@@ -22,29 +22,29 @@
 /* GUC variables */
 extern PGDLLIMPORT int wal_skip_threshold;
 
-extern SMgrRelation RelationCreateStorage(RelFileNode rnode,
+extern PGDLLIMPORT SMgrRelation RelationCreateStorage(RelFileNode rnode,
 										  char relpersistence,
 										  bool register_delete);
-extern void RelationDropStorage(Relation rel);
-extern void RelationPreserveStorage(RelFileNode rnode, bool atCommit);
-extern void RelationPreTruncate(Relation rel);
-extern void RelationTruncate(Relation rel, BlockNumber nblocks);
-extern void RelationCopyStorage(SMgrRelation src, SMgrRelation dst,
+extern PGDLLIMPORT void RelationDropStorage(Relation rel);
+extern PGDLLIMPORT void RelationPreserveStorage(RelFileNode rnode, bool atCommit);
+extern PGDLLIMPORT void RelationPreTruncate(Relation rel);
+extern PGDLLIMPORT void RelationTruncate(Relation rel, BlockNumber nblocks);
+extern PGDLLIMPORT void RelationCopyStorage(SMgrRelation src, SMgrRelation dst,
 								ForkNumber forkNum, char relpersistence);
-extern bool RelFileNodeSkippingWAL(RelFileNode rnode);
-extern Size EstimatePendingSyncsSpace(void);
-extern void SerializePendingSyncs(Size maxSize, char *startAddress);
-extern void RestorePendingSyncs(char *startAddress);
+extern PGDLLIMPORT bool RelFileNodeSkippingWAL(RelFileNode rnode);
+extern PGDLLIMPORT Size EstimatePendingSyncsSpace(void);
+extern PGDLLIMPORT void SerializePendingSyncs(Size maxSize, char *startAddress);
+extern PGDLLIMPORT void RestorePendingSyncs(char *startAddress);
 
 /*
  * These functions used to be in storage/smgr/smgr.c, which explains the
  * naming
  */
-extern void smgrDoPendingDeletes(bool isCommit);
-extern void smgrDoPendingSyncs(bool isCommit, bool isParallelWorker);
-extern int	smgrGetPendingDeletes(bool forCommit, RelFileNode **ptr);
-extern void AtSubCommit_smgr(void);
-extern void AtSubAbort_smgr(void);
-extern void PostPrepare_smgr(void);
+extern PGDLLIMPORT void smgrDoPendingDeletes(bool isCommit);
+extern PGDLLIMPORT void smgrDoPendingSyncs(bool isCommit, bool isParallelWorker);
+extern PGDLLIMPORT int	smgrGetPendingDeletes(bool forCommit, RelFileNode **ptr);
+extern PGDLLIMPORT void AtSubCommit_smgr(void);
+extern PGDLLIMPORT void AtSubAbort_smgr(void);
+extern PGDLLIMPORT void PostPrepare_smgr(void);
 
 #endif							/* STORAGE_H */

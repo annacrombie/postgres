@@ -140,26 +140,26 @@ extern PGDLLIMPORT object_access_hook_type_str object_access_hook_str;
 
 
 /* Core code uses these functions to call the hook (see macros below). */
-extern void RunObjectPostCreateHook(Oid classId, Oid objectId, int subId,
+extern PGDLLIMPORT void RunObjectPostCreateHook(Oid classId, Oid objectId, int subId,
 									bool is_internal);
-extern void RunObjectDropHook(Oid classId, Oid objectId, int subId,
+extern PGDLLIMPORT void RunObjectDropHook(Oid classId, Oid objectId, int subId,
 							  int dropflags);
-extern void RunObjectTruncateHook(Oid objectId);
-extern void RunObjectPostAlterHook(Oid classId, Oid objectId, int subId,
+extern PGDLLIMPORT void RunObjectTruncateHook(Oid objectId);
+extern PGDLLIMPORT void RunObjectPostAlterHook(Oid classId, Oid objectId, int subId,
 								   Oid auxiliaryId, bool is_internal);
-extern bool RunNamespaceSearchHook(Oid objectId, bool ereport_on_violation);
-extern void RunFunctionExecuteHook(Oid objectId);
+extern PGDLLIMPORT bool RunNamespaceSearchHook(Oid objectId, bool ereport_on_violation);
+extern PGDLLIMPORT void RunFunctionExecuteHook(Oid objectId);
 
 /* String versions */
-extern void RunObjectPostCreateHookStr(Oid classId, const char *objectStr, int subId,
+extern PGDLLIMPORT void RunObjectPostCreateHookStr(Oid classId, const char *objectStr, int subId,
 									bool is_internal);
-extern void RunObjectDropHookStr(Oid classId, const char *objectStr, int subId,
+extern PGDLLIMPORT void RunObjectDropHookStr(Oid classId, const char *objectStr, int subId,
 							  int dropflags);
-extern void RunObjectTruncateHookStr(const char *objectStr);
-extern void RunObjectPostAlterHookStr(Oid classId, const char *objectStr, int subId,
+extern PGDLLIMPORT void RunObjectTruncateHookStr(const char *objectStr);
+extern PGDLLIMPORT void RunObjectPostAlterHookStr(Oid classId, const char *objectStr, int subId,
 								   Oid auxiliaryId, bool is_internal);
-extern bool RunNamespaceSearchHookStr(const char *objectStr, bool ereport_on_violation);
-extern void RunFunctionExecuteHookStr(const char *objectStr);
+extern PGDLLIMPORT bool RunNamespaceSearchHookStr(const char *objectStr, bool ereport_on_violation);
+extern PGDLLIMPORT void RunFunctionExecuteHookStr(const char *objectStr);
 
 
 /*

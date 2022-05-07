@@ -17,16 +17,16 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern MemoizeState *ExecInitMemoize(Memoize *node, EState *estate, int eflags);
-extern void ExecEndMemoize(MemoizeState *node);
-extern void ExecReScanMemoize(MemoizeState *node);
-extern double ExecEstimateCacheEntryOverheadBytes(double ntuples);
-extern void ExecMemoizeEstimate(MemoizeState *node,
+extern PGDLLIMPORT MemoizeState *ExecInitMemoize(Memoize *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndMemoize(MemoizeState *node);
+extern PGDLLIMPORT void ExecReScanMemoize(MemoizeState *node);
+extern PGDLLIMPORT double ExecEstimateCacheEntryOverheadBytes(double ntuples);
+extern PGDLLIMPORT void ExecMemoizeEstimate(MemoizeState *node,
 								ParallelContext *pcxt);
-extern void ExecMemoizeInitializeDSM(MemoizeState *node,
+extern PGDLLIMPORT void ExecMemoizeInitializeDSM(MemoizeState *node,
 									 ParallelContext *pcxt);
-extern void ExecMemoizeInitializeWorker(MemoizeState *node,
+extern PGDLLIMPORT void ExecMemoizeInitializeWorker(MemoizeState *node,
 										ParallelWorkerContext *pwcxt);
-extern void ExecMemoizeRetrieveInstrumentation(MemoizeState *node);
+extern PGDLLIMPORT void ExecMemoizeRetrieveInstrumentation(MemoizeState *node);
 
 #endif							/* NODEMEMOIZE_H */

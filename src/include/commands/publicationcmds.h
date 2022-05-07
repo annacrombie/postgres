@@ -22,18 +22,18 @@
 /* Same as MAXNUMMESSAGES in sinvaladt.c */
 #define MAX_RELCACHE_INVAL_MSGS 4096
 
-extern ObjectAddress CreatePublication(ParseState *pstate, CreatePublicationStmt *stmt);
-extern void AlterPublication(ParseState *pstate, AlterPublicationStmt *stmt);
-extern void RemovePublicationById(Oid pubid);
-extern void RemovePublicationRelById(Oid proid);
-extern void RemovePublicationSchemaById(Oid psoid);
+extern PGDLLIMPORT ObjectAddress CreatePublication(ParseState *pstate, CreatePublicationStmt *stmt);
+extern PGDLLIMPORT void AlterPublication(ParseState *pstate, AlterPublicationStmt *stmt);
+extern PGDLLIMPORT void RemovePublicationById(Oid pubid);
+extern PGDLLIMPORT void RemovePublicationRelById(Oid proid);
+extern PGDLLIMPORT void RemovePublicationSchemaById(Oid psoid);
 
-extern ObjectAddress AlterPublicationOwner(const char *name, Oid newOwnerId);
-extern void AlterPublicationOwner_oid(Oid pubid, Oid newOwnerId);
-extern void InvalidatePublicationRels(List *relids);
-extern bool pub_rf_contains_invalid_column(Oid pubid, Relation relation,
+extern PGDLLIMPORT ObjectAddress AlterPublicationOwner(const char *name, Oid newOwnerId);
+extern PGDLLIMPORT void AlterPublicationOwner_oid(Oid pubid, Oid newOwnerId);
+extern PGDLLIMPORT void InvalidatePublicationRels(List *relids);
+extern PGDLLIMPORT bool pub_rf_contains_invalid_column(Oid pubid, Relation relation,
 									 List *ancestors, bool pubviaroot);
-extern bool pub_collist_contains_invalid_column(Oid pubid, Relation relation,
+extern PGDLLIMPORT bool pub_collist_contains_invalid_column(Oid pubid, Relation relation,
 									 List *ancestors, bool pubviaroot);
 
 #endif							/* PUBLICATIONCMDS_H */

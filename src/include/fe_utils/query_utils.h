@@ -16,11 +16,11 @@
 
 #include "libpq-fe.h"
 
-extern PGresult *executeQuery(PGconn *conn, const char *query, bool echo);
+extern PGDLLIMPORT PGresult *executeQuery(PGconn *conn, const char *query, bool echo);
 
-extern void executeCommand(PGconn *conn, const char *query, bool echo);
+extern PGDLLIMPORT void executeCommand(PGconn *conn, const char *query, bool echo);
 
-extern bool executeMaintenanceCommand(PGconn *conn, const char *query,
+extern PGDLLIMPORT bool executeMaintenanceCommand(PGconn *conn, const char *query,
 									  bool echo);
 
 #endif							/* QUERY_UTILS_H */

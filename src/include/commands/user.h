@@ -24,14 +24,14 @@ typedef void (*check_password_hook_type) (const char *username, const char *shad
 
 extern PGDLLIMPORT check_password_hook_type check_password_hook;
 
-extern Oid	CreateRole(ParseState *pstate, CreateRoleStmt *stmt);
-extern Oid	AlterRole(ParseState *pstate, AlterRoleStmt *stmt);
-extern Oid	AlterRoleSet(AlterRoleSetStmt *stmt);
-extern void DropRole(DropRoleStmt *stmt);
-extern void GrantRole(GrantRoleStmt *stmt);
-extern ObjectAddress RenameRole(const char *oldname, const char *newname);
-extern void DropOwnedObjects(DropOwnedStmt *stmt);
-extern void ReassignOwnedObjects(ReassignOwnedStmt *stmt);
-extern List *roleSpecsToIds(List *memberNames);
+extern PGDLLIMPORT Oid	CreateRole(ParseState *pstate, CreateRoleStmt *stmt);
+extern PGDLLIMPORT Oid	AlterRole(ParseState *pstate, AlterRoleStmt *stmt);
+extern PGDLLIMPORT Oid	AlterRoleSet(AlterRoleSetStmt *stmt);
+extern PGDLLIMPORT void DropRole(DropRoleStmt *stmt);
+extern PGDLLIMPORT void GrantRole(GrantRoleStmt *stmt);
+extern PGDLLIMPORT ObjectAddress RenameRole(const char *oldname, const char *newname);
+extern PGDLLIMPORT void DropOwnedObjects(DropOwnedStmt *stmt);
+extern PGDLLIMPORT void ReassignOwnedObjects(ReassignOwnedStmt *stmt);
+extern PGDLLIMPORT List *roleSpecsToIds(List *memberNames);
 
 #endif							/* USER_H */

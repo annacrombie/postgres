@@ -37,28 +37,28 @@ typedef void (*JsonIterateStringValuesAction) (void *state, char *elem_value, in
 typedef text *(*JsonTransformStringValuesAction) (void *state, char *elem_value, int elem_len);
 
 /* build a JsonLexContext from a text datum */
-extern JsonLexContext *makeJsonLexContext(text *json, bool need_escapes);
+extern PGDLLIMPORT JsonLexContext *makeJsonLexContext(text *json, bool need_escapes);
 
 /* try to parse json, and ereport(ERROR) on failure */
-extern void pg_parse_json_or_ereport(JsonLexContext *lex, JsonSemAction *sem);
+extern PGDLLIMPORT void pg_parse_json_or_ereport(JsonLexContext *lex, JsonSemAction *sem);
 
 /* report an error during json lexing or parsing */
-extern void json_ereport_error(JsonParseErrorType error, JsonLexContext *lex);
+extern PGDLLIMPORT void json_ereport_error(JsonParseErrorType error, JsonLexContext *lex);
 
 /* get first JSON token */
-extern JsonTokenType json_get_first_token(text *json, bool throw_error);
+extern PGDLLIMPORT JsonTokenType json_get_first_token(text *json, bool throw_error);
 
-extern uint32 parse_jsonb_index_flags(Jsonb *jb);
-extern void iterate_jsonb_values(Jsonb *jb, uint32 flags, void *state,
+extern PGDLLIMPORT uint32 parse_jsonb_index_flags(Jsonb *jb);
+extern PGDLLIMPORT void iterate_jsonb_values(Jsonb *jb, uint32 flags, void *state,
 								 JsonIterateStringValuesAction action);
-extern void iterate_json_values(text *json, uint32 flags, void *action_state,
+extern PGDLLIMPORT void iterate_json_values(text *json, uint32 flags, void *action_state,
 								JsonIterateStringValuesAction action);
-extern Jsonb *transform_jsonb_string_values(Jsonb *jsonb, void *action_state,
+extern PGDLLIMPORT Jsonb *transform_jsonb_string_values(Jsonb *jsonb, void *action_state,
 											JsonTransformStringValuesAction transform_action);
-extern text *transform_json_string_values(text *json, void *action_state,
+extern PGDLLIMPORT text *transform_json_string_values(text *json, void *action_state,
 										  JsonTransformStringValuesAction transform_action);
 
-extern Datum json_populate_type(Datum json_val, Oid json_type,
+extern PGDLLIMPORT Datum json_populate_type(Datum json_val, Oid json_type,
 								Oid typid, int32 typmod,
 								void **cache, MemoryContext mcxt, bool *isnull);
 

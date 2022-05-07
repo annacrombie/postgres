@@ -37,18 +37,18 @@ extern PGDLLIMPORT int extra_float_digits;
 /*
  * Utility functions in float.c
  */
-extern void float_overflow_error(void) pg_attribute_noreturn();
-extern void float_underflow_error(void) pg_attribute_noreturn();
-extern void float_zero_divide_error(void) pg_attribute_noreturn();
-extern int	is_infinite(float8 val);
-extern float8 float8in_internal(char *num, char **endptr_p,
+extern PGDLLIMPORT void float_overflow_error(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void float_underflow_error(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void float_zero_divide_error(void) pg_attribute_noreturn();
+extern PGDLLIMPORT int	is_infinite(float8 val);
+extern PGDLLIMPORT float8 float8in_internal(char *num, char **endptr_p,
 								const char *type_name, const char *orig_string);
-extern float8 float8in_internal_opt_error(char *num, char **endptr_p,
+extern PGDLLIMPORT float8 float8in_internal_opt_error(char *num, char **endptr_p,
 										  const char *type_name, const char *orig_string,
 										  bool *have_error);
-extern char *float8out_internal(float8 num);
-extern int	float4_cmp_internal(float4 a, float4 b);
-extern int	float8_cmp_internal(float8 a, float8 b);
+extern PGDLLIMPORT char *float8out_internal(float8 num);
+extern PGDLLIMPORT int	float4_cmp_internal(float4 a, float4 b);
+extern PGDLLIMPORT int	float8_cmp_internal(float8 a, float8 b);
 
 /*
  * Routines to provide reasonably platform-independent handling of

@@ -27,7 +27,7 @@
 #include "optimizer/geqo.h"
 
 
-extern void init_tour(PlannerInfo *root, Gene *tour, int num_gene);
+extern PGDLLIMPORT void init_tour(PlannerInfo *root, Gene *tour, int num_gene);
 
 
 /* edge recombination crossover [ERX] */
@@ -39,13 +39,13 @@ typedef struct Edge
 	int			unused_edges;
 } Edge;
 
-extern Edge *alloc_edge_table(PlannerInfo *root, int num_gene);
-extern void free_edge_table(PlannerInfo *root, Edge *edge_table);
+extern PGDLLIMPORT Edge *alloc_edge_table(PlannerInfo *root, int num_gene);
+extern PGDLLIMPORT void free_edge_table(PlannerInfo *root, Edge *edge_table);
 
-extern float gimme_edge_table(PlannerInfo *root, Gene *tour1, Gene *tour2,
+extern PGDLLIMPORT float gimme_edge_table(PlannerInfo *root, Gene *tour1, Gene *tour2,
 							  int num_gene, Edge *edge_table);
 
-extern int	gimme_tour(PlannerInfo *root, Edge *edge_table, Gene *new_gene,
+extern PGDLLIMPORT int	gimme_tour(PlannerInfo *root, Edge *edge_table, Gene *new_gene,
 					   int num_gene);
 
 
@@ -54,7 +54,7 @@ extern int	gimme_tour(PlannerInfo *root, Edge *edge_table, Gene *new_gene,
 #define DAD 1					/* indicator for gene from dad */
 #define MOM 0					/* indicator for gene from mom */
 
-extern void pmx(PlannerInfo *root,
+extern PGDLLIMPORT void pmx(PlannerInfo *root,
 				Gene *tour1, Gene *tour2,
 				Gene *offspring, int num_gene);
 
@@ -67,23 +67,23 @@ typedef struct City
 	int			select_list;
 }			City;
 
-extern City * alloc_city_table(PlannerInfo *root, int num_gene);
-extern void free_city_table(PlannerInfo *root, City * city_table);
+extern PGDLLIMPORT City * alloc_city_table(PlannerInfo *root, int num_gene);
+extern PGDLLIMPORT void free_city_table(PlannerInfo *root, City * city_table);
 
 /* cycle crossover [CX] */
-extern int	cx(PlannerInfo *root, Gene *tour1, Gene *tour2,
+extern PGDLLIMPORT int	cx(PlannerInfo *root, Gene *tour1, Gene *tour2,
 			   Gene *offspring, int num_gene, City * city_table);
 
 /* position crossover [PX] */
-extern void px(PlannerInfo *root, Gene *tour1, Gene *tour2, Gene *offspring,
+extern PGDLLIMPORT void px(PlannerInfo *root, Gene *tour1, Gene *tour2, Gene *offspring,
 			   int num_gene, City * city_table);
 
 /* order crossover [OX1] according to Davis */
-extern void ox1(PlannerInfo *root, Gene *mom, Gene *dad, Gene *offspring,
+extern PGDLLIMPORT void ox1(PlannerInfo *root, Gene *mom, Gene *dad, Gene *offspring,
 				int num_gene, City * city_table);
 
 /* order crossover [OX2] according to Syswerda */
-extern void ox2(PlannerInfo *root, Gene *mom, Gene *dad, Gene *offspring,
+extern PGDLLIMPORT void ox2(PlannerInfo *root, Gene *mom, Gene *dad, Gene *offspring,
 				int num_gene, City * city_table);
 
 #endif							/* GEQO_RECOMBINATION_H */

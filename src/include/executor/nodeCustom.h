@@ -18,25 +18,25 @@
 /*
  * General executor code
  */
-extern CustomScanState *ExecInitCustomScan(CustomScan *cscan,
+extern PGDLLIMPORT CustomScanState *ExecInitCustomScan(CustomScan *cscan,
 										   EState *estate, int eflags);
-extern void ExecEndCustomScan(CustomScanState *node);
+extern PGDLLIMPORT void ExecEndCustomScan(CustomScanState *node);
 
-extern void ExecReScanCustomScan(CustomScanState *node);
-extern void ExecCustomMarkPos(CustomScanState *node);
-extern void ExecCustomRestrPos(CustomScanState *node);
+extern PGDLLIMPORT void ExecReScanCustomScan(CustomScanState *node);
+extern PGDLLIMPORT void ExecCustomMarkPos(CustomScanState *node);
+extern PGDLLIMPORT void ExecCustomRestrPos(CustomScanState *node);
 
 /*
  * Parallel execution support
  */
-extern void ExecCustomScanEstimate(CustomScanState *node,
+extern PGDLLIMPORT void ExecCustomScanEstimate(CustomScanState *node,
 								   ParallelContext *pcxt);
-extern void ExecCustomScanInitializeDSM(CustomScanState *node,
+extern PGDLLIMPORT void ExecCustomScanInitializeDSM(CustomScanState *node,
 										ParallelContext *pcxt);
-extern void ExecCustomScanReInitializeDSM(CustomScanState *node,
+extern PGDLLIMPORT void ExecCustomScanReInitializeDSM(CustomScanState *node,
 										  ParallelContext *pcxt);
-extern void ExecCustomScanInitializeWorker(CustomScanState *node,
+extern PGDLLIMPORT void ExecCustomScanInitializeWorker(CustomScanState *node,
 										   ParallelWorkerContext *pwcxt);
-extern void ExecShutdownCustomScan(CustomScanState *node);
+extern PGDLLIMPORT void ExecShutdownCustomScan(CustomScanState *node);
 
 #endif							/* NODECUSTOM_H */

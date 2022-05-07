@@ -91,15 +91,15 @@ extern PGDLLIMPORT double jit_inline_above_cost;
 extern PGDLLIMPORT double jit_optimize_above_cost;
 
 
-extern void jit_reset_after_error(void);
-extern void jit_release_context(JitContext *context);
+extern PGDLLIMPORT void jit_reset_after_error(void);
+extern PGDLLIMPORT void jit_release_context(JitContext *context);
 
 /*
  * Functions for attempting to JIT code. Callers must accept that these might
  * not be able to perform JIT (i.e. return false).
  */
-extern bool jit_compile_expr(struct ExprState *state);
-extern void InstrJitAgg(JitInstrumentation *dst, JitInstrumentation *add);
+extern PGDLLIMPORT bool jit_compile_expr(struct ExprState *state);
+extern PGDLLIMPORT void InstrJitAgg(JitInstrumentation *dst, JitInstrumentation *add);
 
 
 #endif							/* JIT_H */

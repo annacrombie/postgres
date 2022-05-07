@@ -17,10 +17,10 @@
 #include "nodes/pathnodes.h"
 
 
-extern void expand_inherited_rtentry(PlannerInfo *root, RelOptInfo *rel,
+extern PGDLLIMPORT void expand_inherited_rtentry(PlannerInfo *root, RelOptInfo *rel,
 									 RangeTblEntry *rte, Index rti);
 
-extern bool apply_child_basequals(PlannerInfo *root, RelOptInfo *parentrel,
+extern PGDLLIMPORT bool apply_child_basequals(PlannerInfo *root, RelOptInfo *parentrel,
 								  RelOptInfo *childrel, RangeTblEntry *childRTE,
 								  AppendRelInfo *appinfo);
 

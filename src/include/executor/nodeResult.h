@@ -16,10 +16,10 @@
 
 #include "nodes/execnodes.h"
 
-extern ResultState *ExecInitResult(Result *node, EState *estate, int eflags);
-extern void ExecEndResult(ResultState *node);
-extern void ExecResultMarkPos(ResultState *node);
-extern void ExecResultRestrPos(ResultState *node);
-extern void ExecReScanResult(ResultState *node);
+extern PGDLLIMPORT ResultState *ExecInitResult(Result *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndResult(ResultState *node);
+extern PGDLLIMPORT void ExecResultMarkPos(ResultState *node);
+extern PGDLLIMPORT void ExecResultRestrPos(ResultState *node);
+extern PGDLLIMPORT void ExecReScanResult(ResultState *node);
 
 #endif							/* NODERESULT_H */

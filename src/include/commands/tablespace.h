@@ -45,25 +45,25 @@ typedef struct TableSpaceOpts
 	int			maintenance_io_concurrency;
 } TableSpaceOpts;
 
-extern Oid	CreateTableSpace(CreateTableSpaceStmt *stmt);
-extern void DropTableSpace(DropTableSpaceStmt *stmt);
-extern ObjectAddress RenameTableSpace(const char *oldname, const char *newname);
-extern Oid	AlterTableSpaceOptions(AlterTableSpaceOptionsStmt *stmt);
+extern PGDLLIMPORT Oid	CreateTableSpace(CreateTableSpaceStmt *stmt);
+extern PGDLLIMPORT void DropTableSpace(DropTableSpaceStmt *stmt);
+extern PGDLLIMPORT ObjectAddress RenameTableSpace(const char *oldname, const char *newname);
+extern PGDLLIMPORT Oid	AlterTableSpaceOptions(AlterTableSpaceOptionsStmt *stmt);
 
-extern void TablespaceCreateDbspace(Oid spcNode, Oid dbNode, bool isRedo);
+extern PGDLLIMPORT void TablespaceCreateDbspace(Oid spcNode, Oid dbNode, bool isRedo);
 
-extern Oid	GetDefaultTablespace(char relpersistence, bool partitioned);
+extern PGDLLIMPORT Oid	GetDefaultTablespace(char relpersistence, bool partitioned);
 
-extern void PrepareTempTablespaces(void);
+extern PGDLLIMPORT void PrepareTempTablespaces(void);
 
-extern Oid	get_tablespace_oid(const char *tablespacename, bool missing_ok);
-extern char *get_tablespace_name(Oid spc_oid);
+extern PGDLLIMPORT Oid	get_tablespace_oid(const char *tablespacename, bool missing_ok);
+extern PGDLLIMPORT char *get_tablespace_name(Oid spc_oid);
 
-extern bool directory_is_empty(const char *path);
-extern void remove_tablespace_symlink(const char *linkloc);
+extern PGDLLIMPORT bool directory_is_empty(const char *path);
+extern PGDLLIMPORT void remove_tablespace_symlink(const char *linkloc);
 
-extern void tblspc_redo(XLogReaderState *rptr);
-extern void tblspc_desc(StringInfo buf, XLogReaderState *rptr);
-extern const char *tblspc_identify(uint8 info);
+extern PGDLLIMPORT void tblspc_redo(XLogReaderState *rptr);
+extern PGDLLIMPORT void tblspc_desc(StringInfo buf, XLogReaderState *rptr);
+extern PGDLLIMPORT const char *tblspc_identify(uint8 info);
 
 #endif							/* TABLESPACE_H */

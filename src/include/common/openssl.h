@@ -40,8 +40,8 @@
 
 /* src/common/protocol_openssl.c */
 #ifndef SSL_CTX_set_min_proto_version
-extern int	SSL_CTX_set_min_proto_version(SSL_CTX *ctx, int version);
-extern int	SSL_CTX_set_max_proto_version(SSL_CTX *ctx, int version);
+extern PGDLLIMPORT int	SSL_CTX_set_min_proto_version(SSL_CTX *ctx, int version);
+extern PGDLLIMPORT int	SSL_CTX_set_max_proto_version(SSL_CTX *ctx, int version);
 #endif
 
 #endif							/* USE_OPENSSL */

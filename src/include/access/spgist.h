@@ -190,38 +190,38 @@ typedef struct spgLeafConsistentOut
 
 
 /* spgutils.c */
-extern bytea *spgoptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *spgoptions(Datum reloptions, bool validate);
 
 /* spginsert.c */
-extern IndexBuildResult *spgbuild(Relation heap, Relation index,
+extern PGDLLIMPORT IndexBuildResult *spgbuild(Relation heap, Relation index,
 								  struct IndexInfo *indexInfo);
-extern void spgbuildempty(Relation index);
-extern bool spginsert(Relation index, Datum *values, bool *isnull,
+extern PGDLLIMPORT void spgbuildempty(Relation index);
+extern PGDLLIMPORT bool spginsert(Relation index, Datum *values, bool *isnull,
 					  ItemPointer ht_ctid, Relation heapRel,
 					  IndexUniqueCheck checkUnique,
 					  bool indexUnchanged,
 					  struct IndexInfo *indexInfo);
 
 /* spgscan.c */
-extern IndexScanDesc spgbeginscan(Relation rel, int keysz, int orderbysz);
-extern void spgendscan(IndexScanDesc scan);
-extern void spgrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
+extern PGDLLIMPORT IndexScanDesc spgbeginscan(Relation rel, int keysz, int orderbysz);
+extern PGDLLIMPORT void spgendscan(IndexScanDesc scan);
+extern PGDLLIMPORT void spgrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
 					  ScanKey orderbys, int norderbys);
-extern int64 spggetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
-extern bool spggettuple(IndexScanDesc scan, ScanDirection dir);
-extern bool spgcanreturn(Relation index, int attno);
+extern PGDLLIMPORT int64 spggetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
+extern PGDLLIMPORT bool spggettuple(IndexScanDesc scan, ScanDirection dir);
+extern PGDLLIMPORT bool spgcanreturn(Relation index, int attno);
 
 /* spgvacuum.c */
-extern IndexBulkDeleteResult *spgbulkdelete(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *spgbulkdelete(IndexVacuumInfo *info,
 											IndexBulkDeleteResult *stats,
 											IndexBulkDeleteCallback callback,
 											void *callback_state);
-extern IndexBulkDeleteResult *spgvacuumcleanup(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *spgvacuumcleanup(IndexVacuumInfo *info,
 											   IndexBulkDeleteResult *stats);
 
 /* spgvalidate.c */
-extern bool spgvalidate(Oid opclassoid);
-extern void spgadjustmembers(Oid opfamilyoid,
+extern PGDLLIMPORT bool spgvalidate(Oid opclassoid);
+extern PGDLLIMPORT void spgadjustmembers(Oid opfamilyoid,
 							 Oid opclassoid,
 							 List *operators,
 							 List *functions);

@@ -618,68 +618,68 @@ struct ReorderBuffer
 };
 
 
-extern ReorderBuffer *ReorderBufferAllocate(void);
-extern void ReorderBufferFree(ReorderBuffer *);
+extern PGDLLIMPORT ReorderBuffer *ReorderBufferAllocate(void);
+extern PGDLLIMPORT void ReorderBufferFree(ReorderBuffer *);
 
-extern ReorderBufferTupleBuf *ReorderBufferGetTupleBuf(ReorderBuffer *, Size tuple_len);
-extern void ReorderBufferReturnTupleBuf(ReorderBuffer *, ReorderBufferTupleBuf *tuple);
-extern ReorderBufferChange *ReorderBufferGetChange(ReorderBuffer *);
-extern void ReorderBufferReturnChange(ReorderBuffer *, ReorderBufferChange *, bool);
+extern PGDLLIMPORT ReorderBufferTupleBuf *ReorderBufferGetTupleBuf(ReorderBuffer *, Size tuple_len);
+extern PGDLLIMPORT void ReorderBufferReturnTupleBuf(ReorderBuffer *, ReorderBufferTupleBuf *tuple);
+extern PGDLLIMPORT ReorderBufferChange *ReorderBufferGetChange(ReorderBuffer *);
+extern PGDLLIMPORT void ReorderBufferReturnChange(ReorderBuffer *, ReorderBufferChange *, bool);
 
-extern Oid *ReorderBufferGetRelids(ReorderBuffer *, int nrelids);
-extern void ReorderBufferReturnRelids(ReorderBuffer *, Oid *relids);
+extern PGDLLIMPORT Oid *ReorderBufferGetRelids(ReorderBuffer *, int nrelids);
+extern PGDLLIMPORT void ReorderBufferReturnRelids(ReorderBuffer *, Oid *relids);
 
-extern void ReorderBufferQueueChange(ReorderBuffer *, TransactionId,
+extern PGDLLIMPORT void ReorderBufferQueueChange(ReorderBuffer *, TransactionId,
 									 XLogRecPtr lsn, ReorderBufferChange *,
 									 bool toast_insert);
-extern void ReorderBufferQueueMessage(ReorderBuffer *, TransactionId, Snapshot snapshot, XLogRecPtr lsn,
+extern PGDLLIMPORT void ReorderBufferQueueMessage(ReorderBuffer *, TransactionId, Snapshot snapshot, XLogRecPtr lsn,
 									  bool transactional, const char *prefix,
 									  Size message_size, const char *message);
-extern void ReorderBufferCommit(ReorderBuffer *, TransactionId,
+extern PGDLLIMPORT void ReorderBufferCommit(ReorderBuffer *, TransactionId,
 								XLogRecPtr commit_lsn, XLogRecPtr end_lsn,
 								TimestampTz commit_time, RepOriginId origin_id, XLogRecPtr origin_lsn);
-extern void ReorderBufferFinishPrepared(ReorderBuffer *rb, TransactionId xid,
+extern PGDLLIMPORT void ReorderBufferFinishPrepared(ReorderBuffer *rb, TransactionId xid,
 										XLogRecPtr commit_lsn, XLogRecPtr end_lsn,
 										XLogRecPtr two_phase_at,
 										TimestampTz commit_time,
 										RepOriginId origin_id, XLogRecPtr origin_lsn,
 										char *gid, bool is_commit);
-extern void ReorderBufferAssignChild(ReorderBuffer *, TransactionId, TransactionId, XLogRecPtr commit_lsn);
-extern void ReorderBufferCommitChild(ReorderBuffer *, TransactionId, TransactionId,
+extern PGDLLIMPORT void ReorderBufferAssignChild(ReorderBuffer *, TransactionId, TransactionId, XLogRecPtr commit_lsn);
+extern PGDLLIMPORT void ReorderBufferCommitChild(ReorderBuffer *, TransactionId, TransactionId,
 									 XLogRecPtr commit_lsn, XLogRecPtr end_lsn);
-extern void ReorderBufferAbort(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
-extern void ReorderBufferAbortOld(ReorderBuffer *, TransactionId xid);
-extern void ReorderBufferForget(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
-extern void ReorderBufferInvalidate(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
+extern PGDLLIMPORT void ReorderBufferAbort(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
+extern PGDLLIMPORT void ReorderBufferAbortOld(ReorderBuffer *, TransactionId xid);
+extern PGDLLIMPORT void ReorderBufferForget(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
+extern PGDLLIMPORT void ReorderBufferInvalidate(ReorderBuffer *, TransactionId, XLogRecPtr lsn);
 
-extern void ReorderBufferSetBaseSnapshot(ReorderBuffer *, TransactionId, XLogRecPtr lsn, struct SnapshotData *snap);
-extern void ReorderBufferAddSnapshot(ReorderBuffer *, TransactionId, XLogRecPtr lsn, struct SnapshotData *snap);
-extern void ReorderBufferAddNewCommandId(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
+extern PGDLLIMPORT void ReorderBufferSetBaseSnapshot(ReorderBuffer *, TransactionId, XLogRecPtr lsn, struct SnapshotData *snap);
+extern PGDLLIMPORT void ReorderBufferAddSnapshot(ReorderBuffer *, TransactionId, XLogRecPtr lsn, struct SnapshotData *snap);
+extern PGDLLIMPORT void ReorderBufferAddNewCommandId(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
 										 CommandId cid);
-extern void ReorderBufferAddNewTupleCids(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
+extern PGDLLIMPORT void ReorderBufferAddNewTupleCids(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
 										 RelFileNode node, ItemPointerData pt,
 										 CommandId cmin, CommandId cmax, CommandId combocid);
-extern void ReorderBufferAddInvalidations(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
+extern PGDLLIMPORT void ReorderBufferAddInvalidations(ReorderBuffer *, TransactionId, XLogRecPtr lsn,
 										  Size nmsgs, SharedInvalidationMessage *msgs);
-extern void ReorderBufferImmediateInvalidation(ReorderBuffer *, uint32 ninvalidations,
+extern PGDLLIMPORT void ReorderBufferImmediateInvalidation(ReorderBuffer *, uint32 ninvalidations,
 											   SharedInvalidationMessage *invalidations);
-extern void ReorderBufferProcessXid(ReorderBuffer *, TransactionId xid, XLogRecPtr lsn);
+extern PGDLLIMPORT void ReorderBufferProcessXid(ReorderBuffer *, TransactionId xid, XLogRecPtr lsn);
 
-extern void ReorderBufferXidSetCatalogChanges(ReorderBuffer *, TransactionId xid, XLogRecPtr lsn);
-extern bool ReorderBufferXidHasCatalogChanges(ReorderBuffer *, TransactionId xid);
-extern bool ReorderBufferXidHasBaseSnapshot(ReorderBuffer *, TransactionId xid);
+extern PGDLLIMPORT void ReorderBufferXidSetCatalogChanges(ReorderBuffer *, TransactionId xid, XLogRecPtr lsn);
+extern PGDLLIMPORT bool ReorderBufferXidHasCatalogChanges(ReorderBuffer *, TransactionId xid);
+extern PGDLLIMPORT bool ReorderBufferXidHasBaseSnapshot(ReorderBuffer *, TransactionId xid);
 
-extern bool ReorderBufferRememberPrepareInfo(ReorderBuffer *rb, TransactionId xid,
+extern PGDLLIMPORT bool ReorderBufferRememberPrepareInfo(ReorderBuffer *rb, TransactionId xid,
 											 XLogRecPtr prepare_lsn, XLogRecPtr end_lsn,
 											 TimestampTz prepare_time,
 											 RepOriginId origin_id, XLogRecPtr origin_lsn);
-extern void ReorderBufferSkipPrepare(ReorderBuffer *rb, TransactionId xid);
-extern void ReorderBufferPrepare(ReorderBuffer *rb, TransactionId xid, char *gid);
-extern ReorderBufferTXN *ReorderBufferGetOldestTXN(ReorderBuffer *);
-extern TransactionId ReorderBufferGetOldestXmin(ReorderBuffer *rb);
+extern PGDLLIMPORT void ReorderBufferSkipPrepare(ReorderBuffer *rb, TransactionId xid);
+extern PGDLLIMPORT void ReorderBufferPrepare(ReorderBuffer *rb, TransactionId xid, char *gid);
+extern PGDLLIMPORT ReorderBufferTXN *ReorderBufferGetOldestTXN(ReorderBuffer *);
+extern PGDLLIMPORT TransactionId ReorderBufferGetOldestXmin(ReorderBuffer *rb);
 
-extern void ReorderBufferSetRestartPoint(ReorderBuffer *, XLogRecPtr ptr);
+extern PGDLLIMPORT void ReorderBufferSetRestartPoint(ReorderBuffer *, XLogRecPtr ptr);
 
-extern void StartupReorderBuffer(void);
+extern PGDLLIMPORT void StartupReorderBuffer(void);
 
 #endif

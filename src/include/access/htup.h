@@ -78,12 +78,12 @@ typedef HeapTupleData *HeapTuple;
 #define HeapTupleIsValid(tuple) PointerIsValid(tuple)
 
 /* HeapTupleHeader functions implemented in utils/time/combocid.c */
-extern CommandId HeapTupleHeaderGetCmin(HeapTupleHeader tup);
-extern CommandId HeapTupleHeaderGetCmax(HeapTupleHeader tup);
-extern void HeapTupleHeaderAdjustCmax(HeapTupleHeader tup,
+extern PGDLLIMPORT CommandId HeapTupleHeaderGetCmin(HeapTupleHeader tup);
+extern PGDLLIMPORT CommandId HeapTupleHeaderGetCmax(HeapTupleHeader tup);
+extern PGDLLIMPORT void HeapTupleHeaderAdjustCmax(HeapTupleHeader tup,
 									  CommandId *cmax, bool *iscombo);
 
 /* Prototype for HeapTupleHeader accessors in heapam.c */
-extern TransactionId HeapTupleGetUpdateXid(HeapTupleHeader tuple);
+extern PGDLLIMPORT TransactionId HeapTupleGetUpdateXid(HeapTupleHeader tuple);
 
 #endif							/* HTUP_H */

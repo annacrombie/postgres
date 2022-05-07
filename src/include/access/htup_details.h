@@ -691,47 +691,47 @@ struct MinimalTupleData
 		HeapTupleHeaderClearHeapOnly((tuple)->t_data)
 
 /* prototypes for functions in common/heaptuple.c */
-extern Size heap_compute_data_size(TupleDesc tupleDesc,
+extern PGDLLIMPORT Size heap_compute_data_size(TupleDesc tupleDesc,
 								   Datum *values, bool *isnull);
-extern void heap_fill_tuple(TupleDesc tupleDesc,
+extern PGDLLIMPORT void heap_fill_tuple(TupleDesc tupleDesc,
 							Datum *values, bool *isnull,
 							char *data, Size data_size,
 							uint16 *infomask, bits8 *bit);
-extern bool heap_attisnull(HeapTuple tup, int attnum, TupleDesc tupleDesc);
-extern Datum nocachegetattr(HeapTuple tup, int attnum,
+extern PGDLLIMPORT bool heap_attisnull(HeapTuple tup, int attnum, TupleDesc tupleDesc);
+extern PGDLLIMPORT Datum nocachegetattr(HeapTuple tup, int attnum,
 							TupleDesc att);
-extern Datum heap_getsysattr(HeapTuple tup, int attnum, TupleDesc tupleDesc,
+extern PGDLLIMPORT Datum heap_getsysattr(HeapTuple tup, int attnum, TupleDesc tupleDesc,
 							 bool *isnull);
-extern Datum getmissingattr(TupleDesc tupleDesc,
+extern PGDLLIMPORT Datum getmissingattr(TupleDesc tupleDesc,
 							int attnum, bool *isnull);
-extern HeapTuple heap_copytuple(HeapTuple tuple);
-extern void heap_copytuple_with_tuple(HeapTuple src, HeapTuple dest);
-extern Datum heap_copy_tuple_as_datum(HeapTuple tuple, TupleDesc tupleDesc);
-extern HeapTuple heap_form_tuple(TupleDesc tupleDescriptor,
+extern PGDLLIMPORT HeapTuple heap_copytuple(HeapTuple tuple);
+extern PGDLLIMPORT void heap_copytuple_with_tuple(HeapTuple src, HeapTuple dest);
+extern PGDLLIMPORT Datum heap_copy_tuple_as_datum(HeapTuple tuple, TupleDesc tupleDesc);
+extern PGDLLIMPORT HeapTuple heap_form_tuple(TupleDesc tupleDescriptor,
 								 Datum *values, bool *isnull);
-extern HeapTuple heap_modify_tuple(HeapTuple tuple,
+extern PGDLLIMPORT HeapTuple heap_modify_tuple(HeapTuple tuple,
 								   TupleDesc tupleDesc,
 								   Datum *replValues,
 								   bool *replIsnull,
 								   bool *doReplace);
-extern HeapTuple heap_modify_tuple_by_cols(HeapTuple tuple,
+extern PGDLLIMPORT HeapTuple heap_modify_tuple_by_cols(HeapTuple tuple,
 										   TupleDesc tupleDesc,
 										   int nCols,
 										   int *replCols,
 										   Datum *replValues,
 										   bool *replIsnull);
-extern void heap_deform_tuple(HeapTuple tuple, TupleDesc tupleDesc,
+extern PGDLLIMPORT void heap_deform_tuple(HeapTuple tuple, TupleDesc tupleDesc,
 							  Datum *values, bool *isnull);
-extern void heap_freetuple(HeapTuple htup);
-extern MinimalTuple heap_form_minimal_tuple(TupleDesc tupleDescriptor,
+extern PGDLLIMPORT void heap_freetuple(HeapTuple htup);
+extern PGDLLIMPORT MinimalTuple heap_form_minimal_tuple(TupleDesc tupleDescriptor,
 											Datum *values, bool *isnull);
-extern void heap_free_minimal_tuple(MinimalTuple mtup);
-extern MinimalTuple heap_copy_minimal_tuple(MinimalTuple mtup);
-extern HeapTuple heap_tuple_from_minimal_tuple(MinimalTuple mtup);
-extern MinimalTuple minimal_tuple_from_heap_tuple(HeapTuple htup);
-extern size_t varsize_any(void *p);
-extern HeapTuple heap_expand_tuple(HeapTuple sourceTuple, TupleDesc tupleDesc);
-extern MinimalTuple minimal_expand_tuple(HeapTuple sourceTuple, TupleDesc tupleDesc);
+extern PGDLLIMPORT void heap_free_minimal_tuple(MinimalTuple mtup);
+extern PGDLLIMPORT MinimalTuple heap_copy_minimal_tuple(MinimalTuple mtup);
+extern PGDLLIMPORT HeapTuple heap_tuple_from_minimal_tuple(MinimalTuple mtup);
+extern PGDLLIMPORT MinimalTuple minimal_tuple_from_heap_tuple(HeapTuple htup);
+extern PGDLLIMPORT size_t varsize_any(void *p);
+extern PGDLLIMPORT HeapTuple heap_expand_tuple(HeapTuple sourceTuple, TupleDesc tupleDesc);
+extern PGDLLIMPORT MinimalTuple minimal_expand_tuple(HeapTuple sourceTuple, TupleDesc tupleDesc);
 
 #ifndef FRONTEND
 /*

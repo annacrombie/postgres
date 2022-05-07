@@ -50,29 +50,29 @@ extern PGDLLIMPORT char *localized_abbrev_months[];
 extern PGDLLIMPORT char *localized_full_months[];
 
 
-extern bool check_locale_messages(char **newval, void **extra, GucSource source);
-extern void assign_locale_messages(const char *newval, void *extra);
-extern bool check_locale_monetary(char **newval, void **extra, GucSource source);
-extern void assign_locale_monetary(const char *newval, void *extra);
-extern bool check_locale_numeric(char **newval, void **extra, GucSource source);
-extern void assign_locale_numeric(const char *newval, void *extra);
-extern bool check_locale_time(char **newval, void **extra, GucSource source);
-extern void assign_locale_time(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_locale_messages(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_locale_messages(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_locale_monetary(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_locale_monetary(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_locale_numeric(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_locale_numeric(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_locale_time(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_locale_time(const char *newval, void *extra);
 
-extern bool check_locale(int category, const char *locale, char **canonname);
-extern char *pg_perm_setlocale(int category, const char *locale);
-extern void check_strxfrm_bug(void);
+extern PGDLLIMPORT bool check_locale(int category, const char *locale, char **canonname);
+extern PGDLLIMPORT char *pg_perm_setlocale(int category, const char *locale);
+extern PGDLLIMPORT void check_strxfrm_bug(void);
 
-extern bool lc_collate_is_c(Oid collation);
-extern bool lc_ctype_is_c(Oid collation);
+extern PGDLLIMPORT bool lc_collate_is_c(Oid collation);
+extern PGDLLIMPORT bool lc_ctype_is_c(Oid collation);
 
 /*
  * Return the POSIX lconv struct (contains number/money formatting
  * information) with locale information for all categories.
  */
-extern struct lconv *PGLC_localeconv(void);
+extern PGDLLIMPORT struct lconv *PGLC_localeconv(void);
 
-extern void cache_locale_time(void);
+extern PGDLLIMPORT void cache_locale_time(void);
 
 
 /*
@@ -105,23 +105,23 @@ typedef struct pg_locale_struct *pg_locale_t;
 
 extern PGDLLIMPORT struct pg_locale_struct default_locale;
 
-extern void make_icu_collator(const char *iculocstr,
+extern PGDLLIMPORT void make_icu_collator(const char *iculocstr,
 							  struct pg_locale_struct *resultp);
 
-extern pg_locale_t pg_newlocale_from_collation(Oid collid);
+extern PGDLLIMPORT pg_locale_t pg_newlocale_from_collation(Oid collid);
 
-extern char *get_collation_actual_version(char collprovider, const char *collcollate);
+extern PGDLLIMPORT char *get_collation_actual_version(char collprovider, const char *collcollate);
 
 #ifdef USE_ICU
-extern int32_t icu_to_uchar(UChar **buff_uchar, const char *buff, size_t nbytes);
-extern int32_t icu_from_uchar(char **result, const UChar *buff_uchar, int32_t len_uchar);
+extern PGDLLIMPORT int32_t icu_to_uchar(UChar **buff_uchar, const char *buff, size_t nbytes);
+extern PGDLLIMPORT int32_t icu_from_uchar(char **result, const UChar *buff_uchar, int32_t len_uchar);
 #endif
-extern void check_icu_locale(const char *icu_locale);
+extern PGDLLIMPORT void check_icu_locale(const char *icu_locale);
 
 /* These functions convert from/to libc's wchar_t, *not* pg_wchar_t */
-extern size_t wchar2char(char *to, const wchar_t *from, size_t tolen,
+extern PGDLLIMPORT size_t wchar2char(char *to, const wchar_t *from, size_t tolen,
 						 pg_locale_t locale);
-extern size_t char2wchar(wchar_t *to, size_t tolen,
+extern PGDLLIMPORT size_t char2wchar(wchar_t *to, size_t tolen,
 						 const char *from, size_t fromlen, pg_locale_t locale);
 
 #endif							/* _PG_LOCALE_ */

@@ -43,7 +43,7 @@ typedef union ConditionVariableMinimallyPadded
 } ConditionVariableMinimallyPadded;
 
 /* Initialize a condition variable. */
-extern void ConditionVariableInit(ConditionVariable *cv);
+extern PGDLLIMPORT void ConditionVariableInit(ConditionVariable *cv);
 
 /*
  * To sleep on a condition variable, a process should use a loop which first
@@ -53,10 +53,10 @@ extern void ConditionVariableInit(ConditionVariable *cv);
  * be called to ensure that the process is no longer in the wait list for
  * the condition variable.
  */
-extern void ConditionVariableSleep(ConditionVariable *cv, uint32 wait_event_info);
-extern bool ConditionVariableTimedSleep(ConditionVariable *cv, long timeout,
+extern PGDLLIMPORT void ConditionVariableSleep(ConditionVariable *cv, uint32 wait_event_info);
+extern PGDLLIMPORT bool ConditionVariableTimedSleep(ConditionVariable *cv, long timeout,
 										uint32 wait_event_info);
-extern void ConditionVariableCancelSleep(void);
+extern PGDLLIMPORT void ConditionVariableCancelSleep(void);
 
 /*
  * Optionally, ConditionVariablePrepareToSleep can be called before entering
@@ -64,10 +64,10 @@ extern void ConditionVariableCancelSleep(void);
  * at least one sleep is needed, whereas not doing so is more efficient when
  * no sleep is needed because the test condition is true the first time.
  */
-extern void ConditionVariablePrepareToSleep(ConditionVariable *cv);
+extern PGDLLIMPORT void ConditionVariablePrepareToSleep(ConditionVariable *cv);
 
 /* Wake up a single waiter (via signal) or all waiters (via broadcast). */
-extern void ConditionVariableSignal(ConditionVariable *cv);
-extern void ConditionVariableBroadcast(ConditionVariable *cv);
+extern PGDLLIMPORT void ConditionVariableSignal(ConditionVariable *cv);
+extern PGDLLIMPORT void ConditionVariableBroadcast(ConditionVariable *cv);
 
 #endif							/* CONDITION_VARIABLE_H */

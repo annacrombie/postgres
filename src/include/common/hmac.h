@@ -20,11 +20,11 @@
 /* opaque context, private to each HMAC implementation */
 typedef struct pg_hmac_ctx pg_hmac_ctx;
 
-extern pg_hmac_ctx *pg_hmac_create(pg_cryptohash_type type);
-extern int	pg_hmac_init(pg_hmac_ctx *ctx, const uint8 *key, size_t len);
-extern int	pg_hmac_update(pg_hmac_ctx *ctx, const uint8 *data, size_t len);
-extern int	pg_hmac_final(pg_hmac_ctx *ctx, uint8 *dest, size_t len);
-extern void pg_hmac_free(pg_hmac_ctx *ctx);
-extern const char *pg_hmac_error(pg_hmac_ctx *ctx);
+extern PGDLLIMPORT pg_hmac_ctx *pg_hmac_create(pg_cryptohash_type type);
+extern PGDLLIMPORT int	pg_hmac_init(pg_hmac_ctx *ctx, const uint8 *key, size_t len);
+extern PGDLLIMPORT int	pg_hmac_update(pg_hmac_ctx *ctx, const uint8 *data, size_t len);
+extern PGDLLIMPORT int	pg_hmac_final(pg_hmac_ctx *ctx, uint8 *dest, size_t len);
+extern PGDLLIMPORT void pg_hmac_free(pg_hmac_ctx *ctx);
+extern PGDLLIMPORT const char *pg_hmac_error(pg_hmac_ctx *ctx);
 
 #endif							/* PG_HMAC_H */

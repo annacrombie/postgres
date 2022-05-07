@@ -94,24 +94,24 @@ typedef struct MCVList
 	MCVItem		items[FLEXIBLE_ARRAY_MEMBER];	/* array of MCV items */
 } MCVList;
 
-extern MVNDistinct *statext_ndistinct_load(Oid mvoid, bool inh);
-extern MVDependencies *statext_dependencies_load(Oid mvoid, bool inh);
-extern MCVList *statext_mcv_load(Oid mvoid, bool inh);
+extern PGDLLIMPORT MVNDistinct *statext_ndistinct_load(Oid mvoid, bool inh);
+extern PGDLLIMPORT MVDependencies *statext_dependencies_load(Oid mvoid, bool inh);
+extern PGDLLIMPORT MCVList *statext_mcv_load(Oid mvoid, bool inh);
 
-extern void BuildRelationExtStatistics(Relation onerel, bool inh, double totalrows,
+extern PGDLLIMPORT void BuildRelationExtStatistics(Relation onerel, bool inh, double totalrows,
 									   int numrows, HeapTuple *rows,
 									   int natts, VacAttrStats **vacattrstats);
-extern int	ComputeExtStatisticsRows(Relation onerel,
+extern PGDLLIMPORT int	ComputeExtStatisticsRows(Relation onerel,
 									 int natts, VacAttrStats **stats);
-extern bool statext_is_kind_built(HeapTuple htup, char kind);
-extern Selectivity dependencies_clauselist_selectivity(PlannerInfo *root,
+extern PGDLLIMPORT bool statext_is_kind_built(HeapTuple htup, char kind);
+extern PGDLLIMPORT Selectivity dependencies_clauselist_selectivity(PlannerInfo *root,
 													   List *clauses,
 													   int varRelid,
 													   JoinType jointype,
 													   SpecialJoinInfo *sjinfo,
 													   RelOptInfo *rel,
 													   Bitmapset **estimatedclauses);
-extern Selectivity statext_clauselist_selectivity(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity statext_clauselist_selectivity(PlannerInfo *root,
 												  List *clauses,
 												  int varRelid,
 												  JoinType jointype,
@@ -119,12 +119,12 @@ extern Selectivity statext_clauselist_selectivity(PlannerInfo *root,
 												  RelOptInfo *rel,
 												  Bitmapset **estimatedclauses,
 												  bool is_or);
-extern bool has_stats_of_kind(List *stats, char requiredkind);
-extern StatisticExtInfo *choose_best_statistics(List *stats, char requiredkind,
+extern PGDLLIMPORT bool has_stats_of_kind(List *stats, char requiredkind);
+extern PGDLLIMPORT StatisticExtInfo *choose_best_statistics(List *stats, char requiredkind,
 												bool inh,
 												Bitmapset **clause_attnums,
 												List **clause_exprs,
 												int nclauses);
-extern HeapTuple statext_expressions_load(Oid stxoid, bool inh, int idx);
+extern PGDLLIMPORT HeapTuple statext_expressions_load(Oid stxoid, bool inh, int idx);
 
 #endif							/* STATISTICS_H */

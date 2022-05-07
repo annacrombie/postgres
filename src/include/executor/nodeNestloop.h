@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern NestLoopState *ExecInitNestLoop(NestLoop *node, EState *estate, int eflags);
-extern void ExecEndNestLoop(NestLoopState *node);
-extern void ExecReScanNestLoop(NestLoopState *node);
+extern PGDLLIMPORT NestLoopState *ExecInitNestLoop(NestLoop *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndNestLoop(NestLoopState *node);
+extern PGDLLIMPORT void ExecReScanNestLoop(NestLoopState *node);
 
 #endif							/* NODENESTLOOP_H */

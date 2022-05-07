@@ -27,6 +27,6 @@ typedef NTSTATUS (__stdcall * RtlGetLastNtStatus_t) (void);
 
 extern PGDLLIMPORT RtlGetLastNtStatus_t pg_RtlGetLastNtStatus;
 
-extern int	initialize_ntdll(void);
+extern PGDLLIMPORT int	initialize_ntdll(void);
 
 #endif							/* WIN32NTDLL_H */

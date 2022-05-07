@@ -21,37 +21,37 @@
 /*
  * prototypes for prepjointree.c
  */
-extern void transform_MERGE_to_join(Query *parse);
-extern void replace_empty_jointree(Query *parse);
-extern void pull_up_sublinks(PlannerInfo *root);
-extern void preprocess_function_rtes(PlannerInfo *root);
-extern void pull_up_subqueries(PlannerInfo *root);
-extern void flatten_simple_union_all(PlannerInfo *root);
-extern void reduce_outer_joins(PlannerInfo *root);
-extern void remove_useless_result_rtes(PlannerInfo *root);
-extern Relids get_relids_in_jointree(Node *jtnode, bool include_joins);
-extern Relids get_relids_for_join(Query *query, int joinrelid);
+extern PGDLLIMPORT void transform_MERGE_to_join(Query *parse);
+extern PGDLLIMPORT void replace_empty_jointree(Query *parse);
+extern PGDLLIMPORT void pull_up_sublinks(PlannerInfo *root);
+extern PGDLLIMPORT void preprocess_function_rtes(PlannerInfo *root);
+extern PGDLLIMPORT void pull_up_subqueries(PlannerInfo *root);
+extern PGDLLIMPORT void flatten_simple_union_all(PlannerInfo *root);
+extern PGDLLIMPORT void reduce_outer_joins(PlannerInfo *root);
+extern PGDLLIMPORT void remove_useless_result_rtes(PlannerInfo *root);
+extern PGDLLIMPORT Relids get_relids_in_jointree(Node *jtnode, bool include_joins);
+extern PGDLLIMPORT Relids get_relids_for_join(Query *query, int joinrelid);
 
 /*
  * prototypes for preptlist.c
  */
-extern void preprocess_targetlist(PlannerInfo *root);
+extern PGDLLIMPORT void preprocess_targetlist(PlannerInfo *root);
 
-extern List *extract_update_targetlist_colnos(List *tlist);
+extern PGDLLIMPORT List *extract_update_targetlist_colnos(List *tlist);
 
-extern PlanRowMark *get_plan_rowmark(List *rowmarks, Index rtindex);
+extern PGDLLIMPORT PlanRowMark *get_plan_rowmark(List *rowmarks, Index rtindex);
 
 /*
  * prototypes for prepagg.c
  */
-extern void get_agg_clause_costs(PlannerInfo *root, AggSplit aggsplit,
+extern PGDLLIMPORT void get_agg_clause_costs(PlannerInfo *root, AggSplit aggsplit,
 								 AggClauseCosts *agg_costs);
-extern void preprocess_aggrefs(PlannerInfo *root, Node *clause);
+extern PGDLLIMPORT void preprocess_aggrefs(PlannerInfo *root, Node *clause);
 
 /*
  * prototypes for prepunion.c
  */
-extern RelOptInfo *plan_set_operations(PlannerInfo *root);
+extern PGDLLIMPORT RelOptInfo *plan_set_operations(PlannerInfo *root);
 
 
 #endif							/* PREP_H */

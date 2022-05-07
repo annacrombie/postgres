@@ -82,34 +82,34 @@ extern PGDLLIMPORT char *syncrep_parse_error_msg;
 extern PGDLLIMPORT char *SyncRepStandbyNames;
 
 /* called by user backend */
-extern void SyncRepWaitForLSN(XLogRecPtr lsn, bool commit);
+extern PGDLLIMPORT void SyncRepWaitForLSN(XLogRecPtr lsn, bool commit);
 
 /* called at backend exit */
-extern void SyncRepCleanupAtProcExit(void);
+extern PGDLLIMPORT void SyncRepCleanupAtProcExit(void);
 
 /* called by wal sender */
-extern void SyncRepInitConfig(void);
-extern void SyncRepReleaseWaiters(void);
+extern PGDLLIMPORT void SyncRepInitConfig(void);
+extern PGDLLIMPORT void SyncRepReleaseWaiters(void);
 
 /* called by wal sender and user backend */
-extern int	SyncRepGetCandidateStandbys(SyncRepStandbyData **standbys);
+extern PGDLLIMPORT int	SyncRepGetCandidateStandbys(SyncRepStandbyData **standbys);
 
 /* called by checkpointer */
-extern void SyncRepUpdateSyncStandbysDefined(void);
+extern PGDLLIMPORT void SyncRepUpdateSyncStandbysDefined(void);
 
 /* GUC infrastructure */
-extern bool check_synchronous_standby_names(char **newval, void **extra, GucSource source);
-extern void assign_synchronous_standby_names(const char *newval, void *extra);
-extern void assign_synchronous_commit(int newval, void *extra);
+extern PGDLLIMPORT bool check_synchronous_standby_names(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_synchronous_standby_names(const char *newval, void *extra);
+extern PGDLLIMPORT void assign_synchronous_commit(int newval, void *extra);
 
 /*
  * Internal functions for parsing synchronous_standby_names grammar,
  * in syncrep_gram.y and syncrep_scanner.l
  */
-extern int	syncrep_yyparse(void);
-extern int	syncrep_yylex(void);
-extern void syncrep_yyerror(const char *str);
-extern void syncrep_scanner_init(const char *query_string);
-extern void syncrep_scanner_finish(void);
+extern PGDLLIMPORT int	syncrep_yyparse(void);
+extern PGDLLIMPORT int	syncrep_yylex(void);
+extern PGDLLIMPORT void syncrep_yyerror(const char *str);
+extern PGDLLIMPORT void syncrep_scanner_init(const char *query_string);
+extern PGDLLIMPORT void syncrep_scanner_finish(void);
 
 #endif							/* _SYNCREP_H */

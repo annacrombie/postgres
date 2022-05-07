@@ -37,13 +37,13 @@ typedef struct LogicalRepRelMapEntry
 	XLogRecPtr	statelsn;
 } LogicalRepRelMapEntry;
 
-extern void logicalrep_relmap_update(LogicalRepRelation *remoterel);
+extern PGDLLIMPORT void logicalrep_relmap_update(LogicalRepRelation *remoterel);
 
-extern LogicalRepRelMapEntry *logicalrep_rel_open(LogicalRepRelId remoteid,
+extern PGDLLIMPORT LogicalRepRelMapEntry *logicalrep_rel_open(LogicalRepRelId remoteid,
 												  LOCKMODE lockmode);
-extern LogicalRepRelMapEntry *logicalrep_partition_open(LogicalRepRelMapEntry *root,
+extern PGDLLIMPORT LogicalRepRelMapEntry *logicalrep_partition_open(LogicalRepRelMapEntry *root,
 														Relation partrel, AttrMap *map);
-extern void logicalrep_rel_close(LogicalRepRelMapEntry *rel,
+extern PGDLLIMPORT void logicalrep_rel_close(LogicalRepRelMapEntry *rel,
 								 LOCKMODE lockmode);
 
 #endif							/* LOGICALRELATION_H */

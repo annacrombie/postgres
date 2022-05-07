@@ -21,13 +21,13 @@
 /* struct definition is private to rewriteheap.c */
 typedef struct RewriteStateData *RewriteState;
 
-extern RewriteState begin_heap_rewrite(Relation OldHeap, Relation NewHeap,
+extern PGDLLIMPORT RewriteState begin_heap_rewrite(Relation OldHeap, Relation NewHeap,
 									   TransactionId OldestXmin, TransactionId FreezeXid,
 									   MultiXactId MultiXactCutoff);
-extern void end_heap_rewrite(RewriteState state);
-extern void rewrite_heap_tuple(RewriteState state, HeapTuple oldTuple,
+extern PGDLLIMPORT void end_heap_rewrite(RewriteState state);
+extern PGDLLIMPORT void rewrite_heap_tuple(RewriteState state, HeapTuple oldTuple,
 							   HeapTuple newTuple);
-extern bool rewrite_heap_dead_tuple(RewriteState state, HeapTuple oldTuple);
+extern PGDLLIMPORT bool rewrite_heap_dead_tuple(RewriteState state, HeapTuple oldTuple);
 
 /*
  * On-Disk data format for an individual logical rewrite mapping.
@@ -52,6 +52,6 @@ typedef struct LogicalRewriteMappingData
  * ---
  */
 #define LOGICAL_REWRITE_FORMAT "map-%x-%x-%X_%X-%x-%x"
-extern void CheckPointLogicalRewriteHeap(void);
+extern PGDLLIMPORT void CheckPointLogicalRewriteHeap(void);
 
 #endif							/* REWRITE_HEAP_H */

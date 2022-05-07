@@ -23,29 +23,29 @@ struct PlannedStmt;				/* avoid including plannodes.h here */
 extern PGDLLIMPORT Portal ActivePortal;
 
 
-extern PortalStrategy ChoosePortalStrategy(List *stmts);
+extern PGDLLIMPORT PortalStrategy ChoosePortalStrategy(List *stmts);
 
-extern List *FetchPortalTargetList(Portal portal);
+extern PGDLLIMPORT List *FetchPortalTargetList(Portal portal);
 
-extern List *FetchStatementTargetList(Node *stmt);
+extern PGDLLIMPORT List *FetchStatementTargetList(Node *stmt);
 
-extern void PortalStart(Portal portal, ParamListInfo params,
+extern PGDLLIMPORT void PortalStart(Portal portal, ParamListInfo params,
 						int eflags, Snapshot snapshot);
 
-extern void PortalSetResultFormat(Portal portal, int nFormats,
+extern PGDLLIMPORT void PortalSetResultFormat(Portal portal, int nFormats,
 								  int16 *formats);
 
-extern bool PortalRun(Portal portal, long count, bool isTopLevel,
+extern PGDLLIMPORT bool PortalRun(Portal portal, long count, bool isTopLevel,
 					  bool run_once, DestReceiver *dest, DestReceiver *altdest,
 					  QueryCompletion *qc);
 
-extern uint64 PortalRunFetch(Portal portal,
+extern PGDLLIMPORT uint64 PortalRunFetch(Portal portal,
 							 FetchDirection fdirection,
 							 long count,
 							 DestReceiver *dest);
 
-extern bool PlannedStmtRequiresSnapshot(struct PlannedStmt *pstmt);
+extern PGDLLIMPORT bool PlannedStmtRequiresSnapshot(struct PlannedStmt *pstmt);
 
-extern void EnsurePortalSnapshotExists(void);
+extern PGDLLIMPORT void EnsurePortalSnapshotExists(void);
 
 #endif							/* PQUERY_H */

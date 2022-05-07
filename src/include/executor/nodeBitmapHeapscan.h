@@ -17,16 +17,16 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern BitmapHeapScanState *ExecInitBitmapHeapScan(BitmapHeapScan *node, EState *estate, int eflags);
-extern void ExecEndBitmapHeapScan(BitmapHeapScanState *node);
-extern void ExecReScanBitmapHeapScan(BitmapHeapScanState *node);
-extern void ExecBitmapHeapEstimate(BitmapHeapScanState *node,
+extern PGDLLIMPORT BitmapHeapScanState *ExecInitBitmapHeapScan(BitmapHeapScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndBitmapHeapScan(BitmapHeapScanState *node);
+extern PGDLLIMPORT void ExecReScanBitmapHeapScan(BitmapHeapScanState *node);
+extern PGDLLIMPORT void ExecBitmapHeapEstimate(BitmapHeapScanState *node,
 								   ParallelContext *pcxt);
-extern void ExecBitmapHeapInitializeDSM(BitmapHeapScanState *node,
+extern PGDLLIMPORT void ExecBitmapHeapInitializeDSM(BitmapHeapScanState *node,
 										ParallelContext *pcxt);
-extern void ExecBitmapHeapReInitializeDSM(BitmapHeapScanState *node,
+extern PGDLLIMPORT void ExecBitmapHeapReInitializeDSM(BitmapHeapScanState *node,
 										  ParallelContext *pcxt);
-extern void ExecBitmapHeapInitializeWorker(BitmapHeapScanState *node,
+extern PGDLLIMPORT void ExecBitmapHeapInitializeWorker(BitmapHeapScanState *node,
 										   ParallelWorkerContext *pwcxt);
 
 #endif							/* NODEBITMAPHEAPSCAN_H */

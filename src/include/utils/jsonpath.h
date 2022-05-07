@@ -166,20 +166,20 @@ typedef struct JsonPathItem
 
 #define jspHasNext(jsp) ((jsp)->nextPos > 0)
 
-extern void jspInit(JsonPathItem *v, JsonPath *js);
-extern void jspInitByBuffer(JsonPathItem *v, char *base, int32 pos);
-extern bool jspGetNext(JsonPathItem *v, JsonPathItem *a);
-extern void jspGetArg(JsonPathItem *v, JsonPathItem *a);
-extern void jspGetLeftArg(JsonPathItem *v, JsonPathItem *a);
-extern void jspGetRightArg(JsonPathItem *v, JsonPathItem *a);
-extern Numeric jspGetNumeric(JsonPathItem *v);
-extern bool jspGetBool(JsonPathItem *v);
-extern char *jspGetString(JsonPathItem *v, int32 *len);
-extern bool jspGetArraySubscript(JsonPathItem *v, JsonPathItem *from,
+extern PGDLLIMPORT void jspInit(JsonPathItem *v, JsonPath *js);
+extern PGDLLIMPORT void jspInitByBuffer(JsonPathItem *v, char *base, int32 pos);
+extern PGDLLIMPORT bool jspGetNext(JsonPathItem *v, JsonPathItem *a);
+extern PGDLLIMPORT void jspGetArg(JsonPathItem *v, JsonPathItem *a);
+extern PGDLLIMPORT void jspGetLeftArg(JsonPathItem *v, JsonPathItem *a);
+extern PGDLLIMPORT void jspGetRightArg(JsonPathItem *v, JsonPathItem *a);
+extern PGDLLIMPORT Numeric jspGetNumeric(JsonPathItem *v);
+extern PGDLLIMPORT bool jspGetBool(JsonPathItem *v);
+extern PGDLLIMPORT char *jspGetString(JsonPathItem *v, int32 *len);
+extern PGDLLIMPORT bool jspGetArraySubscript(JsonPathItem *v, JsonPathItem *from,
 								 JsonPathItem *to, int i);
-extern bool jspIsMutable(JsonPath *path, List *varnames, List *varexprs);
+extern PGDLLIMPORT bool jspIsMutable(JsonPath *path, List *varnames, List *varexprs);
 
-extern const char *jspOperationName(JsonPathItemType type);
+extern PGDLLIMPORT const char *jspOperationName(JsonPathItemType type);
 
 /*
  * Parsing support data structures.
@@ -248,9 +248,9 @@ typedef struct JsonPathParseResult
 	bool		lax;
 } JsonPathParseResult;
 
-extern JsonPathParseResult *parsejsonpath(const char *str, int len);
+extern PGDLLIMPORT JsonPathParseResult *parsejsonpath(const char *str, int len);
 
-extern int	jspConvertRegexFlags(uint32 xflags);
+extern PGDLLIMPORT int	jspConvertRegexFlags(uint32 xflags);
 
 /*
  * Evaluation of jsonpath
@@ -271,16 +271,16 @@ typedef struct JsonPathVariableEvalContext
 } JsonPathVariableEvalContext;
 
 /* SQL/JSON item */
-extern void JsonItemFromDatum(Datum val, Oid typid, int32 typmod,
+extern PGDLLIMPORT void JsonItemFromDatum(Datum val, Oid typid, int32 typmod,
 							  JsonbValue *res);
 
-extern bool  JsonPathExists(Datum jb, JsonPath *path, List *vars, bool *error);
-extern Datum JsonPathQuery(Datum jb, JsonPath *jp, JsonWrapper wrapper,
+extern PGDLLIMPORT bool  JsonPathExists(Datum jb, JsonPath *path, List *vars, bool *error);
+extern PGDLLIMPORT Datum JsonPathQuery(Datum jb, JsonPath *jp, JsonWrapper wrapper,
 						   bool *empty, bool *error, List *vars);
-extern JsonbValue *JsonPathValue(Datum jb, JsonPath *jp, bool *empty,
+extern PGDLLIMPORT JsonbValue *JsonPathValue(Datum jb, JsonPath *jp, bool *empty,
 								 bool *error, List *vars);
 
-extern int EvalJsonPathVar(void *vars, char *varName, int varNameLen,
+extern PGDLLIMPORT int EvalJsonPathVar(void *vars, char *varName, int varNameLen,
 						   JsonbValue *val, JsonbValue *baseObject);
 
 extern PGDLLIMPORT const TableFuncRoutine JsonbTableRoutine;

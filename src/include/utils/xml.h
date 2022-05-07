@@ -53,27 +53,27 @@ typedef struct PgXmlErrorContext PgXmlErrorContext;
 #define PG_GETARG_XML_P(n)	DatumGetXmlP(PG_GETARG_DATUM(n))
 #define PG_RETURN_XML_P(x)	PG_RETURN_POINTER(x)
 
-extern void pg_xml_init_library(void);
-extern PgXmlErrorContext *pg_xml_init(PgXmlStrictness strictness);
-extern void pg_xml_done(PgXmlErrorContext *errcxt, bool isError);
-extern bool pg_xml_error_occurred(PgXmlErrorContext *errcxt);
-extern void xml_ereport(PgXmlErrorContext *errcxt, int level, int sqlcode,
+extern PGDLLIMPORT void pg_xml_init_library(void);
+extern PGDLLIMPORT PgXmlErrorContext *pg_xml_init(PgXmlStrictness strictness);
+extern PGDLLIMPORT void pg_xml_done(PgXmlErrorContext *errcxt, bool isError);
+extern PGDLLIMPORT bool pg_xml_error_occurred(PgXmlErrorContext *errcxt);
+extern PGDLLIMPORT void xml_ereport(PgXmlErrorContext *errcxt, int level, int sqlcode,
 						const char *msg);
 
-extern xmltype *xmlconcat(List *args);
-extern xmltype *xmlelement(XmlExpr *xexpr,
+extern PGDLLIMPORT xmltype *xmlconcat(List *args);
+extern PGDLLIMPORT xmltype *xmlelement(XmlExpr *xexpr,
 						   Datum *named_argvalue, bool *named_argnull,
 						   Datum *argvalue, bool *argnull);
-extern xmltype *xmlparse(text *data, XmlOptionType xmloption, bool preserve_whitespace);
-extern xmltype *xmlpi(const char *target, text *arg, bool arg_is_null, bool *result_is_null);
-extern xmltype *xmlroot(xmltype *data, text *version, int standalone);
-extern bool xml_is_document(xmltype *arg);
-extern text *xmltotext_with_xmloption(xmltype *data, XmlOptionType xmloption_arg);
-extern char *escape_xml(const char *str);
+extern PGDLLIMPORT xmltype *xmlparse(text *data, XmlOptionType xmloption, bool preserve_whitespace);
+extern PGDLLIMPORT xmltype *xmlpi(const char *target, text *arg, bool arg_is_null, bool *result_is_null);
+extern PGDLLIMPORT xmltype *xmlroot(xmltype *data, text *version, int standalone);
+extern PGDLLIMPORT bool xml_is_document(xmltype *arg);
+extern PGDLLIMPORT text *xmltotext_with_xmloption(xmltype *data, XmlOptionType xmloption_arg);
+extern PGDLLIMPORT char *escape_xml(const char *str);
 
-extern char *map_sql_identifier_to_xml_name(const char *ident, bool fully_escaped, bool escape_period);
-extern char *map_xml_name_to_sql_identifier(const char *name);
-extern char *map_sql_value_to_xml_value(Datum value, Oid type, bool xml_escape_strings);
+extern PGDLLIMPORT char *map_sql_identifier_to_xml_name(const char *ident, bool fully_escaped, bool escape_period);
+extern PGDLLIMPORT char *map_xml_name_to_sql_identifier(const char *name);
+extern PGDLLIMPORT char *map_sql_value_to_xml_value(Datum value, Oid type, bool xml_escape_strings);
 
 extern PGDLLIMPORT int xmlbinary;	/* XmlBinaryType, but int for guc enum */
 

@@ -253,42 +253,42 @@ fDKQXkYuNs474553LBgOhgObJ4Oi7Aeij7XFXfBvTFLJ3ivL9pVYFxg5lUl86pVq\n\
  * Otherwise, log errors at LOG level and return -1 to indicate trouble,
  * preserving the old SSL state if any.  Returns 0 if OK.
  */
-extern int	be_tls_init(bool isServerStart);
+extern PGDLLIMPORT int	be_tls_init(bool isServerStart);
 
 /*
  * Destroy global SSL context, if any.
  */
-extern void be_tls_destroy(void);
+extern PGDLLIMPORT void be_tls_destroy(void);
 
 /*
  * Attempt to negotiate SSL connection.
  */
-extern int	be_tls_open_server(Port *port);
+extern PGDLLIMPORT int	be_tls_open_server(Port *port);
 
 /*
  * Close SSL connection.
  */
-extern void be_tls_close(Port *port);
+extern PGDLLIMPORT void be_tls_close(Port *port);
 
 /*
  * Read data from a secure connection.
  */
-extern ssize_t be_tls_read(Port *port, void *ptr, size_t len, int *waitfor);
+extern PGDLLIMPORT ssize_t be_tls_read(Port *port, void *ptr, size_t len, int *waitfor);
 
 /*
  * Write data to a secure connection.
  */
-extern ssize_t be_tls_write(Port *port, void *ptr, size_t len, int *waitfor);
+extern PGDLLIMPORT ssize_t be_tls_write(Port *port, void *ptr, size_t len, int *waitfor);
 
 /*
  * Return information about the SSL connection.
  */
-extern int	be_tls_get_cipher_bits(Port *port);
-extern const char *be_tls_get_version(Port *port);
-extern const char *be_tls_get_cipher(Port *port);
-extern void be_tls_get_peer_subject_name(Port *port, char *ptr, size_t len);
-extern void be_tls_get_peer_issuer_name(Port *port, char *ptr, size_t len);
-extern void be_tls_get_peer_serial(Port *port, char *ptr, size_t len);
+extern PGDLLIMPORT int	be_tls_get_cipher_bits(Port *port);
+extern PGDLLIMPORT const char *be_tls_get_version(Port *port);
+extern PGDLLIMPORT const char *be_tls_get_cipher(Port *port);
+extern PGDLLIMPORT void be_tls_get_peer_subject_name(Port *port, char *ptr, size_t len);
+extern PGDLLIMPORT void be_tls_get_peer_issuer_name(Port *port, char *ptr, size_t len);
+extern PGDLLIMPORT void be_tls_get_peer_serial(Port *port, char *ptr, size_t len);
 
 /*
  * Get the server certificate hash for SCRAM channel binding type
@@ -302,7 +302,7 @@ extern void be_tls_get_peer_serial(Port *port, char *ptr, size_t len);
  */
 #if defined(USE_OPENSSL) && defined(HAVE_X509_GET_SIGNATURE_NID)
 #define HAVE_BE_TLS_GET_CERTIFICATE_HASH
-extern char *be_tls_get_certificate_hash(Port *port, size_t *len);
+extern PGDLLIMPORT char *be_tls_get_certificate_hash(Port *port, size_t *len);
 #endif
 
 /* init hook for SSL, the default sets the password callback if appropriate */
@@ -317,27 +317,27 @@ extern PGDLLIMPORT openssl_tls_init_hook_typ openssl_tls_init_hook;
 /*
  * Return information about the GSSAPI authenticated connection
  */
-extern bool be_gssapi_get_auth(Port *port);
-extern bool be_gssapi_get_enc(Port *port);
-extern const char *be_gssapi_get_princ(Port *port);
+extern PGDLLIMPORT bool be_gssapi_get_auth(Port *port);
+extern PGDLLIMPORT bool be_gssapi_get_enc(Port *port);
+extern PGDLLIMPORT const char *be_gssapi_get_princ(Port *port);
 
 /* Read and write to a GSSAPI-encrypted connection. */
-extern ssize_t be_gssapi_read(Port *port, void *ptr, size_t len);
-extern ssize_t be_gssapi_write(Port *port, void *ptr, size_t len);
+extern PGDLLIMPORT ssize_t be_gssapi_read(Port *port, void *ptr, size_t len);
+extern PGDLLIMPORT ssize_t be_gssapi_write(Port *port, void *ptr, size_t len);
 #endif							/* ENABLE_GSS */
 
 extern PGDLLIMPORT ProtocolVersion FrontendProtocol;
 
 /* TCP keepalives configuration. These are no-ops on an AF_UNIX socket. */
 
-extern int	pq_getkeepalivesidle(Port *port);
-extern int	pq_getkeepalivesinterval(Port *port);
-extern int	pq_getkeepalivescount(Port *port);
-extern int	pq_gettcpusertimeout(Port *port);
+extern PGDLLIMPORT int	pq_getkeepalivesidle(Port *port);
+extern PGDLLIMPORT int	pq_getkeepalivesinterval(Port *port);
+extern PGDLLIMPORT int	pq_getkeepalivescount(Port *port);
+extern PGDLLIMPORT int	pq_gettcpusertimeout(Port *port);
 
-extern int	pq_setkeepalivesidle(int idle, Port *port);
-extern int	pq_setkeepalivesinterval(int interval, Port *port);
-extern int	pq_setkeepalivescount(int count, Port *port);
-extern int	pq_settcpusertimeout(int timeout, Port *port);
+extern PGDLLIMPORT int	pq_setkeepalivesidle(int idle, Port *port);
+extern PGDLLIMPORT int	pq_setkeepalivesinterval(int interval, Port *port);
+extern PGDLLIMPORT int	pq_setkeepalivescount(int count, Port *port);
+extern PGDLLIMPORT int	pq_settcpusertimeout(int timeout, Port *port);
 
 #endif							/* LIBPQ_BE_H */

@@ -430,33 +430,33 @@ extern PGDLLIMPORT bool log_lock_waits;
 /*
  * Function Prototypes
  */
-extern int	ProcGlobalSemas(void);
-extern Size ProcGlobalShmemSize(void);
-extern void InitProcGlobal(void);
-extern void InitProcess(void);
-extern void InitProcessPhase2(void);
-extern void InitAuxiliaryProcess(void);
+extern PGDLLIMPORT int	ProcGlobalSemas(void);
+extern PGDLLIMPORT Size ProcGlobalShmemSize(void);
+extern PGDLLIMPORT void InitProcGlobal(void);
+extern PGDLLIMPORT void InitProcess(void);
+extern PGDLLIMPORT void InitProcessPhase2(void);
+extern PGDLLIMPORT void InitAuxiliaryProcess(void);
 
-extern void SetStartupBufferPinWaitBufId(int bufid);
-extern int	GetStartupBufferPinWaitBufId(void);
+extern PGDLLIMPORT void SetStartupBufferPinWaitBufId(int bufid);
+extern PGDLLIMPORT int	GetStartupBufferPinWaitBufId(void);
 
-extern bool HaveNFreeProcs(int n);
-extern void ProcReleaseLocks(bool isCommit);
+extern PGDLLIMPORT bool HaveNFreeProcs(int n);
+extern PGDLLIMPORT void ProcReleaseLocks(bool isCommit);
 
-extern void ProcQueueInit(PROC_QUEUE *queue);
-extern ProcWaitStatus ProcSleep(LOCALLOCK *locallock, LockMethod lockMethodTable);
-extern PGPROC *ProcWakeup(PGPROC *proc, ProcWaitStatus waitStatus);
-extern void ProcLockWakeup(LockMethod lockMethodTable, LOCK *lock);
-extern void CheckDeadLockAlert(void);
-extern bool IsWaitingForLock(void);
-extern void LockErrorCleanup(void);
+extern PGDLLIMPORT void ProcQueueInit(PROC_QUEUE *queue);
+extern PGDLLIMPORT ProcWaitStatus ProcSleep(LOCALLOCK *locallock, LockMethod lockMethodTable);
+extern PGDLLIMPORT PGPROC *ProcWakeup(PGPROC *proc, ProcWaitStatus waitStatus);
+extern PGDLLIMPORT void ProcLockWakeup(LockMethod lockMethodTable, LOCK *lock);
+extern PGDLLIMPORT void CheckDeadLockAlert(void);
+extern PGDLLIMPORT bool IsWaitingForLock(void);
+extern PGDLLIMPORT void LockErrorCleanup(void);
 
-extern void ProcWaitForSignal(uint32 wait_event_info);
-extern void ProcSendSignal(int pgprocno);
+extern PGDLLIMPORT void ProcWaitForSignal(uint32 wait_event_info);
+extern PGDLLIMPORT void ProcSendSignal(int pgprocno);
 
-extern PGPROC *AuxiliaryPidGetProc(int pid);
+extern PGDLLIMPORT PGPROC *AuxiliaryPidGetProc(int pid);
 
-extern void BecomeLockGroupLeader(void);
-extern bool BecomeLockGroupMember(PGPROC *leader, int pid);
+extern PGDLLIMPORT void BecomeLockGroupLeader(void);
+extern PGDLLIMPORT bool BecomeLockGroupMember(PGPROC *leader, int pid);
 
 #endif							/* _PROC_H_ */

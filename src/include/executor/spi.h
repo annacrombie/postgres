@@ -111,103 +111,103 @@ extern PGDLLIMPORT uint64 SPI_processed;
 extern PGDLLIMPORT SPITupleTable *SPI_tuptable;
 extern PGDLLIMPORT int SPI_result;
 
-extern int	SPI_connect(void);
-extern int	SPI_connect_ext(int options);
-extern int	SPI_finish(void);
-extern int	SPI_execute(const char *src, bool read_only, long tcount);
-extern int	SPI_execute_extended(const char *src,
+extern PGDLLIMPORT int	SPI_connect(void);
+extern PGDLLIMPORT int	SPI_connect_ext(int options);
+extern PGDLLIMPORT int	SPI_finish(void);
+extern PGDLLIMPORT int	SPI_execute(const char *src, bool read_only, long tcount);
+extern PGDLLIMPORT int	SPI_execute_extended(const char *src,
 								 const SPIExecuteOptions *options);
-extern int	SPI_execute_plan(SPIPlanPtr plan, Datum *Values, const char *Nulls,
+extern PGDLLIMPORT int	SPI_execute_plan(SPIPlanPtr plan, Datum *Values, const char *Nulls,
 							 bool read_only, long tcount);
-extern int	SPI_execute_plan_extended(SPIPlanPtr plan,
+extern PGDLLIMPORT int	SPI_execute_plan_extended(SPIPlanPtr plan,
 									  const SPIExecuteOptions *options);
-extern int	SPI_execute_plan_with_paramlist(SPIPlanPtr plan,
+extern PGDLLIMPORT int	SPI_execute_plan_with_paramlist(SPIPlanPtr plan,
 											ParamListInfo params,
 											bool read_only, long tcount);
-extern int	SPI_exec(const char *src, long tcount);
-extern int	SPI_execp(SPIPlanPtr plan, Datum *Values, const char *Nulls,
+extern PGDLLIMPORT int	SPI_exec(const char *src, long tcount);
+extern PGDLLIMPORT int	SPI_execp(SPIPlanPtr plan, Datum *Values, const char *Nulls,
 					  long tcount);
-extern int	SPI_execute_snapshot(SPIPlanPtr plan,
+extern PGDLLIMPORT int	SPI_execute_snapshot(SPIPlanPtr plan,
 								 Datum *Values, const char *Nulls,
 								 Snapshot snapshot,
 								 Snapshot crosscheck_snapshot,
 								 bool read_only, bool fire_triggers, long tcount);
-extern int	SPI_execute_with_args(const char *src,
+extern PGDLLIMPORT int	SPI_execute_with_args(const char *src,
 								  int nargs, Oid *argtypes,
 								  Datum *Values, const char *Nulls,
 								  bool read_only, long tcount);
-extern SPIPlanPtr SPI_prepare(const char *src, int nargs, Oid *argtypes);
-extern SPIPlanPtr SPI_prepare_cursor(const char *src, int nargs, Oid *argtypes,
+extern PGDLLIMPORT SPIPlanPtr SPI_prepare(const char *src, int nargs, Oid *argtypes);
+extern PGDLLIMPORT SPIPlanPtr SPI_prepare_cursor(const char *src, int nargs, Oid *argtypes,
 									 int cursorOptions);
-extern SPIPlanPtr SPI_prepare_extended(const char *src,
+extern PGDLLIMPORT SPIPlanPtr SPI_prepare_extended(const char *src,
 									   const SPIPrepareOptions *options);
-extern SPIPlanPtr SPI_prepare_params(const char *src,
+extern PGDLLIMPORT SPIPlanPtr SPI_prepare_params(const char *src,
 									 ParserSetupHook parserSetup,
 									 void *parserSetupArg,
 									 int cursorOptions);
-extern int	SPI_keepplan(SPIPlanPtr plan);
-extern SPIPlanPtr SPI_saveplan(SPIPlanPtr plan);
-extern int	SPI_freeplan(SPIPlanPtr plan);
+extern PGDLLIMPORT int	SPI_keepplan(SPIPlanPtr plan);
+extern PGDLLIMPORT SPIPlanPtr SPI_saveplan(SPIPlanPtr plan);
+extern PGDLLIMPORT int	SPI_freeplan(SPIPlanPtr plan);
 
-extern Oid	SPI_getargtypeid(SPIPlanPtr plan, int argIndex);
-extern int	SPI_getargcount(SPIPlanPtr plan);
-extern bool SPI_is_cursor_plan(SPIPlanPtr plan);
-extern bool SPI_plan_is_valid(SPIPlanPtr plan);
-extern const char *SPI_result_code_string(int code);
+extern PGDLLIMPORT Oid	SPI_getargtypeid(SPIPlanPtr plan, int argIndex);
+extern PGDLLIMPORT int	SPI_getargcount(SPIPlanPtr plan);
+extern PGDLLIMPORT bool SPI_is_cursor_plan(SPIPlanPtr plan);
+extern PGDLLIMPORT bool SPI_plan_is_valid(SPIPlanPtr plan);
+extern PGDLLIMPORT const char *SPI_result_code_string(int code);
 
-extern List *SPI_plan_get_plan_sources(SPIPlanPtr plan);
-extern CachedPlan *SPI_plan_get_cached_plan(SPIPlanPtr plan);
+extern PGDLLIMPORT List *SPI_plan_get_plan_sources(SPIPlanPtr plan);
+extern PGDLLIMPORT CachedPlan *SPI_plan_get_cached_plan(SPIPlanPtr plan);
 
-extern HeapTuple SPI_copytuple(HeapTuple tuple);
-extern HeapTupleHeader SPI_returntuple(HeapTuple tuple, TupleDesc tupdesc);
-extern HeapTuple SPI_modifytuple(Relation rel, HeapTuple tuple, int natts,
+extern PGDLLIMPORT HeapTuple SPI_copytuple(HeapTuple tuple);
+extern PGDLLIMPORT HeapTupleHeader SPI_returntuple(HeapTuple tuple, TupleDesc tupdesc);
+extern PGDLLIMPORT HeapTuple SPI_modifytuple(Relation rel, HeapTuple tuple, int natts,
 								 int *attnum, Datum *Values, const char *Nulls);
-extern int	SPI_fnumber(TupleDesc tupdesc, const char *fname);
-extern char *SPI_fname(TupleDesc tupdesc, int fnumber);
-extern char *SPI_getvalue(HeapTuple tuple, TupleDesc tupdesc, int fnumber);
-extern Datum SPI_getbinval(HeapTuple tuple, TupleDesc tupdesc, int fnumber, bool *isnull);
-extern char *SPI_gettype(TupleDesc tupdesc, int fnumber);
-extern Oid	SPI_gettypeid(TupleDesc tupdesc, int fnumber);
-extern char *SPI_getrelname(Relation rel);
-extern char *SPI_getnspname(Relation rel);
-extern void *SPI_palloc(Size size);
-extern void *SPI_repalloc(void *pointer, Size size);
-extern void SPI_pfree(void *pointer);
-extern Datum SPI_datumTransfer(Datum value, bool typByVal, int typLen);
-extern void SPI_freetuple(HeapTuple pointer);
-extern void SPI_freetuptable(SPITupleTable *tuptable);
+extern PGDLLIMPORT int	SPI_fnumber(TupleDesc tupdesc, const char *fname);
+extern PGDLLIMPORT char *SPI_fname(TupleDesc tupdesc, int fnumber);
+extern PGDLLIMPORT char *SPI_getvalue(HeapTuple tuple, TupleDesc tupdesc, int fnumber);
+extern PGDLLIMPORT Datum SPI_getbinval(HeapTuple tuple, TupleDesc tupdesc, int fnumber, bool *isnull);
+extern PGDLLIMPORT char *SPI_gettype(TupleDesc tupdesc, int fnumber);
+extern PGDLLIMPORT Oid	SPI_gettypeid(TupleDesc tupdesc, int fnumber);
+extern PGDLLIMPORT char *SPI_getrelname(Relation rel);
+extern PGDLLIMPORT char *SPI_getnspname(Relation rel);
+extern PGDLLIMPORT void *SPI_palloc(Size size);
+extern PGDLLIMPORT void *SPI_repalloc(void *pointer, Size size);
+extern PGDLLIMPORT void SPI_pfree(void *pointer);
+extern PGDLLIMPORT Datum SPI_datumTransfer(Datum value, bool typByVal, int typLen);
+extern PGDLLIMPORT void SPI_freetuple(HeapTuple pointer);
+extern PGDLLIMPORT void SPI_freetuptable(SPITupleTable *tuptable);
 
-extern Portal SPI_cursor_open(const char *name, SPIPlanPtr plan,
+extern PGDLLIMPORT Portal SPI_cursor_open(const char *name, SPIPlanPtr plan,
 							  Datum *Values, const char *Nulls, bool read_only);
-extern Portal SPI_cursor_open_with_args(const char *name,
+extern PGDLLIMPORT Portal SPI_cursor_open_with_args(const char *name,
 										const char *src,
 										int nargs, Oid *argtypes,
 										Datum *Values, const char *Nulls,
 										bool read_only, int cursorOptions);
-extern Portal SPI_cursor_open_with_paramlist(const char *name, SPIPlanPtr plan,
+extern PGDLLIMPORT Portal SPI_cursor_open_with_paramlist(const char *name, SPIPlanPtr plan,
 											 ParamListInfo params, bool read_only);
-extern Portal SPI_cursor_parse_open(const char *name,
+extern PGDLLIMPORT Portal SPI_cursor_parse_open(const char *name,
 									const char *src,
 									const SPIParseOpenOptions *options);
-extern Portal SPI_cursor_find(const char *name);
-extern void SPI_cursor_fetch(Portal portal, bool forward, long count);
-extern void SPI_cursor_move(Portal portal, bool forward, long count);
-extern void SPI_scroll_cursor_fetch(Portal, FetchDirection direction, long count);
-extern void SPI_scroll_cursor_move(Portal, FetchDirection direction, long count);
-extern void SPI_cursor_close(Portal portal);
+extern PGDLLIMPORT Portal SPI_cursor_find(const char *name);
+extern PGDLLIMPORT void SPI_cursor_fetch(Portal portal, bool forward, long count);
+extern PGDLLIMPORT void SPI_cursor_move(Portal portal, bool forward, long count);
+extern PGDLLIMPORT void SPI_scroll_cursor_fetch(Portal, FetchDirection direction, long count);
+extern PGDLLIMPORT void SPI_scroll_cursor_move(Portal, FetchDirection direction, long count);
+extern PGDLLIMPORT void SPI_cursor_close(Portal portal);
 
-extern int	SPI_register_relation(EphemeralNamedRelation enr);
-extern int	SPI_unregister_relation(const char *name);
-extern int	SPI_register_trigger_data(TriggerData *tdata);
+extern PGDLLIMPORT int	SPI_register_relation(EphemeralNamedRelation enr);
+extern PGDLLIMPORT int	SPI_unregister_relation(const char *name);
+extern PGDLLIMPORT int	SPI_register_trigger_data(TriggerData *tdata);
 
-extern void SPI_start_transaction(void);
-extern void SPI_commit(void);
-extern void SPI_commit_and_chain(void);
-extern void SPI_rollback(void);
-extern void SPI_rollback_and_chain(void);
+extern PGDLLIMPORT void SPI_start_transaction(void);
+extern PGDLLIMPORT void SPI_commit(void);
+extern PGDLLIMPORT void SPI_commit_and_chain(void);
+extern PGDLLIMPORT void SPI_rollback(void);
+extern PGDLLIMPORT void SPI_rollback_and_chain(void);
 
-extern void AtEOXact_SPI(bool isCommit);
-extern void AtEOSubXact_SPI(bool isCommit, SubTransactionId mySubid);
-extern bool SPI_inside_nonatomic_context(void);
+extern PGDLLIMPORT void AtEOXact_SPI(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_SPI(bool isCommit, SubTransactionId mySubid);
+extern PGDLLIMPORT bool SPI_inside_nonatomic_context(void);
 
 #endif							/* SPI_H */

@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern TableFuncScanState *ExecInitTableFuncScan(TableFuncScan *node, EState *estate, int eflags);
-extern void ExecEndTableFuncScan(TableFuncScanState *node);
-extern void ExecReScanTableFuncScan(TableFuncScanState *node);
+extern PGDLLIMPORT TableFuncScanState *ExecInitTableFuncScan(TableFuncScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndTableFuncScan(TableFuncScanState *node);
+extern PGDLLIMPORT void ExecReScanTableFuncScan(TableFuncScanState *node);
 
 #endif							/* NODETABLEFUNCSCAN_H */

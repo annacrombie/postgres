@@ -98,20 +98,20 @@ typedef struct PartitionBoundInfoData
 #define partition_bound_accepts_nulls(bi) ((bi)->null_index != -1)
 #define partition_bound_has_default(bi) ((bi)->default_index != -1)
 
-extern int	get_hash_partition_greatest_modulus(PartitionBoundInfo b);
-extern uint64 compute_partition_hash_value(int partnatts, FmgrInfo *partsupfunc,
+extern PGDLLIMPORT int	get_hash_partition_greatest_modulus(PartitionBoundInfo b);
+extern PGDLLIMPORT uint64 compute_partition_hash_value(int partnatts, FmgrInfo *partsupfunc,
 										   Oid *partcollation,
 										   Datum *values, bool *isnull);
-extern List *get_qual_from_partbound(Relation parent,
+extern PGDLLIMPORT List *get_qual_from_partbound(Relation parent,
 									 PartitionBoundSpec *spec);
-extern PartitionBoundInfo partition_bounds_create(PartitionBoundSpec **boundspecs,
+extern PGDLLIMPORT PartitionBoundInfo partition_bounds_create(PartitionBoundSpec **boundspecs,
 												  int nparts, PartitionKey key, int **mapping);
-extern bool partition_bounds_equal(int partnatts, int16 *parttyplen,
+extern PGDLLIMPORT bool partition_bounds_equal(int partnatts, int16 *parttyplen,
 								   bool *parttypbyval, PartitionBoundInfo b1,
 								   PartitionBoundInfo b2);
-extern PartitionBoundInfo partition_bounds_copy(PartitionBoundInfo src,
+extern PGDLLIMPORT PartitionBoundInfo partition_bounds_copy(PartitionBoundInfo src,
 												PartitionKey key);
-extern PartitionBoundInfo partition_bounds_merge(int partnatts,
+extern PGDLLIMPORT PartitionBoundInfo partition_bounds_merge(int partnatts,
 												 FmgrInfo *partsupfunc,
 												 Oid *partcollation,
 												 struct RelOptInfo *outer_rel,
@@ -119,28 +119,28 @@ extern PartitionBoundInfo partition_bounds_merge(int partnatts,
 												 JoinType jointype,
 												 List **outer_parts,
 												 List **inner_parts);
-extern bool partitions_are_ordered(PartitionBoundInfo boundinfo,
+extern PGDLLIMPORT bool partitions_are_ordered(PartitionBoundInfo boundinfo,
 								   Bitmapset *live_parts);
-extern void check_new_partition_bound(char *relname, Relation parent,
+extern PGDLLIMPORT void check_new_partition_bound(char *relname, Relation parent,
 									  PartitionBoundSpec *spec,
 									  ParseState *pstate);
-extern void check_default_partition_contents(Relation parent,
+extern PGDLLIMPORT void check_default_partition_contents(Relation parent,
 											 Relation defaultRel,
 											 PartitionBoundSpec *new_spec);
 
-extern int32 partition_rbound_datum_cmp(FmgrInfo *partsupfunc,
+extern PGDLLIMPORT int32 partition_rbound_datum_cmp(FmgrInfo *partsupfunc,
 										Oid *partcollation,
 										Datum *rb_datums, PartitionRangeDatumKind *rb_kind,
 										Datum *tuple_datums, int n_tuple_datums);
-extern int	partition_list_bsearch(FmgrInfo *partsupfunc,
+extern PGDLLIMPORT int	partition_list_bsearch(FmgrInfo *partsupfunc,
 								   Oid *partcollation,
 								   PartitionBoundInfo boundinfo,
 								   Datum value, bool *is_equal);
-extern int	partition_range_datum_bsearch(FmgrInfo *partsupfunc,
+extern PGDLLIMPORT int	partition_range_datum_bsearch(FmgrInfo *partsupfunc,
 										  Oid *partcollation,
 										  PartitionBoundInfo boundinfo,
 										  int nvalues, Datum *values, bool *is_equal);
-extern int	partition_hash_bsearch(PartitionBoundInfo boundinfo,
+extern PGDLLIMPORT int	partition_hash_bsearch(PartitionBoundInfo boundinfo,
 								   int modulus, int remainder);
 
 #endif							/* PARTBOUNDS_H */

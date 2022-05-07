@@ -21,7 +21,7 @@
 /* Emulate POSIX sigset_t APIs on Windows */
 typedef int sigset_t;
 
-extern int	pqsigsetmask(int mask);
+extern PGDLLIMPORT int	pqsigsetmask(int mask);
 
 #define PG_SETMASK(mask)		pqsigsetmask(*(mask))
 #define sigemptyset(set)		(*(set) = 0)
@@ -34,9 +34,9 @@ extern PGDLLIMPORT sigset_t UnBlockSig,
 			BlockSig,
 			StartupBlockSig;
 
-extern void pqinitmask(void);
+extern PGDLLIMPORT void pqinitmask(void);
 
 /* pqsigfunc is declared in src/include/port.h */
-extern pqsigfunc pqsignal_pm(int signo, pqsigfunc func);
+extern PGDLLIMPORT pqsigfunc pqsignal_pm(int signo, pqsigfunc func);
 
 #endif							/* PQSIGNAL_H */

@@ -19,9 +19,9 @@
 #include "utils/tuplestore.h"
 
 
-extern DestReceiver *CreateTuplestoreDestReceiver(void);
+extern PGDLLIMPORT DestReceiver *CreateTuplestoreDestReceiver(void);
 
-extern void SetTuplestoreDestReceiverParams(DestReceiver *self,
+extern PGDLLIMPORT void SetTuplestoreDestReceiverParams(DestReceiver *self,
 											Tuplestorestate *tStore,
 											MemoryContext tContext,
 											bool detoast,

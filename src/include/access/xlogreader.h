@@ -328,23 +328,23 @@ XLogReaderHasQueuedRecordOrError(XLogReaderState *state)
 }
 
 /* Get a new XLogReader */
-extern XLogReaderState *XLogReaderAllocate(int wal_segment_size,
+extern PGDLLIMPORT XLogReaderState *XLogReaderAllocate(int wal_segment_size,
 										   const char *waldir,
 										   XLogReaderRoutine *routine,
 										   void *private_data);
-extern XLogReaderRoutine *LocalXLogReaderRoutine(void);
+extern PGDLLIMPORT XLogReaderRoutine *LocalXLogReaderRoutine(void);
 
 /* Free an XLogReader */
-extern void XLogReaderFree(XLogReaderState *state);
+extern PGDLLIMPORT void XLogReaderFree(XLogReaderState *state);
 
 /* Optionally provide a circular decoding buffer to allow readahead. */
-extern void XLogReaderSetDecodeBuffer(XLogReaderState *state,
+extern PGDLLIMPORT void XLogReaderSetDecodeBuffer(XLogReaderState *state,
 									  void *buffer,
 									  size_t size);
 
 /* Position the XLogReader to given record */
-extern void XLogBeginRead(XLogReaderState *state, XLogRecPtr RecPtr);
-extern XLogRecPtr XLogFindNextRecord(XLogReaderState *state, XLogRecPtr RecPtr);
+extern PGDLLIMPORT void XLogBeginRead(XLogReaderState *state, XLogRecPtr RecPtr);
+extern PGDLLIMPORT XLogRecPtr XLogFindNextRecord(XLogReaderState *state, XLogRecPtr RecPtr);
 
 /* Return values from XLogPageReadCB. */
 typedef enum XLogPageReadResult
@@ -355,22 +355,22 @@ typedef enum XLogPageReadResult
 } XLogPageReadResult;
 
 /* Read the next XLog record. Returns NULL on end-of-WAL or failure */
-extern struct XLogRecord *XLogReadRecord(XLogReaderState *state,
+extern PGDLLIMPORT struct XLogRecord *XLogReadRecord(XLogReaderState *state,
 										 char **errormsg);
 
 /* Consume the next record or error. */
-extern DecodedXLogRecord *XLogNextRecord(XLogReaderState *state,
+extern PGDLLIMPORT DecodedXLogRecord *XLogNextRecord(XLogReaderState *state,
 										 char **errormsg);
 
 /* Release the previously returned record, if necessary. */
-extern void XLogReleasePreviousRecord(XLogReaderState *state);
+extern PGDLLIMPORT void XLogReleasePreviousRecord(XLogReaderState *state);
 
 /* Try to read ahead, if there is data and space. */
-extern DecodedXLogRecord *XLogReadAhead(XLogReaderState *state,
+extern PGDLLIMPORT DecodedXLogRecord *XLogReadAhead(XLogReaderState *state,
 										bool nonblocking);
 
 /* Validate a page */
-extern bool XLogReaderValidatePageHeader(XLogReaderState *state,
+extern PGDLLIMPORT bool XLogReaderValidatePageHeader(XLogReaderState *state,
 										 XLogRecPtr recptr, char *phdr);
 
 /*
@@ -386,14 +386,14 @@ typedef struct WALReadError
 	WALOpenSegment wre_seg;		/* Segment we tried to read from. */
 } WALReadError;
 
-extern bool WALRead(XLogReaderState *state,
+extern PGDLLIMPORT bool WALRead(XLogReaderState *state,
 					char *buf, XLogRecPtr startptr, Size count,
 					TimeLineID tli, WALReadError *errinfo);
 
 /* Functions for decoding an XLogRecord */
 
-extern size_t DecodeXLogRecordRequiredSpace(size_t xl_tot_len);
-extern bool DecodeXLogRecord(XLogReaderState *state,
+extern PGDLLIMPORT size_t DecodeXLogRecordRequiredSpace(size_t xl_tot_len);
+extern PGDLLIMPORT bool DecodeXLogRecord(XLogReaderState *state,
 							 DecodedXLogRecord *decoded,
 							 XLogRecord *record,
 							 XLogRecPtr lsn,
@@ -424,15 +424,15 @@ extern bool DecodeXLogRecord(XLogReaderState *state,
 	((decoder)->record->blocks[block_id].apply_image)
 
 #ifndef FRONTEND
-extern FullTransactionId XLogRecGetFullXid(XLogReaderState *record);
+extern PGDLLIMPORT FullTransactionId XLogRecGetFullXid(XLogReaderState *record);
 #endif
 
-extern bool RestoreBlockImage(XLogReaderState *record, uint8 block_id, char *page);
-extern char *XLogRecGetBlockData(XLogReaderState *record, uint8 block_id, Size *len);
-extern void XLogRecGetBlockTag(XLogReaderState *record, uint8 block_id,
+extern PGDLLIMPORT bool RestoreBlockImage(XLogReaderState *record, uint8 block_id, char *page);
+extern PGDLLIMPORT char *XLogRecGetBlockData(XLogReaderState *record, uint8 block_id, Size *len);
+extern PGDLLIMPORT void XLogRecGetBlockTag(XLogReaderState *record, uint8 block_id,
 							   RelFileNode *rnode, ForkNumber *forknum,
 							   BlockNumber *blknum);
-extern bool XLogRecGetBlockTagExtended(XLogReaderState *record, uint8 block_id,
+extern PGDLLIMPORT bool XLogRecGetBlockTagExtended(XLogReaderState *record, uint8 block_id,
 									   RelFileNode *rnode, ForkNumber *forknum,
 									   BlockNumber *blknum,
 									   Buffer *prefetch_buffer);

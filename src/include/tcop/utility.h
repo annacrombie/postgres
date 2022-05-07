@@ -77,27 +77,27 @@ typedef void (*ProcessUtility_hook_type) (PlannedStmt *pstmt,
 										  DestReceiver *dest, QueryCompletion *qc);
 extern PGDLLIMPORT ProcessUtility_hook_type ProcessUtility_hook;
 
-extern void ProcessUtility(PlannedStmt *pstmt, const char *queryString,
+extern PGDLLIMPORT void ProcessUtility(PlannedStmt *pstmt, const char *queryString,
 						   bool readOnlyTree,
 						   ProcessUtilityContext context, ParamListInfo params,
 						   QueryEnvironment *queryEnv,
 						   DestReceiver *dest, QueryCompletion *qc);
-extern void standard_ProcessUtility(PlannedStmt *pstmt, const char *queryString,
+extern PGDLLIMPORT void standard_ProcessUtility(PlannedStmt *pstmt, const char *queryString,
 									bool readOnlyTree,
 									ProcessUtilityContext context, ParamListInfo params,
 									QueryEnvironment *queryEnv,
 									DestReceiver *dest, QueryCompletion *qc);
 
-extern void ProcessUtilityForAlterTable(Node *stmt,
+extern PGDLLIMPORT void ProcessUtilityForAlterTable(Node *stmt,
 										AlterTableUtilityContext *context);
 
-extern bool UtilityReturnsTuples(Node *parsetree);
+extern PGDLLIMPORT bool UtilityReturnsTuples(Node *parsetree);
 
-extern TupleDesc UtilityTupleDescriptor(Node *parsetree);
+extern PGDLLIMPORT TupleDesc UtilityTupleDescriptor(Node *parsetree);
 
-extern Query *UtilityContainsQuery(Node *parsetree);
+extern PGDLLIMPORT Query *UtilityContainsQuery(Node *parsetree);
 
-extern CommandTag CreateCommandTag(Node *parsetree);
+extern PGDLLIMPORT CommandTag CreateCommandTag(Node *parsetree);
 
 static inline const char *
 CreateCommandName(Node *parsetree)
@@ -105,8 +105,8 @@ CreateCommandName(Node *parsetree)
 	return GetCommandTagName(CreateCommandTag(parsetree));
 }
 
-extern LogStmtLevel GetCommandLogLevel(Node *parsetree);
+extern PGDLLIMPORT LogStmtLevel GetCommandLogLevel(Node *parsetree);
 
-extern bool CommandIsReadOnly(PlannedStmt *pstmt);
+extern PGDLLIMPORT bool CommandIsReadOnly(PlannedStmt *pstmt);
 
 #endif							/* UTILITY_H */

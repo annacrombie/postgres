@@ -17,9 +17,9 @@
 #include "catalog/objectaddress.h"
 #include "nodes/parsenodes.h"
 
-extern ObjectAddress DefineView(ViewStmt *stmt, const char *queryString,
+extern PGDLLIMPORT ObjectAddress DefineView(ViewStmt *stmt, const char *queryString,
 								int stmt_location, int stmt_len);
 
-extern void StoreViewQuery(Oid viewOid, Query *viewParse, bool replace);
+extern PGDLLIMPORT void StoreViewQuery(Oid viewOid, Query *viewParse, bool replace);
 
 #endif							/* VIEW_H */

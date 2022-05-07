@@ -37,15 +37,15 @@ typedef struct ParallelExecutorInfo
 	struct TupleQueueReader **reader;	/* tuple reader/writer support */
 } ParallelExecutorInfo;
 
-extern ParallelExecutorInfo *ExecInitParallelPlan(PlanState *planstate,
+extern PGDLLIMPORT ParallelExecutorInfo *ExecInitParallelPlan(PlanState *planstate,
 												  EState *estate, Bitmapset *sendParam, int nworkers,
 												  int64 tuples_needed);
-extern void ExecParallelCreateReaders(ParallelExecutorInfo *pei);
-extern void ExecParallelFinish(ParallelExecutorInfo *pei);
-extern void ExecParallelCleanup(ParallelExecutorInfo *pei);
-extern void ExecParallelReinitialize(PlanState *planstate,
+extern PGDLLIMPORT void ExecParallelCreateReaders(ParallelExecutorInfo *pei);
+extern PGDLLIMPORT void ExecParallelFinish(ParallelExecutorInfo *pei);
+extern PGDLLIMPORT void ExecParallelCleanup(ParallelExecutorInfo *pei);
+extern PGDLLIMPORT void ExecParallelReinitialize(PlanState *planstate,
 									 ParallelExecutorInfo *pei, Bitmapset *sendParam);
 
-extern void ParallelQueryMain(dsm_segment *seg, shm_toc *toc);
+extern PGDLLIMPORT void ParallelQueryMain(dsm_segment *seg, shm_toc *toc);
 
 #endif							/* EXECPARALLEL_H */

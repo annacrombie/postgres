@@ -16,6 +16,6 @@
 
 #include "parser/parse_node.h"
 
-extern Query *transformMergeStmt(ParseState *pstate, MergeStmt *stmt);
+extern PGDLLIMPORT Query *transformMergeStmt(ParseState *pstate, MergeStmt *stmt);
 
 #endif							/* PARSE_MERGE_H */

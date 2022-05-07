@@ -41,7 +41,7 @@ do { \
  *		in compressed format.
  * ----------
  */
-extern struct varlena *detoast_external_attr(struct varlena *attr);
+extern PGDLLIMPORT struct varlena *detoast_external_attr(struct varlena *attr);
 
 /* ----------
  * detoast_attr() -
@@ -50,7 +50,7 @@ extern struct varlena *detoast_external_attr(struct varlena *attr);
  *		it as needed.
  * ----------
  */
-extern struct varlena *detoast_attr(struct varlena *attr);
+extern PGDLLIMPORT struct varlena *detoast_attr(struct varlena *attr);
 
 /* ----------
  * detoast_attr_slice() -
@@ -59,7 +59,7 @@ extern struct varlena *detoast_attr(struct varlena *attr);
  *		(Handles all cases for attribute storage)
  * ----------
  */
-extern struct varlena *detoast_attr_slice(struct varlena *attr,
+extern PGDLLIMPORT struct varlena *detoast_attr_slice(struct varlena *attr,
 										  int32 sliceoffset,
 										  int32 slicelength);
 
@@ -69,7 +69,7 @@ extern struct varlena *detoast_attr_slice(struct varlena *attr,
  *	Return the raw (detoasted) size of a varlena datum
  * ----------
  */
-extern Size toast_raw_datum_size(Datum value);
+extern PGDLLIMPORT Size toast_raw_datum_size(Datum value);
 
 /* ----------
  * toast_datum_size -
@@ -77,6 +77,6 @@ extern Size toast_raw_datum_size(Datum value);
  *	Return the storage size of a varlena datum
  * ----------
  */
-extern Size toast_datum_size(Datum value);
+extern PGDLLIMPORT Size toast_datum_size(Datum value);
 
 #endif							/* DETOAST_H */

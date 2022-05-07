@@ -38,36 +38,36 @@ extern PGDLLIMPORT XLogRecPtr replorigin_session_origin_lsn;
 extern PGDLLIMPORT TimestampTz replorigin_session_origin_timestamp;
 
 /* API for querying & manipulating replication origins */
-extern RepOriginId replorigin_by_name(const char *name, bool missing_ok);
-extern RepOriginId replorigin_create(const char *name);
-extern void replorigin_drop_by_name(const char *name, bool missing_ok, bool nowait);
-extern bool replorigin_by_oid(RepOriginId roident, bool missing_ok,
+extern PGDLLIMPORT RepOriginId replorigin_by_name(const char *name, bool missing_ok);
+extern PGDLLIMPORT RepOriginId replorigin_create(const char *name);
+extern PGDLLIMPORT void replorigin_drop_by_name(const char *name, bool missing_ok, bool nowait);
+extern PGDLLIMPORT bool replorigin_by_oid(RepOriginId roident, bool missing_ok,
 							  char **roname);
 
 /* API for querying & manipulating replication progress tracking */
-extern void replorigin_advance(RepOriginId node,
+extern PGDLLIMPORT void replorigin_advance(RepOriginId node,
 							   XLogRecPtr remote_commit,
 							   XLogRecPtr local_commit,
 							   bool go_backward, bool wal_log);
-extern XLogRecPtr replorigin_get_progress(RepOriginId node, bool flush);
+extern PGDLLIMPORT XLogRecPtr replorigin_get_progress(RepOriginId node, bool flush);
 
-extern void replorigin_session_advance(XLogRecPtr remote_commit,
+extern PGDLLIMPORT void replorigin_session_advance(XLogRecPtr remote_commit,
 									   XLogRecPtr local_commit);
-extern void replorigin_session_setup(RepOriginId node);
-extern void replorigin_session_reset(void);
-extern XLogRecPtr replorigin_session_get_progress(bool flush);
+extern PGDLLIMPORT void replorigin_session_setup(RepOriginId node);
+extern PGDLLIMPORT void replorigin_session_reset(void);
+extern PGDLLIMPORT XLogRecPtr replorigin_session_get_progress(bool flush);
 
 /* Checkpoint/Startup integration */
-extern void CheckPointReplicationOrigin(void);
-extern void StartupReplicationOrigin(void);
+extern PGDLLIMPORT void CheckPointReplicationOrigin(void);
+extern PGDLLIMPORT void StartupReplicationOrigin(void);
 
 /* WAL logging */
-extern void replorigin_redo(XLogReaderState *record);
-extern void replorigin_desc(StringInfo buf, XLogReaderState *record);
-extern const char *replorigin_identify(uint8 info);
+extern PGDLLIMPORT void replorigin_redo(XLogReaderState *record);
+extern PGDLLIMPORT void replorigin_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *replorigin_identify(uint8 info);
 
 /* shared memory allocation */
-extern Size ReplicationOriginShmemSize(void);
-extern void ReplicationOriginShmemInit(void);
+extern PGDLLIMPORT Size ReplicationOriginShmemSize(void);
+extern PGDLLIMPORT void ReplicationOriginShmemInit(void);
 
 #endif							/* PG_ORIGIN_H */

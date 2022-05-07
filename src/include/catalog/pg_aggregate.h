@@ -144,7 +144,7 @@ DECLARE_UNIQUE_INDEX_PKEY(pg_aggregate_fnoid_index, 2650, AggregateFnoidIndexId,
 #endif							/* EXPOSE_TO_CLIENT_CODE */
 
 
-extern ObjectAddress AggregateCreate(const char *aggName,
+extern PGDLLIMPORT ObjectAddress AggregateCreate(const char *aggName,
 									 Oid aggNamespace,
 									 bool replace,
 									 char aggKind,

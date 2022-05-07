@@ -32,19 +32,19 @@ typedef enum					/* type categories for datum_to_json */
 } JsonTypeCategory;
 
 /* functions in json.c */
-extern void escape_json(StringInfo buf, const char *str);
-extern char *JsonEncodeDateTime(char *buf, Datum value, Oid typid,
+extern PGDLLIMPORT void escape_json(StringInfo buf, const char *str);
+extern PGDLLIMPORT char *JsonEncodeDateTime(char *buf, Datum value, Oid typid,
 								const int *tzp);
-extern bool to_json_is_immutable(Oid typoid);
-extern void json_categorize_type(Oid typoid, JsonTypeCategory *tcategory,
+extern PGDLLIMPORT bool to_json_is_immutable(Oid typoid);
+extern PGDLLIMPORT void json_categorize_type(Oid typoid, JsonTypeCategory *tcategory,
 								 Oid *outfuncoid);
-extern Datum to_json_worker(Datum val, JsonTypeCategory tcategory,
+extern PGDLLIMPORT Datum to_json_worker(Datum val, JsonTypeCategory tcategory,
 							Oid outfuncoid);
-extern Datum json_build_object_worker(int nargs, Datum *args, bool *nulls,
+extern PGDLLIMPORT Datum json_build_object_worker(int nargs, Datum *args, bool *nulls,
 									  Oid *types, bool absent_on_null,
 									  bool unique_keys);
-extern Datum json_build_array_worker(int nargs, Datum *args, bool *nulls,
+extern PGDLLIMPORT Datum json_build_array_worker(int nargs, Datum *args, bool *nulls,
 									 Oid *types, bool absent_on_null);
-extern bool json_validate(text *json, bool check_unique_keys, bool throw_error);
+extern PGDLLIMPORT bool json_validate(text *json, bool check_unique_keys, bool throw_error);
 
 #endif							/* JSON_H */

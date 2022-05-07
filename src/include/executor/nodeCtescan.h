@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern CteScanState *ExecInitCteScan(CteScan *node, EState *estate, int eflags);
-extern void ExecEndCteScan(CteScanState *node);
-extern void ExecReScanCteScan(CteScanState *node);
+extern PGDLLIMPORT CteScanState *ExecInitCteScan(CteScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndCteScan(CteScanState *node);
+extern PGDLLIMPORT void ExecReScanCteScan(CteScanState *node);
 
 #endif							/* NODECTESCAN_H */

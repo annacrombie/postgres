@@ -30,16 +30,16 @@ struct GenericXLogState;
 typedef struct GenericXLogState GenericXLogState;
 
 /* API for construction of generic xlog records */
-extern GenericXLogState *GenericXLogStart(Relation relation);
-extern Page GenericXLogRegisterBuffer(GenericXLogState *state, Buffer buffer,
+extern PGDLLIMPORT GenericXLogState *GenericXLogStart(Relation relation);
+extern PGDLLIMPORT Page GenericXLogRegisterBuffer(GenericXLogState *state, Buffer buffer,
 									  int flags);
-extern XLogRecPtr GenericXLogFinish(GenericXLogState *state);
-extern void GenericXLogAbort(GenericXLogState *state);
+extern PGDLLIMPORT XLogRecPtr GenericXLogFinish(GenericXLogState *state);
+extern PGDLLIMPORT void GenericXLogAbort(GenericXLogState *state);
 
 /* functions defined for rmgr */
-extern void generic_redo(XLogReaderState *record);
-extern const char *generic_identify(uint8 info);
-extern void generic_desc(StringInfo buf, XLogReaderState *record);
-extern void generic_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void generic_redo(XLogReaderState *record);
+extern PGDLLIMPORT const char *generic_identify(uint8 info);
+extern PGDLLIMPORT void generic_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT void generic_mask(char *pagedata, BlockNumber blkno);
 
 #endif							/* GENERIC_XLOG_H */

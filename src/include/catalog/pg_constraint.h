@@ -205,7 +205,7 @@ typedef enum ConstraintCategory
 } ConstraintCategory;
 
 
-extern Oid	CreateConstraintEntry(const char *constraintName,
+extern PGDLLIMPORT Oid	CreateConstraintEntry(const char *constraintName,
 								  Oid constraintNamespace,
 								  char constraintType,
 								  bool isDeferrable,
@@ -237,35 +237,35 @@ extern Oid	CreateConstraintEntry(const char *constraintName,
 								  bool conNoInherit,
 								  bool is_internal);
 
-extern void RemoveConstraintById(Oid conId);
-extern void RenameConstraintById(Oid conId, const char *newname);
+extern PGDLLIMPORT void RemoveConstraintById(Oid conId);
+extern PGDLLIMPORT void RenameConstraintById(Oid conId, const char *newname);
 
-extern bool ConstraintNameIsUsed(ConstraintCategory conCat, Oid objId,
+extern PGDLLIMPORT bool ConstraintNameIsUsed(ConstraintCategory conCat, Oid objId,
 								 const char *conname);
-extern bool ConstraintNameExists(const char *conname, Oid namespaceid);
-extern char *ChooseConstraintName(const char *name1, const char *name2,
+extern PGDLLIMPORT bool ConstraintNameExists(const char *conname, Oid namespaceid);
+extern PGDLLIMPORT char *ChooseConstraintName(const char *name1, const char *name2,
 								  const char *label, Oid namespaceid,
 								  List *others);
 
-extern void AlterConstraintNamespaces(Oid ownerId, Oid oldNspId,
+extern PGDLLIMPORT void AlterConstraintNamespaces(Oid ownerId, Oid oldNspId,
 									  Oid newNspId, bool isType, ObjectAddresses *objsMoved);
-extern void ConstraintSetParentConstraint(Oid childConstrId,
+extern PGDLLIMPORT void ConstraintSetParentConstraint(Oid childConstrId,
 										  Oid parentConstrId,
 										  Oid childTableId);
-extern Oid	get_relation_constraint_oid(Oid relid, const char *conname, bool missing_ok);
-extern Bitmapset *get_relation_constraint_attnos(Oid relid, const char *conname,
+extern PGDLLIMPORT Oid	get_relation_constraint_oid(Oid relid, const char *conname, bool missing_ok);
+extern PGDLLIMPORT Bitmapset *get_relation_constraint_attnos(Oid relid, const char *conname,
 												 bool missing_ok, Oid *constraintOid);
-extern Oid	get_domain_constraint_oid(Oid typid, const char *conname, bool missing_ok);
-extern Oid	get_relation_idx_constraint_oid(Oid relationId, Oid indexId);
+extern PGDLLIMPORT Oid	get_domain_constraint_oid(Oid typid, const char *conname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_relation_idx_constraint_oid(Oid relationId, Oid indexId);
 
-extern Bitmapset *get_primary_key_attnos(Oid relid, bool deferrableOk,
+extern PGDLLIMPORT Bitmapset *get_primary_key_attnos(Oid relid, bool deferrableOk,
 										 Oid *constraintOid);
-extern void DeconstructFkConstraintRow(HeapTuple tuple, int *numfks,
+extern PGDLLIMPORT void DeconstructFkConstraintRow(HeapTuple tuple, int *numfks,
 									   AttrNumber *conkey, AttrNumber *confkey,
 									   Oid *pf_eq_oprs, Oid *pp_eq_oprs, Oid *ff_eq_oprs,
 									   int *num_fk_del_set_cols, AttrNumber *fk_del_set_cols);
 
-extern bool check_functional_grouping(Oid relid,
+extern PGDLLIMPORT bool check_functional_grouping(Oid relid,
 									  Index varno, Index varlevelsup,
 									  List *grouping_columns,
 									  List **constraintDeps);

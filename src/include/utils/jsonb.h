@@ -394,55 +394,55 @@ typedef enum					/* type categories for datum_to_jsonb */
 } JsonbTypeCategory;
 
 /* Support functions */
-extern uint32 getJsonbOffset(const JsonbContainer *jc, int index);
-extern uint32 getJsonbLength(const JsonbContainer *jc, int index);
-extern int	compareJsonbContainers(JsonbContainer *a, JsonbContainer *b);
-extern JsonbValue *findJsonbValueFromContainer(JsonbContainer *sheader,
+extern PGDLLIMPORT uint32 getJsonbOffset(const JsonbContainer *jc, int index);
+extern PGDLLIMPORT uint32 getJsonbLength(const JsonbContainer *jc, int index);
+extern PGDLLIMPORT int	compareJsonbContainers(JsonbContainer *a, JsonbContainer *b);
+extern PGDLLIMPORT JsonbValue *findJsonbValueFromContainer(JsonbContainer *sheader,
 											   uint32 flags,
 											   JsonbValue *key);
-extern JsonbValue *getKeyJsonValueFromContainer(JsonbContainer *container,
+extern PGDLLIMPORT JsonbValue *getKeyJsonValueFromContainer(JsonbContainer *container,
 												const char *keyVal, int keyLen,
 												JsonbValue *res);
-extern JsonbValue *getIthJsonbValueFromContainer(JsonbContainer *sheader,
+extern PGDLLIMPORT JsonbValue *getIthJsonbValueFromContainer(JsonbContainer *sheader,
 												 uint32 i);
-extern JsonbValue *pushJsonbValue(JsonbParseState **pstate,
+extern PGDLLIMPORT JsonbValue *pushJsonbValue(JsonbParseState **pstate,
 								  JsonbIteratorToken seq, JsonbValue *jbval);
-extern JsonbIterator *JsonbIteratorInit(JsonbContainer *container);
-extern JsonbIteratorToken JsonbIteratorNext(JsonbIterator **it, JsonbValue *val,
+extern PGDLLIMPORT JsonbIterator *JsonbIteratorInit(JsonbContainer *container);
+extern PGDLLIMPORT JsonbIteratorToken JsonbIteratorNext(JsonbIterator **it, JsonbValue *val,
 											bool skipNested);
-extern void JsonbToJsonbValue(Jsonb *jsonb, JsonbValue *val);
-extern Jsonb *JsonbValueToJsonb(JsonbValue *val);
-extern bool JsonbDeepContains(JsonbIterator **val,
+extern PGDLLIMPORT void JsonbToJsonbValue(Jsonb *jsonb, JsonbValue *val);
+extern PGDLLIMPORT Jsonb *JsonbValueToJsonb(JsonbValue *val);
+extern PGDLLIMPORT bool JsonbDeepContains(JsonbIterator **val,
 							  JsonbIterator **mContained);
-extern void JsonbHashScalarValue(const JsonbValue *scalarVal, uint32 *hash);
-extern void JsonbHashScalarValueExtended(const JsonbValue *scalarVal,
+extern PGDLLIMPORT void JsonbHashScalarValue(const JsonbValue *scalarVal, uint32 *hash);
+extern PGDLLIMPORT void JsonbHashScalarValueExtended(const JsonbValue *scalarVal,
 										 uint64 *hash, uint64 seed);
 
 /* jsonb.c support functions */
-extern Datum jsonb_from_text(text *js, bool unique_keys);
-extern char *JsonbToCString(StringInfo out, JsonbContainer *in,
+extern PGDLLIMPORT Datum jsonb_from_text(text *js, bool unique_keys);
+extern PGDLLIMPORT char *JsonbToCString(StringInfo out, JsonbContainer *in,
 							int estimated_len);
-extern char *JsonbToCStringIndent(StringInfo out, JsonbContainer *in,
+extern PGDLLIMPORT char *JsonbToCStringIndent(StringInfo out, JsonbContainer *in,
 								  int estimated_len);
-extern Jsonb *JsonbMakeEmptyArray(void);
-extern Jsonb *JsonbMakeEmptyObject(void);
-extern char *JsonbUnquote(Jsonb *jb);
-extern bool JsonbExtractScalar(JsonbContainer *jbc, JsonbValue *res);
-extern const char *JsonbTypeName(JsonbValue *jb);
+extern PGDLLIMPORT Jsonb *JsonbMakeEmptyArray(void);
+extern PGDLLIMPORT Jsonb *JsonbMakeEmptyObject(void);
+extern PGDLLIMPORT char *JsonbUnquote(Jsonb *jb);
+extern PGDLLIMPORT bool JsonbExtractScalar(JsonbContainer *jbc, JsonbValue *res);
+extern PGDLLIMPORT const char *JsonbTypeName(JsonbValue *jb);
 
-extern Datum jsonb_set_element(Jsonb *jb, Datum *path, int path_len,
+extern PGDLLIMPORT Datum jsonb_set_element(Jsonb *jb, Datum *path, int path_len,
 							   JsonbValue *newval);
-extern Datum jsonb_get_element(Jsonb *jb, Datum *path, int npath,
+extern PGDLLIMPORT Datum jsonb_get_element(Jsonb *jb, Datum *path, int npath,
 							   bool *isnull, bool as_text);
-extern bool to_jsonb_is_immutable(Oid typoid);
-extern void jsonb_categorize_type(Oid typoid, JsonbTypeCategory *tcategory,
+extern PGDLLIMPORT bool to_jsonb_is_immutable(Oid typoid);
+extern PGDLLIMPORT void jsonb_categorize_type(Oid typoid, JsonbTypeCategory *tcategory,
 								  Oid *outfuncoid);
-extern Datum to_jsonb_worker(Datum val, JsonbTypeCategory tcategory,
+extern PGDLLIMPORT Datum to_jsonb_worker(Datum val, JsonbTypeCategory tcategory,
 							 Oid outfuncoid);
-extern Datum jsonb_build_object_worker(int nargs, Datum *args, bool *nulls,
+extern PGDLLIMPORT Datum jsonb_build_object_worker(int nargs, Datum *args, bool *nulls,
 									   Oid *types, bool absent_on_null,
 									   bool unique_keys);
-extern Datum jsonb_build_array_worker(int nargs, Datum *args, bool *nulls,
+extern PGDLLIMPORT Datum jsonb_build_array_worker(int nargs, Datum *args, bool *nulls,
 									  Oid *types, bool absent_on_null);
 
 #endif							/* __JSONB_H__ */

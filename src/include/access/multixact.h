@@ -100,65 +100,65 @@ typedef struct xl_multixact_truncate
 #define SizeOfMultiXactTruncate (sizeof(xl_multixact_truncate))
 
 
-extern MultiXactId MultiXactIdCreate(TransactionId xid1,
+extern PGDLLIMPORT MultiXactId MultiXactIdCreate(TransactionId xid1,
 									 MultiXactStatus status1, TransactionId xid2,
 									 MultiXactStatus status2);
-extern MultiXactId MultiXactIdExpand(MultiXactId multi, TransactionId xid,
+extern PGDLLIMPORT MultiXactId MultiXactIdExpand(MultiXactId multi, TransactionId xid,
 									 MultiXactStatus status);
-extern MultiXactId MultiXactIdCreateFromMembers(int nmembers,
+extern PGDLLIMPORT MultiXactId MultiXactIdCreateFromMembers(int nmembers,
 												MultiXactMember *members);
 
-extern MultiXactId ReadNextMultiXactId(void);
-extern void ReadMultiXactIdRange(MultiXactId *oldest, MultiXactId *next);
-extern bool MultiXactIdIsRunning(MultiXactId multi, bool isLockOnly);
-extern void MultiXactIdSetOldestMember(void);
-extern int	GetMultiXactIdMembers(MultiXactId multi, MultiXactMember **xids,
+extern PGDLLIMPORT MultiXactId ReadNextMultiXactId(void);
+extern PGDLLIMPORT void ReadMultiXactIdRange(MultiXactId *oldest, MultiXactId *next);
+extern PGDLLIMPORT bool MultiXactIdIsRunning(MultiXactId multi, bool isLockOnly);
+extern PGDLLIMPORT void MultiXactIdSetOldestMember(void);
+extern PGDLLIMPORT int	GetMultiXactIdMembers(MultiXactId multi, MultiXactMember **xids,
 								  bool allow_old, bool isLockOnly);
-extern bool MultiXactIdPrecedes(MultiXactId multi1, MultiXactId multi2);
-extern bool MultiXactIdPrecedesOrEquals(MultiXactId multi1,
+extern PGDLLIMPORT bool MultiXactIdPrecedes(MultiXactId multi1, MultiXactId multi2);
+extern PGDLLIMPORT bool MultiXactIdPrecedesOrEquals(MultiXactId multi1,
 										MultiXactId multi2);
 
-extern int	multixactoffsetssyncfiletag(const FileTag *ftag, char *path);
-extern int	multixactmemberssyncfiletag(const FileTag *ftag, char *path);
+extern PGDLLIMPORT int	multixactoffsetssyncfiletag(const FileTag *ftag, char *path);
+extern PGDLLIMPORT int	multixactmemberssyncfiletag(const FileTag *ftag, char *path);
 
-extern void AtEOXact_MultiXact(void);
-extern void AtPrepare_MultiXact(void);
-extern void PostPrepare_MultiXact(TransactionId xid);
+extern PGDLLIMPORT void AtEOXact_MultiXact(void);
+extern PGDLLIMPORT void AtPrepare_MultiXact(void);
+extern PGDLLIMPORT void PostPrepare_MultiXact(TransactionId xid);
 
-extern Size MultiXactShmemSize(void);
-extern void MultiXactShmemInit(void);
-extern void BootStrapMultiXact(void);
-extern void StartupMultiXact(void);
-extern void TrimMultiXact(void);
-extern void SetMultiXactIdLimit(MultiXactId oldest_datminmxid,
+extern PGDLLIMPORT Size MultiXactShmemSize(void);
+extern PGDLLIMPORT void MultiXactShmemInit(void);
+extern PGDLLIMPORT void BootStrapMultiXact(void);
+extern PGDLLIMPORT void StartupMultiXact(void);
+extern PGDLLIMPORT void TrimMultiXact(void);
+extern PGDLLIMPORT void SetMultiXactIdLimit(MultiXactId oldest_datminmxid,
 								Oid oldest_datoid,
 								bool is_startup);
-extern void MultiXactGetCheckptMulti(bool is_shutdown,
+extern PGDLLIMPORT void MultiXactGetCheckptMulti(bool is_shutdown,
 									 MultiXactId *nextMulti,
 									 MultiXactOffset *nextMultiOffset,
 									 MultiXactId *oldestMulti,
 									 Oid *oldestMultiDB);
-extern void CheckPointMultiXact(void);
-extern MultiXactId GetOldestMultiXactId(void);
-extern void TruncateMultiXact(MultiXactId oldestMulti, Oid oldestMultiDB);
-extern void MultiXactSetNextMXact(MultiXactId nextMulti,
+extern PGDLLIMPORT void CheckPointMultiXact(void);
+extern PGDLLIMPORT MultiXactId GetOldestMultiXactId(void);
+extern PGDLLIMPORT void TruncateMultiXact(MultiXactId oldestMulti, Oid oldestMultiDB);
+extern PGDLLIMPORT void MultiXactSetNextMXact(MultiXactId nextMulti,
 								  MultiXactOffset nextMultiOffset);
-extern void MultiXactAdvanceNextMXact(MultiXactId minMulti,
+extern PGDLLIMPORT void MultiXactAdvanceNextMXact(MultiXactId minMulti,
 									  MultiXactOffset minMultiOffset);
-extern void MultiXactAdvanceOldest(MultiXactId oldestMulti, Oid oldestMultiDB);
-extern int	MultiXactMemberFreezeThreshold(void);
+extern PGDLLIMPORT void MultiXactAdvanceOldest(MultiXactId oldestMulti, Oid oldestMultiDB);
+extern PGDLLIMPORT int	MultiXactMemberFreezeThreshold(void);
 
-extern void multixact_twophase_recover(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void multixact_twophase_recover(TransactionId xid, uint16 info,
 									   void *recdata, uint32 len);
-extern void multixact_twophase_postcommit(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void multixact_twophase_postcommit(TransactionId xid, uint16 info,
 										  void *recdata, uint32 len);
-extern void multixact_twophase_postabort(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void multixact_twophase_postabort(TransactionId xid, uint16 info,
 										 void *recdata, uint32 len);
 
-extern void multixact_redo(XLogReaderState *record);
-extern void multixact_desc(StringInfo buf, XLogReaderState *record);
-extern const char *multixact_identify(uint8 info);
-extern char *mxid_to_string(MultiXactId multi, int nmembers,
+extern PGDLLIMPORT void multixact_redo(XLogReaderState *record);
+extern PGDLLIMPORT void multixact_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *multixact_identify(uint8 info);
+extern PGDLLIMPORT char *mxid_to_string(MultiXactId multi, int nmembers,
 							MultiXactMember *members);
 
 #endif							/* MULTIXACT_H */

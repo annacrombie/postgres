@@ -34,22 +34,22 @@ typedef struct SQLFunctionParseInfo
 
 typedef SQLFunctionParseInfo *SQLFunctionParseInfoPtr;
 
-extern Datum fmgr_sql(PG_FUNCTION_ARGS);
+extern PGDLLIMPORT Datum fmgr_sql(PG_FUNCTION_ARGS);
 
-extern SQLFunctionParseInfoPtr prepare_sql_fn_parse_info(HeapTuple procedureTuple,
+extern PGDLLIMPORT SQLFunctionParseInfoPtr prepare_sql_fn_parse_info(HeapTuple procedureTuple,
 														 Node *call_expr,
 														 Oid inputCollation);
 
-extern void sql_fn_parser_setup(struct ParseState *pstate,
+extern PGDLLIMPORT void sql_fn_parser_setup(struct ParseState *pstate,
 								SQLFunctionParseInfoPtr pinfo);
 
-extern void check_sql_fn_statements(List *queryTreeLists);
+extern PGDLLIMPORT void check_sql_fn_statements(List *queryTreeLists);
 
-extern bool check_sql_fn_retval(List *queryTreeLists,
+extern PGDLLIMPORT bool check_sql_fn_retval(List *queryTreeLists,
 								Oid rettype, TupleDesc rettupdesc,
 								bool insertDroppedCols,
 								List **resultTargetList);
 
-extern DestReceiver *CreateSQLFunctionDestReceiver(void);
+extern PGDLLIMPORT DestReceiver *CreateSQLFunctionDestReceiver(void);
 
 #endif							/* FUNCTIONS_H */

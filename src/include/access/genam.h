@@ -137,10 +137,10 @@ typedef struct IndexOrderByDistance
  */
 #define IndexScanIsValid(scan) PointerIsValid(scan)
 
-extern Relation index_open(Oid relationId, LOCKMODE lockmode);
-extern void index_close(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT Relation index_open(Oid relationId, LOCKMODE lockmode);
+extern PGDLLIMPORT void index_close(Relation relation, LOCKMODE lockmode);
 
-extern bool index_insert(Relation indexRelation,
+extern PGDLLIMPORT bool index_insert(Relation indexRelation,
 						 Datum *values, bool *isnull,
 						 ItemPointer heap_t_ctid,
 						 Relation heapRelation,
@@ -148,62 +148,62 @@ extern bool index_insert(Relation indexRelation,
 						 bool indexUnchanged,
 						 struct IndexInfo *indexInfo);
 
-extern IndexScanDesc index_beginscan(Relation heapRelation,
+extern PGDLLIMPORT IndexScanDesc index_beginscan(Relation heapRelation,
 									 Relation indexRelation,
 									 Snapshot snapshot,
 									 int nkeys, int norderbys);
-extern IndexScanDesc index_beginscan_bitmap(Relation indexRelation,
+extern PGDLLIMPORT IndexScanDesc index_beginscan_bitmap(Relation indexRelation,
 											Snapshot snapshot,
 											int nkeys);
-extern void index_rescan(IndexScanDesc scan,
+extern PGDLLIMPORT void index_rescan(IndexScanDesc scan,
 						 ScanKey keys, int nkeys,
 						 ScanKey orderbys, int norderbys);
-extern void index_endscan(IndexScanDesc scan);
-extern void index_markpos(IndexScanDesc scan);
-extern void index_restrpos(IndexScanDesc scan);
-extern Size index_parallelscan_estimate(Relation indexrel, Snapshot snapshot);
-extern void index_parallelscan_initialize(Relation heaprel, Relation indexrel,
+extern PGDLLIMPORT void index_endscan(IndexScanDesc scan);
+extern PGDLLIMPORT void index_markpos(IndexScanDesc scan);
+extern PGDLLIMPORT void index_restrpos(IndexScanDesc scan);
+extern PGDLLIMPORT Size index_parallelscan_estimate(Relation indexrel, Snapshot snapshot);
+extern PGDLLIMPORT void index_parallelscan_initialize(Relation heaprel, Relation indexrel,
 										  Snapshot snapshot, ParallelIndexScanDesc target);
-extern void index_parallelrescan(IndexScanDesc scan);
-extern IndexScanDesc index_beginscan_parallel(Relation heaprel,
+extern PGDLLIMPORT void index_parallelrescan(IndexScanDesc scan);
+extern PGDLLIMPORT IndexScanDesc index_beginscan_parallel(Relation heaprel,
 											  Relation indexrel, int nkeys, int norderbys,
 											  ParallelIndexScanDesc pscan);
-extern ItemPointer index_getnext_tid(IndexScanDesc scan,
+extern PGDLLIMPORT ItemPointer index_getnext_tid(IndexScanDesc scan,
 									 ScanDirection direction);
 struct TupleTableSlot;
-extern bool index_fetch_heap(IndexScanDesc scan, struct TupleTableSlot *slot);
-extern bool index_getnext_slot(IndexScanDesc scan, ScanDirection direction,
+extern PGDLLIMPORT bool index_fetch_heap(IndexScanDesc scan, struct TupleTableSlot *slot);
+extern PGDLLIMPORT bool index_getnext_slot(IndexScanDesc scan, ScanDirection direction,
 							   struct TupleTableSlot *slot);
-extern int64 index_getbitmap(IndexScanDesc scan, TIDBitmap *bitmap);
+extern PGDLLIMPORT int64 index_getbitmap(IndexScanDesc scan, TIDBitmap *bitmap);
 
-extern IndexBulkDeleteResult *index_bulk_delete(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *index_bulk_delete(IndexVacuumInfo *info,
 												IndexBulkDeleteResult *istat,
 												IndexBulkDeleteCallback callback,
 												void *callback_state);
-extern IndexBulkDeleteResult *index_vacuum_cleanup(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *index_vacuum_cleanup(IndexVacuumInfo *info,
 												   IndexBulkDeleteResult *istat);
-extern bool index_can_return(Relation indexRelation, int attno);
-extern RegProcedure index_getprocid(Relation irel, AttrNumber attnum,
+extern PGDLLIMPORT bool index_can_return(Relation indexRelation, int attno);
+extern PGDLLIMPORT RegProcedure index_getprocid(Relation irel, AttrNumber attnum,
 									uint16 procnum);
-extern FmgrInfo *index_getprocinfo(Relation irel, AttrNumber attnum,
+extern PGDLLIMPORT FmgrInfo *index_getprocinfo(Relation irel, AttrNumber attnum,
 								   uint16 procnum);
-extern void index_store_float8_orderby_distances(IndexScanDesc scan,
+extern PGDLLIMPORT void index_store_float8_orderby_distances(IndexScanDesc scan,
 												 Oid *orderByTypes,
 												 IndexOrderByDistance *distances,
 												 bool recheckOrderBy);
-extern bytea *index_opclass_options(Relation relation, AttrNumber attnum,
+extern PGDLLIMPORT bytea *index_opclass_options(Relation relation, AttrNumber attnum,
 									Datum attoptions, bool validate);
 
 
 /*
  * index access method support routines (in genam.c)
  */
-extern IndexScanDesc RelationGetIndexScan(Relation indexRelation,
+extern PGDLLIMPORT IndexScanDesc RelationGetIndexScan(Relation indexRelation,
 										  int nkeys, int norderbys);
-extern void IndexScanEnd(IndexScanDesc scan);
-extern char *BuildIndexValueDescription(Relation indexRelation,
+extern PGDLLIMPORT void IndexScanEnd(IndexScanDesc scan);
+extern PGDLLIMPORT char *BuildIndexValueDescription(Relation indexRelation,
 										Datum *values, bool *isnull);
-extern TransactionId index_compute_xid_horizon_for_tuples(Relation irel,
+extern PGDLLIMPORT TransactionId index_compute_xid_horizon_for_tuples(Relation irel,
 														  Relation hrel,
 														  Buffer ibuf,
 														  OffsetNumber *itemnos,
@@ -212,20 +212,20 @@ extern TransactionId index_compute_xid_horizon_for_tuples(Relation irel,
 /*
  * heap-or-index access to system catalogs (in genam.c)
  */
-extern SysScanDesc systable_beginscan(Relation heapRelation,
+extern PGDLLIMPORT SysScanDesc systable_beginscan(Relation heapRelation,
 									  Oid indexId,
 									  bool indexOK,
 									  Snapshot snapshot,
 									  int nkeys, ScanKey key);
-extern HeapTuple systable_getnext(SysScanDesc sysscan);
-extern bool systable_recheck_tuple(SysScanDesc sysscan, HeapTuple tup);
-extern void systable_endscan(SysScanDesc sysscan);
-extern SysScanDesc systable_beginscan_ordered(Relation heapRelation,
+extern PGDLLIMPORT HeapTuple systable_getnext(SysScanDesc sysscan);
+extern PGDLLIMPORT bool systable_recheck_tuple(SysScanDesc sysscan, HeapTuple tup);
+extern PGDLLIMPORT void systable_endscan(SysScanDesc sysscan);
+extern PGDLLIMPORT SysScanDesc systable_beginscan_ordered(Relation heapRelation,
 											  Relation indexRelation,
 											  Snapshot snapshot,
 											  int nkeys, ScanKey key);
-extern HeapTuple systable_getnext_ordered(SysScanDesc sysscan,
+extern PGDLLIMPORT HeapTuple systable_getnext_ordered(SysScanDesc sysscan,
 										  ScanDirection direction);
-extern void systable_endscan_ordered(SysScanDesc sysscan);
+extern PGDLLIMPORT void systable_endscan_ordered(SysScanDesc sysscan);
 
 #endif							/* GENAM_H */

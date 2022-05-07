@@ -30,11 +30,11 @@ typedef struct pg_pthread_barrier
 	pthread_cond_t cond;
 } pthread_barrier_t;
 
-extern int	pthread_barrier_init(pthread_barrier_t *barrier,
+extern PGDLLIMPORT int	pthread_barrier_init(pthread_barrier_t *barrier,
 								 const void *attr,
 								 int count);
-extern int	pthread_barrier_wait(pthread_barrier_t *barrier);
-extern int	pthread_barrier_destroy(pthread_barrier_t *barrier);
+extern PGDLLIMPORT int	pthread_barrier_wait(pthread_barrier_t *barrier);
+extern PGDLLIMPORT int	pthread_barrier_destroy(pthread_barrier_t *barrier);
 
 #endif
 

@@ -416,71 +416,71 @@ typedef struct xl_xact_parsed_abort
  *		extern definitions
  * ----------------
  */
-extern bool IsTransactionState(void);
-extern bool IsAbortedTransactionBlockState(void);
-extern TransactionId GetTopTransactionId(void);
-extern TransactionId GetTopTransactionIdIfAny(void);
-extern TransactionId GetCurrentTransactionId(void);
-extern TransactionId GetCurrentTransactionIdIfAny(void);
-extern TransactionId GetStableLatestTransactionId(void);
-extern SubTransactionId GetCurrentSubTransactionId(void);
-extern FullTransactionId GetTopFullTransactionId(void);
-extern FullTransactionId GetTopFullTransactionIdIfAny(void);
-extern FullTransactionId GetCurrentFullTransactionId(void);
-extern FullTransactionId GetCurrentFullTransactionIdIfAny(void);
-extern void MarkCurrentTransactionIdLoggedIfAny(void);
-extern bool SubTransactionIsActive(SubTransactionId subxid);
-extern CommandId GetCurrentCommandId(bool used);
-extern void SetParallelStartTimestamps(TimestampTz xact_ts, TimestampTz stmt_ts);
-extern TimestampTz GetCurrentTransactionStartTimestamp(void);
-extern TimestampTz GetCurrentStatementStartTimestamp(void);
-extern TimestampTz GetCurrentTransactionStopTimestamp(void);
-extern void SetCurrentStatementStartTimestamp(void);
-extern int	GetCurrentTransactionNestLevel(void);
-extern bool TransactionIdIsCurrentTransactionId(TransactionId xid);
-extern void CommandCounterIncrement(void);
-extern void ForceSyncCommit(void);
-extern void StartTransactionCommand(void);
-extern void SaveTransactionCharacteristics(SavedTransactionCharacteristics *s);
-extern void RestoreTransactionCharacteristics(const SavedTransactionCharacteristics *s);
-extern void CommitTransactionCommand(void);
-extern void AbortCurrentTransaction(void);
-extern void BeginTransactionBlock(void);
-extern bool EndTransactionBlock(bool chain);
-extern bool PrepareTransactionBlock(const char *gid);
-extern void UserAbortTransactionBlock(bool chain);
-extern void BeginImplicitTransactionBlock(void);
-extern void EndImplicitTransactionBlock(void);
-extern void ReleaseSavepoint(const char *name);
-extern void DefineSavepoint(const char *name);
-extern void RollbackToSavepoint(const char *name);
-extern void BeginInternalSubTransaction(const char *name);
-extern void ReleaseCurrentSubTransaction(void);
-extern void RollbackAndReleaseCurrentSubTransaction(void);
-extern bool IsSubTransaction(void);
-extern Size EstimateTransactionStateSpace(void);
-extern void SerializeTransactionState(Size maxsize, char *start_address);
-extern void StartParallelWorkerTransaction(char *tstatespace);
-extern void EndParallelWorkerTransaction(void);
-extern bool IsTransactionBlock(void);
-extern bool IsTransactionOrTransactionBlock(void);
-extern char TransactionBlockStatusCode(void);
-extern void AbortOutOfAnyTransaction(void);
-extern void PreventInTransactionBlock(bool isTopLevel, const char *stmtType);
-extern void RequireTransactionBlock(bool isTopLevel, const char *stmtType);
-extern void WarnNoTransactionBlock(bool isTopLevel, const char *stmtType);
-extern bool IsInTransactionBlock(bool isTopLevel);
-extern void RegisterXactCallback(XactCallback callback, void *arg);
-extern void UnregisterXactCallback(XactCallback callback, void *arg);
-extern void RegisterSubXactCallback(SubXactCallback callback, void *arg);
-extern void UnregisterSubXactCallback(SubXactCallback callback, void *arg);
+extern PGDLLIMPORT bool IsTransactionState(void);
+extern PGDLLIMPORT bool IsAbortedTransactionBlockState(void);
+extern PGDLLIMPORT TransactionId GetTopTransactionId(void);
+extern PGDLLIMPORT TransactionId GetTopTransactionIdIfAny(void);
+extern PGDLLIMPORT TransactionId GetCurrentTransactionId(void);
+extern PGDLLIMPORT TransactionId GetCurrentTransactionIdIfAny(void);
+extern PGDLLIMPORT TransactionId GetStableLatestTransactionId(void);
+extern PGDLLIMPORT SubTransactionId GetCurrentSubTransactionId(void);
+extern PGDLLIMPORT FullTransactionId GetTopFullTransactionId(void);
+extern PGDLLIMPORT FullTransactionId GetTopFullTransactionIdIfAny(void);
+extern PGDLLIMPORT FullTransactionId GetCurrentFullTransactionId(void);
+extern PGDLLIMPORT FullTransactionId GetCurrentFullTransactionIdIfAny(void);
+extern PGDLLIMPORT void MarkCurrentTransactionIdLoggedIfAny(void);
+extern PGDLLIMPORT bool SubTransactionIsActive(SubTransactionId subxid);
+extern PGDLLIMPORT CommandId GetCurrentCommandId(bool used);
+extern PGDLLIMPORT void SetParallelStartTimestamps(TimestampTz xact_ts, TimestampTz stmt_ts);
+extern PGDLLIMPORT TimestampTz GetCurrentTransactionStartTimestamp(void);
+extern PGDLLIMPORT TimestampTz GetCurrentStatementStartTimestamp(void);
+extern PGDLLIMPORT TimestampTz GetCurrentTransactionStopTimestamp(void);
+extern PGDLLIMPORT void SetCurrentStatementStartTimestamp(void);
+extern PGDLLIMPORT int	GetCurrentTransactionNestLevel(void);
+extern PGDLLIMPORT bool TransactionIdIsCurrentTransactionId(TransactionId xid);
+extern PGDLLIMPORT void CommandCounterIncrement(void);
+extern PGDLLIMPORT void ForceSyncCommit(void);
+extern PGDLLIMPORT void StartTransactionCommand(void);
+extern PGDLLIMPORT void SaveTransactionCharacteristics(SavedTransactionCharacteristics *s);
+extern PGDLLIMPORT void RestoreTransactionCharacteristics(const SavedTransactionCharacteristics *s);
+extern PGDLLIMPORT void CommitTransactionCommand(void);
+extern PGDLLIMPORT void AbortCurrentTransaction(void);
+extern PGDLLIMPORT void BeginTransactionBlock(void);
+extern PGDLLIMPORT bool EndTransactionBlock(bool chain);
+extern PGDLLIMPORT bool PrepareTransactionBlock(const char *gid);
+extern PGDLLIMPORT void UserAbortTransactionBlock(bool chain);
+extern PGDLLIMPORT void BeginImplicitTransactionBlock(void);
+extern PGDLLIMPORT void EndImplicitTransactionBlock(void);
+extern PGDLLIMPORT void ReleaseSavepoint(const char *name);
+extern PGDLLIMPORT void DefineSavepoint(const char *name);
+extern PGDLLIMPORT void RollbackToSavepoint(const char *name);
+extern PGDLLIMPORT void BeginInternalSubTransaction(const char *name);
+extern PGDLLIMPORT void ReleaseCurrentSubTransaction(void);
+extern PGDLLIMPORT void RollbackAndReleaseCurrentSubTransaction(void);
+extern PGDLLIMPORT bool IsSubTransaction(void);
+extern PGDLLIMPORT Size EstimateTransactionStateSpace(void);
+extern PGDLLIMPORT void SerializeTransactionState(Size maxsize, char *start_address);
+extern PGDLLIMPORT void StartParallelWorkerTransaction(char *tstatespace);
+extern PGDLLIMPORT void EndParallelWorkerTransaction(void);
+extern PGDLLIMPORT bool IsTransactionBlock(void);
+extern PGDLLIMPORT bool IsTransactionOrTransactionBlock(void);
+extern PGDLLIMPORT char TransactionBlockStatusCode(void);
+extern PGDLLIMPORT void AbortOutOfAnyTransaction(void);
+extern PGDLLIMPORT void PreventInTransactionBlock(bool isTopLevel, const char *stmtType);
+extern PGDLLIMPORT void RequireTransactionBlock(bool isTopLevel, const char *stmtType);
+extern PGDLLIMPORT void WarnNoTransactionBlock(bool isTopLevel, const char *stmtType);
+extern PGDLLIMPORT bool IsInTransactionBlock(bool isTopLevel);
+extern PGDLLIMPORT void RegisterXactCallback(XactCallback callback, void *arg);
+extern PGDLLIMPORT void UnregisterXactCallback(XactCallback callback, void *arg);
+extern PGDLLIMPORT void RegisterSubXactCallback(SubXactCallback callback, void *arg);
+extern PGDLLIMPORT void UnregisterSubXactCallback(SubXactCallback callback, void *arg);
 
-extern bool IsSubxactTopXidLogPending(void);
-extern void MarkSubxactTopXidLogged(void);
+extern PGDLLIMPORT bool IsSubxactTopXidLogPending(void);
+extern PGDLLIMPORT void MarkSubxactTopXidLogged(void);
 
-extern int	xactGetCommittedChildren(TransactionId **ptr);
+extern PGDLLIMPORT int	xactGetCommittedChildren(TransactionId **ptr);
 
-extern XLogRecPtr XactLogCommitRecord(TimestampTz commit_time,
+extern PGDLLIMPORT XLogRecPtr XactLogCommitRecord(TimestampTz commit_time,
 									  int nsubxacts, TransactionId *subxacts,
 									  int nrels, RelFileNode *rels,
 									  int nstats,
@@ -491,26 +491,26 @@ extern XLogRecPtr XactLogCommitRecord(TimestampTz commit_time,
 									  TransactionId twophase_xid,
 									  const char *twophase_gid);
 
-extern XLogRecPtr XactLogAbortRecord(TimestampTz abort_time,
+extern PGDLLIMPORT XLogRecPtr XactLogAbortRecord(TimestampTz abort_time,
 									 int nsubxacts, TransactionId *subxacts,
 									 int nrels, RelFileNode *rels,
 									 int nstats,
 									 xl_xact_stats_item *stats,
 									 int xactflags, TransactionId twophase_xid,
 									 const char *twophase_gid);
-extern void xact_redo(XLogReaderState *record);
+extern PGDLLIMPORT void xact_redo(XLogReaderState *record);
 
 /* xactdesc.c */
-extern void xact_desc(StringInfo buf, XLogReaderState *record);
-extern const char *xact_identify(uint8 info);
+extern PGDLLIMPORT void xact_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *xact_identify(uint8 info);
 
 /* also in xactdesc.c, so they can be shared between front/backend code */
-extern void ParseCommitRecord(uint8 info, xl_xact_commit *xlrec, xl_xact_parsed_commit *parsed);
-extern void ParseAbortRecord(uint8 info, xl_xact_abort *xlrec, xl_xact_parsed_abort *parsed);
-extern void ParsePrepareRecord(uint8 info, xl_xact_prepare *xlrec, xl_xact_parsed_prepare *parsed);
+extern PGDLLIMPORT void ParseCommitRecord(uint8 info, xl_xact_commit *xlrec, xl_xact_parsed_commit *parsed);
+extern PGDLLIMPORT void ParseAbortRecord(uint8 info, xl_xact_abort *xlrec, xl_xact_parsed_abort *parsed);
+extern PGDLLIMPORT void ParsePrepareRecord(uint8 info, xl_xact_prepare *xlrec, xl_xact_parsed_prepare *parsed);
 
-extern void EnterParallelMode(void);
-extern void ExitParallelMode(void);
-extern bool IsInParallelMode(void);
+extern PGDLLIMPORT void EnterParallelMode(void);
+extern PGDLLIMPORT void ExitParallelMode(void);
+extern PGDLLIMPORT bool IsInParallelMode(void);
 
 #endif							/* XACT_H */

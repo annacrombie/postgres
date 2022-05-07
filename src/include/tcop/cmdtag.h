@@ -48,11 +48,11 @@ CopyQueryCompletion(QueryCompletion *dst, const QueryCompletion *src)
 }
 
 
-extern void InitializeQueryCompletion(QueryCompletion *qc);
-extern const char *GetCommandTagName(CommandTag commandTag);
-extern bool command_tag_display_rowcount(CommandTag commandTag);
-extern bool command_tag_event_trigger_ok(CommandTag commandTag);
-extern bool command_tag_table_rewrite_ok(CommandTag commandTag);
-extern CommandTag GetCommandTagEnum(const char *tagname);
+extern PGDLLIMPORT void InitializeQueryCompletion(QueryCompletion *qc);
+extern PGDLLIMPORT const char *GetCommandTagName(CommandTag commandTag);
+extern PGDLLIMPORT bool command_tag_display_rowcount(CommandTag commandTag);
+extern PGDLLIMPORT bool command_tag_event_trigger_ok(CommandTag commandTag);
+extern PGDLLIMPORT bool command_tag_table_rewrite_ok(CommandTag commandTag);
+extern PGDLLIMPORT CommandTag GetCommandTagEnum(const char *tagname);
 
 #endif							/* CMDTAG_H */

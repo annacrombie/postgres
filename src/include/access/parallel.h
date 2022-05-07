@@ -60,23 +60,23 @@ extern PGDLLIMPORT bool InitializingParallelWorker;
 
 #define		IsParallelWorker()		(ParallelWorkerNumber >= 0)
 
-extern ParallelContext *CreateParallelContext(const char *library_name,
+extern PGDLLIMPORT ParallelContext *CreateParallelContext(const char *library_name,
 											  const char *function_name, int nworkers);
-extern void InitializeParallelDSM(ParallelContext *pcxt);
-extern void ReinitializeParallelDSM(ParallelContext *pcxt);
-extern void ReinitializeParallelWorkers(ParallelContext *pcxt, int nworkers_to_launch);
-extern void LaunchParallelWorkers(ParallelContext *pcxt);
-extern void WaitForParallelWorkersToAttach(ParallelContext *pcxt);
-extern void WaitForParallelWorkersToFinish(ParallelContext *pcxt);
-extern void DestroyParallelContext(ParallelContext *pcxt);
-extern bool ParallelContextActive(void);
+extern PGDLLIMPORT void InitializeParallelDSM(ParallelContext *pcxt);
+extern PGDLLIMPORT void ReinitializeParallelDSM(ParallelContext *pcxt);
+extern PGDLLIMPORT void ReinitializeParallelWorkers(ParallelContext *pcxt, int nworkers_to_launch);
+extern PGDLLIMPORT void LaunchParallelWorkers(ParallelContext *pcxt);
+extern PGDLLIMPORT void WaitForParallelWorkersToAttach(ParallelContext *pcxt);
+extern PGDLLIMPORT void WaitForParallelWorkersToFinish(ParallelContext *pcxt);
+extern PGDLLIMPORT void DestroyParallelContext(ParallelContext *pcxt);
+extern PGDLLIMPORT bool ParallelContextActive(void);
 
-extern void HandleParallelMessageInterrupt(void);
-extern void HandleParallelMessages(void);
-extern void AtEOXact_Parallel(bool isCommit);
-extern void AtEOSubXact_Parallel(bool isCommit, SubTransactionId mySubId);
-extern void ParallelWorkerReportLastRecEnd(XLogRecPtr last_xlog_end);
+extern PGDLLIMPORT void HandleParallelMessageInterrupt(void);
+extern PGDLLIMPORT void HandleParallelMessages(void);
+extern PGDLLIMPORT void AtEOXact_Parallel(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_Parallel(bool isCommit, SubTransactionId mySubId);
+extern PGDLLIMPORT void ParallelWorkerReportLastRecEnd(XLogRecPtr last_xlog_end);
 
-extern void ParallelWorkerMain(Datum main_arg);
+extern PGDLLIMPORT void ParallelWorkerMain(Datum main_arg);
 
 #endif							/* PARALLEL_H */

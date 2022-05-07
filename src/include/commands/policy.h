@@ -19,20 +19,20 @@
 #include "nodes/parsenodes.h"
 #include "utils/relcache.h"
 
-extern void RelationBuildRowSecurity(Relation relation);
+extern PGDLLIMPORT void RelationBuildRowSecurity(Relation relation);
 
-extern void RemovePolicyById(Oid policy_id);
+extern PGDLLIMPORT void RemovePolicyById(Oid policy_id);
 
-extern bool RemoveRoleFromObjectPolicy(Oid roleid, Oid classid, Oid objid);
+extern PGDLLIMPORT bool RemoveRoleFromObjectPolicy(Oid roleid, Oid classid, Oid objid);
 
-extern ObjectAddress CreatePolicy(CreatePolicyStmt *stmt);
-extern ObjectAddress AlterPolicy(AlterPolicyStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreatePolicy(CreatePolicyStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterPolicy(AlterPolicyStmt *stmt);
 
-extern Oid	get_relation_policy_oid(Oid relid, const char *policy_name,
+extern PGDLLIMPORT Oid	get_relation_policy_oid(Oid relid, const char *policy_name,
 									bool missing_ok);
 
-extern ObjectAddress rename_policy(RenameStmt *stmt);
+extern PGDLLIMPORT ObjectAddress rename_policy(RenameStmt *stmt);
 
-extern bool relation_has_policies(Relation rel);
+extern PGDLLIMPORT bool relation_has_policies(Relation rel);
 
 #endif							/* POLICY_H */

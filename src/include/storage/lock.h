@@ -537,80 +537,80 @@ typedef enum
 /*
  * function prototypes
  */
-extern void InitLocks(void);
-extern LockMethod GetLocksMethodTable(const LOCK *lock);
-extern LockMethod GetLockTagsMethodTable(const LOCKTAG *locktag);
-extern uint32 LockTagHashCode(const LOCKTAG *locktag);
-extern bool DoLockModesConflict(LOCKMODE mode1, LOCKMODE mode2);
-extern LockAcquireResult LockAcquire(const LOCKTAG *locktag,
+extern PGDLLIMPORT void InitLocks(void);
+extern PGDLLIMPORT LockMethod GetLocksMethodTable(const LOCK *lock);
+extern PGDLLIMPORT LockMethod GetLockTagsMethodTable(const LOCKTAG *locktag);
+extern PGDLLIMPORT uint32 LockTagHashCode(const LOCKTAG *locktag);
+extern PGDLLIMPORT bool DoLockModesConflict(LOCKMODE mode1, LOCKMODE mode2);
+extern PGDLLIMPORT LockAcquireResult LockAcquire(const LOCKTAG *locktag,
 									 LOCKMODE lockmode,
 									 bool sessionLock,
 									 bool dontWait);
-extern LockAcquireResult LockAcquireExtended(const LOCKTAG *locktag,
+extern PGDLLIMPORT LockAcquireResult LockAcquireExtended(const LOCKTAG *locktag,
 											 LOCKMODE lockmode,
 											 bool sessionLock,
 											 bool dontWait,
 											 bool reportMemoryError,
 											 LOCALLOCK **locallockp);
-extern void AbortStrongLockAcquire(void);
-extern void MarkLockClear(LOCALLOCK *locallock);
-extern bool LockRelease(const LOCKTAG *locktag,
+extern PGDLLIMPORT void AbortStrongLockAcquire(void);
+extern PGDLLIMPORT void MarkLockClear(LOCALLOCK *locallock);
+extern PGDLLIMPORT bool LockRelease(const LOCKTAG *locktag,
 						LOCKMODE lockmode, bool sessionLock);
-extern void LockReleaseAll(LOCKMETHODID lockmethodid, bool allLocks);
-extern void LockReleaseSession(LOCKMETHODID lockmethodid);
-extern void LockReleaseCurrentOwner(LOCALLOCK **locallocks, int nlocks);
-extern void LockReassignCurrentOwner(LOCALLOCK **locallocks, int nlocks);
-extern bool LockHeldByMe(const LOCKTAG *locktag, LOCKMODE lockmode);
+extern PGDLLIMPORT void LockReleaseAll(LOCKMETHODID lockmethodid, bool allLocks);
+extern PGDLLIMPORT void LockReleaseSession(LOCKMETHODID lockmethodid);
+extern PGDLLIMPORT void LockReleaseCurrentOwner(LOCALLOCK **locallocks, int nlocks);
+extern PGDLLIMPORT void LockReassignCurrentOwner(LOCALLOCK **locallocks, int nlocks);
+extern PGDLLIMPORT bool LockHeldByMe(const LOCKTAG *locktag, LOCKMODE lockmode);
 #ifdef USE_ASSERT_CHECKING
-extern HTAB *GetLockMethodLocalHash(void);
+extern PGDLLIMPORT HTAB *GetLockMethodLocalHash(void);
 #endif
-extern bool LockHasWaiters(const LOCKTAG *locktag,
+extern PGDLLIMPORT bool LockHasWaiters(const LOCKTAG *locktag,
 						   LOCKMODE lockmode, bool sessionLock);
-extern VirtualTransactionId *GetLockConflicts(const LOCKTAG *locktag,
+extern PGDLLIMPORT VirtualTransactionId *GetLockConflicts(const LOCKTAG *locktag,
 											  LOCKMODE lockmode, int *countp);
-extern void AtPrepare_Locks(void);
-extern void PostPrepare_Locks(TransactionId xid);
-extern bool LockCheckConflicts(LockMethod lockMethodTable,
+extern PGDLLIMPORT void AtPrepare_Locks(void);
+extern PGDLLIMPORT void PostPrepare_Locks(TransactionId xid);
+extern PGDLLIMPORT bool LockCheckConflicts(LockMethod lockMethodTable,
 							   LOCKMODE lockmode,
 							   LOCK *lock, PROCLOCK *proclock);
-extern void GrantLock(LOCK *lock, PROCLOCK *proclock, LOCKMODE lockmode);
-extern void GrantAwaitedLock(void);
-extern void RemoveFromWaitQueue(PGPROC *proc, uint32 hashcode);
-extern Size LockShmemSize(void);
-extern LockData *GetLockStatusData(void);
-extern BlockedProcsData *GetBlockerStatusData(int blocked_pid);
+extern PGDLLIMPORT void GrantLock(LOCK *lock, PROCLOCK *proclock, LOCKMODE lockmode);
+extern PGDLLIMPORT void GrantAwaitedLock(void);
+extern PGDLLIMPORT void RemoveFromWaitQueue(PGPROC *proc, uint32 hashcode);
+extern PGDLLIMPORT Size LockShmemSize(void);
+extern PGDLLIMPORT LockData *GetLockStatusData(void);
+extern PGDLLIMPORT BlockedProcsData *GetBlockerStatusData(int blocked_pid);
 
-extern xl_standby_lock *GetRunningTransactionLocks(int *nlocks);
-extern const char *GetLockmodeName(LOCKMETHODID lockmethodid, LOCKMODE mode);
+extern PGDLLIMPORT xl_standby_lock *GetRunningTransactionLocks(int *nlocks);
+extern PGDLLIMPORT const char *GetLockmodeName(LOCKMETHODID lockmethodid, LOCKMODE mode);
 
-extern void lock_twophase_recover(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void lock_twophase_recover(TransactionId xid, uint16 info,
 								  void *recdata, uint32 len);
-extern void lock_twophase_postcommit(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void lock_twophase_postcommit(TransactionId xid, uint16 info,
 									 void *recdata, uint32 len);
-extern void lock_twophase_postabort(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void lock_twophase_postabort(TransactionId xid, uint16 info,
 									void *recdata, uint32 len);
-extern void lock_twophase_standby_recover(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void lock_twophase_standby_recover(TransactionId xid, uint16 info,
 										  void *recdata, uint32 len);
 
-extern DeadLockState DeadLockCheck(PGPROC *proc);
-extern PGPROC *GetBlockingAutoVacuumPgproc(void);
-extern void DeadLockReport(void) pg_attribute_noreturn();
-extern void RememberSimpleDeadLock(PGPROC *proc1,
+extern PGDLLIMPORT DeadLockState DeadLockCheck(PGPROC *proc);
+extern PGDLLIMPORT PGPROC *GetBlockingAutoVacuumPgproc(void);
+extern PGDLLIMPORT void DeadLockReport(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void RememberSimpleDeadLock(PGPROC *proc1,
 								   LOCKMODE lockmode,
 								   LOCK *lock,
 								   PGPROC *proc2);
-extern void InitDeadLockChecking(void);
+extern PGDLLIMPORT void InitDeadLockChecking(void);
 
-extern int	LockWaiterCount(const LOCKTAG *locktag);
+extern PGDLLIMPORT int	LockWaiterCount(const LOCKTAG *locktag);
 
 #ifdef LOCK_DEBUG
-extern void DumpLocks(PGPROC *proc);
-extern void DumpAllLocks(void);
+extern PGDLLIMPORT void DumpLocks(PGPROC *proc);
+extern PGDLLIMPORT void DumpAllLocks(void);
 #endif
 
 /* Lock a VXID (used to wait for a transaction to finish) */
-extern void VirtualXactLockTableInsert(VirtualTransactionId vxid);
-extern void VirtualXactLockTableCleanup(void);
-extern bool VirtualXactLock(VirtualTransactionId vxid, bool wait);
+extern PGDLLIMPORT void VirtualXactLockTableInsert(VirtualTransactionId vxid);
+extern PGDLLIMPORT void VirtualXactLockTableCleanup(void);
+extern PGDLLIMPORT bool VirtualXactLock(VirtualTransactionId vxid, bool wait);
 
 #endif							/* LOCK_H_ */

@@ -16,6 +16,6 @@
 
 #include "nodes/parsenodes.h"
 
-extern void RemoveRewriteRuleById(Oid ruleOid);
+extern PGDLLIMPORT void RemoveRewriteRuleById(Oid ruleOid);
 
 #endif							/* REWRITEREMOVE_H */

@@ -26,7 +26,7 @@
 #include "optimizer/geqo.h"
 
 
-extern void geqo_selection(PlannerInfo *root,
+extern PGDLLIMPORT void geqo_selection(PlannerInfo *root,
 						   Chromosome *momma, Chromosome *daddy,
 						   Pool *pool, double bias);
 

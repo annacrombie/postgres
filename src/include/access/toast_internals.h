@@ -45,19 +45,19 @@ typedef struct toast_compress_header
 			(len) | ((uint32) (cm_method) << VARLENA_EXTSIZE_BITS); \
 	} while (0)
 
-extern Datum toast_compress_datum(Datum value, char cmethod);
-extern Oid	toast_get_valid_index(Oid toastoid, LOCKMODE lock);
+extern PGDLLIMPORT Datum toast_compress_datum(Datum value, char cmethod);
+extern PGDLLIMPORT Oid	toast_get_valid_index(Oid toastoid, LOCKMODE lock);
 
-extern void toast_delete_datum(Relation rel, Datum value, bool is_speculative);
-extern Datum toast_save_datum(Relation rel, Datum value,
+extern PGDLLIMPORT void toast_delete_datum(Relation rel, Datum value, bool is_speculative);
+extern PGDLLIMPORT Datum toast_save_datum(Relation rel, Datum value,
 							  struct varlena *oldexternal, int options);
 
-extern int	toast_open_indexes(Relation toastrel,
+extern PGDLLIMPORT int	toast_open_indexes(Relation toastrel,
 							   LOCKMODE lock,
 							   Relation **toastidxs,
 							   int *num_indexes);
-extern void toast_close_indexes(Relation *toastidxs, int num_indexes,
+extern PGDLLIMPORT void toast_close_indexes(Relation *toastidxs, int num_indexes,
 								LOCKMODE lock);
-extern void init_toast_snapshot(Snapshot toast_snapshot);
+extern PGDLLIMPORT void init_toast_snapshot(Snapshot toast_snapshot);
 
 #endif							/* TOAST_INTERNALS_H */

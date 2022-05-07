@@ -29,13 +29,13 @@ typedef struct TSVectorParseStateData *TSVectorParseState;
 #define P_TSV_IS_TSQUERY	(1 << 1)
 #define P_TSV_IS_WEB		(1 << 2)
 
-extern TSVectorParseState init_tsvector_parser(char *input, int flags);
-extern void reset_tsvector_parser(TSVectorParseState state, char *input);
-extern bool gettoken_tsvector(TSVectorParseState state,
+extern PGDLLIMPORT TSVectorParseState init_tsvector_parser(char *input, int flags);
+extern PGDLLIMPORT void reset_tsvector_parser(TSVectorParseState state, char *input);
+extern PGDLLIMPORT bool gettoken_tsvector(TSVectorParseState state,
 							  char **token, int *len,
 							  WordEntryPos **pos, int *poslen,
 							  char **endptr);
-extern void close_tsvector_parser(TSVectorParseState state);
+extern PGDLLIMPORT void close_tsvector_parser(TSVectorParseState state);
 
 /* phrase operator begins with '<' */
 #define ISOPERATOR(x) \
@@ -61,16 +61,16 @@ typedef void (*PushFunction) (Datum opaque, TSQueryParserState state,
 #define P_TSQ_PLAIN		(1 << 0)
 #define P_TSQ_WEB		(1 << 1)
 
-extern TSQuery parse_tsquery(char *buf,
+extern PGDLLIMPORT TSQuery parse_tsquery(char *buf,
 							 PushFunction pushval,
 							 Datum opaque,
 							 int flags);
 
 /* Functions for use by PushFunction implementations */
-extern void pushValue(TSQueryParserState state,
+extern PGDLLIMPORT void pushValue(TSQueryParserState state,
 					  char *strval, int lenval, int16 weight, bool prefix);
-extern void pushStop(TSQueryParserState state);
-extern void pushOperator(TSQueryParserState state, int8 oper, int16 distance);
+extern PGDLLIMPORT void pushStop(TSQueryParserState state);
+extern PGDLLIMPORT void pushOperator(TSQueryParserState state, int8 oper, int16 distance);
 
 /*
  * parse plain text and lexize words
@@ -103,7 +103,7 @@ typedef struct
 	int32		pos;
 } ParsedText;
 
-extern void parsetext(Oid cfgId, ParsedText *prs, char *buf, int32 buflen);
+extern PGDLLIMPORT void parsetext(Oid cfgId, ParsedText *prs, char *buf, int32 buflen);
 
 /*
  * headline framework, flow in common to generate:
@@ -112,9 +112,9 @@ extern void parsetext(Oid cfgId, ParsedText *prs, char *buf, int32 buflen);
  *	3 generateHeadline to generate result text
  */
 
-extern void hlparsetext(Oid cfgId, HeadlineParsedText *prs, TSQuery query,
+extern PGDLLIMPORT void hlparsetext(Oid cfgId, HeadlineParsedText *prs, TSQuery query,
 						char *buf, int32 buflen);
-extern text *generateHeadline(HeadlineParsedText *prs);
+extern PGDLLIMPORT text *generateHeadline(HeadlineParsedText *prs);
 
 /*
  * TSQuery execution support
@@ -197,18 +197,18 @@ typedef TSTernaryValue (*TSExecuteCallback) (void *arg, QueryOperand *val,
  */
 #define TS_EXEC_PHRASE_NO_POS	(0x02)
 
-extern bool TS_execute(QueryItem *curitem, void *arg, uint32 flags,
+extern PGDLLIMPORT bool TS_execute(QueryItem *curitem, void *arg, uint32 flags,
 					   TSExecuteCallback chkcond);
-extern TSTernaryValue TS_execute_ternary(QueryItem *curitem, void *arg,
+extern PGDLLIMPORT TSTernaryValue TS_execute_ternary(QueryItem *curitem, void *arg,
 										 uint32 flags,
 										 TSExecuteCallback chkcond);
-extern bool tsquery_requires_match(QueryItem *curitem);
+extern PGDLLIMPORT bool tsquery_requires_match(QueryItem *curitem);
 
 /*
  * to_ts* - text transformation to tsvector, tsquery
  */
-extern TSVector make_tsvector(ParsedText *prs);
-extern int32 tsCompareString(char *a, int lena, char *b, int lenb, bool prefix);
+extern PGDLLIMPORT TSVector make_tsvector(ParsedText *prs);
+extern PGDLLIMPORT int32 tsCompareString(char *a, int lena, char *b, int lenb, bool prefix);
 
 /*
  * Possible strategy numbers for indexes
@@ -221,8 +221,8 @@ extern int32 tsCompareString(char *a, int lena, char *b, int lenb, bool prefix);
 /*
  * TSQuery Utilities
  */
-extern QueryItem *clean_NOT(QueryItem *ptr, int32 *len);
-extern TSQuery cleanup_tsquery_stopwords(TSQuery in);
+extern PGDLLIMPORT QueryItem *clean_NOT(QueryItem *ptr, int32 *len);
+extern PGDLLIMPORT TSQuery cleanup_tsquery_stopwords(TSQuery in);
 
 typedef struct QTNode
 {
@@ -249,18 +249,18 @@ typedef uint64 TSQuerySign;
 #define PG_GETARG_TSQUERYSIGN(n)	DatumGetTSQuerySign(PG_GETARG_DATUM(n))
 
 
-extern QTNode *QT2QTN(QueryItem *in, char *operand);
-extern TSQuery QTN2QT(QTNode *in);
-extern void QTNFree(QTNode *in);
-extern void QTNSort(QTNode *in);
-extern void QTNTernary(QTNode *in);
-extern void QTNBinary(QTNode *in);
-extern int	QTNodeCompare(QTNode *an, QTNode *bn);
-extern QTNode *QTNCopy(QTNode *in);
-extern void QTNClearFlags(QTNode *in, uint32 flags);
-extern bool QTNEq(QTNode *a, QTNode *b);
-extern TSQuerySign makeTSQuerySign(TSQuery a);
-extern QTNode *findsubquery(QTNode *root, QTNode *ex, QTNode *subs,
+extern PGDLLIMPORT QTNode *QT2QTN(QueryItem *in, char *operand);
+extern PGDLLIMPORT TSQuery QTN2QT(QTNode *in);
+extern PGDLLIMPORT void QTNFree(QTNode *in);
+extern PGDLLIMPORT void QTNSort(QTNode *in);
+extern PGDLLIMPORT void QTNTernary(QTNode *in);
+extern PGDLLIMPORT void QTNBinary(QTNode *in);
+extern PGDLLIMPORT int	QTNodeCompare(QTNode *an, QTNode *bn);
+extern PGDLLIMPORT QTNode *QTNCopy(QTNode *in);
+extern PGDLLIMPORT void QTNClearFlags(QTNode *in, uint32 flags);
+extern PGDLLIMPORT bool QTNEq(QTNode *a, QTNode *b);
+extern PGDLLIMPORT TSQuerySign makeTSQuerySign(TSQuery a);
+extern PGDLLIMPORT QTNode *findsubquery(QTNode *root, QTNode *ex, QTNode *subs,
 							bool *isfind);
 
 #endif							/* _PG_TS_UTILS_H_ */

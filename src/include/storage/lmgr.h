@@ -34,82 +34,82 @@ typedef enum XLTW_Oper
 	XLTW_RecheckExclusionConstr
 } XLTW_Oper;
 
-extern void RelationInitLockInfo(Relation relation);
+extern PGDLLIMPORT void RelationInitLockInfo(Relation relation);
 
 /* Lock a relation */
-extern void LockRelationOid(Oid relid, LOCKMODE lockmode);
-extern void LockRelationId(LockRelId *relid, LOCKMODE lockmode);
-extern bool ConditionalLockRelationOid(Oid relid, LOCKMODE lockmode);
-extern void UnlockRelationId(LockRelId *relid, LOCKMODE lockmode);
-extern void UnlockRelationOid(Oid relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void LockRelationOid(Oid relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void LockRelationId(LockRelId *relid, LOCKMODE lockmode);
+extern PGDLLIMPORT bool ConditionalLockRelationOid(Oid relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockRelationId(LockRelId *relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockRelationOid(Oid relid, LOCKMODE lockmode);
 
-extern void LockRelation(Relation relation, LOCKMODE lockmode);
-extern bool ConditionalLockRelation(Relation relation, LOCKMODE lockmode);
-extern void UnlockRelation(Relation relation, LOCKMODE lockmode);
-extern bool CheckRelationLockedByMe(Relation relation, LOCKMODE lockmode,
+extern PGDLLIMPORT void LockRelation(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT bool ConditionalLockRelation(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockRelation(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT bool CheckRelationLockedByMe(Relation relation, LOCKMODE lockmode,
 									bool orstronger);
-extern bool LockHasWaitersRelation(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT bool LockHasWaitersRelation(Relation relation, LOCKMODE lockmode);
 
-extern void LockRelationIdForSession(LockRelId *relid, LOCKMODE lockmode);
-extern void UnlockRelationIdForSession(LockRelId *relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void LockRelationIdForSession(LockRelId *relid, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockRelationIdForSession(LockRelId *relid, LOCKMODE lockmode);
 
 /* Lock a relation for extension */
-extern void LockRelationForExtension(Relation relation, LOCKMODE lockmode);
-extern void UnlockRelationForExtension(Relation relation, LOCKMODE lockmode);
-extern bool ConditionalLockRelationForExtension(Relation relation,
+extern PGDLLIMPORT void LockRelationForExtension(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockRelationForExtension(Relation relation, LOCKMODE lockmode);
+extern PGDLLIMPORT bool ConditionalLockRelationForExtension(Relation relation,
 												LOCKMODE lockmode);
-extern int	RelationExtensionLockWaiterCount(Relation relation);
+extern PGDLLIMPORT int	RelationExtensionLockWaiterCount(Relation relation);
 
 /* Lock to recompute pg_database.datfrozenxid in the current database */
-extern void LockDatabaseFrozenIds(LOCKMODE lockmode);
+extern PGDLLIMPORT void LockDatabaseFrozenIds(LOCKMODE lockmode);
 
 /* Lock a page (currently only used within indexes) */
-extern void LockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
-extern bool ConditionalLockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
-extern void UnlockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
+extern PGDLLIMPORT void LockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
+extern PGDLLIMPORT bool ConditionalLockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockPage(Relation relation, BlockNumber blkno, LOCKMODE lockmode);
 
 /* Lock a tuple (see heap_lock_tuple before assuming you understand this) */
-extern void LockTuple(Relation relation, ItemPointer tid, LOCKMODE lockmode);
-extern bool ConditionalLockTuple(Relation relation, ItemPointer tid,
+extern PGDLLIMPORT void LockTuple(Relation relation, ItemPointer tid, LOCKMODE lockmode);
+extern PGDLLIMPORT bool ConditionalLockTuple(Relation relation, ItemPointer tid,
 								 LOCKMODE lockmode);
-extern void UnlockTuple(Relation relation, ItemPointer tid, LOCKMODE lockmode);
+extern PGDLLIMPORT void UnlockTuple(Relation relation, ItemPointer tid, LOCKMODE lockmode);
 
 /* Lock an XID (used to wait for a transaction to finish) */
-extern void XactLockTableInsert(TransactionId xid);
-extern void XactLockTableDelete(TransactionId xid);
-extern void XactLockTableWait(TransactionId xid, Relation rel,
+extern PGDLLIMPORT void XactLockTableInsert(TransactionId xid);
+extern PGDLLIMPORT void XactLockTableDelete(TransactionId xid);
+extern PGDLLIMPORT void XactLockTableWait(TransactionId xid, Relation rel,
 							  ItemPointer ctid, XLTW_Oper oper);
-extern bool ConditionalXactLockTableWait(TransactionId xid);
+extern PGDLLIMPORT bool ConditionalXactLockTableWait(TransactionId xid);
 
 /* Lock VXIDs, specified by conflicting locktags */
-extern void WaitForLockers(LOCKTAG heaplocktag, LOCKMODE lockmode, bool progress);
-extern void WaitForLockersMultiple(List *locktags, LOCKMODE lockmode, bool progress);
+extern PGDLLIMPORT void WaitForLockers(LOCKTAG heaplocktag, LOCKMODE lockmode, bool progress);
+extern PGDLLIMPORT void WaitForLockersMultiple(List *locktags, LOCKMODE lockmode, bool progress);
 
 /* Lock an XID for tuple insertion (used to wait for an insertion to finish) */
-extern uint32 SpeculativeInsertionLockAcquire(TransactionId xid);
-extern void SpeculativeInsertionLockRelease(TransactionId xid);
-extern void SpeculativeInsertionWait(TransactionId xid, uint32 token);
+extern PGDLLIMPORT uint32 SpeculativeInsertionLockAcquire(TransactionId xid);
+extern PGDLLIMPORT void SpeculativeInsertionLockRelease(TransactionId xid);
+extern PGDLLIMPORT void SpeculativeInsertionWait(TransactionId xid, uint32 token);
 
 /* Lock a general object (other than a relation) of the current database */
-extern void LockDatabaseObject(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void LockDatabaseObject(Oid classid, Oid objid, uint16 objsubid,
 							   LOCKMODE lockmode);
-extern void UnlockDatabaseObject(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void UnlockDatabaseObject(Oid classid, Oid objid, uint16 objsubid,
 								 LOCKMODE lockmode);
 
 /* Lock a shared-across-databases object (other than a relation) */
-extern void LockSharedObject(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void LockSharedObject(Oid classid, Oid objid, uint16 objsubid,
 							 LOCKMODE lockmode);
-extern void UnlockSharedObject(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void UnlockSharedObject(Oid classid, Oid objid, uint16 objsubid,
 							   LOCKMODE lockmode);
 
-extern void LockSharedObjectForSession(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void LockSharedObjectForSession(Oid classid, Oid objid, uint16 objsubid,
 									   LOCKMODE lockmode);
-extern void UnlockSharedObjectForSession(Oid classid, Oid objid, uint16 objsubid,
+extern PGDLLIMPORT void UnlockSharedObjectForSession(Oid classid, Oid objid, uint16 objsubid,
 										 LOCKMODE lockmode);
 
 /* Describe a locktag for error messages */
-extern void DescribeLockTag(StringInfo buf, const LOCKTAG *tag);
+extern PGDLLIMPORT void DescribeLockTag(StringInfo buf, const LOCKTAG *tag);
 
-extern const char *GetLockNameFromTagType(uint16 locktag_type);
+extern PGDLLIMPORT const char *GetLockNameFromTagType(uint16 locktag_type);
 
 #endif							/* LMGR_H */

@@ -35,18 +35,18 @@ extern PGDLLIMPORT int max_wal_senders;
 extern PGDLLIMPORT int wal_sender_timeout;
 extern PGDLLIMPORT bool log_replication_commands;
 
-extern void InitWalSender(void);
-extern bool exec_replication_command(const char *query_string);
-extern void WalSndErrorCleanup(void);
-extern void WalSndResourceCleanup(bool isCommit);
-extern void WalSndSignals(void);
-extern Size WalSndShmemSize(void);
-extern void WalSndShmemInit(void);
-extern void WalSndWakeup(void);
-extern void WalSndInitStopping(void);
-extern void WalSndWaitStopping(void);
-extern void HandleWalSndInitStopping(void);
-extern void WalSndRqstFileReload(void);
+extern PGDLLIMPORT void InitWalSender(void);
+extern PGDLLIMPORT bool exec_replication_command(const char *query_string);
+extern PGDLLIMPORT void WalSndErrorCleanup(void);
+extern PGDLLIMPORT void WalSndResourceCleanup(bool isCommit);
+extern PGDLLIMPORT void WalSndSignals(void);
+extern PGDLLIMPORT Size WalSndShmemSize(void);
+extern PGDLLIMPORT void WalSndShmemInit(void);
+extern PGDLLIMPORT void WalSndWakeup(void);
+extern PGDLLIMPORT void WalSndInitStopping(void);
+extern PGDLLIMPORT void WalSndWaitStopping(void);
+extern PGDLLIMPORT void HandleWalSndInitStopping(void);
+extern PGDLLIMPORT void WalSndRqstFileReload(void);
 
 /*
  * Remember that we want to wakeup walsenders later

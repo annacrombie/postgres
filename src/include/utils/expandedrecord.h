@@ -166,31 +166,31 @@ typedef struct ExpandedRecordFieldInfo
 /*
  * prototypes for functions defined in expandedrecord.c
  */
-extern ExpandedRecordHeader *make_expanded_record_from_typeid(Oid type_id, int32 typmod,
+extern PGDLLIMPORT ExpandedRecordHeader *make_expanded_record_from_typeid(Oid type_id, int32 typmod,
 															  MemoryContext parentcontext);
-extern ExpandedRecordHeader *make_expanded_record_from_tupdesc(TupleDesc tupdesc,
+extern PGDLLIMPORT ExpandedRecordHeader *make_expanded_record_from_tupdesc(TupleDesc tupdesc,
 															   MemoryContext parentcontext);
-extern ExpandedRecordHeader *make_expanded_record_from_exprecord(ExpandedRecordHeader *olderh,
+extern PGDLLIMPORT ExpandedRecordHeader *make_expanded_record_from_exprecord(ExpandedRecordHeader *olderh,
 																 MemoryContext parentcontext);
-extern void expanded_record_set_tuple(ExpandedRecordHeader *erh,
+extern PGDLLIMPORT void expanded_record_set_tuple(ExpandedRecordHeader *erh,
 									  HeapTuple tuple, bool copy, bool expand_external);
-extern Datum make_expanded_record_from_datum(Datum recorddatum,
+extern PGDLLIMPORT Datum make_expanded_record_from_datum(Datum recorddatum,
 											 MemoryContext parentcontext);
-extern TupleDesc expanded_record_fetch_tupdesc(ExpandedRecordHeader *erh);
-extern HeapTuple expanded_record_get_tuple(ExpandedRecordHeader *erh);
-extern ExpandedRecordHeader *DatumGetExpandedRecord(Datum d);
-extern void deconstruct_expanded_record(ExpandedRecordHeader *erh);
-extern bool expanded_record_lookup_field(ExpandedRecordHeader *erh,
+extern PGDLLIMPORT TupleDesc expanded_record_fetch_tupdesc(ExpandedRecordHeader *erh);
+extern PGDLLIMPORT HeapTuple expanded_record_get_tuple(ExpandedRecordHeader *erh);
+extern PGDLLIMPORT ExpandedRecordHeader *DatumGetExpandedRecord(Datum d);
+extern PGDLLIMPORT void deconstruct_expanded_record(ExpandedRecordHeader *erh);
+extern PGDLLIMPORT bool expanded_record_lookup_field(ExpandedRecordHeader *erh,
 										 const char *fieldname,
 										 ExpandedRecordFieldInfo *finfo);
-extern Datum expanded_record_fetch_field(ExpandedRecordHeader *erh, int fnumber,
+extern PGDLLIMPORT Datum expanded_record_fetch_field(ExpandedRecordHeader *erh, int fnumber,
 										 bool *isnull);
-extern void expanded_record_set_field_internal(ExpandedRecordHeader *erh,
+extern PGDLLIMPORT void expanded_record_set_field_internal(ExpandedRecordHeader *erh,
 											   int fnumber,
 											   Datum newValue, bool isnull,
 											   bool expand_external,
 											   bool check_constraints);
-extern void expanded_record_set_fields(ExpandedRecordHeader *erh,
+extern PGDLLIMPORT void expanded_record_set_fields(ExpandedRecordHeader *erh,
 									   const Datum *newValues, const bool *isnulls,
 									   bool expand_external);
 

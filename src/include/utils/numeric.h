@@ -66,25 +66,25 @@ typedef struct NumericData *Numeric;
 /*
  * Utility functions in numeric.c
  */
-extern bool numeric_is_nan(Numeric num);
-extern bool numeric_is_inf(Numeric num);
-extern int32 numeric_maximum_size(int32 typmod);
-extern char *numeric_out_sci(Numeric num, int scale);
-extern char *numeric_normalize(Numeric num);
+extern PGDLLIMPORT bool numeric_is_nan(Numeric num);
+extern PGDLLIMPORT bool numeric_is_inf(Numeric num);
+extern PGDLLIMPORT int32 numeric_maximum_size(int32 typmod);
+extern PGDLLIMPORT char *numeric_out_sci(Numeric num, int scale);
+extern PGDLLIMPORT char *numeric_normalize(Numeric num);
 
-extern Numeric int64_to_numeric(int64 val);
-extern Numeric int64_div_fast_to_numeric(int64 val1, int log10val2);
+extern PGDLLIMPORT Numeric int64_to_numeric(int64 val);
+extern PGDLLIMPORT Numeric int64_div_fast_to_numeric(int64 val1, int log10val2);
 
-extern Numeric numeric_add_opt_error(Numeric num1, Numeric num2,
+extern PGDLLIMPORT Numeric numeric_add_opt_error(Numeric num1, Numeric num2,
 									 bool *have_error);
-extern Numeric numeric_sub_opt_error(Numeric num1, Numeric num2,
+extern PGDLLIMPORT Numeric numeric_sub_opt_error(Numeric num1, Numeric num2,
 									 bool *have_error);
-extern Numeric numeric_mul_opt_error(Numeric num1, Numeric num2,
+extern PGDLLIMPORT Numeric numeric_mul_opt_error(Numeric num1, Numeric num2,
 									 bool *have_error);
-extern Numeric numeric_div_opt_error(Numeric num1, Numeric num2,
+extern PGDLLIMPORT Numeric numeric_div_opt_error(Numeric num1, Numeric num2,
 									 bool *have_error);
-extern Numeric numeric_mod_opt_error(Numeric num1, Numeric num2,
+extern PGDLLIMPORT Numeric numeric_mod_opt_error(Numeric num1, Numeric num2,
 									 bool *have_error);
-extern int32 numeric_int4_opt_error(Numeric num, bool *error);
+extern PGDLLIMPORT int32 numeric_int4_opt_error(Numeric num, bool *error);
 
 #endif							/* _PG_NUMERIC_H_ */

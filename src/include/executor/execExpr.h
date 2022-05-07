@@ -784,85 +784,85 @@ typedef struct SubscriptExecSteps
 
 
 /* functions in execExpr.c */
-extern void ExprEvalPushStep(ExprState *es, const ExprEvalStep *s);
+extern PGDLLIMPORT void ExprEvalPushStep(ExprState *es, const ExprEvalStep *s);
 
 /* functions in execExprInterp.c */
-extern void ExecReadyInterpretedExpr(ExprState *state);
-extern ExprEvalOp ExecEvalStepOp(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecReadyInterpretedExpr(ExprState *state);
+extern PGDLLIMPORT ExprEvalOp ExecEvalStepOp(ExprState *state, ExprEvalStep *op);
 
-extern Datum ExecInterpExprStillValid(ExprState *state, ExprContext *econtext, bool *isNull);
-extern void CheckExprStillValid(ExprState *state, ExprContext *econtext);
+extern PGDLLIMPORT Datum ExecInterpExprStillValid(ExprState *state, ExprContext *econtext, bool *isNull);
+extern PGDLLIMPORT void CheckExprStillValid(ExprState *state, ExprContext *econtext);
 
 /*
  * Non fast-path execution functions. These are externs instead of statics in
  * execExprInterp.c, because that allows them to be used by other methods of
  * expression evaluation, reducing code duplication.
  */
-extern void ExecEvalFuncExprFusage(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalFuncExprFusage(ExprState *state, ExprEvalStep *op,
 								   ExprContext *econtext);
-extern void ExecEvalFuncExprStrictFusage(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalFuncExprStrictFusage(ExprState *state, ExprEvalStep *op,
 										 ExprContext *econtext);
-extern void ExecEvalParamExec(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalParamExec(ExprState *state, ExprEvalStep *op,
 							  ExprContext *econtext);
-extern void ExecEvalParamExtern(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalParamExtern(ExprState *state, ExprEvalStep *op,
 								ExprContext *econtext);
-extern void ExecEvalSQLValueFunction(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalCurrentOfExpr(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalNextValueExpr(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalRowNull(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalSQLValueFunction(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalCurrentOfExpr(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalNextValueExpr(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalRowNull(ExprState *state, ExprEvalStep *op,
 							ExprContext *econtext);
-extern void ExecEvalRowNotNull(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalRowNotNull(ExprState *state, ExprEvalStep *op,
 							   ExprContext *econtext);
-extern void ExecEvalArrayExpr(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalArrayCoerce(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalArrayExpr(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalArrayCoerce(ExprState *state, ExprEvalStep *op,
 								ExprContext *econtext);
-extern void ExecEvalRow(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalMinMax(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalRow(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalMinMax(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op,
 								ExprContext *econtext);
-extern void ExecEvalFieldStoreDeForm(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalFieldStoreDeForm(ExprState *state, ExprEvalStep *op,
 									 ExprContext *econtext);
-extern void ExecEvalFieldStoreForm(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalFieldStoreForm(ExprState *state, ExprEvalStep *op,
 								   ExprContext *econtext);
-extern void ExecEvalConvertRowtype(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalConvertRowtype(ExprState *state, ExprEvalStep *op,
 								   ExprContext *econtext);
-extern void ExecEvalScalarArrayOp(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalHashedScalarArrayOp(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalScalarArrayOp(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalHashedScalarArrayOp(ExprState *state, ExprEvalStep *op,
 										ExprContext *econtext);
-extern void ExecEvalConstraintNotNull(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalConstraintCheck(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalXmlExpr(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalJsonIsPredicate(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalGroupingFunc(ExprState *state, ExprEvalStep *op);
-extern void ExecEvalSubPlan(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalConstraintNotNull(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalConstraintCheck(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalXmlExpr(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalJsonIsPredicate(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalGroupingFunc(ExprState *state, ExprEvalStep *op);
+extern PGDLLIMPORT void ExecEvalSubPlan(ExprState *state, ExprEvalStep *op,
 							ExprContext *econtext);
-extern void ExecEvalWholeRowVar(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalWholeRowVar(ExprState *state, ExprEvalStep *op,
 								ExprContext *econtext);
-extern void ExecEvalSysVar(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalSysVar(ExprState *state, ExprEvalStep *op,
 						   ExprContext *econtext, TupleTableSlot *slot);
-extern void ExecEvalJsonConstructor(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalJsonConstructor(ExprState *state, ExprEvalStep *op,
 									ExprContext *econtext);
-extern void ExecEvalJson(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalJson(ExprState *state, ExprEvalStep *op,
 						 ExprContext *econtext);
-extern Datum ExecPrepareJsonItemCoercion(struct JsonbValue *item,
+extern PGDLLIMPORT Datum ExecPrepareJsonItemCoercion(struct JsonbValue *item,
 										 JsonReturning *returning,
 										 struct JsonCoercionsState *coercions,
 										 struct JsonCoercionState **pjcstate);
-extern bool ExecEvalJsonNeedsSubTransaction(JsonExpr *jsexpr,
+extern PGDLLIMPORT bool ExecEvalJsonNeedsSubTransaction(JsonExpr *jsexpr,
 											struct JsonCoercionsState *);
-extern Datum ExecEvalExprPassingCaseValue(ExprState *estate,
+extern PGDLLIMPORT Datum ExecEvalExprPassingCaseValue(ExprState *estate,
 										  ExprContext *econtext, bool *isnull,
 										  Datum caseval_datum,
 										  bool caseval_isnull);
 
-extern void ExecAggInitGroup(AggState *aggstate, AggStatePerTrans pertrans, AggStatePerGroup pergroup,
+extern PGDLLIMPORT void ExecAggInitGroup(AggState *aggstate, AggStatePerTrans pertrans, AggStatePerGroup pergroup,
 							 ExprContext *aggcontext);
-extern Datum ExecAggTransReparent(AggState *aggstate, AggStatePerTrans pertrans,
+extern PGDLLIMPORT Datum ExecAggTransReparent(AggState *aggstate, AggStatePerTrans pertrans,
 								  Datum newValue, bool newValueIsNull,
 								  Datum oldValue, bool oldValueIsNull);
-extern void ExecEvalAggOrderedTransDatum(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalAggOrderedTransDatum(ExprState *state, ExprEvalStep *op,
 										 ExprContext *econtext);
-extern void ExecEvalAggOrderedTransTuple(ExprState *state, ExprEvalStep *op,
+extern PGDLLIMPORT void ExecEvalAggOrderedTransTuple(ExprState *state, ExprEvalStep *op,
 										 ExprContext *econtext);
 
 #endif							/* EXEC_EXPR_H */

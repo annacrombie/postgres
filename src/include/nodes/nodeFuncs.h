@@ -33,26 +33,26 @@
 typedef bool (*check_function_callback) (Oid func_id, void *context);
 
 
-extern Oid	exprType(const Node *expr);
-extern int32 exprTypmod(const Node *expr);
-extern bool exprIsLengthCoercion(const Node *expr, int32 *coercedTypmod);
-extern Node *applyRelabelType(Node *arg, Oid rtype, int32 rtypmod, Oid rcollid,
+extern PGDLLIMPORT Oid	exprType(const Node *expr);
+extern PGDLLIMPORT int32 exprTypmod(const Node *expr);
+extern PGDLLIMPORT bool exprIsLengthCoercion(const Node *expr, int32 *coercedTypmod);
+extern PGDLLIMPORT Node *applyRelabelType(Node *arg, Oid rtype, int32 rtypmod, Oid rcollid,
 							  CoercionForm rformat, int rlocation,
 							  bool overwrite_ok);
-extern Node *relabel_to_typmod(Node *expr, int32 typmod);
-extern Node *strip_implicit_coercions(Node *node);
-extern bool expression_returns_set(Node *clause);
+extern PGDLLIMPORT Node *relabel_to_typmod(Node *expr, int32 typmod);
+extern PGDLLIMPORT Node *strip_implicit_coercions(Node *node);
+extern PGDLLIMPORT bool expression_returns_set(Node *clause);
 
-extern Oid	exprCollation(const Node *expr);
-extern Oid	exprInputCollation(const Node *expr);
-extern void exprSetCollation(Node *expr, Oid collation);
-extern void exprSetInputCollation(Node *expr, Oid inputcollation);
+extern PGDLLIMPORT Oid	exprCollation(const Node *expr);
+extern PGDLLIMPORT Oid	exprInputCollation(const Node *expr);
+extern PGDLLIMPORT void exprSetCollation(Node *expr, Oid collation);
+extern PGDLLIMPORT void exprSetInputCollation(Node *expr, Oid inputcollation);
 
-extern int	exprLocation(const Node *expr);
+extern PGDLLIMPORT int	exprLocation(const Node *expr);
 
-extern void fix_opfuncids(Node *node);
-extern void set_opfuncid(OpExpr *opexpr);
-extern void set_sa_opfuncid(ScalarArrayOpExpr *opexpr);
+extern PGDLLIMPORT void fix_opfuncids(Node *node);
+extern PGDLLIMPORT void set_opfuncid(OpExpr *opexpr);
+extern PGDLLIMPORT void set_sa_opfuncid(ScalarArrayOpExpr *opexpr);
 
 /* Is clause a FuncExpr clause? */
 static inline bool
@@ -126,37 +126,37 @@ get_notclausearg(const void *notclause)
 	return (Expr *) linitial(((const BoolExpr *) notclause)->args);
 }
 
-extern bool check_functions_in_node(Node *node, check_function_callback checker,
+extern PGDLLIMPORT bool check_functions_in_node(Node *node, check_function_callback checker,
 									void *context);
 
-extern bool expression_tree_walker(Node *node, bool (*walker) (),
+extern PGDLLIMPORT bool expression_tree_walker(Node *node, bool (*walker) (),
 								   void *context);
-extern Node *expression_tree_mutator(Node *node, Node *(*mutator) (),
+extern PGDLLIMPORT Node *expression_tree_mutator(Node *node, Node *(*mutator) (),
 									 void *context);
 
-extern bool query_tree_walker(Query *query, bool (*walker) (),
+extern PGDLLIMPORT bool query_tree_walker(Query *query, bool (*walker) (),
 							  void *context, int flags);
-extern Query *query_tree_mutator(Query *query, Node *(*mutator) (),
+extern PGDLLIMPORT Query *query_tree_mutator(Query *query, Node *(*mutator) (),
 								 void *context, int flags);
 
-extern bool range_table_walker(List *rtable, bool (*walker) (),
+extern PGDLLIMPORT bool range_table_walker(List *rtable, bool (*walker) (),
 							   void *context, int flags);
-extern List *range_table_mutator(List *rtable, Node *(*mutator) (),
+extern PGDLLIMPORT List *range_table_mutator(List *rtable, Node *(*mutator) (),
 								 void *context, int flags);
 
-extern bool range_table_entry_walker(RangeTblEntry *rte, bool (*walker) (),
+extern PGDLLIMPORT bool range_table_entry_walker(RangeTblEntry *rte, bool (*walker) (),
 									 void *context, int flags);
 
-extern bool query_or_expression_tree_walker(Node *node, bool (*walker) (),
+extern PGDLLIMPORT bool query_or_expression_tree_walker(Node *node, bool (*walker) (),
 											void *context, int flags);
-extern Node *query_or_expression_tree_mutator(Node *node, Node *(*mutator) (),
+extern PGDLLIMPORT Node *query_or_expression_tree_mutator(Node *node, Node *(*mutator) (),
 											  void *context, int flags);
 
-extern bool raw_expression_tree_walker(Node *node, bool (*walker) (),
+extern PGDLLIMPORT bool raw_expression_tree_walker(Node *node, bool (*walker) (),
 									   void *context);
 
 struct PlanState;
-extern bool planstate_tree_walker(struct PlanState *planstate, bool (*walker) (),
+extern PGDLLIMPORT bool planstate_tree_walker(struct PlanState *planstate, bool (*walker) (),
 								  void *context);
 
 #endif							/* NODEFUNCS_H */

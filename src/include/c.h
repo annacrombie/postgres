@@ -273,6 +273,37 @@
 #define unlikely(x) ((x) != 0)
 #endif
 
+
+/*
+ * Use "extern PGDLLIMPORT ..." to declare variables that are defined
+ * in the core backend and need to be accessible by loadable modules.
+ */
+
+/*
+ * If the platform knows __attribute__((visibility("*"))), i.e. gcc like
+ * compilers, we use that.
+ */
+#if !defined(PGDLLIMPORT) && defined(HAVE_VISIBILITY_ATTRIBUTE)
+#define PGDLLIMPORT __attribute__((visibility("default")))
+#define PGDLLEXPORT __attribute__((visibility("default")))
+#endif
+
+/* No special marking is required on most ports. */
+#ifndef PGDLLIMPORT
+#define PGDLLIMPORT
+#endif
+
+/*
+ * Use "extern PGDLLEXPORT ..." to declare functions that are defined in
+ * loadable modules and need to be callable by the core backend.  (Usually,
+ * this is not necessary because our build process automatically exports
+ * such symbols, but sometimes manual marking is required.)
+ * No special marking is required on most ports.
+ */
+#ifndef PGDLLEXPORT
+#define PGDLLEXPORT
+#endif
+
 /*
  * CppAsString
  *		Convert the argument to a string, using the C preprocessor.
@@ -885,7 +916,7 @@ typedef NameData *Name;
  * we should declare it as long as !FRONTEND.
  */
 #ifndef FRONTEND
-extern void ExceptionalCondition(const char *conditionName,
+extern PGDLLIMPORT void ExceptionalCondition(const char *conditionName,
 								 const char *errorType,
 								 const char *fileName, int lineNumber) pg_attribute_noreturn();
 #endif
@@ -1280,7 +1311,7 @@ typedef union PGAlignedXLogBlock
  */
 
 #if defined(HAVE_FDATASYNC) && !HAVE_DECL_FDATASYNC
-extern int	fdatasync(int fildes);
+extern PGDLLIMPORT int	fdatasync(int fildes);
 #endif
 
 /* Older platforms may provide strto[u]ll functionality under other names */
@@ -1305,11 +1336,11 @@ extern int	fdatasync(int fildes);
 #endif
 
 #if defined(HAVE_STRTOLL) && !HAVE_DECL_STRTOLL
-extern long long strtoll(const char *str, char **endptr, int base);
+extern PGDLLIMPORT long long strtoll(const char *str, char **endptr, int base);
 #endif
 
 #if defined(HAVE_STRTOULL) && !HAVE_DECL_STRTOULL
-extern unsigned long long strtoull(const char *str, char **endptr, int base);
+extern PGDLLIMPORT unsigned long long strtoull(const char *str, char **endptr, int base);
 #endif
 
 /*
@@ -1323,36 +1354,6 @@ extern unsigned long long strtoull(const char *str, char **endptr, int base);
 #else
 #define strtoi64(str, endptr, base) ((int64) strtoll(str, endptr, base))
 #define strtou64(str, endptr, base) ((uint64) strtoull(str, endptr, base))
-#endif
-
-/*
- * Use "extern PGDLLIMPORT ..." to declare variables that are defined
- * in the core backend and need to be accessible by loadable modules.
- */
-
-/*
- * If the platform knows __attribute__((visibility("*"))), i.e. gcc like
- * compilers, we use that.
- */
-#if !defined(PGDLLIMPORT) && defined(HAVE_VISIBILITY_ATTRIBUTE)
-#define PGDLLIMPORT __attribute__((visibility("default")))
-#define PGDLLEXPORT __attribute__((visibility("default")))
-#endif
-
-/* No special marking is required on most ports. */
-#ifndef PGDLLIMPORT
-#define PGDLLIMPORT
-#endif
-
-/*
- * Use "extern PGDLLEXPORT ..." to declare functions that are defined in
- * loadable modules and need to be callable by the core backend.  (Usually,
- * this is not necessary because our build process automatically exports
- * such symbols, but sometimes manual marking is required.)
- * No special marking is required on most ports.
- */
-#ifndef PGDLLEXPORT
-#define PGDLLEXPORT
 #endif
 
 /*

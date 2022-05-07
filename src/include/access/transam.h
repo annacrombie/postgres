@@ -263,7 +263,7 @@ typedef VariableCacheData *VariableCache;
  */
 
 /* in transam/xact.c */
-extern bool TransactionStartedDuringRecovery(void);
+extern PGDLLIMPORT bool TransactionStartedDuringRecovery(void);
 
 /* in transam/varsup.c */
 extern PGDLLIMPORT VariableCache ShmemVariableCache;
@@ -271,33 +271,33 @@ extern PGDLLIMPORT VariableCache ShmemVariableCache;
 /*
  * prototypes for functions in transam/transam.c
  */
-extern bool TransactionIdDidCommit(TransactionId transactionId);
-extern bool TransactionIdDidAbort(TransactionId transactionId);
-extern bool TransactionIdIsKnownCompleted(TransactionId transactionId);
-extern void TransactionIdCommitTree(TransactionId xid, int nxids, TransactionId *xids);
-extern void TransactionIdAsyncCommitTree(TransactionId xid, int nxids, TransactionId *xids, XLogRecPtr lsn);
-extern void TransactionIdAbortTree(TransactionId xid, int nxids, TransactionId *xids);
-extern bool TransactionIdPrecedes(TransactionId id1, TransactionId id2);
-extern bool TransactionIdPrecedesOrEquals(TransactionId id1, TransactionId id2);
-extern bool TransactionIdFollows(TransactionId id1, TransactionId id2);
-extern bool TransactionIdFollowsOrEquals(TransactionId id1, TransactionId id2);
-extern TransactionId TransactionIdLatest(TransactionId mainxid,
+extern PGDLLIMPORT bool TransactionIdDidCommit(TransactionId transactionId);
+extern PGDLLIMPORT bool TransactionIdDidAbort(TransactionId transactionId);
+extern PGDLLIMPORT bool TransactionIdIsKnownCompleted(TransactionId transactionId);
+extern PGDLLIMPORT void TransactionIdCommitTree(TransactionId xid, int nxids, TransactionId *xids);
+extern PGDLLIMPORT void TransactionIdAsyncCommitTree(TransactionId xid, int nxids, TransactionId *xids, XLogRecPtr lsn);
+extern PGDLLIMPORT void TransactionIdAbortTree(TransactionId xid, int nxids, TransactionId *xids);
+extern PGDLLIMPORT bool TransactionIdPrecedes(TransactionId id1, TransactionId id2);
+extern PGDLLIMPORT bool TransactionIdPrecedesOrEquals(TransactionId id1, TransactionId id2);
+extern PGDLLIMPORT bool TransactionIdFollows(TransactionId id1, TransactionId id2);
+extern PGDLLIMPORT bool TransactionIdFollowsOrEquals(TransactionId id1, TransactionId id2);
+extern PGDLLIMPORT TransactionId TransactionIdLatest(TransactionId mainxid,
 										 int nxids, const TransactionId *xids);
-extern XLogRecPtr TransactionIdGetCommitLSN(TransactionId xid);
+extern PGDLLIMPORT XLogRecPtr TransactionIdGetCommitLSN(TransactionId xid);
 
 /* in transam/varsup.c */
-extern FullTransactionId GetNewTransactionId(bool isSubXact);
-extern void AdvanceNextFullTransactionIdPastXid(TransactionId xid);
-extern FullTransactionId ReadNextFullTransactionId(void);
-extern void SetTransactionIdLimit(TransactionId oldest_datfrozenxid,
+extern PGDLLIMPORT FullTransactionId GetNewTransactionId(bool isSubXact);
+extern PGDLLIMPORT void AdvanceNextFullTransactionIdPastXid(TransactionId xid);
+extern PGDLLIMPORT FullTransactionId ReadNextFullTransactionId(void);
+extern PGDLLIMPORT void SetTransactionIdLimit(TransactionId oldest_datfrozenxid,
 								  Oid oldest_datoid);
-extern void AdvanceOldestClogXid(TransactionId oldest_datfrozenxid);
-extern bool ForceTransactionIdLimitUpdate(void);
-extern Oid	GetNewObjectId(void);
-extern void StopGeneratingPinnedObjectIds(void);
+extern PGDLLIMPORT void AdvanceOldestClogXid(TransactionId oldest_datfrozenxid);
+extern PGDLLIMPORT bool ForceTransactionIdLimitUpdate(void);
+extern PGDLLIMPORT Oid	GetNewObjectId(void);
+extern PGDLLIMPORT void StopGeneratingPinnedObjectIds(void);
 
 #ifdef USE_ASSERT_CHECKING
-extern void AssertTransactionIdInAllowableRange(TransactionId xid);
+extern PGDLLIMPORT void AssertTransactionIdInAllowableRange(TransactionId xid);
 #else
 #define AssertTransactionIdInAllowableRange(xid) ((void)true)
 #endif

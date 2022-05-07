@@ -65,53 +65,53 @@ extern PGDLLIMPORT TimestampTz PgReloadTime;
 
 /* Internal routines (not fmgr-callable) */
 
-extern int32 anytimestamp_typmod_check(bool istz, int32 typmod);
+extern PGDLLIMPORT int32 anytimestamp_typmod_check(bool istz, int32 typmod);
 
-extern TimestampTz GetCurrentTimestamp(void);
-extern TimestampTz GetSQLCurrentTimestamp(int32 typmod);
-extern Timestamp GetSQLLocalTimestamp(int32 typmod);
-extern void TimestampDifference(TimestampTz start_time, TimestampTz stop_time,
+extern PGDLLIMPORT TimestampTz GetCurrentTimestamp(void);
+extern PGDLLIMPORT TimestampTz GetSQLCurrentTimestamp(int32 typmod);
+extern PGDLLIMPORT Timestamp GetSQLLocalTimestamp(int32 typmod);
+extern PGDLLIMPORT void TimestampDifference(TimestampTz start_time, TimestampTz stop_time,
 								long *secs, int *microsecs);
-extern long TimestampDifferenceMilliseconds(TimestampTz start_time,
+extern PGDLLIMPORT long TimestampDifferenceMilliseconds(TimestampTz start_time,
 											TimestampTz stop_time);
-extern bool TimestampDifferenceExceeds(TimestampTz start_time,
+extern PGDLLIMPORT bool TimestampDifferenceExceeds(TimestampTz start_time,
 									   TimestampTz stop_time,
 									   int msec);
 
-extern TimestampTz time_t_to_timestamptz(pg_time_t tm);
-extern pg_time_t timestamptz_to_time_t(TimestampTz t);
+extern PGDLLIMPORT TimestampTz time_t_to_timestamptz(pg_time_t tm);
+extern PGDLLIMPORT pg_time_t timestamptz_to_time_t(TimestampTz t);
 
-extern const char *timestamptz_to_str(TimestampTz t);
+extern PGDLLIMPORT const char *timestamptz_to_str(TimestampTz t);
 
-extern int	tm2timestamp(struct pg_tm *tm, fsec_t fsec, int *tzp, Timestamp *dt);
-extern int	timestamp2tm(Timestamp dt, int *tzp, struct pg_tm *tm,
+extern PGDLLIMPORT int	tm2timestamp(struct pg_tm *tm, fsec_t fsec, int *tzp, Timestamp *dt);
+extern PGDLLIMPORT int	timestamp2tm(Timestamp dt, int *tzp, struct pg_tm *tm,
 						 fsec_t *fsec, const char **tzn, pg_tz *attimezone);
-extern void dt2time(Timestamp dt, int *hour, int *min, int *sec, fsec_t *fsec);
+extern PGDLLIMPORT void dt2time(Timestamp dt, int *hour, int *min, int *sec, fsec_t *fsec);
 
-extern void interval2itm(Interval span, struct pg_itm *itm);
-extern int	itm2interval(struct pg_itm *itm, Interval *span);
-extern int	itmin2interval(struct pg_itm_in *itm_in, Interval *span);
+extern PGDLLIMPORT void interval2itm(Interval span, struct pg_itm *itm);
+extern PGDLLIMPORT int	itm2interval(struct pg_itm *itm, Interval *span);
+extern PGDLLIMPORT int	itmin2interval(struct pg_itm_in *itm_in, Interval *span);
 
-extern Timestamp SetEpochTimestamp(void);
-extern void GetEpochTime(struct pg_tm *tm);
+extern PGDLLIMPORT Timestamp SetEpochTimestamp(void);
+extern PGDLLIMPORT void GetEpochTime(struct pg_tm *tm);
 
-extern int	timestamp_cmp_internal(Timestamp dt1, Timestamp dt2);
+extern PGDLLIMPORT int	timestamp_cmp_internal(Timestamp dt1, Timestamp dt2);
 
 /* timestamp comparison works for timestamptz also */
 #define timestamptz_cmp_internal(dt1,dt2)	timestamp_cmp_internal(dt1, dt2)
 
-extern TimestampTz timestamp2timestamptz_opt_overflow(Timestamp timestamp,
+extern PGDLLIMPORT TimestampTz timestamp2timestamptz_opt_overflow(Timestamp timestamp,
 													  int *overflow);
-extern int32 timestamp_cmp_timestamptz_internal(Timestamp timestampVal,
+extern PGDLLIMPORT int32 timestamp_cmp_timestamptz_internal(Timestamp timestampVal,
 												TimestampTz dt2);
 
-extern int	isoweek2j(int year, int week);
-extern void isoweek2date(int woy, int *year, int *mon, int *mday);
-extern void isoweekdate2date(int isoweek, int wday, int *year, int *mon, int *mday);
-extern int	date2isoweek(int year, int mon, int mday);
-extern int	date2isoyear(int year, int mon, int mday);
-extern int	date2isoyearday(int year, int mon, int mday);
+extern PGDLLIMPORT int	isoweek2j(int year, int week);
+extern PGDLLIMPORT void isoweek2date(int woy, int *year, int *mon, int *mday);
+extern PGDLLIMPORT void isoweekdate2date(int isoweek, int wday, int *year, int *mon, int *mday);
+extern PGDLLIMPORT int	date2isoweek(int year, int mon, int mday);
+extern PGDLLIMPORT int	date2isoyear(int year, int mon, int mday);
+extern PGDLLIMPORT int	date2isoyearday(int year, int mon, int mday);
 
-extern bool TimestampTimestampTzRequiresRewrite(void);
+extern PGDLLIMPORT bool TimestampTimestampTzRequiresRewrite(void);
 
 #endif							/* TIMESTAMP_H */

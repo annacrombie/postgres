@@ -18,27 +18,27 @@
 #include "utils/relcache.h"
 
 
-extern bool IsSystemRelation(Relation relation);
-extern bool IsToastRelation(Relation relation);
-extern bool IsCatalogRelation(Relation relation);
+extern PGDLLIMPORT bool IsSystemRelation(Relation relation);
+extern PGDLLIMPORT bool IsToastRelation(Relation relation);
+extern PGDLLIMPORT bool IsCatalogRelation(Relation relation);
 
-extern bool IsSystemClass(Oid relid, Form_pg_class reltuple);
-extern bool IsToastClass(Form_pg_class reltuple);
+extern PGDLLIMPORT bool IsSystemClass(Oid relid, Form_pg_class reltuple);
+extern PGDLLIMPORT bool IsToastClass(Form_pg_class reltuple);
 
-extern bool IsCatalogRelationOid(Oid relid);
+extern PGDLLIMPORT bool IsCatalogRelationOid(Oid relid);
 
-extern bool IsCatalogNamespace(Oid namespaceId);
-extern bool IsToastNamespace(Oid namespaceId);
+extern PGDLLIMPORT bool IsCatalogNamespace(Oid namespaceId);
+extern PGDLLIMPORT bool IsToastNamespace(Oid namespaceId);
 
-extern bool IsReservedName(const char *name);
+extern PGDLLIMPORT bool IsReservedName(const char *name);
 
-extern bool IsSharedRelation(Oid relationId);
+extern PGDLLIMPORT bool IsSharedRelation(Oid relationId);
 
-extern bool IsPinnedObject(Oid classId, Oid objectId);
+extern PGDLLIMPORT bool IsPinnedObject(Oid classId, Oid objectId);
 
-extern Oid	GetNewOidWithIndex(Relation relation, Oid indexId,
+extern PGDLLIMPORT Oid	GetNewOidWithIndex(Relation relation, Oid indexId,
 							   AttrNumber oidcolumn);
-extern Oid	GetNewRelFileNode(Oid reltablespace, Relation pg_class,
+extern PGDLLIMPORT Oid	GetNewRelFileNode(Oid reltablespace, Relation pg_class,
 							  char relpersistence);
 
 #endif							/* CATALOG_H */

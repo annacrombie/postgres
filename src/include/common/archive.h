@@ -13,7 +13,7 @@
 #ifndef ARCHIVE_H
 #define ARCHIVE_H
 
-extern char *BuildRestoreCommand(const char *restoreCommand,
+extern PGDLLIMPORT char *BuildRestoreCommand(const char *restoreCommand,
 								 const char *xlogpath,	/* %p */
 								 const char *xlogfname, /* %f */
 								 const char *lastRestartPointFname);	/* %r */

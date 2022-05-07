@@ -58,23 +58,23 @@ struct HeapTupleData;
 
 /* in path/clausesel.c: */
 
-extern Selectivity clause_selectivity(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity clause_selectivity(PlannerInfo *root,
 									  Node *clause,
 									  int varRelid,
 									  JoinType jointype,
 									  SpecialJoinInfo *sjinfo);
-extern Selectivity clause_selectivity_ext(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity clause_selectivity_ext(PlannerInfo *root,
 										  Node *clause,
 										  int varRelid,
 										  JoinType jointype,
 										  SpecialJoinInfo *sjinfo,
 										  bool use_extended_stats);
-extern Selectivity clauselist_selectivity(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity clauselist_selectivity(PlannerInfo *root,
 										  List *clauses,
 										  int varRelid,
 										  JoinType jointype,
 										  SpecialJoinInfo *sjinfo);
-extern Selectivity clauselist_selectivity_ext(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity clauselist_selectivity_ext(PlannerInfo *root,
 											  List *clauses,
 											  int varRelid,
 											  JoinType jointype,
@@ -94,11 +94,11 @@ extern PGDLLIMPORT double parallel_setup_cost;
 extern PGDLLIMPORT double recursive_worktable_factor;
 extern PGDLLIMPORT int effective_cache_size;
 
-extern double clamp_row_est(double nrows);
+extern PGDLLIMPORT double clamp_row_est(double nrows);
 
 /* in path/indxpath.c: */
 
-extern bool is_pseudo_constant_for_index(PlannerInfo *root, Node *expr,
+extern PGDLLIMPORT bool is_pseudo_constant_for_index(PlannerInfo *root, Node *expr,
 										 IndexOptInfo *index);
 
 /* in plan/planner.c: */
@@ -115,70 +115,70 @@ typedef enum
 extern PGDLLIMPORT int force_parallel_mode;
 extern PGDLLIMPORT bool parallel_leader_participation;
 
-extern struct PlannedStmt *planner(Query *parse, const char *query_string,
+extern PGDLLIMPORT struct PlannedStmt *planner(Query *parse, const char *query_string,
 								   int cursorOptions,
 								   struct ParamListInfoData *boundParams);
 
-extern Expr *expression_planner(Expr *expr);
-extern Expr *expression_planner_with_deps(Expr *expr,
+extern PGDLLIMPORT Expr *expression_planner(Expr *expr);
+extern PGDLLIMPORT Expr *expression_planner_with_deps(Expr *expr,
 										  List **relationOids,
 										  List **invalItems);
 
-extern bool plan_cluster_use_sort(Oid tableOid, Oid indexOid);
-extern int	plan_create_index_workers(Oid tableOid, Oid indexOid);
+extern PGDLLIMPORT bool plan_cluster_use_sort(Oid tableOid, Oid indexOid);
+extern PGDLLIMPORT int	plan_create_index_workers(Oid tableOid, Oid indexOid);
 
 /* in plan/setrefs.c: */
 
-extern void extract_query_dependencies(Node *query,
+extern PGDLLIMPORT void extract_query_dependencies(Node *query,
 									   List **relationOids,
 									   List **invalItems,
 									   bool *hasRowSecurity);
 
 /* in prep/prepqual.c: */
 
-extern Node *negate_clause(Node *node);
-extern Expr *canonicalize_qual(Expr *qual, bool is_check);
+extern PGDLLIMPORT Node *negate_clause(Node *node);
+extern PGDLLIMPORT Expr *canonicalize_qual(Expr *qual, bool is_check);
 
 /* in util/clauses.c: */
 
-extern bool contain_mutable_functions(Node *clause);
-extern bool contain_volatile_functions(Node *clause);
-extern bool contain_volatile_functions_not_nextval(Node *clause);
+extern PGDLLIMPORT bool contain_mutable_functions(Node *clause);
+extern PGDLLIMPORT bool contain_volatile_functions(Node *clause);
+extern PGDLLIMPORT bool contain_volatile_functions_not_nextval(Node *clause);
 
-extern Node *eval_const_expressions(PlannerInfo *root, Node *node);
+extern PGDLLIMPORT Node *eval_const_expressions(PlannerInfo *root, Node *node);
 
-extern void convert_saop_to_hashed_saop(Node *node);
+extern PGDLLIMPORT void convert_saop_to_hashed_saop(Node *node);
 
-extern Node *estimate_expression_value(PlannerInfo *root, Node *node);
+extern PGDLLIMPORT Node *estimate_expression_value(PlannerInfo *root, Node *node);
 
-extern Expr *evaluate_expr(Expr *expr, Oid result_type, int32 result_typmod,
+extern PGDLLIMPORT Expr *evaluate_expr(Expr *expr, Oid result_type, int32 result_typmod,
 						   Oid result_collation);
 
-extern List *expand_function_arguments(List *args, bool include_out_arguments,
+extern PGDLLIMPORT List *expand_function_arguments(List *args, bool include_out_arguments,
 									   Oid result_type,
 									   struct HeapTupleData *func_tuple);
 
 /* in util/predtest.c: */
 
-extern bool predicate_implied_by(List *predicate_list, List *clause_list,
+extern PGDLLIMPORT bool predicate_implied_by(List *predicate_list, List *clause_list,
 								 bool weak);
-extern bool predicate_refuted_by(List *predicate_list, List *clause_list,
+extern PGDLLIMPORT bool predicate_refuted_by(List *predicate_list, List *clause_list,
 								 bool weak);
 
 /* in util/tlist.c: */
 
-extern int	count_nonjunk_tlist_entries(List *tlist);
-extern TargetEntry *get_sortgroupref_tle(Index sortref,
+extern PGDLLIMPORT int	count_nonjunk_tlist_entries(List *tlist);
+extern PGDLLIMPORT TargetEntry *get_sortgroupref_tle(Index sortref,
 										 List *targetList);
-extern TargetEntry *get_sortgroupclause_tle(SortGroupClause *sgClause,
+extern PGDLLIMPORT TargetEntry *get_sortgroupclause_tle(SortGroupClause *sgClause,
 											List *targetList);
-extern Node *get_sortgroupclause_expr(SortGroupClause *sgClause,
+extern PGDLLIMPORT Node *get_sortgroupclause_expr(SortGroupClause *sgClause,
 									  List *targetList);
-extern List *get_sortgrouplist_exprs(List *sgClauses,
+extern PGDLLIMPORT List *get_sortgrouplist_exprs(List *sgClauses,
 									 List *targetList);
-extern SortGroupClause *get_sortgroupref_clause(Index sortref,
+extern PGDLLIMPORT SortGroupClause *get_sortgroupref_clause(Index sortref,
 												List *clauses);
-extern SortGroupClause *get_sortgroupref_clause_noerr(Index sortref,
+extern PGDLLIMPORT SortGroupClause *get_sortgroupref_clause_noerr(Index sortref,
 													  List *clauses);
 
 /* in util/var.c: */
@@ -193,14 +193,14 @@ extern SortGroupClause *get_sortgroupref_clause_noerr(Index sortref,
 #define PVC_RECURSE_PLACEHOLDERS	0x0020	/* recurse into PlaceHolderVar
 											 * arguments */
 
-extern Bitmapset *pull_varnos(PlannerInfo *root, Node *node);
-extern Bitmapset *pull_varnos_of_level(PlannerInfo *root, Node *node, int levelsup);
-extern void pull_varattnos(Node *node, Index varno, Bitmapset **varattnos);
-extern List *pull_vars_of_level(Node *node, int levelsup);
-extern bool contain_var_clause(Node *node);
-extern bool contain_vars_of_level(Node *node, int levelsup);
-extern int	locate_var_of_level(Node *node, int levelsup);
-extern List *pull_var_clause(Node *node, int flags);
-extern Node *flatten_join_alias_vars(Query *query, Node *node);
+extern PGDLLIMPORT Bitmapset *pull_varnos(PlannerInfo *root, Node *node);
+extern PGDLLIMPORT Bitmapset *pull_varnos_of_level(PlannerInfo *root, Node *node, int levelsup);
+extern PGDLLIMPORT void pull_varattnos(Node *node, Index varno, Bitmapset **varattnos);
+extern PGDLLIMPORT List *pull_vars_of_level(Node *node, int levelsup);
+extern PGDLLIMPORT bool contain_var_clause(Node *node);
+extern PGDLLIMPORT bool contain_vars_of_level(Node *node, int levelsup);
+extern PGDLLIMPORT int	locate_var_of_level(Node *node, int levelsup);
+extern PGDLLIMPORT List *pull_var_clause(Node *node, int flags);
+extern PGDLLIMPORT Node *flatten_join_alias_vars(Query *query, Node *node);
 
 #endif							/* OPTIMIZER_H */

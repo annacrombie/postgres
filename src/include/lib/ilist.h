@@ -252,11 +252,11 @@ typedef struct slist_mutable_iter
 /* Prototypes for functions too big to be inline */
 
 /* Caution: this is O(n); consider using slist_delete_current() instead */
-extern void slist_delete(slist_head *head, slist_node *node);
+extern PGDLLIMPORT void slist_delete(slist_head *head, slist_node *node);
 
 #ifdef ILIST_DEBUG
-extern void dlist_check(dlist_head *head);
-extern void slist_check(slist_head *head);
+extern PGDLLIMPORT void dlist_check(dlist_head *head);
+extern PGDLLIMPORT void slist_check(slist_head *head);
 #else
 /*
  * These seemingly useless casts to void are here to keep the compiler quiet

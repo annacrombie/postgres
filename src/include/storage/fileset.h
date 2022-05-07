@@ -29,12 +29,12 @@ typedef struct FileSet
 								 * tablespaces. */
 } FileSet;
 
-extern void FileSetInit(FileSet *fileset);
-extern File FileSetCreate(FileSet *fileset, const char *name);
-extern File FileSetOpen(FileSet *fileset, const char *name,
+extern PGDLLIMPORT void FileSetInit(FileSet *fileset);
+extern PGDLLIMPORT File FileSetCreate(FileSet *fileset, const char *name);
+extern PGDLLIMPORT File FileSetOpen(FileSet *fileset, const char *name,
 						int mode);
-extern bool FileSetDelete(FileSet *fileset, const char *name,
+extern PGDLLIMPORT bool FileSetDelete(FileSet *fileset, const char *name,
 						  bool error_on_failure);
-extern void FileSetDeleteAll(FileSet *fileset);
+extern PGDLLIMPORT void FileSetDeleteAll(FileSet *fileset);
 
 #endif

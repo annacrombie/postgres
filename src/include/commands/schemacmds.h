@@ -18,12 +18,12 @@
 #include "catalog/objectaddress.h"
 #include "nodes/parsenodes.h"
 
-extern Oid	CreateSchemaCommand(CreateSchemaStmt *parsetree,
+extern PGDLLIMPORT Oid	CreateSchemaCommand(CreateSchemaStmt *parsetree,
 								const char *queryString,
 								int stmt_location, int stmt_len);
 
-extern ObjectAddress RenameSchema(const char *oldname, const char *newname);
-extern ObjectAddress AlterSchemaOwner(const char *name, Oid newOwnerId);
-extern void AlterSchemaOwner_oid(Oid schemaOid, Oid newOwnerId);
+extern PGDLLIMPORT ObjectAddress RenameSchema(const char *oldname, const char *newname);
+extern PGDLLIMPORT ObjectAddress AlterSchemaOwner(const char *name, Oid newOwnerId);
+extern PGDLLIMPORT void AlterSchemaOwner_oid(Oid schemaOid, Oid newOwnerId);
 
 #endif							/* SCHEMACMDS_H */

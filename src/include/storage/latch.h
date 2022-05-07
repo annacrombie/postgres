@@ -157,30 +157,30 @@ typedef struct WaitEventSet WaitEventSet;
 /*
  * prototypes for functions in latch.c
  */
-extern void InitializeLatchSupport(void);
-extern void InitLatch(Latch *latch);
-extern void InitSharedLatch(Latch *latch);
-extern void OwnLatch(Latch *latch);
-extern void DisownLatch(Latch *latch);
-extern void SetLatch(Latch *latch);
-extern void ResetLatch(Latch *latch);
-extern void ShutdownLatchSupport(void);
+extern PGDLLIMPORT void InitializeLatchSupport(void);
+extern PGDLLIMPORT void InitLatch(Latch *latch);
+extern PGDLLIMPORT void InitSharedLatch(Latch *latch);
+extern PGDLLIMPORT void OwnLatch(Latch *latch);
+extern PGDLLIMPORT void DisownLatch(Latch *latch);
+extern PGDLLIMPORT void SetLatch(Latch *latch);
+extern PGDLLIMPORT void ResetLatch(Latch *latch);
+extern PGDLLIMPORT void ShutdownLatchSupport(void);
 
-extern WaitEventSet *CreateWaitEventSet(MemoryContext context, int nevents);
-extern void FreeWaitEventSet(WaitEventSet *set);
-extern int	AddWaitEventToSet(WaitEventSet *set, uint32 events, pgsocket fd,
+extern PGDLLIMPORT WaitEventSet *CreateWaitEventSet(MemoryContext context, int nevents);
+extern PGDLLIMPORT void FreeWaitEventSet(WaitEventSet *set);
+extern PGDLLIMPORT int	AddWaitEventToSet(WaitEventSet *set, uint32 events, pgsocket fd,
 							  Latch *latch, void *user_data);
-extern void ModifyWaitEvent(WaitEventSet *set, int pos, uint32 events, Latch *latch);
+extern PGDLLIMPORT void ModifyWaitEvent(WaitEventSet *set, int pos, uint32 events, Latch *latch);
 
-extern int	WaitEventSetWait(WaitEventSet *set, long timeout,
+extern PGDLLIMPORT int	WaitEventSetWait(WaitEventSet *set, long timeout,
 							 WaitEvent *occurred_events, int nevents,
 							 uint32 wait_event_info);
-extern int	WaitLatch(Latch *latch, int wakeEvents, long timeout,
+extern PGDLLIMPORT int	WaitLatch(Latch *latch, int wakeEvents, long timeout,
 					  uint32 wait_event_info);
-extern int	WaitLatchOrSocket(Latch *latch, int wakeEvents,
+extern PGDLLIMPORT int	WaitLatchOrSocket(Latch *latch, int wakeEvents,
 							  pgsocket sock, long timeout, uint32 wait_event_info);
-extern void InitializeLatchWaitSet(void);
-extern int	GetNumRegisteredWaitEvents(WaitEventSet *set);
-extern bool	WaitEventSetCanReportClosed(void);
+extern PGDLLIMPORT void InitializeLatchWaitSet(void);
+extern PGDLLIMPORT int	GetNumRegisteredWaitEvents(WaitEventSet *set);
+extern PGDLLIMPORT bool	WaitEventSetCanReportClosed(void);
 
 #endif							/* LATCH_H */

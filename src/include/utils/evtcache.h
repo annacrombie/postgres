@@ -32,6 +32,6 @@ typedef struct
 	Bitmapset  *tagset;			/* command tags, or NULL if empty */
 } EventTriggerCacheItem;
 
-extern List *EventCacheLookup(EventTriggerEvent event);
+extern PGDLLIMPORT List *EventCacheLookup(EventTriggerEvent event);
 
 #endif							/* EVTCACHE_H */

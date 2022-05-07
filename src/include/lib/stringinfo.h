@@ -70,21 +70,21 @@ typedef StringInfoData *StringInfo;
  * makeStringInfo
  * Create an empty 'StringInfoData' & return a pointer to it.
  */
-extern StringInfo makeStringInfo(void);
+extern PGDLLIMPORT StringInfo makeStringInfo(void);
 
 /*------------------------
  * initStringInfo
  * Initialize a StringInfoData struct (with previously undefined contents)
  * to describe an empty string.
  */
-extern void initStringInfo(StringInfo str);
+extern PGDLLIMPORT void initStringInfo(StringInfo str);
 
 /*------------------------
  * resetStringInfo
  * Clears the current content of the StringInfo, if any. The
  * StringInfo remains valid.
  */
-extern void resetStringInfo(StringInfo str);
+extern PGDLLIMPORT void resetStringInfo(StringInfo str);
 
 /*------------------------
  * appendStringInfo
@@ -93,7 +93,7 @@ extern void resetStringInfo(StringInfo str);
  * to str if necessary.  This is sort of like a combination of sprintf and
  * strcat.
  */
-extern void appendStringInfo(StringInfo str, const char *fmt,...) pg_attribute_printf(2, 3);
+extern PGDLLIMPORT void appendStringInfo(StringInfo str, const char *fmt,...) pg_attribute_printf(2, 3);
 
 /*------------------------
  * appendStringInfoVA
@@ -104,21 +104,21 @@ extern void appendStringInfo(StringInfo str, const char *fmt,...) pg_attribute_p
  * pass the return value to enlargeStringInfo() before trying again; see
  * appendStringInfo for standard usage pattern.
  */
-extern int	appendStringInfoVA(StringInfo str, const char *fmt, va_list args) pg_attribute_printf(2, 0);
+extern PGDLLIMPORT int	appendStringInfoVA(StringInfo str, const char *fmt, va_list args) pg_attribute_printf(2, 0);
 
 /*------------------------
  * appendStringInfoString
  * Append a null-terminated string to str.
  * Like appendStringInfo(str, "%s", s) but faster.
  */
-extern void appendStringInfoString(StringInfo str, const char *s);
+extern PGDLLIMPORT void appendStringInfoString(StringInfo str, const char *s);
 
 /*------------------------
  * appendStringInfoChar
  * Append a single byte to str.
  * Like appendStringInfo(str, "%c", ch) but much faster.
  */
-extern void appendStringInfoChar(StringInfo str, char ch);
+extern PGDLLIMPORT void appendStringInfoChar(StringInfo str, char ch);
 
 /*------------------------
  * appendStringInfoCharMacro
@@ -134,14 +134,14 @@ extern void appendStringInfoChar(StringInfo str, char ch);
  * appendStringInfoSpaces
  * Append a given number of spaces to str.
  */
-extern void appendStringInfoSpaces(StringInfo str, int count);
+extern PGDLLIMPORT void appendStringInfoSpaces(StringInfo str, int count);
 
 /*------------------------
  * appendBinaryStringInfo
  * Append arbitrary binary data to a StringInfo, allocating more space
  * if necessary.
  */
-extern void appendBinaryStringInfo(StringInfo str,
+extern PGDLLIMPORT void appendBinaryStringInfo(StringInfo str,
 								   const char *data, int datalen);
 
 /*------------------------
@@ -149,13 +149,13 @@ extern void appendBinaryStringInfo(StringInfo str,
  * Append arbitrary binary data to a StringInfo, allocating more space
  * if necessary. Does not ensure a trailing null-byte exists.
  */
-extern void appendBinaryStringInfoNT(StringInfo str,
+extern PGDLLIMPORT void appendBinaryStringInfoNT(StringInfo str,
 									 const char *data, int datalen);
 
 /*------------------------
  * enlargeStringInfo
  * Make sure a StringInfo's buffer can hold at least 'needed' more bytes.
  */
-extern void enlargeStringInfo(StringInfo str, int needed);
+extern PGDLLIMPORT void enlargeStringInfo(StringInfo str, int needed);
 
 #endif							/* STRINGINFO_H */

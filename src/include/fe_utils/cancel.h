@@ -20,13 +20,13 @@
 
 extern PGDLLIMPORT volatile sig_atomic_t CancelRequested;
 
-extern void SetCancelConn(PGconn *conn);
-extern void ResetCancelConn(void);
+extern PGDLLIMPORT void SetCancelConn(PGconn *conn);
+extern PGDLLIMPORT void ResetCancelConn(void);
 
 /*
  * A callback can be optionally set up to be called at cancellation
  * time.
  */
-extern void setup_cancel_handler(void (*cancel_callback) (void));
+extern PGDLLIMPORT void setup_cancel_handler(void (*cancel_callback) (void));
 
 #endif							/* CANCEL_H */

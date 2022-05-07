@@ -152,37 +152,37 @@ typedef enum TypeFuncClass
 	TYPEFUNC_OTHER				/* bogus type, eg pseudotype */
 } TypeFuncClass;
 
-extern TypeFuncClass get_call_result_type(FunctionCallInfo fcinfo,
+extern PGDLLIMPORT TypeFuncClass get_call_result_type(FunctionCallInfo fcinfo,
 										  Oid *resultTypeId,
 										  TupleDesc *resultTupleDesc);
-extern TypeFuncClass get_expr_result_type(Node *expr,
+extern PGDLLIMPORT TypeFuncClass get_expr_result_type(Node *expr,
 										  Oid *resultTypeId,
 										  TupleDesc *resultTupleDesc);
-extern TypeFuncClass get_func_result_type(Oid functionId,
+extern PGDLLIMPORT TypeFuncClass get_func_result_type(Oid functionId,
 										  Oid *resultTypeId,
 										  TupleDesc *resultTupleDesc);
 
-extern TupleDesc get_expr_result_tupdesc(Node *expr, bool noError);
+extern PGDLLIMPORT TupleDesc get_expr_result_tupdesc(Node *expr, bool noError);
 
-extern bool resolve_polymorphic_argtypes(int numargs, Oid *argtypes,
+extern PGDLLIMPORT bool resolve_polymorphic_argtypes(int numargs, Oid *argtypes,
 										 char *argmodes,
 										 Node *call_expr);
 
-extern int	get_func_arg_info(HeapTuple procTup,
+extern PGDLLIMPORT int	get_func_arg_info(HeapTuple procTup,
 							  Oid **p_argtypes, char ***p_argnames,
 							  char **p_argmodes);
 
-extern int	get_func_input_arg_names(Datum proargnames, Datum proargmodes,
+extern PGDLLIMPORT int	get_func_input_arg_names(Datum proargnames, Datum proargmodes,
 									 char ***arg_names);
 
-extern int	get_func_trftypes(HeapTuple procTup, Oid **p_trftypes);
-extern char *get_func_result_name(Oid functionId);
+extern PGDLLIMPORT int	get_func_trftypes(HeapTuple procTup, Oid **p_trftypes);
+extern PGDLLIMPORT char *get_func_result_name(Oid functionId);
 
-extern TupleDesc build_function_result_tupdesc_d(char prokind,
+extern PGDLLIMPORT TupleDesc build_function_result_tupdesc_d(char prokind,
 												 Datum proallargtypes,
 												 Datum proargmodes,
 												 Datum proargnames);
-extern TupleDesc build_function_result_tupdesc_t(HeapTuple procTuple);
+extern PGDLLIMPORT TupleDesc build_function_result_tupdesc_t(HeapTuple procTuple);
 
 
 /*----------
@@ -221,14 +221,14 @@ extern TupleDesc build_function_result_tupdesc_t(HeapTuple procTuple);
 /* obsolete version of above */
 #define TupleGetDatum(_slot, _tuple)	HeapTupleGetDatum(_tuple)
 
-extern TupleDesc RelationNameGetTupleDesc(const char *relname);
-extern TupleDesc TypeGetTupleDesc(Oid typeoid, List *colaliases);
+extern PGDLLIMPORT TupleDesc RelationNameGetTupleDesc(const char *relname);
+extern PGDLLIMPORT TupleDesc TypeGetTupleDesc(Oid typeoid, List *colaliases);
 
 /* from execTuples.c */
-extern TupleDesc BlessTupleDesc(TupleDesc tupdesc);
-extern AttInMetadata *TupleDescGetAttInMetadata(TupleDesc tupdesc);
-extern HeapTuple BuildTupleFromCStrings(AttInMetadata *attinmeta, char **values);
-extern Datum HeapTupleHeaderGetDatum(HeapTupleHeader tuple);
+extern PGDLLIMPORT TupleDesc BlessTupleDesc(TupleDesc tupdesc);
+extern PGDLLIMPORT AttInMetadata *TupleDescGetAttInMetadata(TupleDesc tupdesc);
+extern PGDLLIMPORT HeapTuple BuildTupleFromCStrings(AttInMetadata *attinmeta, char **values);
+extern PGDLLIMPORT Datum HeapTupleHeaderGetDatum(HeapTupleHeader tuple);
 
 
 /*----------
@@ -290,11 +290,11 @@ extern Datum HeapTupleHeaderGetDatum(HeapTupleHeader tuple);
 /* flag bits for SetSingleFuncCall() */
 #define SRF_SINGLE_USE_EXPECTED	0x01	/* use expectedDesc as tupdesc */
 #define SRF_SINGLE_BLESS		0x02	/* validate tuple for SRF */
-extern void SetSingleFuncCall(FunctionCallInfo fcinfo, bits32 flags);
+extern PGDLLIMPORT void SetSingleFuncCall(FunctionCallInfo fcinfo, bits32 flags);
 
-extern FuncCallContext *init_MultiFuncCall(PG_FUNCTION_ARGS);
-extern FuncCallContext *per_MultiFuncCall(PG_FUNCTION_ARGS);
-extern void end_MultiFuncCall(PG_FUNCTION_ARGS, FuncCallContext *funcctx);
+extern PGDLLIMPORT FuncCallContext *init_MultiFuncCall(PG_FUNCTION_ARGS);
+extern PGDLLIMPORT FuncCallContext *per_MultiFuncCall(PG_FUNCTION_ARGS);
+extern PGDLLIMPORT void end_MultiFuncCall(PG_FUNCTION_ARGS, FuncCallContext *funcctx);
 
 #define SRF_IS_FIRSTCALL() (fcinfo->flinfo->fn_extra == NULL)
 
@@ -347,7 +347,7 @@ extern void end_MultiFuncCall(PG_FUNCTION_ARGS, FuncCallContext *funcctx);
  * The return result is the number of elements stored, or -1 in the case of
  * "VARIADIC NULL".
  */
-extern int	extract_variadic_args(FunctionCallInfo fcinfo, int variadic_start,
+extern PGDLLIMPORT int	extract_variadic_args(FunctionCallInfo fcinfo, int variadic_start,
 								  bool convert_unknown, Datum **values,
 								  Oid **types, bool **nulls);
 

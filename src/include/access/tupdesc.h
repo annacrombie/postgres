@@ -91,27 +91,27 @@ typedef struct TupleDescData *TupleDesc;
 /* Accessor for the i'th attribute of tupdesc. */
 #define TupleDescAttr(tupdesc, i) (&(tupdesc)->attrs[(i)])
 
-extern TupleDesc CreateTemplateTupleDesc(int natts);
+extern PGDLLIMPORT TupleDesc CreateTemplateTupleDesc(int natts);
 
-extern TupleDesc CreateTupleDesc(int natts, Form_pg_attribute *attrs);
+extern PGDLLIMPORT TupleDesc CreateTupleDesc(int natts, Form_pg_attribute *attrs);
 
-extern TupleDesc CreateTupleDescCopy(TupleDesc tupdesc);
+extern PGDLLIMPORT TupleDesc CreateTupleDescCopy(TupleDesc tupdesc);
 
-extern TupleDesc CreateTupleDescCopyConstr(TupleDesc tupdesc);
+extern PGDLLIMPORT TupleDesc CreateTupleDescCopyConstr(TupleDesc tupdesc);
 
 #define TupleDescSize(src) \
 	(offsetof(struct TupleDescData, attrs) + \
 	 (src)->natts * sizeof(FormData_pg_attribute))
 
-extern void TupleDescCopy(TupleDesc dst, TupleDesc src);
+extern PGDLLIMPORT void TupleDescCopy(TupleDesc dst, TupleDesc src);
 
-extern void TupleDescCopyEntry(TupleDesc dst, AttrNumber dstAttno,
+extern PGDLLIMPORT void TupleDescCopyEntry(TupleDesc dst, AttrNumber dstAttno,
 							   TupleDesc src, AttrNumber srcAttno);
 
-extern void FreeTupleDesc(TupleDesc tupdesc);
+extern PGDLLIMPORT void FreeTupleDesc(TupleDesc tupdesc);
 
-extern void IncrTupleDescRefCount(TupleDesc tupdesc);
-extern void DecrTupleDescRefCount(TupleDesc tupdesc);
+extern PGDLLIMPORT void IncrTupleDescRefCount(TupleDesc tupdesc);
+extern PGDLLIMPORT void DecrTupleDescRefCount(TupleDesc tupdesc);
 
 #define PinTupleDesc(tupdesc) \
 	do { \
@@ -125,30 +125,30 @@ extern void DecrTupleDescRefCount(TupleDesc tupdesc);
 			DecrTupleDescRefCount(tupdesc); \
 	} while (0)
 
-extern bool equalTupleDescs(TupleDesc tupdesc1, TupleDesc tupdesc2);
+extern PGDLLIMPORT bool equalTupleDescs(TupleDesc tupdesc1, TupleDesc tupdesc2);
 
-extern uint32 hashTupleDesc(TupleDesc tupdesc);
+extern PGDLLIMPORT uint32 hashTupleDesc(TupleDesc tupdesc);
 
-extern void TupleDescInitEntry(TupleDesc desc,
+extern PGDLLIMPORT void TupleDescInitEntry(TupleDesc desc,
 							   AttrNumber attributeNumber,
 							   const char *attributeName,
 							   Oid oidtypeid,
 							   int32 typmod,
 							   int attdim);
 
-extern void TupleDescInitBuiltinEntry(TupleDesc desc,
+extern PGDLLIMPORT void TupleDescInitBuiltinEntry(TupleDesc desc,
 									  AttrNumber attributeNumber,
 									  const char *attributeName,
 									  Oid oidtypeid,
 									  int32 typmod,
 									  int attdim);
 
-extern void TupleDescInitEntryCollation(TupleDesc desc,
+extern PGDLLIMPORT void TupleDescInitEntryCollation(TupleDesc desc,
 										AttrNumber attributeNumber,
 										Oid collationid);
 
-extern TupleDesc BuildDescForRelation(List *schema);
+extern PGDLLIMPORT TupleDesc BuildDescForRelation(List *schema);
 
-extern TupleDesc BuildDescFromLists(List *names, List *types, List *typmods, List *collations);
+extern PGDLLIMPORT TupleDesc BuildDescFromLists(List *names, List *types, List *typmods, List *collations);
 
 #endif							/* TUPDESC_H */

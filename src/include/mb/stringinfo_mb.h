@@ -18,7 +18,7 @@
 /*
  * Multibyte-aware StringInfo support function.
  */
-extern void appendStringInfoStringQuoted(StringInfo str,
+extern PGDLLIMPORT void appendStringInfoStringQuoted(StringInfo str,
 										 const char *s, int maxlen);
 
 #endif							/* STRINGINFO_MB_H */

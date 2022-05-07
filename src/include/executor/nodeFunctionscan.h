@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern FunctionScanState *ExecInitFunctionScan(FunctionScan *node, EState *estate, int eflags);
-extern void ExecEndFunctionScan(FunctionScanState *node);
-extern void ExecReScanFunctionScan(FunctionScanState *node);
+extern PGDLLIMPORT FunctionScanState *ExecInitFunctionScan(FunctionScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndFunctionScan(FunctionScanState *node);
+extern PGDLLIMPORT void ExecReScanFunctionScan(FunctionScanState *node);
 
 #endif							/* NODEFUNCTIONSCAN_H */

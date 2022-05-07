@@ -166,7 +166,7 @@ typedef struct CopyFromStateData
 	uint64		bytes_processed;	/* number of bytes processed so far */
 } CopyFromStateData;
 
-extern void ReceiveCopyBegin(CopyFromState cstate);
-extern void ReceiveCopyBinaryHeader(CopyFromState cstate);
+extern PGDLLIMPORT void ReceiveCopyBegin(CopyFromState cstate);
+extern PGDLLIMPORT void ReceiveCopyBinaryHeader(CopyFromState cstate);
 
 #endif							/* COPYFROM_INTERNAL_H */

@@ -57,38 +57,38 @@ struct ReorderBuffer;
 struct xl_heap_new_cid;
 struct xl_running_xacts;
 
-extern void CheckPointSnapBuild(void);
+extern PGDLLIMPORT void CheckPointSnapBuild(void);
 
-extern SnapBuild *AllocateSnapshotBuilder(struct ReorderBuffer *cache,
+extern PGDLLIMPORT SnapBuild *AllocateSnapshotBuilder(struct ReorderBuffer *cache,
 										  TransactionId xmin_horizon, XLogRecPtr start_lsn,
 										  bool need_full_snapshot,
 										  XLogRecPtr two_phase_at);
-extern void FreeSnapshotBuilder(SnapBuild *cache);
+extern PGDLLIMPORT void FreeSnapshotBuilder(SnapBuild *cache);
 
-extern void SnapBuildSnapDecRefcount(Snapshot snap);
+extern PGDLLIMPORT void SnapBuildSnapDecRefcount(Snapshot snap);
 
-extern Snapshot SnapBuildInitialSnapshot(SnapBuild *builder);
-extern const char *SnapBuildExportSnapshot(SnapBuild *snapstate);
-extern void SnapBuildClearExportedSnapshot(void);
-extern void SnapBuildResetExportedSnapshotState(void);
+extern PGDLLIMPORT Snapshot SnapBuildInitialSnapshot(SnapBuild *builder);
+extern PGDLLIMPORT const char *SnapBuildExportSnapshot(SnapBuild *snapstate);
+extern PGDLLIMPORT void SnapBuildClearExportedSnapshot(void);
+extern PGDLLIMPORT void SnapBuildResetExportedSnapshotState(void);
 
-extern SnapBuildState SnapBuildCurrentState(SnapBuild *snapstate);
-extern Snapshot SnapBuildGetOrBuildSnapshot(SnapBuild *builder,
+extern PGDLLIMPORT SnapBuildState SnapBuildCurrentState(SnapBuild *snapstate);
+extern PGDLLIMPORT Snapshot SnapBuildGetOrBuildSnapshot(SnapBuild *builder,
 											TransactionId xid);
 
-extern bool SnapBuildXactNeedsSkip(SnapBuild *snapstate, XLogRecPtr ptr);
-extern XLogRecPtr SnapBuildGetTwoPhaseAt(SnapBuild *builder);
-extern void SnapBuildSetTwoPhaseAt(SnapBuild *builder, XLogRecPtr ptr);
+extern PGDLLIMPORT bool SnapBuildXactNeedsSkip(SnapBuild *snapstate, XLogRecPtr ptr);
+extern PGDLLIMPORT XLogRecPtr SnapBuildGetTwoPhaseAt(SnapBuild *builder);
+extern PGDLLIMPORT void SnapBuildSetTwoPhaseAt(SnapBuild *builder, XLogRecPtr ptr);
 
-extern void SnapBuildCommitTxn(SnapBuild *builder, XLogRecPtr lsn,
+extern PGDLLIMPORT void SnapBuildCommitTxn(SnapBuild *builder, XLogRecPtr lsn,
 							   TransactionId xid, int nsubxacts,
 							   TransactionId *subxacts);
-extern bool SnapBuildProcessChange(SnapBuild *builder, TransactionId xid,
+extern PGDLLIMPORT bool SnapBuildProcessChange(SnapBuild *builder, TransactionId xid,
 								   XLogRecPtr lsn);
-extern void SnapBuildProcessNewCid(SnapBuild *builder, TransactionId xid,
+extern PGDLLIMPORT void SnapBuildProcessNewCid(SnapBuild *builder, TransactionId xid,
 								   XLogRecPtr lsn, struct xl_heap_new_cid *cid);
-extern void SnapBuildProcessRunningXacts(SnapBuild *builder, XLogRecPtr lsn,
+extern PGDLLIMPORT void SnapBuildProcessRunningXacts(SnapBuild *builder, XLogRecPtr lsn,
 										 struct xl_running_xacts *running);
-extern void SnapBuildSerializationPoint(SnapBuild *builder, XLogRecPtr lsn);
+extern PGDLLIMPORT void SnapBuildSerializationPoint(SnapBuild *builder, XLogRecPtr lsn);
 
 #endif							/* SNAPBUILD_H */

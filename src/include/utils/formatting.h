@@ -21,17 +21,17 @@
 #define DCH_TIMED	0x02
 #define DCH_ZONED	0x04
 
-extern char *str_tolower(const char *buff, size_t nbytes, Oid collid);
-extern char *str_toupper(const char *buff, size_t nbytes, Oid collid);
-extern char *str_initcap(const char *buff, size_t nbytes, Oid collid);
+extern PGDLLIMPORT char *str_tolower(const char *buff, size_t nbytes, Oid collid);
+extern PGDLLIMPORT char *str_toupper(const char *buff, size_t nbytes, Oid collid);
+extern PGDLLIMPORT char *str_initcap(const char *buff, size_t nbytes, Oid collid);
 
-extern char *asc_tolower(const char *buff, size_t nbytes);
-extern char *asc_toupper(const char *buff, size_t nbytes);
-extern char *asc_initcap(const char *buff, size_t nbytes);
+extern PGDLLIMPORT char *asc_tolower(const char *buff, size_t nbytes);
+extern PGDLLIMPORT char *asc_toupper(const char *buff, size_t nbytes);
+extern PGDLLIMPORT char *asc_initcap(const char *buff, size_t nbytes);
 
-extern Datum parse_datetime(text *date_txt, text *fmt, Oid collid, bool strict,
+extern PGDLLIMPORT Datum parse_datetime(text *date_txt, text *fmt, Oid collid, bool strict,
 							Oid *typid, int32 *typmod, int *tz,
 							bool *have_error);
-extern int datetime_format_flags(const char *fmt_str, bool *have_error);
+extern PGDLLIMPORT int datetime_format_flags(const char *fmt_str, bool *have_error);
 
 #endif

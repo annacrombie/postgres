@@ -41,24 +41,24 @@ typedef struct WindowObjectData *WindowObject;
 #define WindowObjectIsValid(winobj) \
 	((winobj) != NULL && IsA(winobj, WindowObjectData))
 
-extern void *WinGetPartitionLocalMemory(WindowObject winobj, Size sz);
+extern PGDLLIMPORT void *WinGetPartitionLocalMemory(WindowObject winobj, Size sz);
 
-extern int64 WinGetCurrentPosition(WindowObject winobj);
-extern int64 WinGetPartitionRowCount(WindowObject winobj);
+extern PGDLLIMPORT int64 WinGetCurrentPosition(WindowObject winobj);
+extern PGDLLIMPORT int64 WinGetPartitionRowCount(WindowObject winobj);
 
-extern void WinSetMarkPosition(WindowObject winobj, int64 markpos);
+extern PGDLLIMPORT void WinSetMarkPosition(WindowObject winobj, int64 markpos);
 
-extern bool WinRowsArePeers(WindowObject winobj, int64 pos1, int64 pos2);
+extern PGDLLIMPORT bool WinRowsArePeers(WindowObject winobj, int64 pos1, int64 pos2);
 
-extern Datum WinGetFuncArgInPartition(WindowObject winobj, int argno,
+extern PGDLLIMPORT Datum WinGetFuncArgInPartition(WindowObject winobj, int argno,
 									  int relpos, int seektype, bool set_mark,
 									  bool *isnull, bool *isout);
 
-extern Datum WinGetFuncArgInFrame(WindowObject winobj, int argno,
+extern PGDLLIMPORT Datum WinGetFuncArgInFrame(WindowObject winobj, int argno,
 								  int relpos, int seektype, bool set_mark,
 								  bool *isnull, bool *isout);
 
-extern Datum WinGetFuncArgCurrent(WindowObject winobj, int argno,
+extern PGDLLIMPORT Datum WinGetFuncArgCurrent(WindowObject winobj, int argno,
 								  bool *isnull);
 
 #endif							/* WINDOWAPI_H */

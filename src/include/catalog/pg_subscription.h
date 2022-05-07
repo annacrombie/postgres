@@ -120,12 +120,12 @@ typedef struct Subscription
 	List	   *publications;	/* List of publication names to subscribe to */
 } Subscription;
 
-extern Subscription *GetSubscription(Oid subid, bool missing_ok);
-extern void FreeSubscription(Subscription *sub);
-extern void DisableSubscription(Oid subid);
-extern Oid	get_subscription_oid(const char *subname, bool missing_ok);
-extern char *get_subscription_name(Oid subid, bool missing_ok);
+extern PGDLLIMPORT Subscription *GetSubscription(Oid subid, bool missing_ok);
+extern PGDLLIMPORT void FreeSubscription(Subscription *sub);
+extern PGDLLIMPORT void DisableSubscription(Oid subid);
+extern PGDLLIMPORT Oid	get_subscription_oid(const char *subname, bool missing_ok);
+extern PGDLLIMPORT char *get_subscription_name(Oid subid, bool missing_ok);
 
-extern int	CountDBSubscriptions(Oid dbid);
+extern PGDLLIMPORT int	CountDBSubscriptions(Oid dbid);
 
 #endif							/* PG_SUBSCRIPTION_H */

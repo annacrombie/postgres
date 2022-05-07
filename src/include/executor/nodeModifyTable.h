@@ -15,15 +15,15 @@
 
 #include "nodes/execnodes.h"
 
-extern void ExecComputeStoredGenerated(ResultRelInfo *resultRelInfo,
+extern PGDLLIMPORT void ExecComputeStoredGenerated(ResultRelInfo *resultRelInfo,
 									   EState *estate, TupleTableSlot *slot,
 									   CmdType cmdtype);
 
-extern ModifyTableState *ExecInitModifyTable(ModifyTable *node, EState *estate, int eflags);
-extern void ExecEndModifyTable(ModifyTableState *node);
-extern void ExecReScanModifyTable(ModifyTableState *node);
+extern PGDLLIMPORT ModifyTableState *ExecInitModifyTable(ModifyTable *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndModifyTable(ModifyTableState *node);
+extern PGDLLIMPORT void ExecReScanModifyTable(ModifyTableState *node);
 
-extern void ExecInitMergeTupleSlots(ModifyTableState *mtstate,
+extern PGDLLIMPORT void ExecInitMergeTupleSlots(ModifyTableState *mtstate,
 									ResultRelInfo *resultRelInfo);
 
 #endif							/* NODEMODIFYTABLE_H */

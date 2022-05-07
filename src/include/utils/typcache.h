@@ -174,36 +174,36 @@ typedef struct DomainConstraintRef
 
 typedef struct SharedRecordTypmodRegistry SharedRecordTypmodRegistry;
 
-extern TypeCacheEntry *lookup_type_cache(Oid type_id, int flags);
+extern PGDLLIMPORT TypeCacheEntry *lookup_type_cache(Oid type_id, int flags);
 
-extern void InitDomainConstraintRef(Oid type_id, DomainConstraintRef *ref,
+extern PGDLLIMPORT void InitDomainConstraintRef(Oid type_id, DomainConstraintRef *ref,
 									MemoryContext refctx, bool need_exprstate);
 
-extern void UpdateDomainConstraintRef(DomainConstraintRef *ref);
+extern PGDLLIMPORT void UpdateDomainConstraintRef(DomainConstraintRef *ref);
 
-extern bool DomainHasConstraints(Oid type_id);
+extern PGDLLIMPORT bool DomainHasConstraints(Oid type_id);
 
-extern TupleDesc lookup_rowtype_tupdesc(Oid type_id, int32 typmod);
+extern PGDLLIMPORT TupleDesc lookup_rowtype_tupdesc(Oid type_id, int32 typmod);
 
-extern TupleDesc lookup_rowtype_tupdesc_noerror(Oid type_id, int32 typmod,
+extern PGDLLIMPORT TupleDesc lookup_rowtype_tupdesc_noerror(Oid type_id, int32 typmod,
 												bool noError);
 
-extern TupleDesc lookup_rowtype_tupdesc_copy(Oid type_id, int32 typmod);
+extern PGDLLIMPORT TupleDesc lookup_rowtype_tupdesc_copy(Oid type_id, int32 typmod);
 
-extern TupleDesc lookup_rowtype_tupdesc_domain(Oid type_id, int32 typmod,
+extern PGDLLIMPORT TupleDesc lookup_rowtype_tupdesc_domain(Oid type_id, int32 typmod,
 											   bool noError);
 
-extern void assign_record_type_typmod(TupleDesc tupDesc);
+extern PGDLLIMPORT void assign_record_type_typmod(TupleDesc tupDesc);
 
-extern uint64 assign_record_type_identifier(Oid type_id, int32 typmod);
+extern PGDLLIMPORT uint64 assign_record_type_identifier(Oid type_id, int32 typmod);
 
-extern int	compare_values_of_enum(TypeCacheEntry *tcache, Oid arg1, Oid arg2);
+extern PGDLLIMPORT int	compare_values_of_enum(TypeCacheEntry *tcache, Oid arg1, Oid arg2);
 
-extern size_t SharedRecordTypmodRegistryEstimate(void);
+extern PGDLLIMPORT size_t SharedRecordTypmodRegistryEstimate(void);
 
-extern void SharedRecordTypmodRegistryInit(SharedRecordTypmodRegistry *,
+extern PGDLLIMPORT void SharedRecordTypmodRegistryInit(SharedRecordTypmodRegistry *,
 										   dsm_segment *segment, dsa_area *area);
 
-extern void SharedRecordTypmodRegistryAttach(SharedRecordTypmodRegistry *);
+extern PGDLLIMPORT void SharedRecordTypmodRegistryAttach(SharedRecordTypmodRegistry *);
 
 #endif							/* TYPCACHE_H */

@@ -127,27 +127,27 @@ typedef struct
 /*
  * prototypes for functions in dynahash.c
  */
-extern HTAB *hash_create(const char *tabname, long nelem,
+extern PGDLLIMPORT HTAB *hash_create(const char *tabname, long nelem,
 						 const HASHCTL *info, int flags);
-extern void hash_destroy(HTAB *hashp);
-extern void hash_stats(const char *where, HTAB *hashp);
-extern void *hash_search(HTAB *hashp, const void *keyPtr, HASHACTION action,
+extern PGDLLIMPORT void hash_destroy(HTAB *hashp);
+extern PGDLLIMPORT void hash_stats(const char *where, HTAB *hashp);
+extern PGDLLIMPORT void *hash_search(HTAB *hashp, const void *keyPtr, HASHACTION action,
 						 bool *foundPtr);
-extern uint32 get_hash_value(HTAB *hashp, const void *keyPtr);
-extern void *hash_search_with_hash_value(HTAB *hashp, const void *keyPtr,
+extern PGDLLIMPORT uint32 get_hash_value(HTAB *hashp, const void *keyPtr);
+extern PGDLLIMPORT void *hash_search_with_hash_value(HTAB *hashp, const void *keyPtr,
 										 uint32 hashvalue, HASHACTION action,
 										 bool *foundPtr);
-extern bool hash_update_hash_key(HTAB *hashp, void *existingEntry,
+extern PGDLLIMPORT bool hash_update_hash_key(HTAB *hashp, void *existingEntry,
 								 const void *newKeyPtr);
-extern long hash_get_num_entries(HTAB *hashp);
-extern void hash_seq_init(HASH_SEQ_STATUS *status, HTAB *hashp);
-extern void *hash_seq_search(HASH_SEQ_STATUS *status);
-extern void hash_seq_term(HASH_SEQ_STATUS *status);
-extern void hash_freeze(HTAB *hashp);
-extern Size hash_estimate_size(long num_entries, Size entrysize);
-extern long hash_select_dirsize(long num_entries);
-extern Size hash_get_shared_size(HASHCTL *info, int flags);
-extern void AtEOXact_HashTables(bool isCommit);
-extern void AtEOSubXact_HashTables(bool isCommit, int nestDepth);
+extern PGDLLIMPORT long hash_get_num_entries(HTAB *hashp);
+extern PGDLLIMPORT void hash_seq_init(HASH_SEQ_STATUS *status, HTAB *hashp);
+extern PGDLLIMPORT void *hash_seq_search(HASH_SEQ_STATUS *status);
+extern PGDLLIMPORT void hash_seq_term(HASH_SEQ_STATUS *status);
+extern PGDLLIMPORT void hash_freeze(HTAB *hashp);
+extern PGDLLIMPORT Size hash_estimate_size(long num_entries, Size entrysize);
+extern PGDLLIMPORT long hash_select_dirsize(long num_entries);
+extern PGDLLIMPORT Size hash_get_shared_size(HASHCTL *info, int flags);
+extern PGDLLIMPORT void AtEOXact_HashTables(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_HashTables(bool isCommit, int nestDepth);
 
 #endif							/* HSEARCH_H */

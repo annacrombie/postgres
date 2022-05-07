@@ -17,10 +17,10 @@
 /* The ON SELECT rule of a view is always named this: */
 #define ViewSelectRuleName	"_RETURN"
 
-extern bool IsDefinedRewriteRule(Oid owningRel, const char *ruleName);
+extern PGDLLIMPORT bool IsDefinedRewriteRule(Oid owningRel, const char *ruleName);
 
-extern void SetRelationRuleStatus(Oid relationId, bool relHasRules);
+extern PGDLLIMPORT void SetRelationRuleStatus(Oid relationId, bool relHasRules);
 
-extern Oid	get_rewrite_oid(Oid relid, const char *rulename, bool missing_ok);
+extern PGDLLIMPORT Oid	get_rewrite_oid(Oid relid, const char *rulename, bool missing_ok);
 
 #endif							/* REWRITESUPPORT_H */

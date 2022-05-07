@@ -15,6 +15,6 @@
 
 #include "miscadmin.h"
 
-extern void AuxiliaryProcessMain(AuxProcType auxtype) pg_attribute_noreturn();
+extern PGDLLIMPORT void AuxiliaryProcessMain(AuxProcType auxtype) pg_attribute_noreturn();
 
 #endif							/* AUXPROCESS_H */

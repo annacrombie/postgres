@@ -20,8 +20,8 @@ extern PGDLLIMPORT char *pg_krb_server_keyfile;
 extern PGDLLIMPORT bool pg_krb_caseins_users;
 extern PGDLLIMPORT char *pg_krb_realm;
 
-extern void ClientAuthentication(Port *port);
-extern void sendAuthRequest(Port *port, AuthRequest areq, const char *extradata,
+extern PGDLLIMPORT void ClientAuthentication(Port *port);
+extern PGDLLIMPORT void sendAuthRequest(Port *port, AuthRequest areq, const char *extradata,
 							int extralen);
 
 /* Hook for plugins to get control in ClientAuthentication() */

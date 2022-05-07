@@ -654,33 +654,33 @@ castNodeImpl(NodeTag type, void *ptr)
 struct Bitmapset;				/* not to include bitmapset.h here */
 struct StringInfoData;			/* not to include stringinfo.h here */
 
-extern void outNode(struct StringInfoData *str, const void *obj);
-extern void outToken(struct StringInfoData *str, const char *s);
-extern void outBitmapset(struct StringInfoData *str,
+extern PGDLLIMPORT void outNode(struct StringInfoData *str, const void *obj);
+extern PGDLLIMPORT void outToken(struct StringInfoData *str, const char *s);
+extern PGDLLIMPORT void outBitmapset(struct StringInfoData *str,
 						 const struct Bitmapset *bms);
-extern void outDatum(struct StringInfoData *str, uintptr_t value,
+extern PGDLLIMPORT void outDatum(struct StringInfoData *str, uintptr_t value,
 					 int typlen, bool typbyval);
-extern char *nodeToString(const void *obj);
-extern char *bmsToString(const struct Bitmapset *bms);
+extern PGDLLIMPORT char *nodeToString(const void *obj);
+extern PGDLLIMPORT char *bmsToString(const struct Bitmapset *bms);
 
 /*
  * nodes/{readfuncs.c,read.c}
  */
-extern void *stringToNode(const char *str);
+extern PGDLLIMPORT void *stringToNode(const char *str);
 #ifdef WRITE_READ_PARSE_PLAN_TREES
-extern void *stringToNodeWithLocations(const char *str);
+extern PGDLLIMPORT void *stringToNodeWithLocations(const char *str);
 #endif
-extern struct Bitmapset *readBitmapset(void);
-extern uintptr_t readDatum(bool typbyval);
-extern bool *readBoolCols(int numCols);
-extern int *readIntCols(int numCols);
-extern Oid *readOidCols(int numCols);
-extern int16 *readAttrNumberCols(int numCols);
+extern PGDLLIMPORT struct Bitmapset *readBitmapset(void);
+extern PGDLLIMPORT uintptr_t readDatum(bool typbyval);
+extern PGDLLIMPORT bool *readBoolCols(int numCols);
+extern PGDLLIMPORT int *readIntCols(int numCols);
+extern PGDLLIMPORT Oid *readOidCols(int numCols);
+extern PGDLLIMPORT int16 *readAttrNumberCols(int numCols);
 
 /*
  * nodes/copyfuncs.c
  */
-extern void *copyObjectImpl(const void *obj);
+extern PGDLLIMPORT void *copyObjectImpl(const void *obj);
 
 /* cast result back to argument type, if supported by compiler */
 #ifdef HAVE_TYPEOF
@@ -692,7 +692,7 @@ extern void *copyObjectImpl(const void *obj);
 /*
  * nodes/equalfuncs.c
  */
-extern bool equal(const void *a, const void *b);
+extern PGDLLIMPORT bool equal(const void *a, const void *b);
 
 
 /*

@@ -59,10 +59,10 @@ extern PGDLLIMPORT bool standard_conforming_strings;
 
 
 /* Primary entry point for the raw parsing functions */
-extern List *raw_parser(const char *str, RawParseMode mode);
+extern PGDLLIMPORT List *raw_parser(const char *str, RawParseMode mode);
 
 /* Utility functions exported by gram.y (perhaps these should be elsewhere) */
-extern List *SystemFuncName(char *name);
-extern TypeName *SystemTypeName(char *name);
+extern PGDLLIMPORT List *SystemFuncName(char *name);
+extern PGDLLIMPORT TypeName *SystemTypeName(char *name);
 
 #endif							/* PARSER_H */

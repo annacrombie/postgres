@@ -126,12 +126,12 @@ typedef ScanKeyData *ScanKey;
 /*
  * prototypes for functions in access/common/scankey.c
  */
-extern void ScanKeyInit(ScanKey entry,
+extern PGDLLIMPORT void ScanKeyInit(ScanKey entry,
 						AttrNumber attributeNumber,
 						StrategyNumber strategy,
 						RegProcedure procedure,
 						Datum argument);
-extern void ScanKeyEntryInitialize(ScanKey entry,
+extern PGDLLIMPORT void ScanKeyEntryInitialize(ScanKey entry,
 								   int flags,
 								   AttrNumber attributeNumber,
 								   StrategyNumber strategy,
@@ -139,7 +139,7 @@ extern void ScanKeyEntryInitialize(ScanKey entry,
 								   Oid collation,
 								   RegProcedure procedure,
 								   Datum argument);
-extern void ScanKeyEntryInitializeWithInfo(ScanKey entry,
+extern PGDLLIMPORT void ScanKeyEntryInitializeWithInfo(ScanKey entry,
 										   int flags,
 										   AttrNumber attributeNumber,
 										   StrategyNumber strategy,

@@ -75,16 +75,16 @@ typedef struct pairingheap
 	pairingheap_node *ph_root;	/* current root of the heap */
 } pairingheap;
 
-extern pairingheap *pairingheap_allocate(pairingheap_comparator compare,
+extern PGDLLIMPORT pairingheap *pairingheap_allocate(pairingheap_comparator compare,
 										 void *arg);
-extern void pairingheap_free(pairingheap *heap);
-extern void pairingheap_add(pairingheap *heap, pairingheap_node *node);
-extern pairingheap_node *pairingheap_first(pairingheap *heap);
-extern pairingheap_node *pairingheap_remove_first(pairingheap *heap);
-extern void pairingheap_remove(pairingheap *heap, pairingheap_node *node);
+extern PGDLLIMPORT void pairingheap_free(pairingheap *heap);
+extern PGDLLIMPORT void pairingheap_add(pairingheap *heap, pairingheap_node *node);
+extern PGDLLIMPORT pairingheap_node *pairingheap_first(pairingheap *heap);
+extern PGDLLIMPORT pairingheap_node *pairingheap_remove_first(pairingheap *heap);
+extern PGDLLIMPORT void pairingheap_remove(pairingheap *heap, pairingheap_node *node);
 
 #ifdef PAIRINGHEAP_DEBUG
-extern char *pairingheap_dump(pairingheap *heap,
+extern PGDLLIMPORT char *pairingheap_dump(pairingheap *heap,
 							  void (*dumpfunc) (pairingheap_node *node, StringInfo buf, void *opaque),
 							  void *opaque);
 #endif

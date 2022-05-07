@@ -487,8 +487,8 @@ typedef struct TwoPhasePredicateRecord
  * Function definitions for functions needing awareness of predicate
  * locking internals.
  */
-extern PredicateLockData *GetPredicateLockStatusData(void);
-extern int	GetSafeSnapshotBlockingPids(int blocked_pid,
+extern PGDLLIMPORT PredicateLockData *GetPredicateLockStatusData(void);
+extern PGDLLIMPORT int	GetSafeSnapshotBlockingPids(int blocked_pid,
 										int *output, int output_size);
 
 #endif							/* PREDICATE_INTERNALS_H */

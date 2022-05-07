@@ -94,7 +94,7 @@
  *	Called by heap_insert() and heap_update().
  * ----------
  */
-extern HeapTuple heap_toast_insert_or_update(Relation rel, HeapTuple newtup,
+extern PGDLLIMPORT HeapTuple heap_toast_insert_or_update(Relation rel, HeapTuple newtup,
 											 HeapTuple oldtup, int options);
 
 /* ----------
@@ -103,7 +103,7 @@ extern HeapTuple heap_toast_insert_or_update(Relation rel, HeapTuple newtup,
  *	Called by heap_delete().
  * ----------
  */
-extern void heap_toast_delete(Relation rel, HeapTuple oldtup,
+extern PGDLLIMPORT void heap_toast_delete(Relation rel, HeapTuple oldtup,
 							  bool is_speculative);
 
 /* ----------
@@ -113,7 +113,7 @@ extern void heap_toast_delete(Relation rel, HeapTuple oldtup,
  *	(This does not eliminate compressed or short-header datums.)
  * ----------
  */
-extern HeapTuple toast_flatten_tuple(HeapTuple tup, TupleDesc tupleDesc);
+extern PGDLLIMPORT HeapTuple toast_flatten_tuple(HeapTuple tup, TupleDesc tupleDesc);
 
 /* ----------
  * toast_flatten_tuple_to_datum -
@@ -121,7 +121,7 @@ extern HeapTuple toast_flatten_tuple(HeapTuple tup, TupleDesc tupleDesc);
  *	"Flatten" a tuple containing out-of-line toasted fields into a Datum.
  * ----------
  */
-extern Datum toast_flatten_tuple_to_datum(HeapTupleHeader tup,
+extern PGDLLIMPORT Datum toast_flatten_tuple_to_datum(HeapTupleHeader tup,
 										  uint32 tup_len,
 										  TupleDesc tupleDesc);
 
@@ -132,7 +132,7 @@ extern Datum toast_flatten_tuple_to_datum(HeapTupleHeader tup,
  *	(This does not eliminate compressed or short-header datums.)
  * ----------
  */
-extern HeapTuple toast_build_flattened_tuple(TupleDesc tupleDesc,
+extern PGDLLIMPORT HeapTuple toast_build_flattened_tuple(TupleDesc tupleDesc,
 											 Datum *values,
 											 bool *isnull);
 
@@ -142,7 +142,7 @@ extern HeapTuple toast_build_flattened_tuple(TupleDesc tupleDesc,
  *	Fetch a slice from a toast value stored in a heap table.
  * ----------
  */
-extern void heap_fetch_toast_slice(Relation toastrel, Oid valueid,
+extern PGDLLIMPORT void heap_fetch_toast_slice(Relation toastrel, Oid valueid,
 								   int32 attrsize, int32 sliceoffset,
 								   int32 slicelength, struct varlena *result);
 

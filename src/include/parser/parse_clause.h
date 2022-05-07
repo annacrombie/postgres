@@ -16,42 +16,42 @@
 
 #include "parser/parse_node.h"
 
-extern void transformFromClause(ParseState *pstate, List *frmList);
-extern int	setTargetTable(ParseState *pstate, RangeVar *relation,
+extern PGDLLIMPORT void transformFromClause(ParseState *pstate, List *frmList);
+extern PGDLLIMPORT int	setTargetTable(ParseState *pstate, RangeVar *relation,
 						   bool inh, bool alsoSource, AclMode requiredPerms);
 
-extern Node *transformWhereClause(ParseState *pstate, Node *clause,
+extern PGDLLIMPORT Node *transformWhereClause(ParseState *pstate, Node *clause,
 								  ParseExprKind exprKind, const char *constructName);
-extern Node *transformLimitClause(ParseState *pstate, Node *clause,
+extern PGDLLIMPORT Node *transformLimitClause(ParseState *pstate, Node *clause,
 								  ParseExprKind exprKind, const char *constructName,
 								  LimitOption limitOption);
-extern List *transformGroupClause(ParseState *pstate, List *grouplist,
+extern PGDLLIMPORT List *transformGroupClause(ParseState *pstate, List *grouplist,
 								  List **groupingSets,
 								  List **targetlist, List *sortClause,
 								  ParseExprKind exprKind, bool useSQL99);
-extern List *transformSortClause(ParseState *pstate, List *orderlist,
+extern PGDLLIMPORT List *transformSortClause(ParseState *pstate, List *orderlist,
 								 List **targetlist, ParseExprKind exprKind,
 								 bool useSQL99);
 
-extern List *transformWindowDefinitions(ParseState *pstate,
+extern PGDLLIMPORT List *transformWindowDefinitions(ParseState *pstate,
 										List *windowdefs,
 										List **targetlist);
 
-extern List *transformDistinctClause(ParseState *pstate,
+extern PGDLLIMPORT List *transformDistinctClause(ParseState *pstate,
 									 List **targetlist, List *sortClause, bool is_agg);
-extern List *transformDistinctOnClause(ParseState *pstate, List *distinctlist,
+extern PGDLLIMPORT List *transformDistinctOnClause(ParseState *pstate, List *distinctlist,
 									   List **targetlist, List *sortClause);
-extern void transformOnConflictArbiter(ParseState *pstate,
+extern PGDLLIMPORT void transformOnConflictArbiter(ParseState *pstate,
 									   OnConflictClause *onConflictClause,
 									   List **arbiterExpr, Node **arbiterWhere,
 									   Oid *constraint);
 
-extern List *addTargetToSortList(ParseState *pstate, TargetEntry *tle,
+extern PGDLLIMPORT List *addTargetToSortList(ParseState *pstate, TargetEntry *tle,
 								 List *sortlist, List *targetlist, SortBy *sortby);
-extern Index assignSortGroupRef(TargetEntry *tle, List *tlist);
-extern bool targetIsInSortList(TargetEntry *tle, Oid sortop, List *sortList);
+extern PGDLLIMPORT Index assignSortGroupRef(TargetEntry *tle, List *tlist);
+extern PGDLLIMPORT bool targetIsInSortList(TargetEntry *tle, Oid sortop, List *sortList);
 
 /* functions in parse_jsontable.c */
-extern ParseNamespaceItem *transformJsonTable(ParseState *pstate, JsonTable *jt);
+extern PGDLLIMPORT ParseNamespaceItem *transformJsonTable(ParseState *pstate, JsonTable *jt);
 
 #endif							/* PARSE_CLAUSE_H */

@@ -432,26 +432,26 @@ do { \
 StaticAssertDecl(BLCKSZ == ((BLCKSZ / sizeof(size_t)) * sizeof(size_t)),
 				 "BLCKSZ has to be a multiple of sizeof(size_t)");
 
-extern void PageInit(Page page, Size pageSize, Size specialSize);
-extern bool PageIsVerifiedExtended(Page page, BlockNumber blkno, int flags);
-extern OffsetNumber PageAddItemExtended(Page page, Item item, Size size,
+extern PGDLLIMPORT void PageInit(Page page, Size pageSize, Size specialSize);
+extern PGDLLIMPORT bool PageIsVerifiedExtended(Page page, BlockNumber blkno, int flags);
+extern PGDLLIMPORT OffsetNumber PageAddItemExtended(Page page, Item item, Size size,
 										OffsetNumber offsetNumber, int flags);
-extern Page PageGetTempPage(Page page);
-extern Page PageGetTempPageCopy(Page page);
-extern Page PageGetTempPageCopySpecial(Page page);
-extern void PageRestoreTempPage(Page tempPage, Page oldPage);
-extern void PageRepairFragmentation(Page page);
-extern void PageTruncateLinePointerArray(Page page);
-extern Size PageGetFreeSpace(Page page);
-extern Size PageGetFreeSpaceForMultipleTuples(Page page, int ntups);
-extern Size PageGetExactFreeSpace(Page page);
-extern Size PageGetHeapFreeSpace(Page page);
-extern void PageIndexTupleDelete(Page page, OffsetNumber offset);
-extern void PageIndexMultiDelete(Page page, OffsetNumber *itemnos, int nitems);
-extern void PageIndexTupleDeleteNoCompact(Page page, OffsetNumber offset);
-extern bool PageIndexTupleOverwrite(Page page, OffsetNumber offnum,
+extern PGDLLIMPORT Page PageGetTempPage(Page page);
+extern PGDLLIMPORT Page PageGetTempPageCopy(Page page);
+extern PGDLLIMPORT Page PageGetTempPageCopySpecial(Page page);
+extern PGDLLIMPORT void PageRestoreTempPage(Page tempPage, Page oldPage);
+extern PGDLLIMPORT void PageRepairFragmentation(Page page);
+extern PGDLLIMPORT void PageTruncateLinePointerArray(Page page);
+extern PGDLLIMPORT Size PageGetFreeSpace(Page page);
+extern PGDLLIMPORT Size PageGetFreeSpaceForMultipleTuples(Page page, int ntups);
+extern PGDLLIMPORT Size PageGetExactFreeSpace(Page page);
+extern PGDLLIMPORT Size PageGetHeapFreeSpace(Page page);
+extern PGDLLIMPORT void PageIndexTupleDelete(Page page, OffsetNumber offset);
+extern PGDLLIMPORT void PageIndexMultiDelete(Page page, OffsetNumber *itemnos, int nitems);
+extern PGDLLIMPORT void PageIndexTupleDeleteNoCompact(Page page, OffsetNumber offset);
+extern PGDLLIMPORT bool PageIndexTupleOverwrite(Page page, OffsetNumber offnum,
 									Item newtup, Size newsize);
-extern char *PageSetChecksumCopy(Page page, BlockNumber blkno);
-extern void PageSetChecksumInplace(Page page, BlockNumber blkno);
+extern PGDLLIMPORT char *PageSetChecksumCopy(Page page, BlockNumber blkno);
+extern PGDLLIMPORT void PageSetChecksumInplace(Page page, BlockNumber blkno);
 
 #endif							/* BUFPAGE_H */

@@ -40,7 +40,7 @@ typedef struct BaseBackupTargetHandle BaseBackupTargetHandle;
  * string "bar", and whatever that callback returns will be passed as the
  * second argument to the get_sink callback.
  */
-extern void BaseBackupAddTarget(char *name,
+extern PGDLLIMPORT void BaseBackupAddTarget(char *name,
 								void *(*check_detail) (char *, char *),
 								bbsink * (*get_sink) (bbsink *, void *));
 
@@ -58,9 +58,9 @@ extern void BaseBackupAddTarget(char *name,
  * by arranging to call the get_sink() callback provided by the extension
  * that implements the base backup target.
  */
-extern BaseBackupTargetHandle *BaseBackupGetTargetHandle(char *target,
+extern PGDLLIMPORT BaseBackupTargetHandle *BaseBackupGetTargetHandle(char *target,
 														 char *target_detail);
-extern bbsink *BaseBackupGetSink(BaseBackupTargetHandle *handle,
+extern PGDLLIMPORT bbsink *BaseBackupGetSink(BaseBackupTargetHandle *handle,
 								 bbsink *next_sink);
 
 #endif

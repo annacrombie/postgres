@@ -48,36 +48,36 @@ extern PGDLLIMPORT int AutovacuumLauncherPid;
 extern PGDLLIMPORT int Log_autovacuum_min_duration;
 
 /* Status inquiry functions */
-extern bool AutoVacuumingActive(void);
-extern bool IsAutoVacuumLauncherProcess(void);
-extern bool IsAutoVacuumWorkerProcess(void);
+extern PGDLLIMPORT bool AutoVacuumingActive(void);
+extern PGDLLIMPORT bool IsAutoVacuumLauncherProcess(void);
+extern PGDLLIMPORT bool IsAutoVacuumWorkerProcess(void);
 
 #define IsAnyAutoVacuumProcess() \
 	(IsAutoVacuumLauncherProcess() || IsAutoVacuumWorkerProcess())
 
 /* Functions to start autovacuum process, called from postmaster */
-extern void autovac_init(void);
-extern int	StartAutoVacLauncher(void);
-extern int	StartAutoVacWorker(void);
+extern PGDLLIMPORT void autovac_init(void);
+extern PGDLLIMPORT int	StartAutoVacLauncher(void);
+extern PGDLLIMPORT int	StartAutoVacWorker(void);
 
 /* called from postmaster when a worker could not be forked */
-extern void AutoVacWorkerFailed(void);
+extern PGDLLIMPORT void AutoVacWorkerFailed(void);
 
 /* autovacuum cost-delay balancer */
-extern void AutoVacuumUpdateDelay(void);
+extern PGDLLIMPORT void AutoVacuumUpdateDelay(void);
 
 #ifdef EXEC_BACKEND
-extern void AutoVacLauncherMain(int argc, char *argv[]) pg_attribute_noreturn();
-extern void AutoVacWorkerMain(int argc, char *argv[]) pg_attribute_noreturn();
-extern void AutovacuumWorkerIAm(void);
-extern void AutovacuumLauncherIAm(void);
+extern PGDLLIMPORT void AutoVacLauncherMain(int argc, char *argv[]) pg_attribute_noreturn();
+extern PGDLLIMPORT void AutoVacWorkerMain(int argc, char *argv[]) pg_attribute_noreturn();
+extern PGDLLIMPORT void AutovacuumWorkerIAm(void);
+extern PGDLLIMPORT void AutovacuumLauncherIAm(void);
 #endif
 
-extern bool AutoVacuumRequestWork(AutoVacuumWorkItemType type,
+extern PGDLLIMPORT bool AutoVacuumRequestWork(AutoVacuumWorkItemType type,
 								  Oid relationId, BlockNumber blkno);
 
 /* shared memory stuff */
-extern Size AutoVacuumShmemSize(void);
-extern void AutoVacuumShmemInit(void);
+extern PGDLLIMPORT Size AutoVacuumShmemSize(void);
+extern PGDLLIMPORT void AutoVacuumShmemInit(void);
 
 #endif							/* AUTOVACUUM_H */

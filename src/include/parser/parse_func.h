@@ -31,11 +31,11 @@ typedef enum
 } FuncDetailCode;
 
 
-extern Node *ParseFuncOrColumn(ParseState *pstate, List *funcname, List *fargs,
+extern PGDLLIMPORT Node *ParseFuncOrColumn(ParseState *pstate, List *funcname, List *fargs,
 							   Node *last_srf, FuncCall *fn, bool proc_call,
 							   int location);
 
-extern FuncDetailCode func_get_detail(List *funcname,
+extern PGDLLIMPORT FuncDetailCode func_get_detail(List *funcname,
 									  List *fargs, List *fargnames,
 									  int nargs, Oid *argtypes,
 									  bool expand_variadic, bool expand_defaults,
@@ -44,31 +44,31 @@ extern FuncDetailCode func_get_detail(List *funcname,
 									  bool *retset, int *nvargs, Oid *vatype,
 									  Oid **true_typeids, List **argdefaults);
 
-extern int	func_match_argtypes(int nargs,
+extern PGDLLIMPORT int	func_match_argtypes(int nargs,
 								Oid *input_typeids,
 								FuncCandidateList raw_candidates,
 								FuncCandidateList *candidates);
 
-extern FuncCandidateList func_select_candidate(int nargs,
+extern PGDLLIMPORT FuncCandidateList func_select_candidate(int nargs,
 											   Oid *input_typeids,
 											   FuncCandidateList candidates);
 
-extern void make_fn_arguments(ParseState *pstate,
+extern PGDLLIMPORT void make_fn_arguments(ParseState *pstate,
 							  List *fargs,
 							  Oid *actual_arg_types,
 							  Oid *declared_arg_types);
 
-extern const char *funcname_signature_string(const char *funcname, int nargs,
+extern PGDLLIMPORT const char *funcname_signature_string(const char *funcname, int nargs,
 											 List *argnames, const Oid *argtypes);
-extern const char *func_signature_string(List *funcname, int nargs,
+extern PGDLLIMPORT const char *func_signature_string(List *funcname, int nargs,
 										 List *argnames, const Oid *argtypes);
 
-extern Oid	LookupFuncName(List *funcname, int nargs, const Oid *argtypes,
+extern PGDLLIMPORT Oid	LookupFuncName(List *funcname, int nargs, const Oid *argtypes,
 						   bool missing_ok);
-extern Oid	LookupFuncWithArgs(ObjectType objtype, ObjectWithArgs *func,
+extern PGDLLIMPORT Oid	LookupFuncWithArgs(ObjectType objtype, ObjectWithArgs *func,
 							   bool missing_ok);
 
-extern void check_srf_call_placement(ParseState *pstate, Node *last_srf,
+extern PGDLLIMPORT void check_srf_call_placement(ParseState *pstate, Node *last_srf,
 									 int location);
 
 #endif							/* PARSE_FUNC_H */

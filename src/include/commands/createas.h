@@ -21,14 +21,14 @@
 #include "utils/queryenvironment.h"
 
 
-extern ObjectAddress ExecCreateTableAs(ParseState *pstate, CreateTableAsStmt *stmt,
+extern PGDLLIMPORT ObjectAddress ExecCreateTableAs(ParseState *pstate, CreateTableAsStmt *stmt,
 									   ParamListInfo params, QueryEnvironment *queryEnv,
 									   QueryCompletion *qc);
 
-extern int	GetIntoRelEFlags(IntoClause *intoClause);
+extern PGDLLIMPORT int	GetIntoRelEFlags(IntoClause *intoClause);
 
-extern DestReceiver *CreateIntoRelDestReceiver(IntoClause *intoClause);
+extern PGDLLIMPORT DestReceiver *CreateIntoRelDestReceiver(IntoClause *intoClause);
 
-extern bool CreateTableAsRelExists(CreateTableAsStmt *ctas);
+extern PGDLLIMPORT bool CreateTableAsRelExists(CreateTableAsStmt *ctas);
 
 #endif							/* CREATEAS_H */

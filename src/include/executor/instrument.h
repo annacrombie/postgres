@@ -99,20 +99,20 @@ typedef struct WorkerInstrumentation
 extern PGDLLIMPORT BufferUsage pgBufferUsage;
 extern PGDLLIMPORT WalUsage pgWalUsage;
 
-extern Instrumentation *InstrAlloc(int n, int instrument_options,
+extern PGDLLIMPORT Instrumentation *InstrAlloc(int n, int instrument_options,
 								   bool async_mode);
-extern void InstrInit(Instrumentation *instr, int instrument_options);
-extern void InstrStartNode(Instrumentation *instr);
-extern void InstrStopNode(Instrumentation *instr, double nTuples);
-extern void InstrUpdateTupleCount(Instrumentation *instr, double nTuples);
-extern void InstrEndLoop(Instrumentation *instr);
-extern void InstrAggNode(Instrumentation *dst, Instrumentation *add);
-extern void InstrStartParallelQuery(void);
-extern void InstrEndParallelQuery(BufferUsage *bufusage, WalUsage *walusage);
-extern void InstrAccumParallelQuery(BufferUsage *bufusage, WalUsage *walusage);
-extern void BufferUsageAccumDiff(BufferUsage *dst,
+extern PGDLLIMPORT void InstrInit(Instrumentation *instr, int instrument_options);
+extern PGDLLIMPORT void InstrStartNode(Instrumentation *instr);
+extern PGDLLIMPORT void InstrStopNode(Instrumentation *instr, double nTuples);
+extern PGDLLIMPORT void InstrUpdateTupleCount(Instrumentation *instr, double nTuples);
+extern PGDLLIMPORT void InstrEndLoop(Instrumentation *instr);
+extern PGDLLIMPORT void InstrAggNode(Instrumentation *dst, Instrumentation *add);
+extern PGDLLIMPORT void InstrStartParallelQuery(void);
+extern PGDLLIMPORT void InstrEndParallelQuery(BufferUsage *bufusage, WalUsage *walusage);
+extern PGDLLIMPORT void InstrAccumParallelQuery(BufferUsage *bufusage, WalUsage *walusage);
+extern PGDLLIMPORT void BufferUsageAccumDiff(BufferUsage *dst,
 								 const BufferUsage *add, const BufferUsage *sub);
-extern void WalUsageAccumDiff(WalUsage *dst, const WalUsage *add,
+extern PGDLLIMPORT void WalUsageAccumDiff(WalUsage *dst, const WalUsage *add,
 							  const WalUsage *sub);
 
 #endif							/* INSTRUMENT_H */

@@ -16,20 +16,20 @@
 
 #include "utils/portal.h"
 
-extern DestReceiver *printtup_create_DR(CommandDest dest);
+extern PGDLLIMPORT DestReceiver *printtup_create_DR(CommandDest dest);
 
-extern void SetRemoteDestReceiverParams(DestReceiver *self, Portal portal);
+extern PGDLLIMPORT void SetRemoteDestReceiverParams(DestReceiver *self, Portal portal);
 
-extern void SendRowDescriptionMessage(StringInfo buf,
+extern PGDLLIMPORT void SendRowDescriptionMessage(StringInfo buf,
 									  TupleDesc typeinfo, List *targetlist, int16 *formats);
 
-extern void debugStartup(DestReceiver *self, int operation,
+extern PGDLLIMPORT void debugStartup(DestReceiver *self, int operation,
 						 TupleDesc typeinfo);
-extern bool debugtup(TupleTableSlot *slot, DestReceiver *self);
+extern PGDLLIMPORT bool debugtup(TupleTableSlot *slot, DestReceiver *self);
 
 /* XXX these are really in executor/spi.c */
-extern void spi_dest_startup(DestReceiver *self, int operation,
+extern PGDLLIMPORT void spi_dest_startup(DestReceiver *self, int operation,
 							 TupleDesc typeinfo);
-extern bool spi_printtup(TupleTableSlot *slot, DestReceiver *self);
+extern PGDLLIMPORT bool spi_printtup(TupleTableSlot *slot, DestReceiver *self);
 
 #endif							/* PRINTTUP_H */

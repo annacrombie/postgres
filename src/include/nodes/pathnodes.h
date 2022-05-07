@@ -1476,7 +1476,7 @@ typedef struct AppendPath
  * this is provided as a macro that wraps is_dummy_rel().
  */
 #define IS_DUMMY_REL(r) is_dummy_rel(r)
-extern bool is_dummy_rel(RelOptInfo *rel);
+extern PGDLLIMPORT bool is_dummy_rel(RelOptInfo *rel);
 
 /*
  * MergeAppendPath represents a MergeAppend plan, ie, the merging of sorted

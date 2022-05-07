@@ -31,7 +31,7 @@ typedef struct PGRUsage
 } PGRUsage;
 
 
-extern void pg_rusage_init(PGRUsage *ru0);
-extern const char *pg_rusage_show(const PGRUsage *ru0);
+extern PGDLLIMPORT void pg_rusage_init(PGRUsage *ru0);
+extern PGDLLIMPORT const char *pg_rusage_show(const PGRUsage *ru0);
 
 #endif							/* PG_RUSAGE_H */

@@ -47,39 +47,39 @@ typedef enum
  * or written, but they need not be set by the same process.  Each must be
  * set exactly once.
  */
-extern shm_mq *shm_mq_create(void *address, Size size);
-extern void shm_mq_set_receiver(shm_mq *mq, PGPROC *);
-extern void shm_mq_set_sender(shm_mq *mq, PGPROC *);
+extern PGDLLIMPORT shm_mq *shm_mq_create(void *address, Size size);
+extern PGDLLIMPORT void shm_mq_set_receiver(shm_mq *mq, PGPROC *);
+extern PGDLLIMPORT void shm_mq_set_sender(shm_mq *mq, PGPROC *);
 
 /* Accessor methods for sender and receiver. */
-extern PGPROC *shm_mq_get_receiver(shm_mq *);
-extern PGPROC *shm_mq_get_sender(shm_mq *);
+extern PGDLLIMPORT PGPROC *shm_mq_get_receiver(shm_mq *);
+extern PGDLLIMPORT PGPROC *shm_mq_get_sender(shm_mq *);
 
 /* Set up backend-local queue state. */
-extern shm_mq_handle *shm_mq_attach(shm_mq *mq, dsm_segment *seg,
+extern PGDLLIMPORT shm_mq_handle *shm_mq_attach(shm_mq *mq, dsm_segment *seg,
 									BackgroundWorkerHandle *handle);
 
 /* Associate worker handle with shm_mq. */
-extern void shm_mq_set_handle(shm_mq_handle *, BackgroundWorkerHandle *);
+extern PGDLLIMPORT void shm_mq_set_handle(shm_mq_handle *, BackgroundWorkerHandle *);
 
 /* Break connection, release handle resources. */
-extern void shm_mq_detach(shm_mq_handle *mqh);
+extern PGDLLIMPORT void shm_mq_detach(shm_mq_handle *mqh);
 
 /* Get the shm_mq from handle. */
-extern shm_mq *shm_mq_get_queue(shm_mq_handle *mqh);
+extern PGDLLIMPORT shm_mq *shm_mq_get_queue(shm_mq_handle *mqh);
 
 /* Send or receive messages. */
-extern shm_mq_result shm_mq_send(shm_mq_handle *mqh,
+extern PGDLLIMPORT shm_mq_result shm_mq_send(shm_mq_handle *mqh,
 								 Size nbytes, const void *data, bool nowait,
 								 bool force_flush);
-extern shm_mq_result shm_mq_sendv(shm_mq_handle *mqh, shm_mq_iovec *iov,
+extern PGDLLIMPORT shm_mq_result shm_mq_sendv(shm_mq_handle *mqh, shm_mq_iovec *iov,
 								  int iovcnt, bool nowait, bool force_flush);
-extern shm_mq_result shm_mq_receive(shm_mq_handle *mqh,
+extern PGDLLIMPORT shm_mq_result shm_mq_receive(shm_mq_handle *mqh,
 									Size *nbytesp, void **datap, bool nowait);
-extern void shm_mq_flush(shm_mq_handle *mqh);
+extern PGDLLIMPORT void shm_mq_flush(shm_mq_handle *mqh);
 
 /* Wait for our counterparty to attach to the queue. */
-extern shm_mq_result shm_mq_wait_for_attach(shm_mq_handle *mqh);
+extern PGDLLIMPORT shm_mq_result shm_mq_wait_for_attach(shm_mq_handle *mqh);
 
 /* Smallest possible queue. */
 extern PGDLLIMPORT const Size shm_mq_minimum_size;

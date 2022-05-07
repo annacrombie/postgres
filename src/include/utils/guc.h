@@ -141,20 +141,20 @@ typedef struct ConfigVariable
 	struct ConfigVariable *next;
 } ConfigVariable;
 
-extern bool ParseConfigFile(const char *config_file, bool strict,
+extern PGDLLIMPORT bool ParseConfigFile(const char *config_file, bool strict,
 							const char *calling_file, int calling_lineno,
 							int depth, int elevel,
 							ConfigVariable **head_p, ConfigVariable **tail_p);
-extern bool ParseConfigFp(FILE *fp, const char *config_file,
+extern PGDLLIMPORT bool ParseConfigFp(FILE *fp, const char *config_file,
 						  int depth, int elevel,
 						  ConfigVariable **head_p, ConfigVariable **tail_p);
-extern bool ParseConfigDirectory(const char *includedir,
+extern PGDLLIMPORT bool ParseConfigDirectory(const char *includedir,
 								 const char *calling_file, int calling_lineno,
 								 int depth, int elevel,
 								 ConfigVariable **head_p,
 								 ConfigVariable **tail_p);
-extern void FreeConfigVariables(ConfigVariable *list);
-extern char *DeescapeQuotedString(const char *s);
+extern PGDLLIMPORT void FreeConfigVariables(ConfigVariable *list);
+extern PGDLLIMPORT char *DeescapeQuotedString(const char *s);
 
 /*
  * The possible values of an enum variable are specified by an array of
@@ -291,10 +291,10 @@ extern PGDLLIMPORT bool trace_sort;
 /*
  * Functions exported by guc.c
  */
-extern void SetConfigOption(const char *name, const char *value,
+extern PGDLLIMPORT void SetConfigOption(const char *name, const char *value,
 							GucContext context, GucSource source);
 
-extern void DefineCustomBoolVariable(const char *name,
+extern PGDLLIMPORT void DefineCustomBoolVariable(const char *name,
 									 const char *short_desc,
 									 const char *long_desc,
 									 bool *valueAddr,
@@ -305,7 +305,7 @@ extern void DefineCustomBoolVariable(const char *name,
 									 GucBoolAssignHook assign_hook,
 									 GucShowHook show_hook);
 
-extern void DefineCustomIntVariable(const char *name,
+extern PGDLLIMPORT void DefineCustomIntVariable(const char *name,
 									const char *short_desc,
 									const char *long_desc,
 									int *valueAddr,
@@ -318,7 +318,7 @@ extern void DefineCustomIntVariable(const char *name,
 									GucIntAssignHook assign_hook,
 									GucShowHook show_hook);
 
-extern void DefineCustomRealVariable(const char *name,
+extern PGDLLIMPORT void DefineCustomRealVariable(const char *name,
 									 const char *short_desc,
 									 const char *long_desc,
 									 double *valueAddr,
@@ -331,7 +331,7 @@ extern void DefineCustomRealVariable(const char *name,
 									 GucRealAssignHook assign_hook,
 									 GucShowHook show_hook);
 
-extern void DefineCustomStringVariable(const char *name,
+extern PGDLLIMPORT void DefineCustomStringVariable(const char *name,
 									   const char *short_desc,
 									   const char *long_desc,
 									   char **valueAddr,
@@ -342,7 +342,7 @@ extern void DefineCustomStringVariable(const char *name,
 									   GucStringAssignHook assign_hook,
 									   GucShowHook show_hook);
 
-extern void DefineCustomEnumVariable(const char *name,
+extern PGDLLIMPORT void DefineCustomEnumVariable(const char *name,
 									 const char *short_desc,
 									 const char *long_desc,
 									 int *valueAddr,
@@ -354,64 +354,64 @@ extern void DefineCustomEnumVariable(const char *name,
 									 GucEnumAssignHook assign_hook,
 									 GucShowHook show_hook);
 
-extern void MarkGUCPrefixReserved(const char *className);
+extern PGDLLIMPORT void MarkGUCPrefixReserved(const char *className);
 
 /* old name for MarkGUCPrefixReserved, for backwards compatibility: */
 #define EmitWarningsOnPlaceholders(className) MarkGUCPrefixReserved(className)
 
-extern const char *GetConfigOption(const char *name, bool missing_ok,
+extern PGDLLIMPORT const char *GetConfigOption(const char *name, bool missing_ok,
 								   bool restrict_privileged);
-extern const char *GetConfigOptionResetString(const char *name);
-extern int	GetConfigOptionFlags(const char *name, bool missing_ok);
-extern void ProcessConfigFile(GucContext context);
-extern char *convert_GUC_name_for_parameter_acl(const char *name);
-extern bool check_GUC_name_for_parameter_acl(const char *name);
-extern void InitializeGUCOptions(void);
-extern void InitializeWalConsistencyChecking(void);
-extern bool SelectConfigFiles(const char *userDoption, const char *progname);
-extern void ResetAllOptions(void);
-extern void AtStart_GUC(void);
-extern int	NewGUCNestLevel(void);
-extern void AtEOXact_GUC(bool isCommit, int nestLevel);
-extern void BeginReportingGUCOptions(void);
-extern void ReportChangedGUCOptions(void);
-extern void ParseLongOption(const char *string, char **name, char **value);
-extern bool parse_int(const char *value, int *result, int flags,
+extern PGDLLIMPORT const char *GetConfigOptionResetString(const char *name);
+extern PGDLLIMPORT int	GetConfigOptionFlags(const char *name, bool missing_ok);
+extern PGDLLIMPORT void ProcessConfigFile(GucContext context);
+extern PGDLLIMPORT char *convert_GUC_name_for_parameter_acl(const char *name);
+extern PGDLLIMPORT bool check_GUC_name_for_parameter_acl(const char *name);
+extern PGDLLIMPORT void InitializeGUCOptions(void);
+extern PGDLLIMPORT void InitializeWalConsistencyChecking(void);
+extern PGDLLIMPORT bool SelectConfigFiles(const char *userDoption, const char *progname);
+extern PGDLLIMPORT void ResetAllOptions(void);
+extern PGDLLIMPORT void AtStart_GUC(void);
+extern PGDLLIMPORT int	NewGUCNestLevel(void);
+extern PGDLLIMPORT void AtEOXact_GUC(bool isCommit, int nestLevel);
+extern PGDLLIMPORT void BeginReportingGUCOptions(void);
+extern PGDLLIMPORT void ReportChangedGUCOptions(void);
+extern PGDLLIMPORT void ParseLongOption(const char *string, char **name, char **value);
+extern PGDLLIMPORT bool parse_int(const char *value, int *result, int flags,
 					  const char **hintmsg);
-extern bool parse_real(const char *value, double *result, int flags,
+extern PGDLLIMPORT bool parse_real(const char *value, double *result, int flags,
 					   const char **hintmsg);
-extern int	set_config_option(const char *name, const char *value,
+extern PGDLLIMPORT int	set_config_option(const char *name, const char *value,
 							  GucContext context, GucSource source,
 							  GucAction action, bool changeVal, int elevel,
 							  bool is_reload);
-extern void AlterSystemSetConfigFile(AlterSystemStmt *altersysstmt);
-extern char *GetConfigOptionByName(const char *name, const char **varname,
+extern PGDLLIMPORT void AlterSystemSetConfigFile(AlterSystemStmt *altersysstmt);
+extern PGDLLIMPORT char *GetConfigOptionByName(const char *name, const char **varname,
 								   bool missing_ok);
-extern void GetConfigOptionByNum(int varnum, const char **values, bool *noshow);
-extern int	GetNumConfigOptions(void);
+extern PGDLLIMPORT void GetConfigOptionByNum(int varnum, const char **values, bool *noshow);
+extern PGDLLIMPORT int	GetNumConfigOptions(void);
 
-extern void SetPGVariable(const char *name, List *args, bool is_local);
-extern void GetPGVariable(const char *name, DestReceiver *dest);
-extern TupleDesc GetPGVariableResultDesc(const char *name);
+extern PGDLLIMPORT void SetPGVariable(const char *name, List *args, bool is_local);
+extern PGDLLIMPORT void GetPGVariable(const char *name, DestReceiver *dest);
+extern PGDLLIMPORT TupleDesc GetPGVariableResultDesc(const char *name);
 
-extern void ExecSetVariableStmt(VariableSetStmt *stmt, bool isTopLevel);
-extern char *ExtractSetVariableArgs(VariableSetStmt *stmt);
+extern PGDLLIMPORT void ExecSetVariableStmt(VariableSetStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT char *ExtractSetVariableArgs(VariableSetStmt *stmt);
 
-extern void ProcessGUCArray(ArrayType *array,
+extern PGDLLIMPORT void ProcessGUCArray(ArrayType *array,
 							GucContext context, GucSource source, GucAction action);
-extern ArrayType *GUCArrayAdd(ArrayType *array, const char *name, const char *value);
-extern ArrayType *GUCArrayDelete(ArrayType *array, const char *name);
-extern ArrayType *GUCArrayReset(ArrayType *array);
+extern PGDLLIMPORT ArrayType *GUCArrayAdd(ArrayType *array, const char *name, const char *value);
+extern PGDLLIMPORT ArrayType *GUCArrayDelete(ArrayType *array, const char *name);
+extern PGDLLIMPORT ArrayType *GUCArrayReset(ArrayType *array);
 
 #ifdef EXEC_BACKEND
-extern void write_nondefault_variables(GucContext context);
-extern void read_nondefault_variables(void);
+extern PGDLLIMPORT void write_nondefault_variables(GucContext context);
+extern PGDLLIMPORT void read_nondefault_variables(void);
 #endif
 
 /* GUC serialization */
-extern Size EstimateGUCStateSpace(void);
-extern void SerializeGUCState(Size maxsize, char *start_address);
-extern void RestoreGUCState(void *gucstate);
+extern PGDLLIMPORT Size EstimateGUCStateSpace(void);
+extern PGDLLIMPORT void SerializeGUCState(Size maxsize, char *start_address);
+extern PGDLLIMPORT void RestoreGUCState(void *gucstate);
 
 /* Support for messages reported from GUC check hooks */
 
@@ -419,7 +419,7 @@ extern PGDLLIMPORT char *GUC_check_errmsg_string;
 extern PGDLLIMPORT char *GUC_check_errdetail_string;
 extern PGDLLIMPORT char *GUC_check_errhint_string;
 
-extern void GUC_check_errcode(int sqlerrcode);
+extern PGDLLIMPORT void GUC_check_errcode(int sqlerrcode);
 
 #define GUC_check_errmsg \
 	pre_format_elog_string(errno, TEXTDOMAIN), \
@@ -441,20 +441,20 @@ extern void GUC_check_errcode(int sqlerrcode);
  */
 
 /* in commands/tablespace.c */
-extern bool check_default_tablespace(char **newval, void **extra, GucSource source);
-extern bool check_temp_tablespaces(char **newval, void **extra, GucSource source);
-extern void assign_temp_tablespaces(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_default_tablespace(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT bool check_temp_tablespaces(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_temp_tablespaces(const char *newval, void *extra);
 
 /* in catalog/namespace.c */
-extern bool check_search_path(char **newval, void **extra, GucSource source);
-extern void assign_search_path(const char *newval, void *extra);
+extern PGDLLIMPORT bool check_search_path(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_search_path(const char *newval, void *extra);
 
 /* in access/transam/xlog.c */
-extern bool check_wal_buffers(int *newval, void **extra, GucSource source);
-extern void assign_xlog_sync_method(int new_sync_method, void *extra);
+extern PGDLLIMPORT bool check_wal_buffers(int *newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_xlog_sync_method(int new_sync_method, void *extra);
 
 /* in access/transam/xlogprefetcher.c */
-extern bool check_recovery_prefetch(int *new_value, void **extra, GucSource source);
-extern void assign_recovery_prefetch(int new_value, void *extra);
+extern PGDLLIMPORT bool check_recovery_prefetch(int *new_value, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_recovery_prefetch(int new_value, void *extra);
 
 #endif							/* GUC_H */

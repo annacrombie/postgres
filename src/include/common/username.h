@@ -9,7 +9,7 @@
 #ifndef USERNAME_H
 #define USERNAME_H
 
-extern const char *get_user_name(char **errstr);
-extern const char *get_user_name_or_exit(const char *progname);
+extern PGDLLIMPORT const char *get_user_name(char **errstr);
+extern PGDLLIMPORT const char *get_user_name_or_exit(const char *progname);
 
 #endif							/* USERNAME_H */

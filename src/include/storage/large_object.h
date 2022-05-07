@@ -86,15 +86,15 @@ extern PGDLLIMPORT bool lo_compat_privileges;
  */
 
 /* inversion stuff in inv_api.c */
-extern void close_lo_relation(bool isCommit);
-extern Oid	inv_create(Oid lobjId);
-extern LargeObjectDesc *inv_open(Oid lobjId, int flags, MemoryContext mcxt);
-extern void inv_close(LargeObjectDesc *obj_desc);
-extern int	inv_drop(Oid lobjId);
-extern int64 inv_seek(LargeObjectDesc *obj_desc, int64 offset, int whence);
-extern int64 inv_tell(LargeObjectDesc *obj_desc);
-extern int	inv_read(LargeObjectDesc *obj_desc, char *buf, int nbytes);
-extern int	inv_write(LargeObjectDesc *obj_desc, const char *buf, int nbytes);
-extern void inv_truncate(LargeObjectDesc *obj_desc, int64 len);
+extern PGDLLIMPORT void close_lo_relation(bool isCommit);
+extern PGDLLIMPORT Oid	inv_create(Oid lobjId);
+extern PGDLLIMPORT LargeObjectDesc *inv_open(Oid lobjId, int flags, MemoryContext mcxt);
+extern PGDLLIMPORT void inv_close(LargeObjectDesc *obj_desc);
+extern PGDLLIMPORT int	inv_drop(Oid lobjId);
+extern PGDLLIMPORT int64 inv_seek(LargeObjectDesc *obj_desc, int64 offset, int whence);
+extern PGDLLIMPORT int64 inv_tell(LargeObjectDesc *obj_desc);
+extern PGDLLIMPORT int	inv_read(LargeObjectDesc *obj_desc, char *buf, int nbytes);
+extern PGDLLIMPORT int	inv_write(LargeObjectDesc *obj_desc, const char *buf, int nbytes);
+extern PGDLLIMPORT void inv_truncate(LargeObjectDesc *obj_desc, int64 len);
 
 #endif							/* LARGE_OBJECT_H */

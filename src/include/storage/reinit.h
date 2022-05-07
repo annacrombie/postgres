@@ -18,8 +18,8 @@
 #include "common/relpath.h"
 
 
-extern void ResetUnloggedRelations(int op);
-extern bool parse_filename_for_nontemp_relation(const char *name,
+extern PGDLLIMPORT void ResetUnloggedRelations(int op);
+extern PGDLLIMPORT bool parse_filename_for_nontemp_relation(const char *name,
 												int *oidchars, ForkNumber *fork);
 
 #define UNLOGGED_RELATION_CLEANUP		0x0001

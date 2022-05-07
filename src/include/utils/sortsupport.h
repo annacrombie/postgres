@@ -378,15 +378,15 @@ ApplySortAbbrevFullComparator(Datum datum1, bool isNull1,
  * Datatypes that install these as their comparator or abbrevated comparator
  * are eligible for faster sorting.
  */
-extern int ssup_datum_unsigned_cmp(Datum x, Datum y, SortSupport ssup);
-extern int ssup_datum_signed_cmp(Datum x, Datum y, SortSupport ssup);
-extern int ssup_datum_int32_cmp(Datum x, Datum y, SortSupport ssup);
+extern PGDLLIMPORT int ssup_datum_unsigned_cmp(Datum x, Datum y, SortSupport ssup);
+extern PGDLLIMPORT int ssup_datum_signed_cmp(Datum x, Datum y, SortSupport ssup);
+extern PGDLLIMPORT int ssup_datum_int32_cmp(Datum x, Datum y, SortSupport ssup);
 
 /* Other functions in utils/sort/sortsupport.c */
-extern void PrepareSortSupportComparisonShim(Oid cmpFunc, SortSupport ssup);
-extern void PrepareSortSupportFromOrderingOp(Oid orderingOp, SortSupport ssup);
-extern void PrepareSortSupportFromIndexRel(Relation indexRel, int16 strategy,
+extern PGDLLIMPORT void PrepareSortSupportComparisonShim(Oid cmpFunc, SortSupport ssup);
+extern PGDLLIMPORT void PrepareSortSupportFromOrderingOp(Oid orderingOp, SortSupport ssup);
+extern PGDLLIMPORT void PrepareSortSupportFromIndexRel(Relation indexRel, int16 strategy,
 										   SortSupport ssup);
-extern void PrepareSortSupportFromGistIndexRel(Relation indexRel, SortSupport ssup);
+extern PGDLLIMPORT void PrepareSortSupportFromGistIndexRel(Relation indexRel, SortSupport ssup);
 
 #endif							/* SORTSUPPORT_H */

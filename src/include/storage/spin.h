@@ -66,11 +66,11 @@
 #define SpinLockFree(lock)	S_LOCK_FREE(lock)
 
 
-extern int	SpinlockSemas(void);
-extern Size SpinlockSemaSize(void);
+extern PGDLLIMPORT int	SpinlockSemas(void);
+extern PGDLLIMPORT Size SpinlockSemaSize(void);
 
 #ifndef HAVE_SPINLOCKS
-extern void SpinlockSemaInit(void);
+extern PGDLLIMPORT void SpinlockSemaInit(void);
 extern PGDLLIMPORT PGSemaphore *SpinlockSemaArray;
 #endif
 

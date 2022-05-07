@@ -47,17 +47,17 @@ typedef struct
 
 #define COPYCHAR(d,s)	memcpy(d, s, pg_mblen(s))
 
-extern int	t_isdigit(const char *ptr);
-extern int	t_isspace(const char *ptr);
-extern int	t_isalpha(const char *ptr);
-extern int	t_isprint(const char *ptr);
+extern PGDLLIMPORT int	t_isdigit(const char *ptr);
+extern PGDLLIMPORT int	t_isspace(const char *ptr);
+extern PGDLLIMPORT int	t_isalpha(const char *ptr);
+extern PGDLLIMPORT int	t_isprint(const char *ptr);
 
-extern char *lowerstr(const char *str);
-extern char *lowerstr_with_len(const char *str, int len);
+extern PGDLLIMPORT char *lowerstr(const char *str);
+extern PGDLLIMPORT char *lowerstr_with_len(const char *str, int len);
 
-extern bool tsearch_readline_begin(tsearch_readline_state *stp,
+extern PGDLLIMPORT bool tsearch_readline_begin(tsearch_readline_state *stp,
 								   const char *filename);
-extern char *tsearch_readline(tsearch_readline_state *stp);
-extern void tsearch_readline_end(tsearch_readline_state *stp);
+extern PGDLLIMPORT char *tsearch_readline(tsearch_readline_state *stp);
+extern PGDLLIMPORT void tsearch_readline_end(tsearch_readline_state *stp);
 
 #endif							/* __TSLOCALE_H__ */

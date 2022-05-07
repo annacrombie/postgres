@@ -389,22 +389,22 @@ typedef struct xl_heap_rewrite_mapping
 	XLogRecPtr	start_lsn;		/* Insert LSN at begin of rewrite */
 } xl_heap_rewrite_mapping;
 
-extern void HeapTupleHeaderAdvanceLatestRemovedXid(HeapTupleHeader tuple,
+extern PGDLLIMPORT void HeapTupleHeaderAdvanceLatestRemovedXid(HeapTupleHeader tuple,
 												   TransactionId *latestRemovedXid);
 
-extern void heap_redo(XLogReaderState *record);
-extern void heap_desc(StringInfo buf, XLogReaderState *record);
-extern const char *heap_identify(uint8 info);
-extern void heap_mask(char *pagedata, BlockNumber blkno);
-extern void heap2_redo(XLogReaderState *record);
-extern void heap2_desc(StringInfo buf, XLogReaderState *record);
-extern const char *heap2_identify(uint8 info);
-extern void heap_xlog_logical_rewrite(XLogReaderState *r);
+extern PGDLLIMPORT void heap_redo(XLogReaderState *record);
+extern PGDLLIMPORT void heap_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *heap_identify(uint8 info);
+extern PGDLLIMPORT void heap_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void heap2_redo(XLogReaderState *record);
+extern PGDLLIMPORT void heap2_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *heap2_identify(uint8 info);
+extern PGDLLIMPORT void heap_xlog_logical_rewrite(XLogReaderState *r);
 
-extern XLogRecPtr log_heap_freeze(Relation reln, Buffer buffer,
+extern PGDLLIMPORT XLogRecPtr log_heap_freeze(Relation reln, Buffer buffer,
 								  TransactionId cutoff_xid, xl_heap_freeze_tuple *tuples,
 								  int ntuples);
-extern bool heap_prepare_freeze_tuple(HeapTupleHeader tuple,
+extern PGDLLIMPORT bool heap_prepare_freeze_tuple(HeapTupleHeader tuple,
 									  TransactionId relfrozenxid,
 									  TransactionId relminmxid,
 									  TransactionId cutoff_xid,
@@ -413,9 +413,9 @@ extern bool heap_prepare_freeze_tuple(HeapTupleHeader tuple,
 									  bool *totally_frozen,
 									  TransactionId *relfrozenxid_out,
 									  MultiXactId *relminmxid_out);
-extern void heap_execute_freeze_tuple(HeapTupleHeader tuple,
+extern PGDLLIMPORT void heap_execute_freeze_tuple(HeapTupleHeader tuple,
 									  xl_heap_freeze_tuple *xlrec_tp);
-extern XLogRecPtr log_heap_visible(RelFileNode rnode, Buffer heap_buffer,
+extern PGDLLIMPORT XLogRecPtr log_heap_visible(RelFileNode rnode, Buffer heap_buffer,
 								   Buffer vm_buffer, TransactionId cutoff_xid, uint8 flags);
 
 #endif							/* HEAPAM_XLOG_H */

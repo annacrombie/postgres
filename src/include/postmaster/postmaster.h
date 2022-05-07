@@ -47,20 +47,20 @@ extern PGDLLIMPORT int postmaster_alive_fds[2];
 
 extern PGDLLIMPORT const char *progname;
 
-extern void PostmasterMain(int argc, char *argv[]) pg_attribute_noreturn();
-extern void ClosePostmasterPorts(bool am_syslogger);
-extern void InitProcessGlobals(void);
+extern PGDLLIMPORT void PostmasterMain(int argc, char *argv[]) pg_attribute_noreturn();
+extern PGDLLIMPORT void ClosePostmasterPorts(bool am_syslogger);
+extern PGDLLIMPORT void InitProcessGlobals(void);
 
-extern int	MaxLivePostmasterChildren(void);
+extern PGDLLIMPORT int	MaxLivePostmasterChildren(void);
 
-extern bool PostmasterMarkPIDForWorkerNotify(int);
+extern PGDLLIMPORT bool PostmasterMarkPIDForWorkerNotify(int);
 
 #ifdef EXEC_BACKEND
-extern pid_t postmaster_forkexec(int argc, char *argv[]);
-extern void SubPostmasterMain(int argc, char *argv[]) pg_attribute_noreturn();
+extern PGDLLIMPORT pid_t postmaster_forkexec(int argc, char *argv[]);
+extern PGDLLIMPORT void SubPostmasterMain(int argc, char *argv[]) pg_attribute_noreturn();
 
-extern Size ShmemBackendArraySize(void);
-extern void ShmemBackendArrayAllocation(void);
+extern PGDLLIMPORT Size ShmemBackendArraySize(void);
+extern PGDLLIMPORT void ShmemBackendArrayAllocation(void);
 #endif
 
 /*

@@ -451,22 +451,22 @@ walrcv_clear_result(WalRcvExecResult *walres)
 }
 
 /* prototypes for functions in walreceiver.c */
-extern void WalReceiverMain(void) pg_attribute_noreturn();
-extern void ProcessWalRcvInterrupts(void);
+extern PGDLLIMPORT void WalReceiverMain(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void ProcessWalRcvInterrupts(void);
 
 /* prototypes for functions in walreceiverfuncs.c */
-extern Size WalRcvShmemSize(void);
-extern void WalRcvShmemInit(void);
-extern void ShutdownWalRcv(void);
-extern bool WalRcvStreaming(void);
-extern bool WalRcvRunning(void);
-extern void RequestXLogStreaming(TimeLineID tli, XLogRecPtr recptr,
+extern PGDLLIMPORT Size WalRcvShmemSize(void);
+extern PGDLLIMPORT void WalRcvShmemInit(void);
+extern PGDLLIMPORT void ShutdownWalRcv(void);
+extern PGDLLIMPORT bool WalRcvStreaming(void);
+extern PGDLLIMPORT bool WalRcvRunning(void);
+extern PGDLLIMPORT void RequestXLogStreaming(TimeLineID tli, XLogRecPtr recptr,
 								 const char *conninfo, const char *slotname,
 								 bool create_temp_slot);
-extern XLogRecPtr GetWalRcvFlushRecPtr(XLogRecPtr *latestChunkStart, TimeLineID *receiveTLI);
-extern XLogRecPtr GetWalRcvWriteRecPtr(void);
-extern int	GetReplicationApplyDelay(void);
-extern int	GetReplicationTransferLatency(void);
-extern void WalRcvForceReply(void);
+extern PGDLLIMPORT XLogRecPtr GetWalRcvFlushRecPtr(XLogRecPtr *latestChunkStart, TimeLineID *receiveTLI);
+extern PGDLLIMPORT XLogRecPtr GetWalRcvWriteRecPtr(void);
+extern PGDLLIMPORT int	GetReplicationApplyDelay(void);
+extern PGDLLIMPORT int	GetReplicationTransferLatency(void);
+extern PGDLLIMPORT void WalRcvForceReply(void);
 
 #endif							/* _WALRECEIVER_H */

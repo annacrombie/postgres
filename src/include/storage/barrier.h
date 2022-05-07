@@ -34,13 +34,13 @@ typedef struct Barrier
 	ConditionVariable condition_variable;
 } Barrier;
 
-extern void BarrierInit(Barrier *barrier, int num_workers);
-extern bool BarrierArriveAndWait(Barrier *barrier, uint32 wait_event_info);
-extern bool BarrierArriveAndDetach(Barrier *barrier);
-extern bool BarrierArriveAndDetachExceptLast(Barrier *barrier);
-extern int	BarrierAttach(Barrier *barrier);
-extern bool BarrierDetach(Barrier *barrier);
-extern int	BarrierPhase(Barrier *barrier);
-extern int	BarrierParticipants(Barrier *barrier);
+extern PGDLLIMPORT void BarrierInit(Barrier *barrier, int num_workers);
+extern PGDLLIMPORT bool BarrierArriveAndWait(Barrier *barrier, uint32 wait_event_info);
+extern PGDLLIMPORT bool BarrierArriveAndDetach(Barrier *barrier);
+extern PGDLLIMPORT bool BarrierArriveAndDetachExceptLast(Barrier *barrier);
+extern PGDLLIMPORT int	BarrierAttach(Barrier *barrier);
+extern PGDLLIMPORT bool BarrierDetach(Barrier *barrier);
+extern PGDLLIMPORT int	BarrierPhase(Barrier *barrier);
+extern PGDLLIMPORT int	BarrierParticipants(Barrier *barrier);
 
 #endif							/* BARRIER_H */

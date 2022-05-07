@@ -58,20 +58,20 @@ typedef struct TapeShare
  * prototypes for functions in logtape.c
  */
 
-extern LogicalTapeSet *LogicalTapeSetCreate(bool preallocate,
+extern PGDLLIMPORT LogicalTapeSet *LogicalTapeSetCreate(bool preallocate,
 											SharedFileSet *fileset, int worker);
-extern void LogicalTapeClose(LogicalTape *lt);
-extern void LogicalTapeSetClose(LogicalTapeSet *lts);
-extern LogicalTape *LogicalTapeCreate(LogicalTapeSet *lts);
-extern LogicalTape *LogicalTapeImport(LogicalTapeSet *lts, int worker, TapeShare *shared);
-extern void LogicalTapeSetForgetFreeSpace(LogicalTapeSet *lts);
-extern size_t LogicalTapeRead(LogicalTape *lt, void *ptr, size_t size);
-extern void LogicalTapeWrite(LogicalTape *lt, void *ptr, size_t size);
-extern void LogicalTapeRewindForRead(LogicalTape *lt, size_t buffer_size);
-extern void LogicalTapeFreeze(LogicalTape *lt, TapeShare *share);
-extern size_t LogicalTapeBackspace(LogicalTape *lt, size_t size);
-extern void LogicalTapeSeek(LogicalTape *lt, long blocknum, int offset);
-extern void LogicalTapeTell(LogicalTape *lt, long *blocknum, int *offset);
-extern long LogicalTapeSetBlocks(LogicalTapeSet *lts);
+extern PGDLLIMPORT void LogicalTapeClose(LogicalTape *lt);
+extern PGDLLIMPORT void LogicalTapeSetClose(LogicalTapeSet *lts);
+extern PGDLLIMPORT LogicalTape *LogicalTapeCreate(LogicalTapeSet *lts);
+extern PGDLLIMPORT LogicalTape *LogicalTapeImport(LogicalTapeSet *lts, int worker, TapeShare *shared);
+extern PGDLLIMPORT void LogicalTapeSetForgetFreeSpace(LogicalTapeSet *lts);
+extern PGDLLIMPORT size_t LogicalTapeRead(LogicalTape *lt, void *ptr, size_t size);
+extern PGDLLIMPORT void LogicalTapeWrite(LogicalTape *lt, void *ptr, size_t size);
+extern PGDLLIMPORT void LogicalTapeRewindForRead(LogicalTape *lt, size_t buffer_size);
+extern PGDLLIMPORT void LogicalTapeFreeze(LogicalTape *lt, TapeShare *share);
+extern PGDLLIMPORT size_t LogicalTapeBackspace(LogicalTape *lt, size_t size);
+extern PGDLLIMPORT void LogicalTapeSeek(LogicalTape *lt, long blocknum, int offset);
+extern PGDLLIMPORT void LogicalTapeTell(LogicalTape *lt, long *blocknum, int *offset);
+extern PGDLLIMPORT long LogicalTapeSetBlocks(LogicalTapeSet *lts);
 
 #endif							/* LOGTAPE_H */

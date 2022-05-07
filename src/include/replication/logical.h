@@ -110,9 +110,9 @@ typedef struct LogicalDecodingContext
 } LogicalDecodingContext;
 
 
-extern void CheckLogicalDecodingRequirements(void);
+extern PGDLLIMPORT void CheckLogicalDecodingRequirements(void);
 
-extern LogicalDecodingContext *CreateInitDecodingContext(const char *plugin,
+extern PGDLLIMPORT LogicalDecodingContext *CreateInitDecodingContext(const char *plugin,
 														 List *output_plugin_options,
 														 bool need_full_snapshot,
 														 XLogRecPtr restart_lsn,
@@ -120,26 +120,26 @@ extern LogicalDecodingContext *CreateInitDecodingContext(const char *plugin,
 														 LogicalOutputPluginWriterPrepareWrite prepare_write,
 														 LogicalOutputPluginWriterWrite do_write,
 														 LogicalOutputPluginWriterUpdateProgress update_progress);
-extern LogicalDecodingContext *CreateDecodingContext(XLogRecPtr start_lsn,
+extern PGDLLIMPORT LogicalDecodingContext *CreateDecodingContext(XLogRecPtr start_lsn,
 													 List *output_plugin_options,
 													 bool fast_forward,
 													 XLogReaderRoutine *xl_routine,
 													 LogicalOutputPluginWriterPrepareWrite prepare_write,
 													 LogicalOutputPluginWriterWrite do_write,
 													 LogicalOutputPluginWriterUpdateProgress update_progress);
-extern void DecodingContextFindStartpoint(LogicalDecodingContext *ctx);
-extern bool DecodingContextReady(LogicalDecodingContext *ctx);
-extern void FreeDecodingContext(LogicalDecodingContext *ctx);
+extern PGDLLIMPORT void DecodingContextFindStartpoint(LogicalDecodingContext *ctx);
+extern PGDLLIMPORT bool DecodingContextReady(LogicalDecodingContext *ctx);
+extern PGDLLIMPORT void FreeDecodingContext(LogicalDecodingContext *ctx);
 
-extern void LogicalIncreaseXminForSlot(XLogRecPtr lsn, TransactionId xmin);
-extern void LogicalIncreaseRestartDecodingForSlot(XLogRecPtr current_lsn,
+extern PGDLLIMPORT void LogicalIncreaseXminForSlot(XLogRecPtr lsn, TransactionId xmin);
+extern PGDLLIMPORT void LogicalIncreaseRestartDecodingForSlot(XLogRecPtr current_lsn,
 												  XLogRecPtr restart_lsn);
-extern void LogicalConfirmReceivedLocation(XLogRecPtr lsn);
+extern PGDLLIMPORT void LogicalConfirmReceivedLocation(XLogRecPtr lsn);
 
-extern bool filter_prepare_cb_wrapper(LogicalDecodingContext *ctx,
+extern PGDLLIMPORT bool filter_prepare_cb_wrapper(LogicalDecodingContext *ctx,
 									  TransactionId xid, const char *gid);
-extern bool filter_by_origin_cb_wrapper(LogicalDecodingContext *ctx, RepOriginId origin_id);
-extern void ResetLogicalStreamingState(void);
-extern void UpdateDecodingStats(LogicalDecodingContext *ctx);
+extern PGDLLIMPORT bool filter_by_origin_cb_wrapper(LogicalDecodingContext *ctx, RepOriginId origin_id);
+extern PGDLLIMPORT void ResetLogicalStreamingState(void);
+extern PGDLLIMPORT void UpdateDecodingStats(LogicalDecodingContext *ctx);
 
 #endif

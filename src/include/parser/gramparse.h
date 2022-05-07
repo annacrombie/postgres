@@ -65,11 +65,11 @@ typedef struct base_yy_extra_type
 
 
 /* from parser.c */
-extern int	base_yylex(YYSTYPE *lvalp, YYLTYPE *llocp,
+extern PGDLLIMPORT int	base_yylex(YYSTYPE *lvalp, YYLTYPE *llocp,
 					   core_yyscan_t yyscanner);
 
 /* from gram.y */
-extern void parser_init(base_yy_extra_type *yyext);
-extern int	base_yyparse(core_yyscan_t yyscanner);
+extern PGDLLIMPORT void parser_init(base_yy_extra_type *yyext);
+extern PGDLLIMPORT int	base_yyparse(core_yyscan_t yyscanner);
 
 #endif							/* GRAMPARSE_H */

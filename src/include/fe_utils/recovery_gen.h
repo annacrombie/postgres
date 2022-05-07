@@ -20,9 +20,9 @@
  */
 #define MINIMUM_VERSION_FOR_RECOVERY_GUC 120000
 
-extern PQExpBuffer GenerateRecoveryConfig(PGconn *pgconn,
+extern PGDLLIMPORT PQExpBuffer GenerateRecoveryConfig(PGconn *pgconn,
 										  char *pg_replication_slot);
-extern void WriteRecoveryConfig(PGconn *pgconn, char *target_dir,
+extern PGDLLIMPORT void WriteRecoveryConfig(PGconn *pgconn, char *target_dir,
 								PQExpBuffer contents);
 
 #endif							/* RECOVERY_GEN_H */

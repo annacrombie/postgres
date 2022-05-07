@@ -51,20 +51,20 @@ typedef struct xl_seq_rec
 	/* SEQUENCE TUPLE DATA FOLLOWS AT THE END */
 } xl_seq_rec;
 
-extern int64 nextval_internal(Oid relid, bool check_permissions);
-extern Datum nextval(PG_FUNCTION_ARGS);
-extern List *sequence_options(Oid relid);
+extern PGDLLIMPORT int64 nextval_internal(Oid relid, bool check_permissions);
+extern PGDLLIMPORT Datum nextval(PG_FUNCTION_ARGS);
+extern PGDLLIMPORT List *sequence_options(Oid relid);
 
-extern ObjectAddress DefineSequence(ParseState *pstate, CreateSeqStmt *stmt);
-extern ObjectAddress AlterSequence(ParseState *pstate, AlterSeqStmt *stmt);
-extern void SequenceChangePersistence(Oid relid, char newrelpersistence);
-extern void DeleteSequenceTuple(Oid relid);
-extern void ResetSequence(Oid seq_relid);
-extern void ResetSequenceCaches(void);
+extern PGDLLIMPORT ObjectAddress DefineSequence(ParseState *pstate, CreateSeqStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterSequence(ParseState *pstate, AlterSeqStmt *stmt);
+extern PGDLLIMPORT void SequenceChangePersistence(Oid relid, char newrelpersistence);
+extern PGDLLIMPORT void DeleteSequenceTuple(Oid relid);
+extern PGDLLIMPORT void ResetSequence(Oid seq_relid);
+extern PGDLLIMPORT void ResetSequenceCaches(void);
 
-extern void seq_redo(XLogReaderState *rptr);
-extern void seq_desc(StringInfo buf, XLogReaderState *rptr);
-extern const char *seq_identify(uint8 info);
-extern void seq_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void seq_redo(XLogReaderState *rptr);
+extern PGDLLIMPORT void seq_desc(StringInfo buf, XLogReaderState *rptr);
+extern PGDLLIMPORT const char *seq_identify(uint8 info);
+extern PGDLLIMPORT void seq_mask(char *pagedata, BlockNumber blkno);
 
 #endif							/* SEQUENCE_H */

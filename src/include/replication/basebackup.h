@@ -34,6 +34,6 @@ typedef struct
 	int64		size;			/* total size as sent; -1 if not known */
 } tablespaceinfo;
 
-extern void SendBaseBackup(BaseBackupCmd *cmd);
+extern PGDLLIMPORT void SendBaseBackup(BaseBackupCmd *cmd);
 
 #endif							/* _BASEBACKUP_H */

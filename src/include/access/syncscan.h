@@ -17,9 +17,9 @@
 #include "storage/block.h"
 #include "utils/relcache.h"
 
-extern void ss_report_location(Relation rel, BlockNumber location);
-extern BlockNumber ss_get_location(Relation rel, BlockNumber relnblocks);
-extern void SyncScanShmemInit(void);
-extern Size SyncScanShmemSize(void);
+extern PGDLLIMPORT void ss_report_location(Relation rel, BlockNumber location);
+extern PGDLLIMPORT BlockNumber ss_get_location(Relation rel, BlockNumber relnblocks);
+extern PGDLLIMPORT void SyncScanShmemInit(void);
+extern PGDLLIMPORT Size SyncScanShmemSize(void);
 
 #endif

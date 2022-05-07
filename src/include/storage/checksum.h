@@ -19,6 +19,6 @@
  * Compute the checksum for a Postgres page.  The page must be aligned on a
  * 4-byte boundary.
  */
-extern uint16 pg_checksum_page(char *page, BlockNumber blkno);
+extern PGDLLIMPORT uint16 pg_checksum_page(char *page, BlockNumber blkno);
 
 #endif							/* CHECKSUM_H */

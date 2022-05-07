@@ -18,9 +18,9 @@
 
 
 /* Random generator for sampling code */
-extern void sampler_random_init_state(uint32 seed,
+extern PGDLLIMPORT void sampler_random_init_state(uint32 seed,
 									  pg_prng_state *randstate);
-extern double sampler_random_fract(pg_prng_state *randstate);
+extern PGDLLIMPORT double sampler_random_fract(pg_prng_state *randstate);
 
 /* Block sampling methods */
 
@@ -36,10 +36,10 @@ typedef struct
 
 typedef BlockSamplerData *BlockSampler;
 
-extern BlockNumber BlockSampler_Init(BlockSampler bs, BlockNumber nblocks,
+extern PGDLLIMPORT BlockNumber BlockSampler_Init(BlockSampler bs, BlockNumber nblocks,
 									 int samplesize, uint32 randseed);
-extern bool BlockSampler_HasMore(BlockSampler bs);
-extern BlockNumber BlockSampler_Next(BlockSampler bs);
+extern PGDLLIMPORT bool BlockSampler_HasMore(BlockSampler bs);
+extern PGDLLIMPORT BlockNumber BlockSampler_Next(BlockSampler bs);
 
 /* Reservoir sampling methods */
 
@@ -51,14 +51,14 @@ typedef struct
 
 typedef ReservoirStateData *ReservoirState;
 
-extern void reservoir_init_selection_state(ReservoirState rs, int n);
-extern double reservoir_get_next_S(ReservoirState rs, double t, int n);
+extern PGDLLIMPORT void reservoir_init_selection_state(ReservoirState rs, int n);
+extern PGDLLIMPORT double reservoir_get_next_S(ReservoirState rs, double t, int n);
 
 /* Old API, still in use by assorted FDWs */
 /* For backwards compatibility, these declarations are duplicated in vacuum.h */
 
-extern double anl_random_fract(void);
-extern double anl_init_selection_state(int n);
-extern double anl_get_next_S(double t, int n, double *stateptr);
+extern PGDLLIMPORT double anl_random_fract(void);
+extern PGDLLIMPORT double anl_init_selection_state(int n);
+extern PGDLLIMPORT double anl_get_next_S(double t, int n, double *stateptr);
 
 #endif							/* SAMPLING_H */

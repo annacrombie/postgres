@@ -34,7 +34,7 @@ extern PGDLLIMPORT const TwoPhaseCallback twophase_postabort_callbacks[];
 extern PGDLLIMPORT const TwoPhaseCallback twophase_standby_recover_callbacks[];
 
 
-extern void RegisterTwoPhaseRecord(TwoPhaseRmgrId rmid, uint16 info,
+extern PGDLLIMPORT void RegisterTwoPhaseRecord(TwoPhaseRmgrId rmid, uint16 info,
 								   const void *data, uint32 len);
 
 #endif							/* TWOPHASE_RMGR_H */

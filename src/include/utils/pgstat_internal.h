@@ -488,112 +488,112 @@ static inline void *pgstat_get_entry_data(PgStat_Kind kind, PgStatShared_Common 
  * Functions in pgstat.c
  */
 
-extern const PgStat_KindInfo *pgstat_get_kind_info(PgStat_Kind kind);
+extern PGDLLIMPORT const PgStat_KindInfo *pgstat_get_kind_info(PgStat_Kind kind);
 
 #ifdef USE_ASSERT_CHECKING
-extern void pgstat_assert_is_up(void);
+extern PGDLLIMPORT void pgstat_assert_is_up(void);
 #else
 #define pgstat_assert_is_up() ((void)true)
 #endif
 
-extern void pgstat_delete_pending_entry(PgStat_EntryRef *entry_ref);
-extern PgStat_EntryRef *pgstat_prep_pending_entry(PgStat_Kind kind, Oid dboid, Oid objoid, bool *created_entry);
-extern PgStat_EntryRef *pgstat_fetch_pending_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT void pgstat_delete_pending_entry(PgStat_EntryRef *entry_ref);
+extern PGDLLIMPORT PgStat_EntryRef *pgstat_prep_pending_entry(PgStat_Kind kind, Oid dboid, Oid objoid, bool *created_entry);
+extern PGDLLIMPORT PgStat_EntryRef *pgstat_fetch_pending_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
 
-extern void *pgstat_fetch_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
-extern void pgstat_snapshot_fixed(PgStat_Kind kind);
+extern PGDLLIMPORT void *pgstat_fetch_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT void pgstat_snapshot_fixed(PgStat_Kind kind);
 
 
 /*
  * Functions in pgstat_archiver.c
  */
 
-extern void pgstat_archiver_reset_all_cb(TimestampTz ts);
-extern void pgstat_archiver_snapshot_cb(void);
+extern PGDLLIMPORT void pgstat_archiver_reset_all_cb(TimestampTz ts);
+extern PGDLLIMPORT void pgstat_archiver_snapshot_cb(void);
 
 
 /*
  * Functions in pgstat_bgwriter.c
  */
 
-extern void pgstat_bgwriter_reset_all_cb(TimestampTz ts);
-extern void pgstat_bgwriter_snapshot_cb(void);
+extern PGDLLIMPORT void pgstat_bgwriter_reset_all_cb(TimestampTz ts);
+extern PGDLLIMPORT void pgstat_bgwriter_snapshot_cb(void);
 
 
 /*
  * Functions in pgstat_checkpointer.c
  */
 
-extern void pgstat_checkpointer_reset_all_cb(TimestampTz ts);
-extern void pgstat_checkpointer_snapshot_cb(void);
+extern PGDLLIMPORT void pgstat_checkpointer_reset_all_cb(TimestampTz ts);
+extern PGDLLIMPORT void pgstat_checkpointer_snapshot_cb(void);
 
 
 /*
  * Functions in pgstat_database.c
  */
 
-extern void pgstat_report_disconnect(Oid dboid);
-extern void pgstat_update_dbstats(TimestampTz ts);
-extern void AtEOXact_PgStat_Database(bool isCommit, bool parallel);
+extern PGDLLIMPORT void pgstat_report_disconnect(Oid dboid);
+extern PGDLLIMPORT void pgstat_update_dbstats(TimestampTz ts);
+extern PGDLLIMPORT void AtEOXact_PgStat_Database(bool isCommit, bool parallel);
 
-extern PgStat_StatDBEntry *pgstat_prep_database_pending(Oid dboid);
-extern void pgstat_reset_database_timestamp(Oid dboid, TimestampTz ts);
-extern bool pgstat_database_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
-extern void pgstat_database_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
+extern PGDLLIMPORT PgStat_StatDBEntry *pgstat_prep_database_pending(Oid dboid);
+extern PGDLLIMPORT void pgstat_reset_database_timestamp(Oid dboid, TimestampTz ts);
+extern PGDLLIMPORT bool pgstat_database_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
+extern PGDLLIMPORT void pgstat_database_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
 
 
 /*
  * Functions in pgstat_function.c
  */
 
-extern bool pgstat_function_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
+extern PGDLLIMPORT bool pgstat_function_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
 
 
 /*
  * Functions in pgstat_relation.c
  */
 
-extern void AtEOXact_PgStat_Relations(PgStat_SubXactStatus *xact_state, bool isCommit);
-extern void AtEOSubXact_PgStat_Relations(PgStat_SubXactStatus *xact_state, bool isCommit, int nestDepth);
-extern void AtPrepare_PgStat_Relations(PgStat_SubXactStatus *xact_state);
-extern void PostPrepare_PgStat_Relations(PgStat_SubXactStatus *xact_state);
+extern PGDLLIMPORT void AtEOXact_PgStat_Relations(PgStat_SubXactStatus *xact_state, bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_PgStat_Relations(PgStat_SubXactStatus *xact_state, bool isCommit, int nestDepth);
+extern PGDLLIMPORT void AtPrepare_PgStat_Relations(PgStat_SubXactStatus *xact_state);
+extern PGDLLIMPORT void PostPrepare_PgStat_Relations(PgStat_SubXactStatus *xact_state);
 
-extern bool pgstat_relation_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
-extern void pgstat_relation_delete_pending_cb(PgStat_EntryRef *entry_ref);
+extern PGDLLIMPORT bool pgstat_relation_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
+extern PGDLLIMPORT void pgstat_relation_delete_pending_cb(PgStat_EntryRef *entry_ref);
 
 
 /*
  * Functions in pgstat_replslot.c
  */
 
-extern void pgstat_replslot_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
-extern void pgstat_replslot_to_serialized_name_cb(const PgStatShared_Common *tmp, NameData *name);
-extern bool pgstat_replslot_from_serialized_name_cb(const NameData *name, PgStat_HashKey *key);
+extern PGDLLIMPORT void pgstat_replslot_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
+extern PGDLLIMPORT void pgstat_replslot_to_serialized_name_cb(const PgStatShared_Common *tmp, NameData *name);
+extern PGDLLIMPORT bool pgstat_replslot_from_serialized_name_cb(const NameData *name, PgStat_HashKey *key);
 
 
 /*
  * Functions in pgstat_shmem.c
  */
 
-extern void pgstat_attach_shmem(void);
-extern void pgstat_detach_shmem(void);
+extern PGDLLIMPORT void pgstat_attach_shmem(void);
+extern PGDLLIMPORT void pgstat_detach_shmem(void);
 
-extern PgStat_EntryRef *pgstat_get_entry_ref(PgStat_Kind kind, Oid dboid, Oid objoid,
+extern PGDLLIMPORT PgStat_EntryRef *pgstat_get_entry_ref(PgStat_Kind kind, Oid dboid, Oid objoid,
 											 bool create, bool *found);
-extern bool pgstat_lock_entry(PgStat_EntryRef *entry_ref, bool nowait);
-extern void pgstat_unlock_entry(PgStat_EntryRef *entry_ref);
-extern bool pgstat_drop_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
-extern void pgstat_drop_all_entries(void);
-extern PgStat_EntryRef *pgstat_get_entry_ref_locked(PgStat_Kind kind, Oid dboid, Oid objoid,
+extern PGDLLIMPORT bool pgstat_lock_entry(PgStat_EntryRef *entry_ref, bool nowait);
+extern PGDLLIMPORT void pgstat_unlock_entry(PgStat_EntryRef *entry_ref);
+extern PGDLLIMPORT bool pgstat_drop_entry(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT void pgstat_drop_all_entries(void);
+extern PGDLLIMPORT PgStat_EntryRef *pgstat_get_entry_ref_locked(PgStat_Kind kind, Oid dboid, Oid objoid,
 													bool nowait);
-extern void pgstat_reset_entry(PgStat_Kind kind, Oid dboid, Oid objoid, TimestampTz ts);
-extern void pgstat_reset_entries_of_kind(PgStat_Kind kind, TimestampTz ts);
-extern void pgstat_reset_matching_entries(bool (*do_reset) (PgStatShared_HashEntry *, Datum),
+extern PGDLLIMPORT void pgstat_reset_entry(PgStat_Kind kind, Oid dboid, Oid objoid, TimestampTz ts);
+extern PGDLLIMPORT void pgstat_reset_entries_of_kind(PgStat_Kind kind, TimestampTz ts);
+extern PGDLLIMPORT void pgstat_reset_matching_entries(bool (*do_reset) (PgStatShared_HashEntry *, Datum),
 										  Datum match_data,
 										  TimestampTz ts);
 
-extern void pgstat_request_entry_refs_gc(void);
-extern PgStatShared_Common *pgstat_init_entry(PgStat_Kind kind,
+extern PGDLLIMPORT void pgstat_request_entry_refs_gc(void);
+extern PGDLLIMPORT PgStatShared_Common *pgstat_init_entry(PgStat_Kind kind,
 											  PgStatShared_HashEntry *shhashent);
 
 
@@ -601,37 +601,37 @@ extern PgStatShared_Common *pgstat_init_entry(PgStat_Kind kind,
  * Functions in pgstat_slru.c
  */
 
-extern bool pgstat_slru_flush(bool nowait);
-extern void pgstat_slru_reset_all_cb(TimestampTz ts);
-extern void pgstat_slru_snapshot_cb(void);
+extern PGDLLIMPORT bool pgstat_slru_flush(bool nowait);
+extern PGDLLIMPORT void pgstat_slru_reset_all_cb(TimestampTz ts);
+extern PGDLLIMPORT void pgstat_slru_snapshot_cb(void);
 
 
 /*
  * Functions in pgstat_wal.c
  */
 
-extern bool pgstat_flush_wal(bool nowait);
-extern void pgstat_init_wal(void);
-extern bool pgstat_have_pending_wal(void);
+extern PGDLLIMPORT bool pgstat_flush_wal(bool nowait);
+extern PGDLLIMPORT void pgstat_init_wal(void);
+extern PGDLLIMPORT bool pgstat_have_pending_wal(void);
 
-extern void pgstat_wal_reset_all_cb(TimestampTz ts);
-extern void pgstat_wal_snapshot_cb(void);
+extern PGDLLIMPORT void pgstat_wal_reset_all_cb(TimestampTz ts);
+extern PGDLLIMPORT void pgstat_wal_snapshot_cb(void);
 
 
 /*
  * Functions in pgstat_subscription.c
  */
 
-extern bool pgstat_subscription_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
-extern void pgstat_subscription_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
+extern PGDLLIMPORT bool pgstat_subscription_flush_cb(PgStat_EntryRef *entry_ref, bool nowait);
+extern PGDLLIMPORT void pgstat_subscription_reset_timestamp_cb(PgStatShared_Common *header, TimestampTz ts);
 
 /*
  * Functions in pgstat_xact.c
  */
 
-extern PgStat_SubXactStatus *pgstat_get_xact_stack_level(int nest_level);
-extern void pgstat_drop_transactional(PgStat_Kind kind, Oid dboid, Oid objoid);
-extern void pgstat_create_transactional(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT PgStat_SubXactStatus *pgstat_get_xact_stack_level(int nest_level);
+extern PGDLLIMPORT void pgstat_drop_transactional(PgStat_Kind kind, Oid dboid, Oid objoid);
+extern PGDLLIMPORT void pgstat_create_transactional(PgStat_Kind kind, Oid dboid, Oid objoid);
 
 
 /*

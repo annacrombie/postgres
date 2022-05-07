@@ -104,11 +104,11 @@ typedef struct gistxlogPageReuse
 
 #define SizeOfGistxlogPageReuse	(offsetof(gistxlogPageReuse, latestRemovedFullXid) + sizeof(FullTransactionId))
 
-extern void gist_redo(XLogReaderState *record);
-extern void gist_desc(StringInfo buf, XLogReaderState *record);
-extern const char *gist_identify(uint8 info);
-extern void gist_xlog_startup(void);
-extern void gist_xlog_cleanup(void);
-extern void gist_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void gist_redo(XLogReaderState *record);
+extern PGDLLIMPORT void gist_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *gist_identify(uint8 info);
+extern PGDLLIMPORT void gist_xlog_startup(void);
+extern PGDLLIMPORT void gist_xlog_cleanup(void);
+extern PGDLLIMPORT void gist_mask(char *pagedata, BlockNumber blkno);
 
 #endif

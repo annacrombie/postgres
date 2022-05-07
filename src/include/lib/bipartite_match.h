@@ -39,8 +39,8 @@ typedef struct BipartiteMatchState
 	short	   *queue;			/* queue storage for breadth search */
 } BipartiteMatchState;
 
-extern BipartiteMatchState *BipartiteMatch(int u_size, int v_size, short **adjacency);
+extern PGDLLIMPORT BipartiteMatchState *BipartiteMatch(int u_size, int v_size, short **adjacency);
 
-extern void BipartiteMatchFree(BipartiteMatchState *state);
+extern PGDLLIMPORT void BipartiteMatchFree(BipartiteMatchState *state);
 
 #endif							/* BIPARTITE_MATCH_H */

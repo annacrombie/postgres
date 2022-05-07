@@ -23,13 +23,13 @@ enum tarError
 	TAR_SYMLINK_TOO_LONG
 };
 
-extern enum tarError tarCreateHeader(char *h, const char *filename,
+extern PGDLLIMPORT enum tarError tarCreateHeader(char *h, const char *filename,
 									 const char *linktarget, pgoff_t size,
 									 mode_t mode, uid_t uid, gid_t gid,
 									 time_t mtime);
-extern uint64 read_tar_number(const char *s, int len);
-extern void print_tar_number(char *s, int len, uint64 val);
-extern int	tarChecksum(char *header);
+extern PGDLLIMPORT uint64 read_tar_number(const char *s, int len);
+extern PGDLLIMPORT void print_tar_number(char *s, int len, uint64 val);
+extern PGDLLIMPORT int	tarChecksum(char *header);
 
 /*
  * Compute the number of padding bytes required for an entry in a tar

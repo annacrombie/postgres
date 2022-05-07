@@ -127,27 +127,27 @@ extern PGDLLIMPORT uint64 SharedInvalidMessageCounter;
 
 extern PGDLLIMPORT volatile sig_atomic_t catchupInterruptPending;
 
-extern void SendSharedInvalidMessages(const SharedInvalidationMessage *msgs,
+extern PGDLLIMPORT void SendSharedInvalidMessages(const SharedInvalidationMessage *msgs,
 									  int n);
-extern void ReceiveSharedInvalidMessages(void (*invalFunction) (SharedInvalidationMessage *msg),
+extern PGDLLIMPORT void ReceiveSharedInvalidMessages(void (*invalFunction) (SharedInvalidationMessage *msg),
 										 void (*resetFunction) (void));
 
 /* signal handler for catchup events (PROCSIG_CATCHUP_INTERRUPT) */
-extern void HandleCatchupInterrupt(void);
+extern PGDLLIMPORT void HandleCatchupInterrupt(void);
 
 /*
  * enable/disable processing of catchup events directly from signal handler.
  * The enable routine first performs processing of any catchup events that
  * have occurred since the last disable.
  */
-extern void ProcessCatchupInterrupt(void);
+extern PGDLLIMPORT void ProcessCatchupInterrupt(void);
 
-extern int	xactGetCommittedInvalidationMessages(SharedInvalidationMessage **msgs,
+extern PGDLLIMPORT int	xactGetCommittedInvalidationMessages(SharedInvalidationMessage **msgs,
 												 bool *RelcacheInitFileInval);
-extern void ProcessCommittedInvalidationMessages(SharedInvalidationMessage *msgs,
+extern PGDLLIMPORT void ProcessCommittedInvalidationMessages(SharedInvalidationMessage *msgs,
 												 int nmsgs, bool RelcacheInitFileInval,
 												 Oid dbid, Oid tsid);
 
-extern void LocalExecuteInvalidationMessage(SharedInvalidationMessage *msg);
+extern PGDLLIMPORT void LocalExecuteInvalidationMessage(SharedInvalidationMessage *msg);
 
 #endif							/* SINVAL_H */

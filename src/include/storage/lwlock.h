@@ -113,24 +113,24 @@ typedef enum LWLockMode
 extern PGDLLIMPORT bool Trace_lwlocks;
 #endif
 
-extern bool LWLockAcquire(LWLock *lock, LWLockMode mode);
-extern bool LWLockConditionalAcquire(LWLock *lock, LWLockMode mode);
-extern bool LWLockAcquireOrWait(LWLock *lock, LWLockMode mode);
-extern void LWLockRelease(LWLock *lock);
-extern void LWLockReleaseClearVar(LWLock *lock, uint64 *valptr, uint64 val);
-extern void LWLockReleaseAll(void);
-extern bool LWLockHeldByMe(LWLock *lock);
-extern bool LWLockHeldByMeInMode(LWLock *lock, LWLockMode mode);
-extern int	LWLockHeldCount(void);
+extern PGDLLIMPORT bool LWLockAcquire(LWLock *lock, LWLockMode mode);
+extern PGDLLIMPORT bool LWLockConditionalAcquire(LWLock *lock, LWLockMode mode);
+extern PGDLLIMPORT bool LWLockAcquireOrWait(LWLock *lock, LWLockMode mode);
+extern PGDLLIMPORT void LWLockRelease(LWLock *lock);
+extern PGDLLIMPORT void LWLockReleaseClearVar(LWLock *lock, uint64 *valptr, uint64 val);
+extern PGDLLIMPORT void LWLockReleaseAll(void);
+extern PGDLLIMPORT bool LWLockHeldByMe(LWLock *lock);
+extern PGDLLIMPORT bool LWLockHeldByMeInMode(LWLock *lock, LWLockMode mode);
+extern PGDLLIMPORT int	LWLockHeldCount(void);
 
-extern bool LWLockWaitForVar(LWLock *lock, uint64 *valptr, uint64 oldval, uint64 *newval);
-extern void LWLockUpdateVar(LWLock *lock, uint64 *valptr, uint64 value);
+extern PGDLLIMPORT bool LWLockWaitForVar(LWLock *lock, uint64 *valptr, uint64 oldval, uint64 *newval);
+extern PGDLLIMPORT void LWLockUpdateVar(LWLock *lock, uint64 *valptr, uint64 value);
 
-extern Size LWLockShmemSize(void);
-extern void CreateLWLocks(void);
-extern void InitLWLockAccess(void);
+extern PGDLLIMPORT Size LWLockShmemSize(void);
+extern PGDLLIMPORT void CreateLWLocks(void);
+extern PGDLLIMPORT void InitLWLockAccess(void);
 
-extern const char *GetLWLockIdentifier(uint32 classId, uint16 eventId);
+extern PGDLLIMPORT const char *GetLWLockIdentifier(uint32 classId, uint16 eventId);
 
 /*
  * Extensions (or core code) can obtain an LWLocks by calling
@@ -138,8 +138,8 @@ extern const char *GetLWLockIdentifier(uint32 classId, uint16 eventId);
  * call GetNamedLWLockTranche() to obtain a pointer to an array containing
  * the number of LWLocks requested.
  */
-extern void RequestNamedLWLockTranche(const char *tranche_name, int num_lwlocks);
-extern LWLockPadded *GetNamedLWLockTranche(const char *tranche_name);
+extern PGDLLIMPORT void RequestNamedLWLockTranche(const char *tranche_name, int num_lwlocks);
+extern PGDLLIMPORT LWLockPadded *GetNamedLWLockTranche(const char *tranche_name);
 
 /*
  * There is another, more flexible method of obtaining lwlocks. First, call
@@ -154,9 +154,9 @@ extern LWLockPadded *GetNamedLWLockTranche(const char *tranche_name);
  * mapped at the same address in all coordinating backends, so storing the
  * registration in the main shared memory segment wouldn't work for that case.
  */
-extern int	LWLockNewTrancheId(void);
-extern void LWLockRegisterTranche(int tranche_id, const char *tranche_name);
-extern void LWLockInitialize(LWLock *lock, int tranche_id);
+extern PGDLLIMPORT int	LWLockNewTrancheId(void);
+extern PGDLLIMPORT void LWLockRegisterTranche(int tranche_id, const char *tranche_name);
+extern PGDLLIMPORT void LWLockInitialize(LWLock *lock, int tranche_id);
 
 /*
  * Every tranche ID less than NUM_INDIVIDUAL_LWLOCKS is reserved; also,

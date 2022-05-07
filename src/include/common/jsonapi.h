@@ -124,7 +124,7 @@ typedef struct JsonSemAction
  * points to. If the action pointers are NULL the parser
  * does nothing and just continues.
  */
-extern JsonParseErrorType pg_parse_json(JsonLexContext *lex,
+extern PGDLLIMPORT JsonParseErrorType pg_parse_json(JsonLexContext *lex,
 										JsonSemAction *sem);
 
 /* the null action object used for pure validation */
@@ -139,7 +139,7 @@ extern PGDLLIMPORT JsonSemAction nullSemAction;
  * of elements is stored into *elements (but only if the return value is
  * JSON_SUCCESS).
  */
-extern JsonParseErrorType json_count_array_elements(JsonLexContext *lex,
+extern PGDLLIMPORT JsonParseErrorType json_count_array_elements(JsonLexContext *lex,
 													int *elements);
 
 /*
@@ -148,22 +148,22 @@ extern JsonParseErrorType json_count_array_elements(JsonLexContext *lex,
  * the lexeme. However, doing this imposes a performance penalty, so
  * it should be avoided if the de-escaped lexeme is not required.
  */
-extern JsonLexContext *makeJsonLexContextCstringLen(char *json,
+extern PGDLLIMPORT JsonLexContext *makeJsonLexContextCstringLen(char *json,
 													int len,
 													int encoding,
 													bool need_escapes);
 
 /* lex one token */
-extern JsonParseErrorType json_lex(JsonLexContext *lex);
+extern PGDLLIMPORT JsonParseErrorType json_lex(JsonLexContext *lex);
 
 /* construct an error detail string for a json error */
-extern char *json_errdetail(JsonParseErrorType error, JsonLexContext *lex);
+extern PGDLLIMPORT char *json_errdetail(JsonParseErrorType error, JsonLexContext *lex);
 
 /*
  * Utility function to check if a string is a valid JSON number.
  *
  * str argument does not need to be nul-terminated.
  */
-extern bool IsValidJsonNumber(const char *str, int len);
+extern PGDLLIMPORT bool IsValidJsonNumber(const char *str, int len);
 
 #endif							/* JSONAPI_H */

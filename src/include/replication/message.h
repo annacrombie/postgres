@@ -29,13 +29,13 @@ typedef struct xl_logical_message
 
 #define SizeOfLogicalMessage	(offsetof(xl_logical_message, message))
 
-extern XLogRecPtr LogLogicalMessage(const char *prefix, const char *message,
+extern PGDLLIMPORT XLogRecPtr LogLogicalMessage(const char *prefix, const char *message,
 									size_t size, bool transactional);
 
 /* RMGR API */
 #define XLOG_LOGICAL_MESSAGE	0x00
-extern void logicalmsg_redo(XLogReaderState *record);
-extern void logicalmsg_desc(StringInfo buf, XLogReaderState *record);
-extern const char *logicalmsg_identify(uint8 info);
+extern PGDLLIMPORT void logicalmsg_redo(XLogReaderState *record);
+extern PGDLLIMPORT void logicalmsg_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *logicalmsg_identify(uint8 info);
 
 #endif							/* PG_LOGICAL_MESSAGE_H */

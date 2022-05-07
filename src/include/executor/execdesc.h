@@ -56,7 +56,7 @@ typedef struct QueryDesc
 } QueryDesc;
 
 /* in pquery.c */
-extern QueryDesc *CreateQueryDesc(PlannedStmt *plannedstmt,
+extern PGDLLIMPORT QueryDesc *CreateQueryDesc(PlannedStmt *plannedstmt,
 								  const char *sourceText,
 								  Snapshot snapshot,
 								  Snapshot crosscheck_snapshot,
@@ -65,6 +65,6 @@ extern QueryDesc *CreateQueryDesc(PlannedStmt *plannedstmt,
 								  QueryEnvironment *queryEnv,
 								  int instrument_options);
 
-extern void FreeQueryDesc(QueryDesc *qdesc);
+extern PGDLLIMPORT void FreeQueryDesc(QueryDesc *qdesc);
 
 #endif							/* EXECDESC_H  */

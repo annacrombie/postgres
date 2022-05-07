@@ -18,30 +18,30 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern IndexScanState *ExecInitIndexScan(IndexScan *node, EState *estate, int eflags);
-extern void ExecEndIndexScan(IndexScanState *node);
-extern void ExecIndexMarkPos(IndexScanState *node);
-extern void ExecIndexRestrPos(IndexScanState *node);
-extern void ExecReScanIndexScan(IndexScanState *node);
-extern void ExecIndexScanEstimate(IndexScanState *node, ParallelContext *pcxt);
-extern void ExecIndexScanInitializeDSM(IndexScanState *node, ParallelContext *pcxt);
-extern void ExecIndexScanReInitializeDSM(IndexScanState *node, ParallelContext *pcxt);
-extern void ExecIndexScanInitializeWorker(IndexScanState *node,
+extern PGDLLIMPORT IndexScanState *ExecInitIndexScan(IndexScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndIndexScan(IndexScanState *node);
+extern PGDLLIMPORT void ExecIndexMarkPos(IndexScanState *node);
+extern PGDLLIMPORT void ExecIndexRestrPos(IndexScanState *node);
+extern PGDLLIMPORT void ExecReScanIndexScan(IndexScanState *node);
+extern PGDLLIMPORT void ExecIndexScanEstimate(IndexScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecIndexScanInitializeDSM(IndexScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecIndexScanReInitializeDSM(IndexScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecIndexScanInitializeWorker(IndexScanState *node,
 										  ParallelWorkerContext *pwcxt);
 
 /*
  * These routines are exported to share code with nodeIndexonlyscan.c and
  * nodeBitmapIndexscan.c
  */
-extern void ExecIndexBuildScanKeys(PlanState *planstate, Relation index,
+extern PGDLLIMPORT void ExecIndexBuildScanKeys(PlanState *planstate, Relation index,
 								   List *quals, bool isorderby,
 								   ScanKey *scanKeys, int *numScanKeys,
 								   IndexRuntimeKeyInfo **runtimeKeys, int *numRuntimeKeys,
 								   IndexArrayKeyInfo **arrayKeys, int *numArrayKeys);
-extern void ExecIndexEvalRuntimeKeys(ExprContext *econtext,
+extern PGDLLIMPORT void ExecIndexEvalRuntimeKeys(ExprContext *econtext,
 									 IndexRuntimeKeyInfo *runtimeKeys, int numRuntimeKeys);
-extern bool ExecIndexEvalArrayKeys(ExprContext *econtext,
+extern PGDLLIMPORT bool ExecIndexEvalArrayKeys(ExprContext *econtext,
 								   IndexArrayKeyInfo *arrayKeys, int numArrayKeys);
-extern bool ExecIndexAdvanceArrayKeys(IndexArrayKeyInfo *arrayKeys, int numArrayKeys);
+extern PGDLLIMPORT bool ExecIndexAdvanceArrayKeys(IndexArrayKeyInfo *arrayKeys, int numArrayKeys);
 
 #endif							/* NODEINDEXSCAN_H */

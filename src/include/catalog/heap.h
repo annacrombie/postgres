@@ -46,7 +46,7 @@ typedef struct CookedConstraint
 								 * inherited */
 } CookedConstraint;
 
-extern Relation heap_create(const char *relname,
+extern PGDLLIMPORT Relation heap_create(const char *relname,
 							Oid relnamespace,
 							Oid reltablespace,
 							Oid relid,
@@ -62,7 +62,7 @@ extern Relation heap_create(const char *relname,
 							MultiXactId *relminmxid,
 							bool create_storage);
 
-extern Oid	heap_create_with_catalog(const char *relname,
+extern PGDLLIMPORT Oid	heap_create_with_catalog(const char *relname,
 									 Oid relnamespace,
 									 Oid reltablespace,
 									 Oid relid,
@@ -84,29 +84,29 @@ extern Oid	heap_create_with_catalog(const char *relname,
 									 Oid relrewrite,
 									 ObjectAddress *typaddress);
 
-extern void heap_drop_with_catalog(Oid relid);
+extern PGDLLIMPORT void heap_drop_with_catalog(Oid relid);
 
-extern void heap_truncate(List *relids);
+extern PGDLLIMPORT void heap_truncate(List *relids);
 
-extern void heap_truncate_one_rel(Relation rel);
+extern PGDLLIMPORT void heap_truncate_one_rel(Relation rel);
 
-extern void heap_truncate_check_FKs(List *relations, bool tempTables);
+extern PGDLLIMPORT void heap_truncate_check_FKs(List *relations, bool tempTables);
 
-extern List *heap_truncate_find_FKs(List *relationIds);
+extern PGDLLIMPORT List *heap_truncate_find_FKs(List *relationIds);
 
-extern void InsertPgAttributeTuples(Relation pg_attribute_rel,
+extern PGDLLIMPORT void InsertPgAttributeTuples(Relation pg_attribute_rel,
 									TupleDesc tupdesc,
 									Oid new_rel_oid,
 									Datum *attoptions,
 									CatalogIndexState indstate);
 
-extern void InsertPgClassTuple(Relation pg_class_desc,
+extern PGDLLIMPORT void InsertPgClassTuple(Relation pg_class_desc,
 							   Relation new_rel_desc,
 							   Oid new_rel_oid,
 							   Datum relacl,
 							   Datum reloptions);
 
-extern List *AddRelationNewConstraints(Relation rel,
+extern PGDLLIMPORT List *AddRelationNewConstraints(Relation rel,
 									   List *newColDefaults,
 									   List *newConstraints,
 									   bool allow_merge,
@@ -114,46 +114,46 @@ extern List *AddRelationNewConstraints(Relation rel,
 									   bool is_internal,
 									   const char *queryString);
 
-extern void RelationClearMissing(Relation rel);
-extern void SetAttrMissing(Oid relid, char *attname, char *value);
+extern PGDLLIMPORT void RelationClearMissing(Relation rel);
+extern PGDLLIMPORT void SetAttrMissing(Oid relid, char *attname, char *value);
 
-extern Node *cookDefault(ParseState *pstate,
+extern PGDLLIMPORT Node *cookDefault(ParseState *pstate,
 						 Node *raw_default,
 						 Oid atttypid,
 						 int32 atttypmod,
 						 const char *attname,
 						 char attgenerated);
 
-extern void DeleteRelationTuple(Oid relid);
-extern void DeleteAttributeTuples(Oid relid);
-extern void DeleteSystemAttributeTuples(Oid relid);
-extern void RemoveAttributeById(Oid relid, AttrNumber attnum);
+extern PGDLLIMPORT void DeleteRelationTuple(Oid relid);
+extern PGDLLIMPORT void DeleteAttributeTuples(Oid relid);
+extern PGDLLIMPORT void DeleteSystemAttributeTuples(Oid relid);
+extern PGDLLIMPORT void RemoveAttributeById(Oid relid, AttrNumber attnum);
 
-extern void CopyStatistics(Oid fromrelid, Oid torelid);
-extern void RemoveStatistics(Oid relid, AttrNumber attnum);
+extern PGDLLIMPORT void CopyStatistics(Oid fromrelid, Oid torelid);
+extern PGDLLIMPORT void RemoveStatistics(Oid relid, AttrNumber attnum);
 
-extern const FormData_pg_attribute *SystemAttributeDefinition(AttrNumber attno);
+extern PGDLLIMPORT const FormData_pg_attribute *SystemAttributeDefinition(AttrNumber attno);
 
-extern const FormData_pg_attribute *SystemAttributeByName(const char *attname);
+extern PGDLLIMPORT const FormData_pg_attribute *SystemAttributeByName(const char *attname);
 
-extern void CheckAttributeNamesTypes(TupleDesc tupdesc, char relkind,
+extern PGDLLIMPORT void CheckAttributeNamesTypes(TupleDesc tupdesc, char relkind,
 									 int flags);
 
-extern void CheckAttributeType(const char *attname,
+extern PGDLLIMPORT void CheckAttributeType(const char *attname,
 							   Oid atttypid, Oid attcollation,
 							   List *containing_rowtypes,
 							   int flags);
 
 /* pg_partitioned_table catalog manipulation functions */
-extern void StorePartitionKey(Relation rel,
+extern PGDLLIMPORT void StorePartitionKey(Relation rel,
 							  char strategy,
 							  int16 partnatts,
 							  AttrNumber *partattrs,
 							  List *partexprs,
 							  Oid *partopclass,
 							  Oid *partcollation);
-extern void RemovePartitionKeyByRelId(Oid relid);
-extern void StorePartitionBound(Relation rel, Relation parent,
+extern PGDLLIMPORT void RemovePartitionKeyByRelId(Oid relid);
+extern PGDLLIMPORT void StorePartitionBound(Relation rel, Relation parent,
 								PartitionBoundSpec *bound);
 
 #endif							/* HEAP_H */

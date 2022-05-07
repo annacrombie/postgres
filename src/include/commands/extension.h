@@ -31,25 +31,25 @@ extern PGDLLIMPORT bool creating_extension;
 extern PGDLLIMPORT Oid CurrentExtensionObject;
 
 
-extern ObjectAddress CreateExtension(ParseState *pstate, CreateExtensionStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateExtension(ParseState *pstate, CreateExtensionStmt *stmt);
 
-extern void RemoveExtensionById(Oid extId);
+extern PGDLLIMPORT void RemoveExtensionById(Oid extId);
 
-extern ObjectAddress InsertExtensionTuple(const char *extName, Oid extOwner,
+extern PGDLLIMPORT ObjectAddress InsertExtensionTuple(const char *extName, Oid extOwner,
 										  Oid schemaOid, bool relocatable, const char *extVersion,
 										  Datum extConfig, Datum extCondition,
 										  List *requiredExtensions);
 
-extern ObjectAddress ExecAlterExtensionStmt(ParseState *pstate, AlterExtensionStmt *stmt);
+extern PGDLLIMPORT ObjectAddress ExecAlterExtensionStmt(ParseState *pstate, AlterExtensionStmt *stmt);
 
-extern ObjectAddress ExecAlterExtensionContentsStmt(AlterExtensionContentsStmt *stmt,
+extern PGDLLIMPORT ObjectAddress ExecAlterExtensionContentsStmt(AlterExtensionContentsStmt *stmt,
 													ObjectAddress *objAddr);
 
-extern Oid	get_extension_oid(const char *extname, bool missing_ok);
-extern char *get_extension_name(Oid ext_oid);
-extern bool extension_file_exists(const char *extensionName);
+extern PGDLLIMPORT Oid	get_extension_oid(const char *extname, bool missing_ok);
+extern PGDLLIMPORT char *get_extension_name(Oid ext_oid);
+extern PGDLLIMPORT bool extension_file_exists(const char *extensionName);
 
-extern ObjectAddress AlterExtensionNamespace(const char *extensionName, const char *newschema,
+extern PGDLLIMPORT ObjectAddress AlterExtensionNamespace(const char *extensionName, const char *newschema,
 											 Oid *oldschema);
 
 #endif							/* EXTENSION_H */

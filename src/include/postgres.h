@@ -662,7 +662,7 @@ typedef struct NullableDatum
 #ifdef USE_FLOAT8_BYVAL
 #define Int64GetDatum(X) ((Datum) (X))
 #else
-extern Datum Int64GetDatum(int64 X);
+extern PGDLLIMPORT Datum Int64GetDatum(int64 X);
 #endif
 
 /*
@@ -780,7 +780,7 @@ Float8GetDatum(float8 X)
 	return Int64GetDatum(myunion.retval);
 }
 #else
-extern Datum Float8GetDatum(float8 X);
+extern PGDLLIMPORT Datum Float8GetDatum(float8 X);
 #endif
 
 

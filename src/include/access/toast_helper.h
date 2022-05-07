@@ -101,16 +101,16 @@ typedef struct
 #define TOASTCOL_IGNORE						0x0010
 #define TOASTCOL_INCOMPRESSIBLE				0x0020
 
-extern void toast_tuple_init(ToastTupleContext *ttc);
-extern int	toast_tuple_find_biggest_attribute(ToastTupleContext *ttc,
+extern PGDLLIMPORT void toast_tuple_init(ToastTupleContext *ttc);
+extern PGDLLIMPORT int	toast_tuple_find_biggest_attribute(ToastTupleContext *ttc,
 											   bool for_compression,
 											   bool check_main);
-extern void toast_tuple_try_compression(ToastTupleContext *ttc, int attribute);
-extern void toast_tuple_externalize(ToastTupleContext *ttc, int attribute,
+extern PGDLLIMPORT void toast_tuple_try_compression(ToastTupleContext *ttc, int attribute);
+extern PGDLLIMPORT void toast_tuple_externalize(ToastTupleContext *ttc, int attribute,
 									int options);
-extern void toast_tuple_cleanup(ToastTupleContext *ttc);
+extern PGDLLIMPORT void toast_tuple_cleanup(ToastTupleContext *ttc);
 
-extern void toast_delete_external(Relation rel, Datum *values, bool *isnull,
+extern PGDLLIMPORT void toast_delete_external(Relation rel, Datum *values, bool *isnull,
 								  bool is_speculative);
 
 #endif

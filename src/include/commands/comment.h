@@ -30,16 +30,16 @@
  *------------------------------------------------------------------
  */
 
-extern ObjectAddress CommentObject(CommentStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CommentObject(CommentStmt *stmt);
 
-extern void DeleteComments(Oid oid, Oid classoid, int32 subid);
+extern PGDLLIMPORT void DeleteComments(Oid oid, Oid classoid, int32 subid);
 
-extern void CreateComments(Oid oid, Oid classoid, int32 subid, const char *comment);
+extern PGDLLIMPORT void CreateComments(Oid oid, Oid classoid, int32 subid, const char *comment);
 
-extern void DeleteSharedComments(Oid oid, Oid classoid);
+extern PGDLLIMPORT void DeleteSharedComments(Oid oid, Oid classoid);
 
-extern void CreateSharedComments(Oid oid, Oid classoid, const char *comment);
+extern PGDLLIMPORT void CreateSharedComments(Oid oid, Oid classoid, const char *comment);
 
-extern char *GetComment(Oid oid, Oid classoid, int32 subid);
+extern PGDLLIMPORT char *GetComment(Oid oid, Oid classoid, int32 subid);
 
 #endif							/* COMMENT_H */

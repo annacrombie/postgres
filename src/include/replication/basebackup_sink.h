@@ -270,32 +270,32 @@ bbsink_cleanup(bbsink *sink)
 }
 
 /* Forwarding callbacks. Use these to pass operations through to next sink. */
-extern void bbsink_forward_begin_backup(bbsink *sink);
-extern void bbsink_forward_begin_archive(bbsink *sink,
+extern PGDLLIMPORT void bbsink_forward_begin_backup(bbsink *sink);
+extern PGDLLIMPORT void bbsink_forward_begin_archive(bbsink *sink,
 										 const char *archive_name);
-extern void bbsink_forward_archive_contents(bbsink *sink, size_t len);
-extern void bbsink_forward_end_archive(bbsink *sink);
-extern void bbsink_forward_begin_manifest(bbsink *sink);
-extern void bbsink_forward_manifest_contents(bbsink *sink, size_t len);
-extern void bbsink_forward_end_manifest(bbsink *sink);
-extern void bbsink_forward_end_backup(bbsink *sink, XLogRecPtr endptr,
+extern PGDLLIMPORT void bbsink_forward_archive_contents(bbsink *sink, size_t len);
+extern PGDLLIMPORT void bbsink_forward_end_archive(bbsink *sink);
+extern PGDLLIMPORT void bbsink_forward_begin_manifest(bbsink *sink);
+extern PGDLLIMPORT void bbsink_forward_manifest_contents(bbsink *sink, size_t len);
+extern PGDLLIMPORT void bbsink_forward_end_manifest(bbsink *sink);
+extern PGDLLIMPORT void bbsink_forward_end_backup(bbsink *sink, XLogRecPtr endptr,
 									  TimeLineID endtli);
-extern void bbsink_forward_cleanup(bbsink *sink);
+extern PGDLLIMPORT void bbsink_forward_cleanup(bbsink *sink);
 
 /* Constructors for various types of sinks. */
-extern bbsink *bbsink_copystream_new(bool send_to_client);
-extern bbsink *bbsink_gzip_new(bbsink *next, pg_compress_specification *);
-extern bbsink *bbsink_lz4_new(bbsink *next, pg_compress_specification *);
-extern bbsink *bbsink_zstd_new(bbsink *next, pg_compress_specification *);
-extern bbsink *bbsink_progress_new(bbsink *next, bool estimate_backup_size);
-extern bbsink *bbsink_server_new(bbsink *next, char *pathname);
-extern bbsink *bbsink_throttle_new(bbsink *next, uint32 maxrate);
+extern PGDLLIMPORT bbsink *bbsink_copystream_new(bool send_to_client);
+extern PGDLLIMPORT bbsink *bbsink_gzip_new(bbsink *next, pg_compress_specification *);
+extern PGDLLIMPORT bbsink *bbsink_lz4_new(bbsink *next, pg_compress_specification *);
+extern PGDLLIMPORT bbsink *bbsink_zstd_new(bbsink *next, pg_compress_specification *);
+extern PGDLLIMPORT bbsink *bbsink_progress_new(bbsink *next, bool estimate_backup_size);
+extern PGDLLIMPORT bbsink *bbsink_server_new(bbsink *next, char *pathname);
+extern PGDLLIMPORT bbsink *bbsink_throttle_new(bbsink *next, uint32 maxrate);
 
 /* Extra interface functions for progress reporting. */
-extern void basebackup_progress_wait_checkpoint(void);
-extern void basebackup_progress_estimate_backup_size(void);
-extern void basebackup_progress_wait_wal_archive(bbsink_state *);
-extern void basebackup_progress_transfer_wal(void);
-extern void basebackup_progress_done(void);
+extern PGDLLIMPORT void basebackup_progress_wait_checkpoint(void);
+extern PGDLLIMPORT void basebackup_progress_estimate_backup_size(void);
+extern PGDLLIMPORT void basebackup_progress_wait_wal_archive(bbsink_state *);
+extern PGDLLIMPORT void basebackup_progress_transfer_wal(void);
+extern PGDLLIMPORT void basebackup_progress_done(void);
 
 #endif

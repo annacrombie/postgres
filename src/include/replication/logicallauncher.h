@@ -15,15 +15,15 @@
 extern PGDLLIMPORT int max_logical_replication_workers;
 extern PGDLLIMPORT int max_sync_workers_per_subscription;
 
-extern void ApplyLauncherRegister(void);
-extern void ApplyLauncherMain(Datum main_arg);
+extern PGDLLIMPORT void ApplyLauncherRegister(void);
+extern PGDLLIMPORT void ApplyLauncherMain(Datum main_arg);
 
-extern Size ApplyLauncherShmemSize(void);
-extern void ApplyLauncherShmemInit(void);
+extern PGDLLIMPORT Size ApplyLauncherShmemSize(void);
+extern PGDLLIMPORT void ApplyLauncherShmemInit(void);
 
-extern void ApplyLauncherWakeupAtCommit(void);
-extern void AtEOXact_ApplyLauncher(bool isCommit);
+extern PGDLLIMPORT void ApplyLauncherWakeupAtCommit(void);
+extern PGDLLIMPORT void AtEOXact_ApplyLauncher(bool isCommit);
 
-extern bool IsLogicalLauncher(void);
+extern PGDLLIMPORT bool IsLogicalLauncher(void);
 
 #endif							/* LOGICALLAUNCHER_H */

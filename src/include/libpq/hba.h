@@ -163,17 +163,17 @@ typedef struct TokenizedAuthLine
 /* kluge to avoid including libpq/libpq-be.h here */
 typedef struct Port hbaPort;
 
-extern bool load_hba(void);
-extern bool load_ident(void);
-extern const char *hba_authname(UserAuth auth_method);
-extern void hba_getauthmethod(hbaPort *port);
-extern int	check_usermap(const char *usermap_name,
+extern PGDLLIMPORT bool load_hba(void);
+extern PGDLLIMPORT bool load_ident(void);
+extern PGDLLIMPORT const char *hba_authname(UserAuth auth_method);
+extern PGDLLIMPORT void hba_getauthmethod(hbaPort *port);
+extern PGDLLIMPORT int	check_usermap(const char *usermap_name,
 						  const char *pg_role, const char *auth_user,
 						  bool case_sensitive);
-extern HbaLine *parse_hba_line(TokenizedAuthLine *tok_line, int elevel);
-extern IdentLine *parse_ident_line(TokenizedAuthLine *tok_line, int elevel);
-extern bool pg_isblank(const char c);
-extern MemoryContext tokenize_auth_file(const char *filename, FILE *file,
+extern PGDLLIMPORT HbaLine *parse_hba_line(TokenizedAuthLine *tok_line, int elevel);
+extern PGDLLIMPORT IdentLine *parse_ident_line(TokenizedAuthLine *tok_line, int elevel);
+extern PGDLLIMPORT bool pg_isblank(const char c);
+extern PGDLLIMPORT MemoryContext tokenize_auth_file(const char *filename, FILE *file,
 										List **tok_lines, int elevel);
 
 #endif							/* HBA_H */

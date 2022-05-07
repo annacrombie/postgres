@@ -64,9 +64,9 @@ DECLARE_UNIQUE_INDEX(pg_range_rngmultitypid_index, 2228, RangeMultirangeTypidInd
  * prototypes for functions in pg_range.c
  */
 
-extern void RangeCreate(Oid rangeTypeOid, Oid rangeSubType, Oid rangeCollation,
+extern PGDLLIMPORT void RangeCreate(Oid rangeTypeOid, Oid rangeSubType, Oid rangeCollation,
 						Oid rangeSubOpclass, RegProcedure rangeCanonical,
 						RegProcedure rangeSubDiff, Oid multirangeTypeOid);
-extern void RangeDelete(Oid rangeTypeOid);
+extern PGDLLIMPORT void RangeDelete(Oid rangeTypeOid);
 
 #endif							/* PG_RANGE_H */

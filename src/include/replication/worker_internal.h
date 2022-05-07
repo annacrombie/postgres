@@ -80,27 +80,27 @@ extern PGDLLIMPORT LogicalRepWorker *MyLogicalRepWorker;
 
 extern PGDLLIMPORT bool in_remote_transaction;
 
-extern void logicalrep_worker_attach(int slot);
-extern LogicalRepWorker *logicalrep_worker_find(Oid subid, Oid relid,
+extern PGDLLIMPORT void logicalrep_worker_attach(int slot);
+extern PGDLLIMPORT LogicalRepWorker *logicalrep_worker_find(Oid subid, Oid relid,
 												bool only_running);
-extern List *logicalrep_workers_find(Oid subid, bool only_running);
-extern void logicalrep_worker_launch(Oid dbid, Oid subid, const char *subname,
+extern PGDLLIMPORT List *logicalrep_workers_find(Oid subid, bool only_running);
+extern PGDLLIMPORT void logicalrep_worker_launch(Oid dbid, Oid subid, const char *subname,
 									 Oid userid, Oid relid);
-extern void logicalrep_worker_stop(Oid subid, Oid relid);
-extern void logicalrep_worker_wakeup(Oid subid, Oid relid);
-extern void logicalrep_worker_wakeup_ptr(LogicalRepWorker *worker);
+extern PGDLLIMPORT void logicalrep_worker_stop(Oid subid, Oid relid);
+extern PGDLLIMPORT void logicalrep_worker_wakeup(Oid subid, Oid relid);
+extern PGDLLIMPORT void logicalrep_worker_wakeup_ptr(LogicalRepWorker *worker);
 
-extern int	logicalrep_sync_worker_count(Oid subid);
+extern PGDLLIMPORT int	logicalrep_sync_worker_count(Oid subid);
 
-extern void ReplicationOriginNameForTablesync(Oid suboid, Oid relid,
+extern PGDLLIMPORT void ReplicationOriginNameForTablesync(Oid suboid, Oid relid,
 											  char *originname, int szorgname);
-extern char *LogicalRepSyncTableStart(XLogRecPtr *origin_startpos);
+extern PGDLLIMPORT char *LogicalRepSyncTableStart(XLogRecPtr *origin_startpos);
 
-extern bool AllTablesyncsReady(void);
-extern void UpdateTwoPhaseState(Oid suboid, char new_state);
+extern PGDLLIMPORT bool AllTablesyncsReady(void);
+extern PGDLLIMPORT void UpdateTwoPhaseState(Oid suboid, char new_state);
 
-extern void process_syncing_tables(XLogRecPtr current_lsn);
-extern void invalidate_syncing_table_states(Datum arg, int cacheid,
+extern PGDLLIMPORT void process_syncing_tables(XLogRecPtr current_lsn);
+extern PGDLLIMPORT void invalidate_syncing_table_states(Datum arg, int cacheid,
 											uint32 hashvalue);
 
 static inline bool

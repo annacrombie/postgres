@@ -17,19 +17,19 @@
 
 #include "access/xlogdefs.h"
 
-extern bool RestoreArchivedFile(char *path, const char *xlogfname,
+extern PGDLLIMPORT bool RestoreArchivedFile(char *path, const char *xlogfname,
 								const char *recovername, off_t expectedSize,
 								bool cleanupEnabled);
-extern void ExecuteRecoveryCommand(const char *command, const char *commandName,
+extern PGDLLIMPORT void ExecuteRecoveryCommand(const char *command, const char *commandName,
 								   bool failOnSignal, uint32 wait_event_info);
-extern void KeepFileRestoredFromArchive(const char *path, const char *xlogfname);
-extern void XLogArchiveNotify(const char *xlog);
-extern void XLogArchiveNotifySeg(XLogSegNo segno, TimeLineID tli);
-extern void XLogArchiveForceDone(const char *xlog);
-extern bool XLogArchiveCheckDone(const char *xlog);
-extern bool XLogArchiveIsBusy(const char *xlog);
-extern bool XLogArchiveIsReady(const char *xlog);
-extern bool XLogArchiveIsReadyOrDone(const char *xlog);
-extern void XLogArchiveCleanup(const char *xlog);
+extern PGDLLIMPORT void KeepFileRestoredFromArchive(const char *path, const char *xlogfname);
+extern PGDLLIMPORT void XLogArchiveNotify(const char *xlog);
+extern PGDLLIMPORT void XLogArchiveNotifySeg(XLogSegNo segno, TimeLineID tli);
+extern PGDLLIMPORT void XLogArchiveForceDone(const char *xlog);
+extern PGDLLIMPORT bool XLogArchiveCheckDone(const char *xlog);
+extern PGDLLIMPORT bool XLogArchiveIsBusy(const char *xlog);
+extern PGDLLIMPORT bool XLogArchiveIsReady(const char *xlog);
+extern PGDLLIMPORT bool XLogArchiveIsReadyOrDone(const char *xlog);
+extern PGDLLIMPORT void XLogArchiveCleanup(const char *xlog);
 
 #endif							/* XLOG_ARCHIVE_H */

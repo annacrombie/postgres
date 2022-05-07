@@ -19,17 +19,17 @@
 #include "nodes/parsenodes.h"
 #include "utils/relcache.h"
 
-extern ObjectAddress ExecRenameStmt(RenameStmt *stmt);
+extern PGDLLIMPORT ObjectAddress ExecRenameStmt(RenameStmt *stmt);
 
-extern ObjectAddress ExecAlterObjectDependsStmt(AlterObjectDependsStmt *stmt,
+extern PGDLLIMPORT ObjectAddress ExecAlterObjectDependsStmt(AlterObjectDependsStmt *stmt,
 												ObjectAddress *refAddress);
-extern ObjectAddress ExecAlterObjectSchemaStmt(AlterObjectSchemaStmt *stmt,
+extern PGDLLIMPORT ObjectAddress ExecAlterObjectSchemaStmt(AlterObjectSchemaStmt *stmt,
 											   ObjectAddress *oldSchemaAddr);
-extern Oid	AlterObjectNamespace_oid(Oid classId, Oid objid, Oid nspOid,
+extern PGDLLIMPORT Oid	AlterObjectNamespace_oid(Oid classId, Oid objid, Oid nspOid,
 									 ObjectAddresses *objsMoved);
 
-extern ObjectAddress ExecAlterOwnerStmt(AlterOwnerStmt *stmt);
-extern void AlterObjectOwner_internal(Relation catalog, Oid objectId,
+extern PGDLLIMPORT ObjectAddress ExecAlterOwnerStmt(AlterOwnerStmt *stmt);
+extern PGDLLIMPORT void AlterObjectOwner_internal(Relation catalog, Oid objectId,
 									  Oid new_ownerId);
 
 #endif							/* ALTER_H */

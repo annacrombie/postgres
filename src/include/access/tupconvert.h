@@ -33,19 +33,19 @@ typedef struct TupleConversionMap
 } TupleConversionMap;
 
 
-extern TupleConversionMap *convert_tuples_by_position(TupleDesc indesc,
+extern PGDLLIMPORT TupleConversionMap *convert_tuples_by_position(TupleDesc indesc,
 													  TupleDesc outdesc,
 													  const char *msg);
 
-extern TupleConversionMap *convert_tuples_by_name(TupleDesc indesc,
+extern PGDLLIMPORT TupleConversionMap *convert_tuples_by_name(TupleDesc indesc,
 												  TupleDesc outdesc);
 
-extern HeapTuple execute_attr_map_tuple(HeapTuple tuple, TupleConversionMap *map);
-extern TupleTableSlot *execute_attr_map_slot(AttrMap *attrMap,
+extern PGDLLIMPORT HeapTuple execute_attr_map_tuple(HeapTuple tuple, TupleConversionMap *map);
+extern PGDLLIMPORT TupleTableSlot *execute_attr_map_slot(AttrMap *attrMap,
 											 TupleTableSlot *in_slot,
 											 TupleTableSlot *out_slot);
-extern Bitmapset *execute_attr_map_cols(AttrMap *attrMap, Bitmapset *inbitmap);
+extern PGDLLIMPORT Bitmapset *execute_attr_map_cols(AttrMap *attrMap, Bitmapset *inbitmap);
 
-extern void free_conversion_map(TupleConversionMap *map);
+extern PGDLLIMPORT void free_conversion_map(TupleConversionMap *map);
 
 #endif							/* TUPCONVERT_H */

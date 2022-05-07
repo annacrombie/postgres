@@ -16,6 +16,6 @@
 
 #include "nodes/parsenodes.h"
 
-extern CommonTableExpr *rewriteSearchAndCycle(CommonTableExpr *cte);
+extern PGDLLIMPORT CommonTableExpr *rewriteSearchAndCycle(CommonTableExpr *cte);
 
 #endif							/* REWRITESEARCHCYCLE_H */

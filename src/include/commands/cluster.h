@@ -31,15 +31,15 @@ typedef struct ClusterParams
 	bits32		options;		/* bitmask of CLUOPT_* */
 } ClusterParams;
 
-extern void cluster(ParseState *pstate, ClusterStmt *stmt, bool isTopLevel);
-extern void cluster_rel(Oid tableOid, Oid indexOid, ClusterParams *params);
-extern void check_index_is_clusterable(Relation OldHeap, Oid indexOid,
+extern PGDLLIMPORT void cluster(ParseState *pstate, ClusterStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT void cluster_rel(Oid tableOid, Oid indexOid, ClusterParams *params);
+extern PGDLLIMPORT void check_index_is_clusterable(Relation OldHeap, Oid indexOid,
 									   LOCKMODE lockmode);
-extern void mark_index_clustered(Relation rel, Oid indexOid, bool is_internal);
+extern PGDLLIMPORT void mark_index_clustered(Relation rel, Oid indexOid, bool is_internal);
 
-extern Oid	make_new_heap(Oid OIDOldHeap, Oid NewTableSpace, Oid NewAccessMethod,
+extern PGDLLIMPORT Oid	make_new_heap(Oid OIDOldHeap, Oid NewTableSpace, Oid NewAccessMethod,
 						  char relpersistence, LOCKMODE lockmode);
-extern void finish_heap_swap(Oid OIDOldHeap, Oid OIDNewHeap,
+extern PGDLLIMPORT void finish_heap_swap(Oid OIDOldHeap, Oid OIDNewHeap,
 							 bool is_system_catalog,
 							 bool swap_toast_by_content,
 							 bool check_constraints,

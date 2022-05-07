@@ -64,21 +64,21 @@ typedef struct ForeignTable
 #define FDW_MISSING_OK	0x01
 
 
-extern ForeignServer *GetForeignServer(Oid serverid);
-extern ForeignServer *GetForeignServerExtended(Oid serverid,
+extern PGDLLIMPORT ForeignServer *GetForeignServer(Oid serverid);
+extern PGDLLIMPORT ForeignServer *GetForeignServerExtended(Oid serverid,
 											   bits16 flags);
-extern ForeignServer *GetForeignServerByName(const char *name, bool missing_ok);
-extern UserMapping *GetUserMapping(Oid userid, Oid serverid);
-extern ForeignDataWrapper *GetForeignDataWrapper(Oid fdwid);
-extern ForeignDataWrapper *GetForeignDataWrapperExtended(Oid fdwid,
+extern PGDLLIMPORT ForeignServer *GetForeignServerByName(const char *name, bool missing_ok);
+extern PGDLLIMPORT UserMapping *GetUserMapping(Oid userid, Oid serverid);
+extern PGDLLIMPORT ForeignDataWrapper *GetForeignDataWrapper(Oid fdwid);
+extern PGDLLIMPORT ForeignDataWrapper *GetForeignDataWrapperExtended(Oid fdwid,
 														 bits16 flags);
-extern ForeignDataWrapper *GetForeignDataWrapperByName(const char *name,
+extern PGDLLIMPORT ForeignDataWrapper *GetForeignDataWrapperByName(const char *name,
 													   bool missing_ok);
-extern ForeignTable *GetForeignTable(Oid relid);
+extern PGDLLIMPORT ForeignTable *GetForeignTable(Oid relid);
 
-extern List *GetForeignColumnOptions(Oid relid, AttrNumber attnum);
+extern PGDLLIMPORT List *GetForeignColumnOptions(Oid relid, AttrNumber attnum);
 
-extern Oid	get_foreign_data_wrapper_oid(const char *fdwname, bool missing_ok);
-extern Oid	get_foreign_server_oid(const char *servername, bool missing_ok);
+extern PGDLLIMPORT Oid	get_foreign_data_wrapper_oid(const char *fdwname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_foreign_server_oid(const char *servername, bool missing_ok);
 
 #endif							/* FOREIGN_H */

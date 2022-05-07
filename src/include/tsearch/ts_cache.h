@@ -87,12 +87,12 @@ typedef struct
 extern PGDLLIMPORT char *TSCurrentConfig;
 
 
-extern TSParserCacheEntry *lookup_ts_parser_cache(Oid prsId);
-extern TSDictionaryCacheEntry *lookup_ts_dictionary_cache(Oid dictId);
-extern TSConfigCacheEntry *lookup_ts_config_cache(Oid cfgId);
+extern PGDLLIMPORT TSParserCacheEntry *lookup_ts_parser_cache(Oid prsId);
+extern PGDLLIMPORT TSDictionaryCacheEntry *lookup_ts_dictionary_cache(Oid dictId);
+extern PGDLLIMPORT TSConfigCacheEntry *lookup_ts_config_cache(Oid cfgId);
 
-extern Oid	getTSCurrentConfig(bool emitError);
-extern bool check_TSCurrentConfig(char **newval, void **extra, GucSource source);
-extern void assign_TSCurrentConfig(const char *newval, void *extra);
+extern PGDLLIMPORT Oid	getTSCurrentConfig(bool emitError);
+extern PGDLLIMPORT bool check_TSCurrentConfig(char **newval, void **extra, GucSource source);
+extern PGDLLIMPORT void assign_TSCurrentConfig(const char *newval, void *extra);
 
 #endif							/* TS_CACHE_H */

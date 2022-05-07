@@ -58,15 +58,15 @@ typedef enum ForkNumber
 
 extern PGDLLIMPORT const char *const forkNames[];
 
-extern ForkNumber forkname_to_number(const char *forkName);
-extern int	forkname_chars(const char *str, ForkNumber *fork);
+extern PGDLLIMPORT ForkNumber forkname_to_number(const char *forkName);
+extern PGDLLIMPORT int	forkname_chars(const char *str, ForkNumber *fork);
 
 /*
  * Stuff for computing filesystem pathnames for relations.
  */
-extern char *GetDatabasePath(Oid dbNode, Oid spcNode);
+extern PGDLLIMPORT char *GetDatabasePath(Oid dbNode, Oid spcNode);
 
-extern char *GetRelationPath(Oid dbNode, Oid spcNode, Oid relNode,
+extern PGDLLIMPORT char *GetRelationPath(Oid dbNode, Oid spcNode, Oid relNode,
 							 int backendId, ForkNumber forkNumber);
 
 /*

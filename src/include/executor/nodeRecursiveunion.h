@@ -16,8 +16,8 @@
 
 #include "nodes/execnodes.h"
 
-extern RecursiveUnionState *ExecInitRecursiveUnion(RecursiveUnion *node, EState *estate, int eflags);
-extern void ExecEndRecursiveUnion(RecursiveUnionState *node);
-extern void ExecReScanRecursiveUnion(RecursiveUnionState *node);
+extern PGDLLIMPORT RecursiveUnionState *ExecInitRecursiveUnion(RecursiveUnion *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndRecursiveUnion(RecursiveUnionState *node);
+extern PGDLLIMPORT void ExecReScanRecursiveUnion(RecursiveUnionState *node);
 
 #endif							/* NODERECURSIVEUNION_H */

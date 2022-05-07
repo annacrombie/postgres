@@ -16,9 +16,9 @@
 
 #include "nodes/execnodes.h"
 
-extern TidRangeScanState *ExecInitTidRangeScan(TidRangeScan *node,
+extern PGDLLIMPORT TidRangeScanState *ExecInitTidRangeScan(TidRangeScan *node,
 											   EState *estate, int eflags);
-extern void ExecEndTidRangeScan(TidRangeScanState *node);
-extern void ExecReScanTidRangeScan(TidRangeScanState *node);
+extern PGDLLIMPORT void ExecEndTidRangeScan(TidRangeScanState *node);
+extern PGDLLIMPORT void ExecReScanTidRangeScan(TidRangeScanState *node);
 
 #endif							/* NODETIDRANGESCAN_H */

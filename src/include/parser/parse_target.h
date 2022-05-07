@@ -17,26 +17,26 @@
 #include "parser/parse_node.h"
 
 
-extern List *transformTargetList(ParseState *pstate, List *targetlist,
+extern PGDLLIMPORT List *transformTargetList(ParseState *pstate, List *targetlist,
 								 ParseExprKind exprKind);
-extern List *transformExpressionList(ParseState *pstate, List *exprlist,
+extern PGDLLIMPORT List *transformExpressionList(ParseState *pstate, List *exprlist,
 									 ParseExprKind exprKind, bool allowDefault);
-extern void resolveTargetListUnknowns(ParseState *pstate, List *targetlist);
-extern void markTargetListOrigins(ParseState *pstate, List *targetlist);
-extern TargetEntry *transformTargetEntry(ParseState *pstate,
+extern PGDLLIMPORT void resolveTargetListUnknowns(ParseState *pstate, List *targetlist);
+extern PGDLLIMPORT void markTargetListOrigins(ParseState *pstate, List *targetlist);
+extern PGDLLIMPORT TargetEntry *transformTargetEntry(ParseState *pstate,
 										 Node *node, Node *expr, ParseExprKind exprKind,
 										 char *colname, bool resjunk);
-extern Expr *transformAssignedExpr(ParseState *pstate, Expr *expr,
+extern PGDLLIMPORT Expr *transformAssignedExpr(ParseState *pstate, Expr *expr,
 								   ParseExprKind exprKind,
 								   const char *colname,
 								   int attrno,
 								   List *indirection,
 								   int location);
-extern void updateTargetListEntry(ParseState *pstate, TargetEntry *tle,
+extern PGDLLIMPORT void updateTargetListEntry(ParseState *pstate, TargetEntry *tle,
 								  char *colname, int attrno,
 								  List *indirection,
 								  int location);
-extern Node *transformAssignmentIndirection(ParseState *pstate,
+extern PGDLLIMPORT Node *transformAssignmentIndirection(ParseState *pstate,
 											Node *basenode,
 											const char *targetName,
 											bool targetIsSubscripting,
@@ -48,11 +48,11 @@ extern Node *transformAssignmentIndirection(ParseState *pstate,
 											Node *rhs,
 											CoercionContext ccontext,
 											int location);
-extern List *checkInsertTargets(ParseState *pstate, List *cols,
+extern PGDLLIMPORT List *checkInsertTargets(ParseState *pstate, List *cols,
 								List **attrnos);
-extern TupleDesc expandRecordVariable(ParseState *pstate, Var *var,
+extern PGDLLIMPORT TupleDesc expandRecordVariable(ParseState *pstate, Var *var,
 									  int levelsup);
-extern char *FigureColname(Node *node);
-extern char *FigureIndexColname(Node *node);
+extern PGDLLIMPORT char *FigureColname(Node *node);
+extern PGDLLIMPORT char *FigureIndexColname(Node *node);
 
 #endif							/* PARSE_TARGET_H */

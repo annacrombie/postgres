@@ -71,10 +71,10 @@ typedef struct BitString
 #define boolVal(v)		(castNode(Boolean, v)->boolval)
 #define strVal(v)		(castNode(String, v)->sval)
 
-extern Integer *makeInteger(int i);
-extern Float *makeFloat(char *numericStr);
-extern Boolean *makeBoolean(bool var);
-extern String *makeString(char *str);
-extern BitString *makeBitString(char *str);
+extern PGDLLIMPORT Integer *makeInteger(int i);
+extern PGDLLIMPORT Float *makeFloat(char *numericStr);
+extern PGDLLIMPORT Boolean *makeBoolean(bool var);
+extern PGDLLIMPORT String *makeString(char *str);
+extern PGDLLIMPORT BitString *makeBitString(char *str);
 
 #endif							/* VALUE_H */

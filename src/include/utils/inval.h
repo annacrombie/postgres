@@ -24,45 +24,45 @@ typedef void (*SyscacheCallbackFunction) (Datum arg, int cacheid, uint32 hashval
 typedef void (*RelcacheCallbackFunction) (Datum arg, Oid relid);
 
 
-extern void AcceptInvalidationMessages(void);
+extern PGDLLIMPORT void AcceptInvalidationMessages(void);
 
-extern void AtEOXact_Inval(bool isCommit);
+extern PGDLLIMPORT void AtEOXact_Inval(bool isCommit);
 
-extern void AtEOSubXact_Inval(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_Inval(bool isCommit);
 
-extern void PostPrepare_Inval(void);
+extern PGDLLIMPORT void PostPrepare_Inval(void);
 
-extern void CommandEndInvalidationMessages(void);
+extern PGDLLIMPORT void CommandEndInvalidationMessages(void);
 
-extern void CacheInvalidateHeapTuple(Relation relation,
+extern PGDLLIMPORT void CacheInvalidateHeapTuple(Relation relation,
 									 HeapTuple tuple,
 									 HeapTuple newtuple);
 
-extern void CacheInvalidateCatalog(Oid catalogId);
+extern PGDLLIMPORT void CacheInvalidateCatalog(Oid catalogId);
 
-extern void CacheInvalidateRelcache(Relation relation);
+extern PGDLLIMPORT void CacheInvalidateRelcache(Relation relation);
 
-extern void CacheInvalidateRelcacheAll(void);
+extern PGDLLIMPORT void CacheInvalidateRelcacheAll(void);
 
-extern void CacheInvalidateRelcacheByTuple(HeapTuple classTuple);
+extern PGDLLIMPORT void CacheInvalidateRelcacheByTuple(HeapTuple classTuple);
 
-extern void CacheInvalidateRelcacheByRelid(Oid relid);
+extern PGDLLIMPORT void CacheInvalidateRelcacheByRelid(Oid relid);
 
-extern void CacheInvalidateSmgr(RelFileNodeBackend rnode);
+extern PGDLLIMPORT void CacheInvalidateSmgr(RelFileNodeBackend rnode);
 
-extern void CacheInvalidateRelmap(Oid databaseId);
+extern PGDLLIMPORT void CacheInvalidateRelmap(Oid databaseId);
 
-extern void CacheRegisterSyscacheCallback(int cacheid,
+extern PGDLLIMPORT void CacheRegisterSyscacheCallback(int cacheid,
 										  SyscacheCallbackFunction func,
 										  Datum arg);
 
-extern void CacheRegisterRelcacheCallback(RelcacheCallbackFunction func,
+extern PGDLLIMPORT void CacheRegisterRelcacheCallback(RelcacheCallbackFunction func,
 										  Datum arg);
 
-extern void CallSyscacheCallbacks(int cacheid, uint32 hashvalue);
+extern PGDLLIMPORT void CallSyscacheCallbacks(int cacheid, uint32 hashvalue);
 
-extern void InvalidateSystemCaches(void);
-extern void InvalidateSystemCachesExtended(bool debug_discard);
+extern PGDLLIMPORT void InvalidateSystemCaches(void);
+extern PGDLLIMPORT void InvalidateSystemCachesExtended(bool debug_discard);
 
-extern void LogLogicalInvalidations(void);
+extern PGDLLIMPORT void LogLogicalInvalidations(void);
 #endif							/* INVAL_H */

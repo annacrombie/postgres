@@ -64,11 +64,11 @@ typedef EphemeralNamedRelationData *EphemeralNamedRelation;
 typedef struct QueryEnvironment QueryEnvironment;
 
 
-extern QueryEnvironment *create_queryEnv(void);
-extern EphemeralNamedRelationMetadata get_visible_ENR_metadata(QueryEnvironment *queryEnv, const char *refname);
-extern void register_ENR(QueryEnvironment *queryEnv, EphemeralNamedRelation enr);
-extern void unregister_ENR(QueryEnvironment *queryEnv, const char *name);
-extern EphemeralNamedRelation get_ENR(QueryEnvironment *queryEnv, const char *name);
-extern TupleDesc ENRMetadataGetTupDesc(EphemeralNamedRelationMetadata enrmd);
+extern PGDLLIMPORT QueryEnvironment *create_queryEnv(void);
+extern PGDLLIMPORT EphemeralNamedRelationMetadata get_visible_ENR_metadata(QueryEnvironment *queryEnv, const char *refname);
+extern PGDLLIMPORT void register_ENR(QueryEnvironment *queryEnv, EphemeralNamedRelation enr);
+extern PGDLLIMPORT void unregister_ENR(QueryEnvironment *queryEnv, const char *name);
+extern PGDLLIMPORT EphemeralNamedRelation get_ENR(QueryEnvironment *queryEnv, const char *name);
+extern PGDLLIMPORT TupleDesc ENRMetadataGetTupDesc(EphemeralNamedRelationMetadata enrmd);
 
 #endif							/* QUERYENVIRONMENT_H */

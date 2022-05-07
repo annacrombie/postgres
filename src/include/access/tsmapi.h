@@ -77,6 +77,6 @@ typedef struct TsmRoutine
 
 
 /* Functions in access/tablesample/tablesample.c */
-extern TsmRoutine *GetTsmRoutine(Oid tsmhandler);
+extern PGDLLIMPORT TsmRoutine *GetTsmRoutine(Oid tsmhandler);
 
 #endif							/* TSMAPI_H */

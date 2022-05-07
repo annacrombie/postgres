@@ -247,11 +247,11 @@ typedef struct spgxlogVacuumRedirect
 
 #define SizeOfSpgxlogVacuumRedirect offsetof(spgxlogVacuumRedirect, offsets)
 
-extern void spg_redo(XLogReaderState *record);
-extern void spg_desc(StringInfo buf, XLogReaderState *record);
-extern const char *spg_identify(uint8 info);
-extern void spg_xlog_startup(void);
-extern void spg_xlog_cleanup(void);
-extern void spg_mask(char *pagedata, BlockNumber blkno);
+extern PGDLLIMPORT void spg_redo(XLogReaderState *record);
+extern PGDLLIMPORT void spg_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *spg_identify(uint8 info);
+extern PGDLLIMPORT void spg_xlog_startup(void);
+extern PGDLLIMPORT void spg_xlog_cleanup(void);
+extern PGDLLIMPORT void spg_mask(char *pagedata, BlockNumber blkno);
 
 #endif							/* SPGXLOG_H */

@@ -19,12 +19,12 @@
 /*
  * toasting.c prototypes
  */
-extern void NewRelationCreateToastTable(Oid relOid, Datum reloptions);
-extern void NewHeapCreateToastTable(Oid relOid, Datum reloptions,
+extern PGDLLIMPORT void NewRelationCreateToastTable(Oid relOid, Datum reloptions);
+extern PGDLLIMPORT void NewHeapCreateToastTable(Oid relOid, Datum reloptions,
 									LOCKMODE lockmode, Oid OIDOldToast);
-extern void AlterTableCreateToastTable(Oid relOid, Datum reloptions,
+extern PGDLLIMPORT void AlterTableCreateToastTable(Oid relOid, Datum reloptions,
 									   LOCKMODE lockmode);
-extern void BootstrapToastTable(char *relName,
+extern PGDLLIMPORT void BootstrapToastTable(char *relName,
 								Oid toastOid, Oid toastIndexOid);
 
 #endif							/* TOASTING_H */

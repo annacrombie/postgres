@@ -243,7 +243,7 @@ extern PGDLLIMPORT ConditionVariableMinimallyPadded *BufferIOCVArray;
  * Functions for acquiring/releasing a shared buffer header's spinlock.  Do
  * not apply these to local buffers!
  */
-extern uint32 LockBufHdr(BufferDesc *desc);
+extern PGDLLIMPORT uint32 LockBufHdr(BufferDesc *desc);
 #define UnlockBufHdr(desc, s)	\
 	do {	\
 		pg_write_barrier(); \
@@ -304,42 +304,42 @@ extern PGDLLIMPORT CkptSortItem *CkptBufferIds;
  * Internal buffer management routines
  */
 /* bufmgr.c */
-extern void WritebackContextInit(WritebackContext *context, int *max_pending);
-extern void IssuePendingWritebacks(WritebackContext *context);
-extern void ScheduleBufferTagForWriteback(WritebackContext *context, BufferTag *tag);
+extern PGDLLIMPORT void WritebackContextInit(WritebackContext *context, int *max_pending);
+extern PGDLLIMPORT void IssuePendingWritebacks(WritebackContext *context);
+extern PGDLLIMPORT void ScheduleBufferTagForWriteback(WritebackContext *context, BufferTag *tag);
 
 /* freelist.c */
-extern BufferDesc *StrategyGetBuffer(BufferAccessStrategy strategy,
+extern PGDLLIMPORT BufferDesc *StrategyGetBuffer(BufferAccessStrategy strategy,
 									 uint32 *buf_state);
-extern void StrategyFreeBuffer(BufferDesc *buf);
-extern bool StrategyRejectBuffer(BufferAccessStrategy strategy,
+extern PGDLLIMPORT void StrategyFreeBuffer(BufferDesc *buf);
+extern PGDLLIMPORT bool StrategyRejectBuffer(BufferAccessStrategy strategy,
 								 BufferDesc *buf);
 
-extern int	StrategySyncStart(uint32 *complete_passes, uint32 *num_buf_alloc);
-extern void StrategyNotifyBgWriter(int bgwprocno);
+extern PGDLLIMPORT int	StrategySyncStart(uint32 *complete_passes, uint32 *num_buf_alloc);
+extern PGDLLIMPORT void StrategyNotifyBgWriter(int bgwprocno);
 
-extern Size StrategyShmemSize(void);
-extern void StrategyInitialize(bool init);
-extern bool have_free_buffer(void);
+extern PGDLLIMPORT Size StrategyShmemSize(void);
+extern PGDLLIMPORT void StrategyInitialize(bool init);
+extern PGDLLIMPORT bool have_free_buffer(void);
 
 /* buf_table.c */
-extern Size BufTableShmemSize(int size);
-extern void InitBufTable(int size);
-extern uint32 BufTableHashCode(BufferTag *tagPtr);
-extern int	BufTableLookup(BufferTag *tagPtr, uint32 hashcode);
-extern int	BufTableInsert(BufferTag *tagPtr, uint32 hashcode, int buf_id);
-extern void BufTableDelete(BufferTag *tagPtr, uint32 hashcode);
+extern PGDLLIMPORT Size BufTableShmemSize(int size);
+extern PGDLLIMPORT void InitBufTable(int size);
+extern PGDLLIMPORT uint32 BufTableHashCode(BufferTag *tagPtr);
+extern PGDLLIMPORT int	BufTableLookup(BufferTag *tagPtr, uint32 hashcode);
+extern PGDLLIMPORT int	BufTableInsert(BufferTag *tagPtr, uint32 hashcode, int buf_id);
+extern PGDLLIMPORT void BufTableDelete(BufferTag *tagPtr, uint32 hashcode);
 
 /* localbuf.c */
-extern PrefetchBufferResult PrefetchLocalBuffer(SMgrRelation smgr,
+extern PGDLLIMPORT PrefetchBufferResult PrefetchLocalBuffer(SMgrRelation smgr,
 												ForkNumber forkNum,
 												BlockNumber blockNum);
-extern BufferDesc *LocalBufferAlloc(SMgrRelation smgr, ForkNumber forkNum,
+extern PGDLLIMPORT BufferDesc *LocalBufferAlloc(SMgrRelation smgr, ForkNumber forkNum,
 									BlockNumber blockNum, bool *foundPtr);
-extern void MarkLocalBufferDirty(Buffer buffer);
-extern void DropRelFileNodeLocalBuffers(RelFileNode rnode, ForkNumber forkNum,
+extern PGDLLIMPORT void MarkLocalBufferDirty(Buffer buffer);
+extern PGDLLIMPORT void DropRelFileNodeLocalBuffers(RelFileNode rnode, ForkNumber forkNum,
 										BlockNumber firstDelBlock);
-extern void DropRelFileNodeAllLocalBuffers(RelFileNode rnode);
-extern void AtEOXact_LocalBuffers(bool isCommit);
+extern PGDLLIMPORT void DropRelFileNodeAllLocalBuffers(RelFileNode rnode);
+extern PGDLLIMPORT void AtEOXact_LocalBuffers(bool isCommit);
 
 #endif							/* BUFMGR_INTERNALS_H */

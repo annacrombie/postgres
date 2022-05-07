@@ -143,125 +143,125 @@ typedef enum ObjectClass
 
 /* in dependency.c */
 
-extern void AcquireDeletionLock(const ObjectAddress *object, int flags);
+extern PGDLLIMPORT void AcquireDeletionLock(const ObjectAddress *object, int flags);
 
-extern void ReleaseDeletionLock(const ObjectAddress *object);
+extern PGDLLIMPORT void ReleaseDeletionLock(const ObjectAddress *object);
 
-extern void performDeletion(const ObjectAddress *object,
+extern PGDLLIMPORT void performDeletion(const ObjectAddress *object,
 							DropBehavior behavior, int flags);
 
-extern void performMultipleDeletions(const ObjectAddresses *objects,
+extern PGDLLIMPORT void performMultipleDeletions(const ObjectAddresses *objects,
 									 DropBehavior behavior, int flags);
 
-extern void recordDependencyOnExpr(const ObjectAddress *depender,
+extern PGDLLIMPORT void recordDependencyOnExpr(const ObjectAddress *depender,
 								   Node *expr, List *rtable,
 								   DependencyType behavior);
 
-extern void recordDependencyOnSingleRelExpr(const ObjectAddress *depender,
+extern PGDLLIMPORT void recordDependencyOnSingleRelExpr(const ObjectAddress *depender,
 											Node *expr, Oid relId,
 											DependencyType behavior,
 											DependencyType self_behavior,
 											bool reverse_self);
 
-extern ObjectClass getObjectClass(const ObjectAddress *object);
+extern PGDLLIMPORT ObjectClass getObjectClass(const ObjectAddress *object);
 
-extern ObjectAddresses *new_object_addresses(void);
+extern PGDLLIMPORT ObjectAddresses *new_object_addresses(void);
 
-extern void add_exact_object_address(const ObjectAddress *object,
+extern PGDLLIMPORT void add_exact_object_address(const ObjectAddress *object,
 									 ObjectAddresses *addrs);
 
-extern bool object_address_present(const ObjectAddress *object,
+extern PGDLLIMPORT bool object_address_present(const ObjectAddress *object,
 								   const ObjectAddresses *addrs);
 
-extern void record_object_address_dependencies(const ObjectAddress *depender,
+extern PGDLLIMPORT void record_object_address_dependencies(const ObjectAddress *depender,
 											   ObjectAddresses *referenced,
 											   DependencyType behavior);
 
-extern void sort_object_addresses(ObjectAddresses *addrs);
+extern PGDLLIMPORT void sort_object_addresses(ObjectAddresses *addrs);
 
-extern void free_object_addresses(ObjectAddresses *addrs);
+extern PGDLLIMPORT void free_object_addresses(ObjectAddresses *addrs);
 
 /* in pg_depend.c */
 
-extern void recordDependencyOn(const ObjectAddress *depender,
+extern PGDLLIMPORT void recordDependencyOn(const ObjectAddress *depender,
 							   const ObjectAddress *referenced,
 							   DependencyType behavior);
 
-extern void recordMultipleDependencies(const ObjectAddress *depender,
+extern PGDLLIMPORT void recordMultipleDependencies(const ObjectAddress *depender,
 									   const ObjectAddress *referenced,
 									   int nreferenced,
 									   DependencyType behavior);
 
-extern void recordDependencyOnCurrentExtension(const ObjectAddress *object,
+extern PGDLLIMPORT void recordDependencyOnCurrentExtension(const ObjectAddress *object,
 											   bool isReplace);
 
-extern long deleteDependencyRecordsFor(Oid classId, Oid objectId,
+extern PGDLLIMPORT long deleteDependencyRecordsFor(Oid classId, Oid objectId,
 									   bool skipExtensionDeps);
 
-extern long deleteDependencyRecordsForClass(Oid classId, Oid objectId,
+extern PGDLLIMPORT long deleteDependencyRecordsForClass(Oid classId, Oid objectId,
 											Oid refclassId, char deptype);
 
-extern long deleteDependencyRecordsForSpecific(Oid classId, Oid objectId,
+extern PGDLLIMPORT long deleteDependencyRecordsForSpecific(Oid classId, Oid objectId,
 											   char deptype,
 											   Oid refclassId, Oid refobjectId);
 
-extern long changeDependencyFor(Oid classId, Oid objectId,
+extern PGDLLIMPORT long changeDependencyFor(Oid classId, Oid objectId,
 								Oid refClassId, Oid oldRefObjectId,
 								Oid newRefObjectId);
 
-extern long changeDependenciesOf(Oid classId, Oid oldObjectId,
+extern PGDLLIMPORT long changeDependenciesOf(Oid classId, Oid oldObjectId,
 								 Oid newObjectId);
 
-extern long changeDependenciesOn(Oid refClassId, Oid oldRefObjectId,
+extern PGDLLIMPORT long changeDependenciesOn(Oid refClassId, Oid oldRefObjectId,
 								 Oid newRefObjectId);
 
-extern Oid	getExtensionOfObject(Oid classId, Oid objectId);
-extern List *getAutoExtensionsOfObject(Oid classId, Oid objectId);
+extern PGDLLIMPORT Oid	getExtensionOfObject(Oid classId, Oid objectId);
+extern PGDLLIMPORT List *getAutoExtensionsOfObject(Oid classId, Oid objectId);
 
-extern bool sequenceIsOwned(Oid seqId, char deptype, Oid *tableId, int32 *colId);
-extern List *getOwnedSequences(Oid relid);
-extern Oid	getIdentitySequence(Oid relid, AttrNumber attnum, bool missing_ok);
+extern PGDLLIMPORT bool sequenceIsOwned(Oid seqId, char deptype, Oid *tableId, int32 *colId);
+extern PGDLLIMPORT List *getOwnedSequences(Oid relid);
+extern PGDLLIMPORT Oid	getIdentitySequence(Oid relid, AttrNumber attnum, bool missing_ok);
 
-extern Oid	get_index_constraint(Oid indexId);
+extern PGDLLIMPORT Oid	get_index_constraint(Oid indexId);
 
-extern List *get_index_ref_constraints(Oid indexId);
+extern PGDLLIMPORT List *get_index_ref_constraints(Oid indexId);
 
 /* in pg_shdepend.c */
 
-extern void recordSharedDependencyOn(ObjectAddress *depender,
+extern PGDLLIMPORT void recordSharedDependencyOn(ObjectAddress *depender,
 									 ObjectAddress *referenced,
 									 SharedDependencyType deptype);
 
-extern void deleteSharedDependencyRecordsFor(Oid classId, Oid objectId,
+extern PGDLLIMPORT void deleteSharedDependencyRecordsFor(Oid classId, Oid objectId,
 											 int32 objectSubId);
 
-extern void recordDependencyOnOwner(Oid classId, Oid objectId, Oid owner);
+extern PGDLLIMPORT void recordDependencyOnOwner(Oid classId, Oid objectId, Oid owner);
 
-extern void changeDependencyOnOwner(Oid classId, Oid objectId,
+extern PGDLLIMPORT void changeDependencyOnOwner(Oid classId, Oid objectId,
 									Oid newOwnerId);
 
-extern void recordDependencyOnTablespace(Oid classId, Oid objectId,
+extern PGDLLIMPORT void recordDependencyOnTablespace(Oid classId, Oid objectId,
 										 Oid tablespace);
 
-extern void changeDependencyOnTablespace(Oid classId, Oid objectId,
+extern PGDLLIMPORT void changeDependencyOnTablespace(Oid classId, Oid objectId,
 										 Oid newTablespaceId);
 
-extern void updateAclDependencies(Oid classId, Oid objectId, int32 objectSubId,
+extern PGDLLIMPORT void updateAclDependencies(Oid classId, Oid objectId, int32 objectSubId,
 								  Oid ownerId,
 								  int noldmembers, Oid *oldmembers,
 								  int nnewmembers, Oid *newmembers);
 
-extern bool checkSharedDependencies(Oid classId, Oid objectId,
+extern PGDLLIMPORT bool checkSharedDependencies(Oid classId, Oid objectId,
 									char **detail_msg, char **detail_log_msg);
 
-extern void shdepLockAndCheckObject(Oid classId, Oid objectId);
+extern PGDLLIMPORT void shdepLockAndCheckObject(Oid classId, Oid objectId);
 
-extern void copyTemplateDependencies(Oid templateDbId, Oid newDbId);
+extern PGDLLIMPORT void copyTemplateDependencies(Oid templateDbId, Oid newDbId);
 
-extern void dropDatabaseDependencies(Oid databaseId);
+extern PGDLLIMPORT void dropDatabaseDependencies(Oid databaseId);
 
-extern void shdepDropOwned(List *relids, DropBehavior behavior);
+extern PGDLLIMPORT void shdepDropOwned(List *relids, DropBehavior behavior);
 
-extern void shdepReassignOwned(List *relids, Oid newrole);
+extern PGDLLIMPORT void shdepReassignOwned(List *relids, Oid newrole);
 
 #endif							/* DEPENDENCY_H */

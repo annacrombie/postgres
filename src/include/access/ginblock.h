@@ -135,7 +135,7 @@ typedef struct GinMetaPageData
  */
 #define GinPageGetDeleteXid(page) ( ((PageHeader) (page))->pd_prune_xid )
 #define GinPageSetDeleteXid(page, xid) ( ((PageHeader) (page))->pd_prune_xid = xid)
-extern bool GinPageIsRecyclable(Page page);
+extern PGDLLIMPORT bool GinPageIsRecyclable(Page page);
 
 /*
  * We use our own ItemPointerGet(BlockNumber|OffsetNumber)

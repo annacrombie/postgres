@@ -38,12 +38,12 @@ typedef struct Regis
 				unused:15;
 } Regis;
 
-extern bool RS_isRegis(const char *str);
+extern PGDLLIMPORT bool RS_isRegis(const char *str);
 
-extern void RS_compile(Regis *r, bool issuffix, const char *str);
-extern void RS_free(Regis *r);
+extern PGDLLIMPORT void RS_compile(Regis *r, bool issuffix, const char *str);
+extern PGDLLIMPORT void RS_free(Regis *r);
 
 /*returns true if matches */
-extern bool RS_execute(Regis *r, char *str);
+extern PGDLLIMPORT bool RS_execute(Regis *r, char *str);
 
 #endif

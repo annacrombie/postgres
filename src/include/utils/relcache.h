@@ -36,22 +36,22 @@ typedef Relation *RelationPtr;
 /*
  * Routines to open (lookup) and close a relcache entry
  */
-extern Relation RelationIdGetRelation(Oid relationId);
-extern void RelationClose(Relation relation);
+extern PGDLLIMPORT Relation RelationIdGetRelation(Oid relationId);
+extern PGDLLIMPORT void RelationClose(Relation relation);
 
 /*
  * Routines to compute/retrieve additional cached information
  */
-extern List *RelationGetFKeyList(Relation relation);
-extern List *RelationGetIndexList(Relation relation);
-extern List *RelationGetStatExtList(Relation relation);
-extern Oid	RelationGetPrimaryKeyIndex(Relation relation);
-extern Oid	RelationGetReplicaIndex(Relation relation);
-extern List *RelationGetIndexExpressions(Relation relation);
-extern List *RelationGetDummyIndexExpressions(Relation relation);
-extern List *RelationGetIndexPredicate(Relation relation);
-extern Datum *RelationGetIndexRawAttOptions(Relation relation);
-extern bytea **RelationGetIndexAttOptions(Relation relation, bool copy);
+extern PGDLLIMPORT List *RelationGetFKeyList(Relation relation);
+extern PGDLLIMPORT List *RelationGetIndexList(Relation relation);
+extern PGDLLIMPORT List *RelationGetStatExtList(Relation relation);
+extern PGDLLIMPORT Oid	RelationGetPrimaryKeyIndex(Relation relation);
+extern PGDLLIMPORT Oid	RelationGetReplicaIndex(Relation relation);
+extern PGDLLIMPORT List *RelationGetIndexExpressions(Relation relation);
+extern PGDLLIMPORT List *RelationGetDummyIndexExpressions(Relation relation);
+extern PGDLLIMPORT List *RelationGetIndexPredicate(Relation relation);
+extern PGDLLIMPORT Datum *RelationGetIndexRawAttOptions(Relation relation);
+extern PGDLLIMPORT bytea **RelationGetIndexAttOptions(Relation relation, bool copy);
 
 typedef enum IndexAttrBitmapKind
 {
@@ -61,44 +61,44 @@ typedef enum IndexAttrBitmapKind
 	INDEX_ATTR_BITMAP_HOT_BLOCKING
 } IndexAttrBitmapKind;
 
-extern Bitmapset *RelationGetIndexAttrBitmap(Relation relation,
+extern PGDLLIMPORT Bitmapset *RelationGetIndexAttrBitmap(Relation relation,
 											 IndexAttrBitmapKind attrKind);
 
-extern Bitmapset *RelationGetIdentityKeyBitmap(Relation relation);
+extern PGDLLIMPORT Bitmapset *RelationGetIdentityKeyBitmap(Relation relation);
 
-extern void RelationGetExclusionInfo(Relation indexRelation,
+extern PGDLLIMPORT void RelationGetExclusionInfo(Relation indexRelation,
 									 Oid **operators,
 									 Oid **procs,
 									 uint16 **strategies);
 
-extern void RelationInitIndexAccessInfo(Relation relation);
+extern PGDLLIMPORT void RelationInitIndexAccessInfo(Relation relation);
 
 /* caller must include pg_publication.h */
 struct PublicationDesc;
-extern void RelationBuildPublicationDesc(Relation relation,
+extern PGDLLIMPORT void RelationBuildPublicationDesc(Relation relation,
 										 struct PublicationDesc *pubdesc);
 
-extern void RelationInitTableAccessMethod(Relation relation);
+extern PGDLLIMPORT void RelationInitTableAccessMethod(Relation relation);
 
 /*
  * Routines to support ereport() reports of relation-related errors
  */
-extern int	errtable(Relation rel);
-extern int	errtablecol(Relation rel, int attnum);
-extern int	errtablecolname(Relation rel, const char *colname);
-extern int	errtableconstraint(Relation rel, const char *conname);
+extern PGDLLIMPORT int	errtable(Relation rel);
+extern PGDLLIMPORT int	errtablecol(Relation rel, int attnum);
+extern PGDLLIMPORT int	errtablecolname(Relation rel, const char *colname);
+extern PGDLLIMPORT int	errtableconstraint(Relation rel, const char *conname);
 
 /*
  * Routines for backend startup
  */
-extern void RelationCacheInitialize(void);
-extern void RelationCacheInitializePhase2(void);
-extern void RelationCacheInitializePhase3(void);
+extern PGDLLIMPORT void RelationCacheInitialize(void);
+extern PGDLLIMPORT void RelationCacheInitializePhase2(void);
+extern PGDLLIMPORT void RelationCacheInitializePhase3(void);
 
 /*
  * Routine to create a relcache entry for an about-to-be-created relation
  */
-extern Relation RelationBuildLocalRelation(const char *relname,
+extern PGDLLIMPORT Relation RelationBuildLocalRelation(const char *relname,
 										   Oid relnamespace,
 										   TupleDesc tupDesc,
 										   Oid relid,
@@ -113,36 +113,36 @@ extern Relation RelationBuildLocalRelation(const char *relname,
 /*
  * Routines to manage assignment of new relfilenode to a relation
  */
-extern void RelationSetNewRelfilenode(Relation relation, char persistence);
-extern void RelationAssumeNewRelfilenode(Relation relation);
+extern PGDLLIMPORT void RelationSetNewRelfilenode(Relation relation, char persistence);
+extern PGDLLIMPORT void RelationAssumeNewRelfilenode(Relation relation);
 
 /*
  * Routines for flushing/rebuilding relcache entries in various scenarios
  */
-extern void RelationForgetRelation(Oid rid);
+extern PGDLLIMPORT void RelationForgetRelation(Oid rid);
 
-extern void RelationCacheInvalidateEntry(Oid relationId);
+extern PGDLLIMPORT void RelationCacheInvalidateEntry(Oid relationId);
 
-extern void RelationCacheInvalidate(bool debug_discard);
+extern PGDLLIMPORT void RelationCacheInvalidate(bool debug_discard);
 
-extern void RelationCloseSmgrByOid(Oid relationId);
+extern PGDLLIMPORT void RelationCloseSmgrByOid(Oid relationId);
 
 #ifdef USE_ASSERT_CHECKING
-extern void AssertPendingSyncs_RelationCache(void);
+extern PGDLLIMPORT void AssertPendingSyncs_RelationCache(void);
 #else
 #define AssertPendingSyncs_RelationCache() do {} while (0)
 #endif
-extern void AtEOXact_RelationCache(bool isCommit);
-extern void AtEOSubXact_RelationCache(bool isCommit, SubTransactionId mySubid,
+extern PGDLLIMPORT void AtEOXact_RelationCache(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_RelationCache(bool isCommit, SubTransactionId mySubid,
 									  SubTransactionId parentSubid);
 
 /*
  * Routines to help manage rebuilding of relcache init files
  */
-extern bool RelationIdIsInInitFile(Oid relationId);
-extern void RelationCacheInitFilePreInvalidate(void);
-extern void RelationCacheInitFilePostInvalidate(void);
-extern void RelationCacheInitFileRemove(void);
+extern PGDLLIMPORT bool RelationIdIsInInitFile(Oid relationId);
+extern PGDLLIMPORT void RelationCacheInitFilePreInvalidate(void);
+extern PGDLLIMPORT void RelationCacheInitFilePostInvalidate(void);
+extern PGDLLIMPORT void RelationCacheInitFileRemove(void);
 
 /* should be used only by relcache.c and catcache.c */
 extern PGDLLIMPORT bool criticalRelcachesBuilt;

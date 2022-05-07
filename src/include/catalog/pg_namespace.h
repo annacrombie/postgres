@@ -59,6 +59,6 @@ DECLARE_UNIQUE_INDEX_PKEY(pg_namespace_oid_index, 2685, NamespaceOidIndexId, on 
 /*
  * prototypes for functions in pg_namespace.c
  */
-extern Oid	NamespaceCreate(const char *nspName, Oid ownerId, bool isTemp);
+extern PGDLLIMPORT Oid	NamespaceCreate(const char *nspName, Oid ownerId, bool isTemp);
 
 #endif							/* PG_NAMESPACE_H */

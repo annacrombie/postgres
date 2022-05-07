@@ -41,47 +41,47 @@ typedef void *SerializableXactHandle;
  */
 
 /* housekeeping for shared memory predicate lock structures */
-extern void InitPredicateLocks(void);
-extern Size PredicateLockShmemSize(void);
+extern PGDLLIMPORT void InitPredicateLocks(void);
+extern PGDLLIMPORT Size PredicateLockShmemSize(void);
 
-extern void CheckPointPredicate(void);
+extern PGDLLIMPORT void CheckPointPredicate(void);
 
 /* predicate lock reporting */
-extern bool PageIsPredicateLocked(Relation relation, BlockNumber blkno);
+extern PGDLLIMPORT bool PageIsPredicateLocked(Relation relation, BlockNumber blkno);
 
 /* predicate lock maintenance */
-extern Snapshot GetSerializableTransactionSnapshot(Snapshot snapshot);
-extern void SetSerializableTransactionSnapshot(Snapshot snapshot,
+extern PGDLLIMPORT Snapshot GetSerializableTransactionSnapshot(Snapshot snapshot);
+extern PGDLLIMPORT void SetSerializableTransactionSnapshot(Snapshot snapshot,
 											   VirtualTransactionId *sourcevxid,
 											   int sourcepid);
-extern void RegisterPredicateLockingXid(TransactionId xid);
-extern void PredicateLockRelation(Relation relation, Snapshot snapshot);
-extern void PredicateLockPage(Relation relation, BlockNumber blkno, Snapshot snapshot);
-extern void PredicateLockTID(Relation relation, ItemPointer tid, Snapshot snapshot,
+extern PGDLLIMPORT void RegisterPredicateLockingXid(TransactionId xid);
+extern PGDLLIMPORT void PredicateLockRelation(Relation relation, Snapshot snapshot);
+extern PGDLLIMPORT void PredicateLockPage(Relation relation, BlockNumber blkno, Snapshot snapshot);
+extern PGDLLIMPORT void PredicateLockTID(Relation relation, ItemPointer tid, Snapshot snapshot,
 							 TransactionId insert_xid);
-extern void PredicateLockPageSplit(Relation relation, BlockNumber oldblkno, BlockNumber newblkno);
-extern void PredicateLockPageCombine(Relation relation, BlockNumber oldblkno, BlockNumber newblkno);
-extern void TransferPredicateLocksToHeapRelation(Relation relation);
-extern void ReleasePredicateLocks(bool isCommit, bool isReadOnlySafe);
+extern PGDLLIMPORT void PredicateLockPageSplit(Relation relation, BlockNumber oldblkno, BlockNumber newblkno);
+extern PGDLLIMPORT void PredicateLockPageCombine(Relation relation, BlockNumber oldblkno, BlockNumber newblkno);
+extern PGDLLIMPORT void TransferPredicateLocksToHeapRelation(Relation relation);
+extern PGDLLIMPORT void ReleasePredicateLocks(bool isCommit, bool isReadOnlySafe);
 
 /* conflict detection (may also trigger rollback) */
-extern bool CheckForSerializableConflictOutNeeded(Relation relation, Snapshot snapshot);
-extern void CheckForSerializableConflictOut(Relation relation, TransactionId xid, Snapshot snapshot);
-extern void CheckForSerializableConflictIn(Relation relation, ItemPointer tid, BlockNumber blkno);
-extern void CheckTableForSerializableConflictIn(Relation relation);
+extern PGDLLIMPORT bool CheckForSerializableConflictOutNeeded(Relation relation, Snapshot snapshot);
+extern PGDLLIMPORT void CheckForSerializableConflictOut(Relation relation, TransactionId xid, Snapshot snapshot);
+extern PGDLLIMPORT void CheckForSerializableConflictIn(Relation relation, ItemPointer tid, BlockNumber blkno);
+extern PGDLLIMPORT void CheckTableForSerializableConflictIn(Relation relation);
 
 /* final rollback checking */
-extern void PreCommit_CheckForSerializationFailure(void);
+extern PGDLLIMPORT void PreCommit_CheckForSerializationFailure(void);
 
 /* two-phase commit support */
-extern void AtPrepare_PredicateLocks(void);
-extern void PostPrepare_PredicateLocks(TransactionId xid);
-extern void PredicateLockTwoPhaseFinish(TransactionId xid, bool isCommit);
-extern void predicatelock_twophase_recover(TransactionId xid, uint16 info,
+extern PGDLLIMPORT void AtPrepare_PredicateLocks(void);
+extern PGDLLIMPORT void PostPrepare_PredicateLocks(TransactionId xid);
+extern PGDLLIMPORT void PredicateLockTwoPhaseFinish(TransactionId xid, bool isCommit);
+extern PGDLLIMPORT void predicatelock_twophase_recover(TransactionId xid, uint16 info,
 										   void *recdata, uint32 len);
 
 /* parallel query support */
-extern SerializableXactHandle ShareSerializableXact(void);
-extern void AttachSerializableXact(SerializableXactHandle handle);
+extern PGDLLIMPORT SerializableXactHandle ShareSerializableXact(void);
+extern PGDLLIMPORT void AttachSerializableXact(SerializableXactHandle handle);
 
 #endif							/* PREDICATE_H */

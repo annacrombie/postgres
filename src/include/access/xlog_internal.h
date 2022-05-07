@@ -321,10 +321,10 @@ typedef struct RmgrData
 } RmgrData;
 
 extern PGDLLIMPORT RmgrData RmgrTable[];
-extern void RmgrStartup(void);
-extern void RmgrCleanup(void);
-extern void RmgrNotFound(RmgrId rmid);
-extern void RegisterCustomRmgr(RmgrId rmid, RmgrData *rmgr);
+extern PGDLLIMPORT void RmgrStartup(void);
+extern PGDLLIMPORT void RmgrCleanup(void);
+extern PGDLLIMPORT void RmgrNotFound(RmgrId rmid);
+extern PGDLLIMPORT void RegisterCustomRmgr(RmgrId rmid, RmgrData *rmgr);
 
 #ifndef FRONTEND
 static inline bool
@@ -345,12 +345,12 @@ GetRmgr(RmgrId rmid)
 /*
  * Exported to support xlog switching from checkpointer
  */
-extern pg_time_t GetLastSegSwitchData(XLogRecPtr *lastSwitchLSN);
-extern XLogRecPtr RequestXLogSwitch(bool mark_unimportant);
+extern PGDLLIMPORT pg_time_t GetLastSegSwitchData(XLogRecPtr *lastSwitchLSN);
+extern PGDLLIMPORT XLogRecPtr RequestXLogSwitch(bool mark_unimportant);
 
-extern void GetOldestRestartPoint(XLogRecPtr *oldrecptr, TimeLineID *oldtli);
+extern PGDLLIMPORT void GetOldestRestartPoint(XLogRecPtr *oldrecptr, TimeLineID *oldtli);
 
-extern void XLogRecGetBlockRefInfo(XLogReaderState *record, bool pretty,
+extern PGDLLIMPORT void XLogRecGetBlockRefInfo(XLogReaderState *record, bool pretty,
 								   bool detailed_format, StringInfo buf,
 								   uint32 *fpi_len);
 

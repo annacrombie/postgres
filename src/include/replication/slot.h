@@ -190,40 +190,40 @@ extern PGDLLIMPORT ReplicationSlot *MyReplicationSlot;
 extern PGDLLIMPORT int max_replication_slots;
 
 /* shmem initialization functions */
-extern Size ReplicationSlotsShmemSize(void);
-extern void ReplicationSlotsShmemInit(void);
+extern PGDLLIMPORT Size ReplicationSlotsShmemSize(void);
+extern PGDLLIMPORT void ReplicationSlotsShmemInit(void);
 
 /* management of individual slots */
-extern void ReplicationSlotCreate(const char *name, bool db_specific,
+extern PGDLLIMPORT void ReplicationSlotCreate(const char *name, bool db_specific,
 								  ReplicationSlotPersistency p, bool two_phase);
-extern void ReplicationSlotPersist(void);
-extern void ReplicationSlotDrop(const char *name, bool nowait);
+extern PGDLLIMPORT void ReplicationSlotPersist(void);
+extern PGDLLIMPORT void ReplicationSlotDrop(const char *name, bool nowait);
 
-extern void ReplicationSlotAcquire(const char *name, bool nowait);
-extern void ReplicationSlotRelease(void);
-extern void ReplicationSlotCleanup(void);
-extern void ReplicationSlotSave(void);
-extern void ReplicationSlotMarkDirty(void);
+extern PGDLLIMPORT void ReplicationSlotAcquire(const char *name, bool nowait);
+extern PGDLLIMPORT void ReplicationSlotRelease(void);
+extern PGDLLIMPORT void ReplicationSlotCleanup(void);
+extern PGDLLIMPORT void ReplicationSlotSave(void);
+extern PGDLLIMPORT void ReplicationSlotMarkDirty(void);
 
 /* misc stuff */
-extern void ReplicationSlotInitialize(void);
-extern bool ReplicationSlotValidateName(const char *name, int elevel);
-extern void ReplicationSlotReserveWal(void);
-extern void ReplicationSlotsComputeRequiredXmin(bool already_locked);
-extern void ReplicationSlotsComputeRequiredLSN(void);
-extern XLogRecPtr ReplicationSlotsComputeLogicalRestartLSN(void);
-extern bool ReplicationSlotsCountDBSlots(Oid dboid, int *nslots, int *nactive);
-extern void ReplicationSlotsDropDBSlots(Oid dboid);
-extern bool InvalidateObsoleteReplicationSlots(XLogSegNo oldestSegno);
-extern ReplicationSlot *SearchNamedReplicationSlot(const char *name, bool need_lock);
-extern int ReplicationSlotIndex(ReplicationSlot *slot);
-extern void ReplicationSlotNameForTablesync(Oid suboid, Oid relid, char *syncslotname, int szslot);
-extern void ReplicationSlotDropAtPubNode(WalReceiverConn *wrconn, char *slotname, bool missing_ok);
+extern PGDLLIMPORT void ReplicationSlotInitialize(void);
+extern PGDLLIMPORT bool ReplicationSlotValidateName(const char *name, int elevel);
+extern PGDLLIMPORT void ReplicationSlotReserveWal(void);
+extern PGDLLIMPORT void ReplicationSlotsComputeRequiredXmin(bool already_locked);
+extern PGDLLIMPORT void ReplicationSlotsComputeRequiredLSN(void);
+extern PGDLLIMPORT XLogRecPtr ReplicationSlotsComputeLogicalRestartLSN(void);
+extern PGDLLIMPORT bool ReplicationSlotsCountDBSlots(Oid dboid, int *nslots, int *nactive);
+extern PGDLLIMPORT void ReplicationSlotsDropDBSlots(Oid dboid);
+extern PGDLLIMPORT bool InvalidateObsoleteReplicationSlots(XLogSegNo oldestSegno);
+extern PGDLLIMPORT ReplicationSlot *SearchNamedReplicationSlot(const char *name, bool need_lock);
+extern PGDLLIMPORT int ReplicationSlotIndex(ReplicationSlot *slot);
+extern PGDLLIMPORT void ReplicationSlotNameForTablesync(Oid suboid, Oid relid, char *syncslotname, int szslot);
+extern PGDLLIMPORT void ReplicationSlotDropAtPubNode(WalReceiverConn *wrconn, char *slotname, bool missing_ok);
 
-extern void StartupReplicationSlots(void);
-extern void CheckPointReplicationSlots(void);
+extern PGDLLIMPORT void StartupReplicationSlots(void);
+extern PGDLLIMPORT void CheckPointReplicationSlots(void);
 
-extern void CheckSlotRequirements(void);
-extern void CheckSlotPermissions(void);
+extern PGDLLIMPORT void CheckSlotRequirements(void);
+extern PGDLLIMPORT void CheckSlotPermissions(void);
 
 #endif							/* SLOT_H */

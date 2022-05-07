@@ -12,8 +12,8 @@
 #ifndef LOGICALWORKER_H
 #define LOGICALWORKER_H
 
-extern void ApplyWorkerMain(Datum main_arg);
+extern PGDLLIMPORT void ApplyWorkerMain(Datum main_arg);
 
-extern bool IsLogicalWorker(void);
+extern PGDLLIMPORT bool IsLogicalWorker(void);
 
 #endif							/* LOGICALWORKER_H */

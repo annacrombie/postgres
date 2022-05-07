@@ -21,14 +21,14 @@ typedef struct XLogRecordBuffer
 	XLogReaderState *record;
 } XLogRecordBuffer;
 
-extern void xlog_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
-extern void heap_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
-extern void heap2_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
-extern void xact_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
-extern void standby_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
-extern void logicalmsg_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void xlog_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void heap_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void heap2_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void xact_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void standby_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
+extern PGDLLIMPORT void logicalmsg_decode(LogicalDecodingContext *ctx, XLogRecordBuffer *buf);
 
-extern void	LogicalDecodingProcessRecord(LogicalDecodingContext *ctx,
+extern PGDLLIMPORT void	LogicalDecodingProcessRecord(LogicalDecodingContext *ctx,
 										 XLogReaderState *record);
 
 #endif

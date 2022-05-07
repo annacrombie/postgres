@@ -54,7 +54,7 @@ DECLARE_UNIQUE_INDEX(pg_parameter_acl_parname_index, 8927, ParameterAclParnameIn
 DECLARE_UNIQUE_INDEX_PKEY(pg_parameter_acl_oid_index, 8928, ParameterAclOidIndexId, on pg_parameter_acl using btree(oid oid_ops));
 
 
-extern Oid	ParameterAclLookup(const char *parameter, bool missing_ok);
-extern Oid	ParameterAclCreate(const char *parameter);
+extern PGDLLIMPORT Oid	ParameterAclLookup(const char *parameter, bool missing_ok);
+extern PGDLLIMPORT Oid	ParameterAclCreate(const char *parameter);
 
 #endif							/* PG_PARAMETER_ACL_H */

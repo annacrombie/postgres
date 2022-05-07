@@ -145,15 +145,15 @@ struct ExpandedObjectHeader
 	(((isnull) || (typlen) != -1) ? (d) : \
 	 MakeExpandedObjectReadOnlyInternal(d))
 
-extern ExpandedObjectHeader *DatumGetEOHP(Datum d);
-extern void EOH_init_header(ExpandedObjectHeader *eohptr,
+extern PGDLLIMPORT ExpandedObjectHeader *DatumGetEOHP(Datum d);
+extern PGDLLIMPORT void EOH_init_header(ExpandedObjectHeader *eohptr,
 							const ExpandedObjectMethods *methods,
 							MemoryContext obj_context);
-extern Size EOH_get_flat_size(ExpandedObjectHeader *eohptr);
-extern void EOH_flatten_into(ExpandedObjectHeader *eohptr,
+extern PGDLLIMPORT Size EOH_get_flat_size(ExpandedObjectHeader *eohptr);
+extern PGDLLIMPORT void EOH_flatten_into(ExpandedObjectHeader *eohptr,
 							 void *result, Size allocated_size);
-extern Datum MakeExpandedObjectReadOnlyInternal(Datum d);
-extern Datum TransferExpandedObject(Datum d, MemoryContext new_parent);
-extern void DeleteExpandedObject(Datum d);
+extern PGDLLIMPORT Datum MakeExpandedObjectReadOnlyInternal(Datum d);
+extern PGDLLIMPORT Datum TransferExpandedObject(Datum d, MemoryContext new_parent);
+extern PGDLLIMPORT void DeleteExpandedObject(Datum d);
 
 #endif							/* EXPANDEDDATUM_H */

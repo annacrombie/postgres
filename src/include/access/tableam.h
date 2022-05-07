@@ -863,13 +863,13 @@ typedef struct TableAmRoutine
  * for the relation.  Works for tables, views, foreign tables and partitioned
  * tables.
  */
-extern const TupleTableSlotOps *table_slot_callbacks(Relation rel);
+extern PGDLLIMPORT const TupleTableSlotOps *table_slot_callbacks(Relation rel);
 
 /*
  * Returns slot using the callbacks returned by table_slot_callbacks(), and
  * registers it on *reglist.
  */
-extern TupleTableSlot *table_slot_create(Relation rel, List **reglist);
+extern PGDLLIMPORT TupleTableSlot *table_slot_create(Relation rel, List **reglist);
 
 
 /* ----------------------------------------------------------------------------
@@ -895,7 +895,7 @@ table_beginscan(Relation rel, Snapshot snapshot,
  * Like table_beginscan(), but for scanning catalog. It'll automatically use a
  * snapshot appropriate for scanning catalog relations.
  */
-extern TableScanDesc table_beginscan_catalog(Relation rel, int nkeys,
+extern PGDLLIMPORT TableScanDesc table_beginscan_catalog(Relation rel, int nkeys,
 											 struct ScanKeyData *key);
 
 /*
@@ -1025,7 +1025,7 @@ table_rescan_set_params(TableScanDesc scan, struct ScanKeyData *key,
 /*
  * Update snapshot used by the scan.
  */
-extern void table_scan_update_snapshot(TableScanDesc scan, Snapshot snapshot);
+extern PGDLLIMPORT void table_scan_update_snapshot(TableScanDesc scan, Snapshot snapshot);
 
 /*
  * Return next tuple from `scan`, store in slot.
@@ -1114,7 +1114,7 @@ table_scan_getnextslot_tidrange(TableScanDesc sscan, ScanDirection direction,
  * Estimate the size of shared memory needed for a parallel scan of this
  * relation.
  */
-extern Size table_parallelscan_estimate(Relation rel, Snapshot snapshot);
+extern PGDLLIMPORT Size table_parallelscan_estimate(Relation rel, Snapshot snapshot);
 
 /*
  * Initialize ParallelTableScanDesc for a parallel scan of this
@@ -1122,7 +1122,7 @@ extern Size table_parallelscan_estimate(Relation rel, Snapshot snapshot);
  * for the same relation.  Call this just once in the leader process; then,
  * individual workers attach via table_beginscan_parallel.
  */
-extern void table_parallelscan_initialize(Relation rel,
+extern PGDLLIMPORT void table_parallelscan_initialize(Relation rel,
 										  ParallelTableScanDesc pscan,
 										  Snapshot snapshot);
 
@@ -1133,7 +1133,7 @@ extern void table_parallelscan_initialize(Relation rel,
  *
  * Caller must hold a suitable lock on the relation.
  */
-extern TableScanDesc table_beginscan_parallel(Relation rel,
+extern PGDLLIMPORT TableScanDesc table_beginscan_parallel(Relation rel,
 											  ParallelTableScanDesc pscan);
 
 /*
@@ -1234,7 +1234,7 @@ table_index_fetch_tuple(struct IndexFetchTableData *scan,
  * entry.  This likely is only useful to verify if there's a conflict in a
  * unique index.
  */
-extern bool table_index_fetch_tuple_check(Relation rel,
+extern PGDLLIMPORT bool table_index_fetch_tuple_check(Relation rel,
 										  ItemPointer tid,
 										  Snapshot snapshot,
 										  bool *all_dead);
@@ -1291,7 +1291,7 @@ table_tuple_tid_valid(TableScanDesc scan, ItemPointer tid)
  * Return the latest version of the tuple at `tid`, by updating `tid` to
  * point at the newest version.
  */
-extern void table_tuple_get_latest_tid(TableScanDesc scan, ItemPointer tid);
+extern PGDLLIMPORT void table_tuple_get_latest_tid(TableScanDesc scan, ItemPointer tid);
 
 /*
  * Return true iff tuple in slot satisfies the snapshot.
@@ -2024,10 +2024,10 @@ table_scan_sample_next_tuple(TableScanDesc scan,
  * ----------------------------------------------------------------------------
  */
 
-extern void simple_table_tuple_insert(Relation rel, TupleTableSlot *slot);
-extern void simple_table_tuple_delete(Relation rel, ItemPointer tid,
+extern PGDLLIMPORT void simple_table_tuple_insert(Relation rel, TupleTableSlot *slot);
+extern PGDLLIMPORT void simple_table_tuple_delete(Relation rel, ItemPointer tid,
 									  Snapshot snapshot);
-extern void simple_table_tuple_update(Relation rel, ItemPointer otid,
+extern PGDLLIMPORT void simple_table_tuple_update(Relation rel, ItemPointer otid,
 									  TupleTableSlot *slot, Snapshot snapshot,
 									  bool *update_indexes);
 
@@ -2037,15 +2037,15 @@ extern void simple_table_tuple_update(Relation rel, ItemPointer otid,
  * ----------------------------------------------------------------------------
  */
 
-extern Size table_block_parallelscan_estimate(Relation rel);
-extern Size table_block_parallelscan_initialize(Relation rel,
+extern PGDLLIMPORT Size table_block_parallelscan_estimate(Relation rel);
+extern PGDLLIMPORT Size table_block_parallelscan_initialize(Relation rel,
 												ParallelTableScanDesc pscan);
-extern void table_block_parallelscan_reinitialize(Relation rel,
+extern PGDLLIMPORT void table_block_parallelscan_reinitialize(Relation rel,
 												  ParallelTableScanDesc pscan);
-extern BlockNumber table_block_parallelscan_nextpage(Relation rel,
+extern PGDLLIMPORT BlockNumber table_block_parallelscan_nextpage(Relation rel,
 													 ParallelBlockTableScanWorker pbscanwork,
 													 ParallelBlockTableScanDesc pbscan);
-extern void table_block_parallelscan_startblock_init(Relation rel,
+extern PGDLLIMPORT void table_block_parallelscan_startblock_init(Relation rel,
 													 ParallelBlockTableScanWorker pbscanwork,
 													 ParallelBlockTableScanDesc pbscan);
 
@@ -2055,8 +2055,8 @@ extern void table_block_parallelscan_startblock_init(Relation rel,
  * ----------------------------------------------------------------------------
  */
 
-extern uint64 table_block_relation_size(Relation rel, ForkNumber forkNumber);
-extern void table_block_relation_estimate_size(Relation rel,
+extern PGDLLIMPORT uint64 table_block_relation_size(Relation rel, ForkNumber forkNumber);
+extern PGDLLIMPORT void table_block_relation_estimate_size(Relation rel,
 											   int32 *attr_widths,
 											   BlockNumber *pages,
 											   double *tuples,
@@ -2069,9 +2069,9 @@ extern void table_block_relation_estimate_size(Relation rel,
  * ----------------------------------------------------------------------------
  */
 
-extern const TableAmRoutine *GetTableAmRoutine(Oid amhandler);
-extern const TableAmRoutine *GetHeapamTableAmRoutine(void);
-extern bool check_default_table_access_method(char **newval, void **extra,
+extern PGDLLIMPORT const TableAmRoutine *GetTableAmRoutine(Oid amhandler);
+extern PGDLLIMPORT const TableAmRoutine *GetHeapamTableAmRoutine(void);
+extern PGDLLIMPORT bool check_default_table_access_method(char **newval, void **extra,
 											  GucSource source);
 
 #endif							/* TABLEAM_H */

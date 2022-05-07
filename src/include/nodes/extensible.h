@@ -70,8 +70,8 @@ typedef struct ExtensibleNodeMethods
 	void		(*nodeRead) (struct ExtensibleNode *node);
 } ExtensibleNodeMethods;
 
-extern void RegisterExtensibleNodeMethods(const ExtensibleNodeMethods *method);
-extern const ExtensibleNodeMethods *GetExtensibleNodeMethods(const char *name,
+extern PGDLLIMPORT void RegisterExtensibleNodeMethods(const ExtensibleNodeMethods *method);
+extern PGDLLIMPORT const ExtensibleNodeMethods *GetExtensibleNodeMethods(const char *name,
 															 bool missing_ok);
 
 /*
@@ -155,8 +155,8 @@ typedef struct CustomExecMethods
 									  ExplainState *es);
 } CustomExecMethods;
 
-extern void RegisterCustomScanMethods(const CustomScanMethods *methods);
-extern const CustomScanMethods *GetCustomScanMethods(const char *CustomName,
+extern PGDLLIMPORT void RegisterCustomScanMethods(const CustomScanMethods *methods);
+extern PGDLLIMPORT const CustomScanMethods *GetCustomScanMethods(const char *CustomName,
 													 bool missing_ok);
 
 #endif							/* EXTENSIBLE_H */

@@ -35,38 +35,38 @@ typedef struct xl_relmap_update
 #define MinSizeOfRelmapUpdate offsetof(xl_relmap_update, data)
 
 
-extern Oid	RelationMapOidToFilenode(Oid relationId, bool shared);
+extern PGDLLIMPORT Oid	RelationMapOidToFilenode(Oid relationId, bool shared);
 
-extern Oid	RelationMapFilenodeToOid(Oid relationId, bool shared);
-extern Oid RelationMapOidToFilenodeForDatabase(char *dbpath, Oid relationId);
-extern void RelationMapCopy(Oid dbid, Oid tsid, char *srcdbpath,
+extern PGDLLIMPORT Oid	RelationMapFilenodeToOid(Oid relationId, bool shared);
+extern PGDLLIMPORT Oid RelationMapOidToFilenodeForDatabase(char *dbpath, Oid relationId);
+extern PGDLLIMPORT void RelationMapCopy(Oid dbid, Oid tsid, char *srcdbpath,
 							char *dstdbpath);
-extern void RelationMapUpdateMap(Oid relationId, Oid fileNode, bool shared,
+extern PGDLLIMPORT void RelationMapUpdateMap(Oid relationId, Oid fileNode, bool shared,
 								 bool immediate);
 
-extern void RelationMapRemoveMapping(Oid relationId);
+extern PGDLLIMPORT void RelationMapRemoveMapping(Oid relationId);
 
-extern void RelationMapInvalidate(bool shared);
-extern void RelationMapInvalidateAll(void);
+extern PGDLLIMPORT void RelationMapInvalidate(bool shared);
+extern PGDLLIMPORT void RelationMapInvalidateAll(void);
 
-extern void AtCCI_RelationMap(void);
-extern void AtEOXact_RelationMap(bool isCommit, bool isParallelWorker);
-extern void AtPrepare_RelationMap(void);
+extern PGDLLIMPORT void AtCCI_RelationMap(void);
+extern PGDLLIMPORT void AtEOXact_RelationMap(bool isCommit, bool isParallelWorker);
+extern PGDLLIMPORT void AtPrepare_RelationMap(void);
 
-extern void CheckPointRelationMap(void);
+extern PGDLLIMPORT void CheckPointRelationMap(void);
 
-extern void RelationMapFinishBootstrap(void);
+extern PGDLLIMPORT void RelationMapFinishBootstrap(void);
 
-extern void RelationMapInitialize(void);
-extern void RelationMapInitializePhase2(void);
-extern void RelationMapInitializePhase3(void);
+extern PGDLLIMPORT void RelationMapInitialize(void);
+extern PGDLLIMPORT void RelationMapInitializePhase2(void);
+extern PGDLLIMPORT void RelationMapInitializePhase3(void);
 
-extern Size EstimateRelationMapSpace(void);
-extern void SerializeRelationMap(Size maxSize, char *startAddress);
-extern void RestoreRelationMap(char *startAddress);
+extern PGDLLIMPORT Size EstimateRelationMapSpace(void);
+extern PGDLLIMPORT void SerializeRelationMap(Size maxSize, char *startAddress);
+extern PGDLLIMPORT void RestoreRelationMap(char *startAddress);
 
-extern void relmap_redo(XLogReaderState *record);
-extern void relmap_desc(StringInfo buf, XLogReaderState *record);
-extern const char *relmap_identify(uint8 info);
+extern PGDLLIMPORT void relmap_redo(XLogReaderState *record);
+extern PGDLLIMPORT void relmap_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *relmap_identify(uint8 info);
 
 #endif							/* RELMAPPER_H */

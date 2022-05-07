@@ -29,16 +29,16 @@ typedef struct
 	XLogRecPtr	end;			/* exclusive, InvalidXLogRecPtr means infinity */
 } TimeLineHistoryEntry;
 
-extern List *readTimeLineHistory(TimeLineID targetTLI);
-extern bool existsTimeLineHistory(TimeLineID probeTLI);
-extern TimeLineID findNewestTimeLine(TimeLineID startTLI);
-extern void writeTimeLineHistory(TimeLineID newTLI, TimeLineID parentTLI,
+extern PGDLLIMPORT List *readTimeLineHistory(TimeLineID targetTLI);
+extern PGDLLIMPORT bool existsTimeLineHistory(TimeLineID probeTLI);
+extern PGDLLIMPORT TimeLineID findNewestTimeLine(TimeLineID startTLI);
+extern PGDLLIMPORT void writeTimeLineHistory(TimeLineID newTLI, TimeLineID parentTLI,
 								 XLogRecPtr switchpoint, char *reason);
-extern void writeTimeLineHistoryFile(TimeLineID tli, char *content, int size);
-extern void restoreTimeLineHistoryFiles(TimeLineID begin, TimeLineID end);
-extern bool tliInHistory(TimeLineID tli, List *expectedTLEs);
-extern TimeLineID tliOfPointInHistory(XLogRecPtr ptr, List *history);
-extern XLogRecPtr tliSwitchPoint(TimeLineID tli, List *history,
+extern PGDLLIMPORT void writeTimeLineHistoryFile(TimeLineID tli, char *content, int size);
+extern PGDLLIMPORT void restoreTimeLineHistoryFiles(TimeLineID begin, TimeLineID end);
+extern PGDLLIMPORT bool tliInHistory(TimeLineID tli, List *expectedTLEs);
+extern PGDLLIMPORT TimeLineID tliOfPointInHistory(XLogRecPtr ptr, List *history);
+extern PGDLLIMPORT XLogRecPtr tliSwitchPoint(TimeLineID tli, List *history,
 								 TimeLineID *nextTLI);
 
 #endif							/* TIMELINE_H */

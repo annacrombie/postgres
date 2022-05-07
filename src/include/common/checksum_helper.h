@@ -61,12 +61,12 @@ typedef struct pg_checksum_context
  */
 #define PG_CHECKSUM_MAX_LENGTH		PG_SHA512_DIGEST_LENGTH
 
-extern bool pg_checksum_parse_type(char *name, pg_checksum_type *);
-extern char *pg_checksum_type_name(pg_checksum_type);
+extern PGDLLIMPORT bool pg_checksum_parse_type(char *name, pg_checksum_type *);
+extern PGDLLIMPORT char *pg_checksum_type_name(pg_checksum_type);
 
-extern int	pg_checksum_init(pg_checksum_context *, pg_checksum_type);
-extern int	pg_checksum_update(pg_checksum_context *, const uint8 *input,
+extern PGDLLIMPORT int	pg_checksum_init(pg_checksum_context *, pg_checksum_type);
+extern PGDLLIMPORT int	pg_checksum_update(pg_checksum_context *, const uint8 *input,
 							   size_t len);
-extern int	pg_checksum_final(pg_checksum_context *, uint8 *output);
+extern PGDLLIMPORT int	pg_checksum_final(pg_checksum_context *, uint8 *output);
 
 #endif

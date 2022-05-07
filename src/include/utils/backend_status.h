@@ -280,8 +280,8 @@ extern PGDLLIMPORT PgBackendStatus *MyBEEntry;
  * Functions called from postmaster
  * ----------
  */
-extern Size BackendStatusShmemSize(void);
-extern void CreateSharedBackendStatus(void);
+extern PGDLLIMPORT Size BackendStatusShmemSize(void);
+extern PGDLLIMPORT void CreateSharedBackendStatus(void);
 
 
 /* ----------
@@ -290,21 +290,21 @@ extern void CreateSharedBackendStatus(void);
  */
 
 /* Initialization functions */
-extern void pgstat_beinit(void);
-extern void pgstat_bestart(void);
+extern PGDLLIMPORT void pgstat_beinit(void);
+extern PGDLLIMPORT void pgstat_bestart(void);
 
-extern void pgstat_clear_backend_activity_snapshot(void);
+extern PGDLLIMPORT void pgstat_clear_backend_activity_snapshot(void);
 
 /* Activity reporting functions */
-extern void pgstat_report_activity(BackendState state, const char *cmd_str);
-extern void pgstat_report_query_id(uint64 query_id, bool force);
-extern void pgstat_report_tempfile(size_t filesize);
-extern void pgstat_report_appname(const char *appname);
-extern void pgstat_report_xact_timestamp(TimestampTz tstamp);
-extern const char *pgstat_get_backend_current_activity(int pid, bool checkUser);
-extern const char *pgstat_get_crashed_backend_activity(int pid, char *buffer,
+extern PGDLLIMPORT void pgstat_report_activity(BackendState state, const char *cmd_str);
+extern PGDLLIMPORT void pgstat_report_query_id(uint64 query_id, bool force);
+extern PGDLLIMPORT void pgstat_report_tempfile(size_t filesize);
+extern PGDLLIMPORT void pgstat_report_appname(const char *appname);
+extern PGDLLIMPORT void pgstat_report_xact_timestamp(TimestampTz tstamp);
+extern PGDLLIMPORT const char *pgstat_get_backend_current_activity(int pid, bool checkUser);
+extern PGDLLIMPORT const char *pgstat_get_crashed_backend_activity(int pid, char *buffer,
 													   int buflen);
-extern uint64 pgstat_get_my_query_id(void);
+extern PGDLLIMPORT uint64 pgstat_get_my_query_id(void);
 
 
 /* ----------
@@ -312,10 +312,10 @@ extern uint64 pgstat_get_my_query_id(void);
  * generate the pgstat* views.
  * ----------
  */
-extern int	pgstat_fetch_stat_numbackends(void);
-extern PgBackendStatus *pgstat_fetch_stat_beentry(int beid);
-extern LocalPgBackendStatus *pgstat_fetch_stat_local_beentry(int beid);
-extern char *pgstat_clip_activity(const char *raw_activity);
+extern PGDLLIMPORT int	pgstat_fetch_stat_numbackends(void);
+extern PGDLLIMPORT PgBackendStatus *pgstat_fetch_stat_beentry(int beid);
+extern PGDLLIMPORT LocalPgBackendStatus *pgstat_fetch_stat_local_beentry(int beid);
+extern PGDLLIMPORT char *pgstat_clip_activity(const char *raw_activity);
 
 
 #endif							/* BACKEND_STATUS_H */

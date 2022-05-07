@@ -21,41 +21,41 @@
 
 #define DEFAULT_TYPDELIM		','
 
-extern ObjectAddress DefineType(ParseState *pstate, List *names, List *parameters);
-extern void RemoveTypeById(Oid typeOid);
-extern ObjectAddress DefineDomain(CreateDomainStmt *stmt);
-extern ObjectAddress DefineEnum(CreateEnumStmt *stmt);
-extern ObjectAddress DefineRange(ParseState *pstate, CreateRangeStmt *stmt);
-extern ObjectAddress AlterEnum(AlterEnumStmt *stmt);
-extern ObjectAddress DefineCompositeType(RangeVar *typevar, List *coldeflist);
-extern Oid	AssignTypeArrayOid(void);
-extern Oid	AssignTypeMultirangeOid(void);
-extern Oid	AssignTypeMultirangeArrayOid(void);
+extern PGDLLIMPORT ObjectAddress DefineType(ParseState *pstate, List *names, List *parameters);
+extern PGDLLIMPORT void RemoveTypeById(Oid typeOid);
+extern PGDLLIMPORT ObjectAddress DefineDomain(CreateDomainStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineEnum(CreateEnumStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineRange(ParseState *pstate, CreateRangeStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterEnum(AlterEnumStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineCompositeType(RangeVar *typevar, List *coldeflist);
+extern PGDLLIMPORT Oid	AssignTypeArrayOid(void);
+extern PGDLLIMPORT Oid	AssignTypeMultirangeOid(void);
+extern PGDLLIMPORT Oid	AssignTypeMultirangeArrayOid(void);
 
-extern ObjectAddress AlterDomainDefault(List *names, Node *defaultRaw);
-extern ObjectAddress AlterDomainNotNull(List *names, bool notNull);
-extern ObjectAddress AlterDomainAddConstraint(List *names, Node *constr,
+extern PGDLLIMPORT ObjectAddress AlterDomainDefault(List *names, Node *defaultRaw);
+extern PGDLLIMPORT ObjectAddress AlterDomainNotNull(List *names, bool notNull);
+extern PGDLLIMPORT ObjectAddress AlterDomainAddConstraint(List *names, Node *constr,
 											  ObjectAddress *constrAddr);
-extern ObjectAddress AlterDomainValidateConstraint(List *names, const char *constrName);
-extern ObjectAddress AlterDomainDropConstraint(List *names, const char *constrName,
+extern PGDLLIMPORT ObjectAddress AlterDomainValidateConstraint(List *names, const char *constrName);
+extern PGDLLIMPORT ObjectAddress AlterDomainDropConstraint(List *names, const char *constrName,
 											   DropBehavior behavior, bool missing_ok);
 
-extern void checkDomainOwner(HeapTuple tup);
+extern PGDLLIMPORT void checkDomainOwner(HeapTuple tup);
 
-extern ObjectAddress RenameType(RenameStmt *stmt);
+extern PGDLLIMPORT ObjectAddress RenameType(RenameStmt *stmt);
 
-extern ObjectAddress AlterTypeOwner(List *names, Oid newOwnerId, ObjectType objecttype);
-extern void AlterTypeOwner_oid(Oid typeOid, Oid newOwnerId, bool hasDependEntry);
-extern void AlterTypeOwnerInternal(Oid typeOid, Oid newOwnerId);
+extern PGDLLIMPORT ObjectAddress AlterTypeOwner(List *names, Oid newOwnerId, ObjectType objecttype);
+extern PGDLLIMPORT void AlterTypeOwner_oid(Oid typeOid, Oid newOwnerId, bool hasDependEntry);
+extern PGDLLIMPORT void AlterTypeOwnerInternal(Oid typeOid, Oid newOwnerId);
 
-extern ObjectAddress AlterTypeNamespace(List *names, const char *newschema,
+extern PGDLLIMPORT ObjectAddress AlterTypeNamespace(List *names, const char *newschema,
 										ObjectType objecttype, Oid *oldschema);
-extern Oid	AlterTypeNamespace_oid(Oid typeOid, Oid nspOid, ObjectAddresses *objsMoved);
-extern Oid	AlterTypeNamespaceInternal(Oid typeOid, Oid nspOid,
+extern PGDLLIMPORT Oid	AlterTypeNamespace_oid(Oid typeOid, Oid nspOid, ObjectAddresses *objsMoved);
+extern PGDLLIMPORT Oid	AlterTypeNamespaceInternal(Oid typeOid, Oid nspOid,
 									   bool isImplicitArray,
 									   bool errorOnTableType,
 									   ObjectAddresses *objsMoved);
 
-extern ObjectAddress AlterType(AlterTypeStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterType(AlterTypeStmt *stmt);
 
 #endif							/* TYPECMDS_H */

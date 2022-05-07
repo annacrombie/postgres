@@ -16,9 +16,9 @@
 
 #include "nodes/execnodes.h"
 
-extern BitmapAndState *ExecInitBitmapAnd(BitmapAnd *node, EState *estate, int eflags);
-extern Node *MultiExecBitmapAnd(BitmapAndState *node);
-extern void ExecEndBitmapAnd(BitmapAndState *node);
-extern void ExecReScanBitmapAnd(BitmapAndState *node);
+extern PGDLLIMPORT BitmapAndState *ExecInitBitmapAnd(BitmapAnd *node, EState *estate, int eflags);
+extern PGDLLIMPORT Node *MultiExecBitmapAnd(BitmapAndState *node);
+extern PGDLLIMPORT void ExecEndBitmapAnd(BitmapAndState *node);
+extern PGDLLIMPORT void ExecReScanBitmapAnd(BitmapAndState *node);
 
 #endif							/* NODEBITMAPAND_H */

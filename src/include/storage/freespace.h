@@ -19,21 +19,21 @@
 #include "utils/relcache.h"
 
 /* prototypes for public functions in freespace.c */
-extern Size GetRecordedFreeSpace(Relation rel, BlockNumber heapBlk);
-extern BlockNumber GetPageWithFreeSpace(Relation rel, Size spaceNeeded);
-extern BlockNumber RecordAndGetPageWithFreeSpace(Relation rel,
+extern PGDLLIMPORT Size GetRecordedFreeSpace(Relation rel, BlockNumber heapBlk);
+extern PGDLLIMPORT BlockNumber GetPageWithFreeSpace(Relation rel, Size spaceNeeded);
+extern PGDLLIMPORT BlockNumber RecordAndGetPageWithFreeSpace(Relation rel,
 												 BlockNumber oldPage,
 												 Size oldSpaceAvail,
 												 Size spaceNeeded);
-extern void RecordPageWithFreeSpace(Relation rel, BlockNumber heapBlk,
+extern PGDLLIMPORT void RecordPageWithFreeSpace(Relation rel, BlockNumber heapBlk,
 									Size spaceAvail);
-extern void XLogRecordPageWithFreeSpace(RelFileNode rnode, BlockNumber heapBlk,
+extern PGDLLIMPORT void XLogRecordPageWithFreeSpace(RelFileNode rnode, BlockNumber heapBlk,
 										Size spaceAvail);
 
-extern BlockNumber FreeSpaceMapPrepareTruncateRel(Relation rel,
+extern PGDLLIMPORT BlockNumber FreeSpaceMapPrepareTruncateRel(Relation rel,
 												  BlockNumber nblocks);
-extern void FreeSpaceMapVacuum(Relation rel);
-extern void FreeSpaceMapVacuumRange(Relation rel, BlockNumber start,
+extern PGDLLIMPORT void FreeSpaceMapVacuum(Relation rel);
+extern PGDLLIMPORT void FreeSpaceMapVacuumRange(Relation rel, BlockNumber start,
 									BlockNumber end);
 
 #endif							/* FREESPACE_H_ */

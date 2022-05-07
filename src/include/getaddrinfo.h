@@ -150,11 +150,11 @@ struct addrinfo
 #endif
 #define getnameinfo pg_getnameinfo
 
-extern int	getaddrinfo(const char *node, const char *service,
+extern PGDLLIMPORT int	getaddrinfo(const char *node, const char *service,
 						const struct addrinfo *hints, struct addrinfo **res);
-extern void freeaddrinfo(struct addrinfo *res);
-extern const char *gai_strerror(int errcode);
-extern int	getnameinfo(const struct sockaddr *sa, int salen,
+extern PGDLLIMPORT void freeaddrinfo(struct addrinfo *res);
+extern PGDLLIMPORT const char *gai_strerror(int errcode);
+extern PGDLLIMPORT int	getnameinfo(const struct sockaddr *sa, int salen,
 						char *node, int nodelen,
 						char *service, int servicelen, int flags);
 #endif							/* HAVE_GETADDRINFO */

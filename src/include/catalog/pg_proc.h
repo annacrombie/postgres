@@ -185,7 +185,7 @@ DECLARE_UNIQUE_INDEX(pg_proc_proname_args_nsp_index, 2691, ProcedureNameArgsNspI
 #endif							/* EXPOSE_TO_CLIENT_CODE */
 
 
-extern ObjectAddress ProcedureCreate(const char *procedureName,
+extern PGDLLIMPORT ObjectAddress ProcedureCreate(const char *procedureName,
 									 Oid procNamespace,
 									 bool replace,
 									 bool returnsSet,
@@ -213,8 +213,8 @@ extern ObjectAddress ProcedureCreate(const char *procedureName,
 									 float4 procost,
 									 float4 prorows);
 
-extern bool function_parse_error_transpose(const char *prosrc);
+extern PGDLLIMPORT bool function_parse_error_transpose(const char *prosrc);
 
-extern List *oid_array_to_list(Datum datum);
+extern PGDLLIMPORT List *oid_array_to_list(Datum datum);
 
 #endif							/* PG_PROC_H */

@@ -342,11 +342,11 @@ DECLARE_UNIQUE_INDEX(pg_type_typname_nsp_index, 2704, TypeNameNspIndexId, on pg_
 #endif							/* EXPOSE_TO_CLIENT_CODE */
 
 
-extern ObjectAddress TypeShellMake(const char *typeName,
+extern PGDLLIMPORT ObjectAddress TypeShellMake(const char *typeName,
 								   Oid typeNamespace,
 								   Oid ownerId);
 
-extern ObjectAddress TypeCreate(Oid newTypeOid,
+extern PGDLLIMPORT ObjectAddress TypeCreate(Oid newTypeOid,
 								const char *typeName,
 								Oid typeNamespace,
 								Oid relationOid,
@@ -379,7 +379,7 @@ extern ObjectAddress TypeCreate(Oid newTypeOid,
 								bool typeNotNull,
 								Oid typeCollation);
 
-extern void GenerateTypeDependencies(HeapTuple typeTuple,
+extern PGDLLIMPORT void GenerateTypeDependencies(HeapTuple typeTuple,
 									 Relation typeCatalog,
 									 Node *defaultExpr,
 									 void *typacl,
@@ -390,15 +390,15 @@ extern void GenerateTypeDependencies(HeapTuple typeTuple,
 									 bool makeExtensionDep,
 									 bool rebuild);
 
-extern void RenameTypeInternal(Oid typeOid, const char *newTypeName,
+extern PGDLLIMPORT void RenameTypeInternal(Oid typeOid, const char *newTypeName,
 							   Oid typeNamespace);
 
-extern char *makeArrayTypeName(const char *typeName, Oid typeNamespace);
+extern PGDLLIMPORT char *makeArrayTypeName(const char *typeName, Oid typeNamespace);
 
-extern bool moveArrayTypeName(Oid typeOid, const char *typeName,
+extern PGDLLIMPORT bool moveArrayTypeName(Oid typeOid, const char *typeName,
 							  Oid typeNamespace);
 
-extern char *makeMultirangeTypeName(const char *rangeTypeName,
+extern PGDLLIMPORT char *makeMultirangeTypeName(const char *rangeTypeName,
 									Oid typeNamespace);
 
 #endif							/* PG_TYPE_H */

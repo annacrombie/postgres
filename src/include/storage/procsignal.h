@@ -55,17 +55,17 @@ typedef enum
 /*
  * prototypes for functions in procsignal.c
  */
-extern Size ProcSignalShmemSize(void);
-extern void ProcSignalShmemInit(void);
+extern PGDLLIMPORT Size ProcSignalShmemSize(void);
+extern PGDLLIMPORT void ProcSignalShmemInit(void);
 
-extern void ProcSignalInit(int pss_idx);
-extern int	SendProcSignal(pid_t pid, ProcSignalReason reason,
+extern PGDLLIMPORT void ProcSignalInit(int pss_idx);
+extern PGDLLIMPORT int	SendProcSignal(pid_t pid, ProcSignalReason reason,
 						   BackendId backendId);
 
-extern uint64 EmitProcSignalBarrier(ProcSignalBarrierType type);
-extern void WaitForProcSignalBarrier(uint64 generation);
-extern void ProcessProcSignalBarrier(void);
+extern PGDLLIMPORT uint64 EmitProcSignalBarrier(ProcSignalBarrierType type);
+extern PGDLLIMPORT void WaitForProcSignalBarrier(uint64 generation);
+extern PGDLLIMPORT void ProcessProcSignalBarrier(void);
 
-extern void procsignal_sigusr1_handler(SIGNAL_ARGS);
+extern PGDLLIMPORT void procsignal_sigusr1_handler(SIGNAL_ARGS);
 
 #endif							/* PROCSIGNAL_H */

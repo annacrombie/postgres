@@ -40,50 +40,50 @@ extern PGDLLIMPORT const ObjectAddress InvalidObjectAddress;
 #define ObjectAddressSet(addr, class_id, object_id) \
 	ObjectAddressSubSet(addr, class_id, object_id, 0)
 
-extern ObjectAddress get_object_address(ObjectType objtype, Node *object,
+extern PGDLLIMPORT ObjectAddress get_object_address(ObjectType objtype, Node *object,
 										Relation *relp,
 										LOCKMODE lockmode, bool missing_ok);
 
-extern ObjectAddress get_object_address_rv(ObjectType objtype, RangeVar *rel,
+extern PGDLLIMPORT ObjectAddress get_object_address_rv(ObjectType objtype, RangeVar *rel,
 										   List *object, Relation *relp,
 										   LOCKMODE lockmode, bool missing_ok);
 
-extern void check_object_ownership(Oid roleid,
+extern PGDLLIMPORT void check_object_ownership(Oid roleid,
 								   ObjectType objtype, ObjectAddress address,
 								   Node *object, Relation relation);
 
-extern Oid	get_object_namespace(const ObjectAddress *address);
+extern PGDLLIMPORT Oid	get_object_namespace(const ObjectAddress *address);
 
-extern bool is_objectclass_supported(Oid class_id);
-extern const char *get_object_class_descr(Oid class_id);
-extern Oid	get_object_oid_index(Oid class_id);
-extern int	get_object_catcache_oid(Oid class_id);
-extern int	get_object_catcache_name(Oid class_id);
-extern AttrNumber get_object_attnum_oid(Oid class_id);
-extern AttrNumber get_object_attnum_name(Oid class_id);
-extern AttrNumber get_object_attnum_namespace(Oid class_id);
-extern AttrNumber get_object_attnum_owner(Oid class_id);
-extern AttrNumber get_object_attnum_acl(Oid class_id);
-extern ObjectType get_object_type(Oid class_id, Oid object_id);
-extern bool get_object_namensp_unique(Oid class_id);
+extern PGDLLIMPORT bool is_objectclass_supported(Oid class_id);
+extern PGDLLIMPORT const char *get_object_class_descr(Oid class_id);
+extern PGDLLIMPORT Oid	get_object_oid_index(Oid class_id);
+extern PGDLLIMPORT int	get_object_catcache_oid(Oid class_id);
+extern PGDLLIMPORT int	get_object_catcache_name(Oid class_id);
+extern PGDLLIMPORT AttrNumber get_object_attnum_oid(Oid class_id);
+extern PGDLLIMPORT AttrNumber get_object_attnum_name(Oid class_id);
+extern PGDLLIMPORT AttrNumber get_object_attnum_namespace(Oid class_id);
+extern PGDLLIMPORT AttrNumber get_object_attnum_owner(Oid class_id);
+extern PGDLLIMPORT AttrNumber get_object_attnum_acl(Oid class_id);
+extern PGDLLIMPORT ObjectType get_object_type(Oid class_id, Oid object_id);
+extern PGDLLIMPORT bool get_object_namensp_unique(Oid class_id);
 
-extern HeapTuple get_catalog_object_by_oid(Relation catalog,
+extern PGDLLIMPORT HeapTuple get_catalog_object_by_oid(Relation catalog,
 										   AttrNumber oidcol, Oid objectId);
 
-extern char *getObjectDescription(const ObjectAddress *object,
+extern PGDLLIMPORT char *getObjectDescription(const ObjectAddress *object,
 								  bool missing_ok);
-extern char *getObjectDescriptionOids(Oid classid, Oid objid);
+extern PGDLLIMPORT char *getObjectDescriptionOids(Oid classid, Oid objid);
 
-extern int	read_objtype_from_string(const char *objtype);
-extern char *getObjectTypeDescription(const ObjectAddress *object,
+extern PGDLLIMPORT int	read_objtype_from_string(const char *objtype);
+extern PGDLLIMPORT char *getObjectTypeDescription(const ObjectAddress *object,
 									  bool missing_ok);
-extern char *getObjectIdentity(const ObjectAddress *address,
+extern PGDLLIMPORT char *getObjectIdentity(const ObjectAddress *address,
 							   bool missing_ok);
-extern char *getObjectIdentityParts(const ObjectAddress *address,
+extern PGDLLIMPORT char *getObjectIdentityParts(const ObjectAddress *address,
 									List **objname, List **objargs,
 									bool missing_ok);
-extern struct ArrayType *strlist_to_textarray(List *list);
+extern PGDLLIMPORT struct ArrayType *strlist_to_textarray(List *list);
 
-extern ObjectType get_relkind_objtype(char relkind);
+extern PGDLLIMPORT ObjectType get_relkind_objtype(char relkind);
 
 #endif							/* OBJECTADDRESS_H */

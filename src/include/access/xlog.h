@@ -192,73 +192,73 @@ typedef enum WALAvailability
 
 struct XLogRecData;
 
-extern XLogRecPtr XLogInsertRecord(struct XLogRecData *rdata,
+extern PGDLLIMPORT XLogRecPtr XLogInsertRecord(struct XLogRecData *rdata,
 								   XLogRecPtr fpw_lsn,
 								   uint8 flags,
 								   int num_fpi,
 								   bool topxid_included);
-extern void XLogFlush(XLogRecPtr RecPtr);
-extern bool XLogBackgroundFlush(void);
-extern bool XLogNeedsFlush(XLogRecPtr RecPtr);
-extern int	XLogFileInit(XLogSegNo segno, TimeLineID tli);
-extern int	XLogFileOpen(XLogSegNo segno, TimeLineID tli);
+extern PGDLLIMPORT void XLogFlush(XLogRecPtr RecPtr);
+extern PGDLLIMPORT bool XLogBackgroundFlush(void);
+extern PGDLLIMPORT bool XLogNeedsFlush(XLogRecPtr RecPtr);
+extern PGDLLIMPORT int	XLogFileInit(XLogSegNo segno, TimeLineID tli);
+extern PGDLLIMPORT int	XLogFileOpen(XLogSegNo segno, TimeLineID tli);
 
-extern void CheckXLogRemoved(XLogSegNo segno, TimeLineID tli);
-extern XLogSegNo XLogGetLastRemovedSegno(void);
-extern void XLogSetAsyncXactLSN(XLogRecPtr record);
-extern void XLogSetReplicationSlotMinimumLSN(XLogRecPtr lsn);
+extern PGDLLIMPORT void CheckXLogRemoved(XLogSegNo segno, TimeLineID tli);
+extern PGDLLIMPORT XLogSegNo XLogGetLastRemovedSegno(void);
+extern PGDLLIMPORT void XLogSetAsyncXactLSN(XLogRecPtr record);
+extern PGDLLIMPORT void XLogSetReplicationSlotMinimumLSN(XLogRecPtr lsn);
 
-extern void xlog_redo(XLogReaderState *record);
-extern void xlog_desc(StringInfo buf, XLogReaderState *record);
-extern const char *xlog_identify(uint8 info);
+extern PGDLLIMPORT void xlog_redo(XLogReaderState *record);
+extern PGDLLIMPORT void xlog_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *xlog_identify(uint8 info);
 
-extern void issue_xlog_fsync(int fd, XLogSegNo segno, TimeLineID tli);
+extern PGDLLIMPORT void issue_xlog_fsync(int fd, XLogSegNo segno, TimeLineID tli);
 
-extern bool RecoveryInProgress(void);
-extern RecoveryState GetRecoveryState(void);
-extern bool XLogInsertAllowed(void);
-extern XLogRecPtr GetXLogInsertRecPtr(void);
-extern XLogRecPtr GetXLogWriteRecPtr(void);
+extern PGDLLIMPORT bool RecoveryInProgress(void);
+extern PGDLLIMPORT RecoveryState GetRecoveryState(void);
+extern PGDLLIMPORT bool XLogInsertAllowed(void);
+extern PGDLLIMPORT XLogRecPtr GetXLogInsertRecPtr(void);
+extern PGDLLIMPORT XLogRecPtr GetXLogWriteRecPtr(void);
 
-extern uint64 GetSystemIdentifier(void);
-extern char *GetMockAuthenticationNonce(void);
-extern bool DataChecksumsEnabled(void);
-extern XLogRecPtr GetFakeLSNForUnloggedRel(void);
-extern Size XLOGShmemSize(void);
-extern void XLOGShmemInit(void);
-extern void BootStrapXLOG(void);
-extern void LocalProcessControlFile(bool reset);
-extern void StartupXLOG(void);
-extern void ShutdownXLOG(int code, Datum arg);
-extern void CreateCheckPoint(int flags);
-extern bool CreateRestartPoint(int flags);
-extern WALAvailability GetWALAvailability(XLogRecPtr targetLSN);
-extern XLogRecPtr CalculateMaxmumSafeLSN(void);
-extern void XLogPutNextOid(Oid nextOid);
-extern XLogRecPtr XLogRestorePoint(const char *rpName);
-extern void UpdateFullPageWrites(void);
-extern void GetFullPageWriteInfo(XLogRecPtr *RedoRecPtr_p, bool *doPageWrites_p);
-extern XLogRecPtr GetRedoRecPtr(void);
-extern XLogRecPtr GetInsertRecPtr(void);
-extern XLogRecPtr GetFlushRecPtr(TimeLineID *insertTLI);
-extern TimeLineID GetWALInsertionTimeLine(void);
-extern XLogRecPtr GetLastImportantRecPtr(void);
+extern PGDLLIMPORT uint64 GetSystemIdentifier(void);
+extern PGDLLIMPORT char *GetMockAuthenticationNonce(void);
+extern PGDLLIMPORT bool DataChecksumsEnabled(void);
+extern PGDLLIMPORT XLogRecPtr GetFakeLSNForUnloggedRel(void);
+extern PGDLLIMPORT Size XLOGShmemSize(void);
+extern PGDLLIMPORT void XLOGShmemInit(void);
+extern PGDLLIMPORT void BootStrapXLOG(void);
+extern PGDLLIMPORT void LocalProcessControlFile(bool reset);
+extern PGDLLIMPORT void StartupXLOG(void);
+extern PGDLLIMPORT void ShutdownXLOG(int code, Datum arg);
+extern PGDLLIMPORT void CreateCheckPoint(int flags);
+extern PGDLLIMPORT bool CreateRestartPoint(int flags);
+extern PGDLLIMPORT WALAvailability GetWALAvailability(XLogRecPtr targetLSN);
+extern PGDLLIMPORT XLogRecPtr CalculateMaxmumSafeLSN(void);
+extern PGDLLIMPORT void XLogPutNextOid(Oid nextOid);
+extern PGDLLIMPORT XLogRecPtr XLogRestorePoint(const char *rpName);
+extern PGDLLIMPORT void UpdateFullPageWrites(void);
+extern PGDLLIMPORT void GetFullPageWriteInfo(XLogRecPtr *RedoRecPtr_p, bool *doPageWrites_p);
+extern PGDLLIMPORT XLogRecPtr GetRedoRecPtr(void);
+extern PGDLLIMPORT XLogRecPtr GetInsertRecPtr(void);
+extern PGDLLIMPORT XLogRecPtr GetFlushRecPtr(TimeLineID *insertTLI);
+extern PGDLLIMPORT TimeLineID GetWALInsertionTimeLine(void);
+extern PGDLLIMPORT XLogRecPtr GetLastImportantRecPtr(void);
 
-extern void SetWalWriterSleeping(bool sleeping);
+extern PGDLLIMPORT void SetWalWriterSleeping(bool sleeping);
 
-extern void assign_max_wal_size(int newval, void *extra);
-extern void assign_checkpoint_completion_target(double newval, void *extra);
+extern PGDLLIMPORT void assign_max_wal_size(int newval, void *extra);
+extern PGDLLIMPORT void assign_checkpoint_completion_target(double newval, void *extra);
 
 /*
  * Routines used by xlogrecovery.c to call back into xlog.c during recovery.
  */
-extern void RemoveNonParentXlogFiles(XLogRecPtr switchpoint, TimeLineID newTLI);
-extern bool XLogCheckpointNeeded(XLogSegNo new_segno);
-extern void SwitchIntoArchiveRecovery(XLogRecPtr EndRecPtr, TimeLineID replayTLI);
-extern void ReachedEndOfBackup(XLogRecPtr EndRecPtr, TimeLineID tli);
-extern void SetInstallXLogFileSegmentActive(void);
-extern bool IsInstallXLogFileSegmentActive(void);
-extern void XLogShutdownWalRcv(void);
+extern PGDLLIMPORT void RemoveNonParentXlogFiles(XLogRecPtr switchpoint, TimeLineID newTLI);
+extern PGDLLIMPORT bool XLogCheckpointNeeded(XLogSegNo new_segno);
+extern PGDLLIMPORT void SwitchIntoArchiveRecovery(XLogRecPtr EndRecPtr, TimeLineID replayTLI);
+extern PGDLLIMPORT void ReachedEndOfBackup(XLogRecPtr EndRecPtr, TimeLineID tli);
+extern PGDLLIMPORT void SetInstallXLogFileSegmentActive(void);
+extern PGDLLIMPORT bool IsInstallXLogFileSegmentActive(void);
+extern PGDLLIMPORT void XLogShutdownWalRcv(void);
 
 /*
  * Routines to start, stop, and get status of a base backup.
@@ -280,14 +280,14 @@ typedef enum SessionBackupState
 	SESSION_BACKUP_RUNNING,
 } SessionBackupState;
 
-extern XLogRecPtr do_pg_backup_start(const char *backupidstr, bool fast,
+extern PGDLLIMPORT XLogRecPtr do_pg_backup_start(const char *backupidstr, bool fast,
 									 TimeLineID *starttli_p, StringInfo labelfile,
 									 List **tablespaces, StringInfo tblspcmapfile);
-extern XLogRecPtr do_pg_backup_stop(char *labelfile, bool waitforarchive,
+extern PGDLLIMPORT XLogRecPtr do_pg_backup_stop(char *labelfile, bool waitforarchive,
 									TimeLineID *stoptli_p);
-extern void do_pg_abort_backup(int code, Datum arg);
-extern void register_persistent_abort_backup_handler(void);
-extern SessionBackupState get_backup_status(void);
+extern PGDLLIMPORT void do_pg_abort_backup(int code, Datum arg);
+extern PGDLLIMPORT void register_persistent_abort_backup_handler(void);
+extern PGDLLIMPORT SessionBackupState get_backup_status(void);
 
 /* File path names (all relative to $PGDATA) */
 #define RECOVERY_SIGNAL_FILE	"recovery.signal"

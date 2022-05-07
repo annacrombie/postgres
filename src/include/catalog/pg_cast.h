@@ -92,7 +92,7 @@ typedef enum CoercionMethod
 #endif							/* EXPOSE_TO_CLIENT_CODE */
 
 
-extern ObjectAddress CastCreate(Oid sourcetypeid,
+extern PGDLLIMPORT ObjectAddress CastCreate(Oid sourcetypeid,
 								Oid targettypeid,
 								Oid funcid,
 								char castcontext,

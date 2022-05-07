@@ -56,55 +56,55 @@ typedef struct
  */
 
 /* internal versions of the above */
-extern bool multirange_eq_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_eq_internal(TypeCacheEntry *rangetyp,
 								   const MultirangeType *mr1,
 								   const MultirangeType *mr2);
-extern bool multirange_ne_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_ne_internal(TypeCacheEntry *rangetyp,
 								   const MultirangeType *mr1,
 								   const MultirangeType *mr2);
-extern bool multirange_contains_elem_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_contains_elem_internal(TypeCacheEntry *rangetyp,
 											  const MultirangeType *mr,
 											  Datum elem);
-extern bool multirange_contains_range_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_contains_range_internal(TypeCacheEntry *rangetyp,
 											   const MultirangeType *mr,
 											   const RangeType *r);
-extern bool range_contains_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_contains_multirange_internal(TypeCacheEntry *rangetyp,
 											   const RangeType *r,
 											   const MultirangeType *mr);
-extern bool multirange_contains_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_contains_multirange_internal(TypeCacheEntry *rangetyp,
 													const MultirangeType *mr1,
 													const MultirangeType *mr2);
-extern bool range_overlaps_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_overlaps_multirange_internal(TypeCacheEntry *rangetyp,
 											   const RangeType *r,
 											   const MultirangeType *mr);
-extern bool multirange_overlaps_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_overlaps_multirange_internal(TypeCacheEntry *rangetyp,
 													const MultirangeType *mr1,
 													const MultirangeType *mr2);
-extern bool range_overleft_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_overleft_multirange_internal(TypeCacheEntry *rangetyp,
 											   const RangeType *r,
 											   const MultirangeType *mr);
-extern bool range_overright_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_overright_multirange_internal(TypeCacheEntry *rangetyp,
 												const RangeType *r,
 												const MultirangeType *mr);
-extern bool range_before_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_before_multirange_internal(TypeCacheEntry *rangetyp,
 											 const RangeType *r,
 											 const MultirangeType *mr);
-extern bool range_after_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_after_multirange_internal(TypeCacheEntry *rangetyp,
 											const RangeType *r,
 											const MultirangeType *mr);
-extern bool range_adjacent_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool range_adjacent_multirange_internal(TypeCacheEntry *rangetyp,
 											   const RangeType *r,
 											   const MultirangeType *mr);
-extern bool multirange_before_multirange_internal(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT bool multirange_before_multirange_internal(TypeCacheEntry *rangetyp,
 												  const MultirangeType *mr1,
 												  const MultirangeType *mr2);
-extern MultirangeType *multirange_minus_internal(Oid mltrngtypoid,
+extern PGDLLIMPORT MultirangeType *multirange_minus_internal(Oid mltrngtypoid,
 												 TypeCacheEntry *rangetyp,
 												 int32 range_count1,
 												 RangeType **ranges1,
 												 int32 range_count2,
 												 RangeType **ranges2);
-extern MultirangeType *multirange_intersect_internal(Oid mltrngtypoid,
+extern PGDLLIMPORT MultirangeType *multirange_intersect_internal(Oid mltrngtypoid,
 													 TypeCacheEntry *rangetyp,
 													 int32 range_count1,
 													 RangeType **ranges1,
@@ -112,24 +112,24 @@ extern MultirangeType *multirange_intersect_internal(Oid mltrngtypoid,
 													 RangeType **ranges2);
 
 /* assorted support functions */
-extern TypeCacheEntry *multirange_get_typcache(FunctionCallInfo fcinfo,
+extern PGDLLIMPORT TypeCacheEntry *multirange_get_typcache(FunctionCallInfo fcinfo,
 											   Oid mltrngtypid);
-extern void multirange_deserialize(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT void multirange_deserialize(TypeCacheEntry *rangetyp,
 								   const MultirangeType *range,
 								   int32 *range_count,
 								   RangeType ***ranges);
-extern MultirangeType *make_multirange(Oid mltrngtypoid,
+extern PGDLLIMPORT MultirangeType *make_multirange(Oid mltrngtypoid,
 									   TypeCacheEntry *typcache,
 									   int32 range_count, RangeType **ranges);
-extern MultirangeType *make_empty_multirange(Oid mltrngtypoid,
+extern PGDLLIMPORT MultirangeType *make_empty_multirange(Oid mltrngtypoid,
 											 TypeCacheEntry *rangetyp);
-extern void multirange_get_bounds(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT void multirange_get_bounds(TypeCacheEntry *rangetyp,
 								  const MultirangeType *multirange,
 								  uint32 i,
 								  RangeBound *lower, RangeBound *upper);
-extern RangeType *multirange_get_range(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT RangeType *multirange_get_range(TypeCacheEntry *rangetyp,
 									   const MultirangeType *multirange, int i);
-extern RangeType *multirange_get_union_range(TypeCacheEntry *rangetyp,
+extern PGDLLIMPORT RangeType *multirange_get_union_range(TypeCacheEntry *rangetyp,
 											 const MultirangeType *mr);
 
 #endif							/* MULTIRANGETYPES_H */

@@ -15,20 +15,20 @@
 
 #include "nodes/pathnodes.h"
 
-extern Param *replace_outer_var(PlannerInfo *root, Var *var);
-extern Param *replace_outer_placeholdervar(PlannerInfo *root,
+extern PGDLLIMPORT Param *replace_outer_var(PlannerInfo *root, Var *var);
+extern PGDLLIMPORT Param *replace_outer_placeholdervar(PlannerInfo *root,
 										   PlaceHolderVar *phv);
-extern Param *replace_outer_agg(PlannerInfo *root, Aggref *agg);
-extern Param *replace_outer_grouping(PlannerInfo *root, GroupingFunc *grp);
-extern Param *replace_nestloop_param_var(PlannerInfo *root, Var *var);
-extern Param *replace_nestloop_param_placeholdervar(PlannerInfo *root,
+extern PGDLLIMPORT Param *replace_outer_agg(PlannerInfo *root, Aggref *agg);
+extern PGDLLIMPORT Param *replace_outer_grouping(PlannerInfo *root, GroupingFunc *grp);
+extern PGDLLIMPORT Param *replace_nestloop_param_var(PlannerInfo *root, Var *var);
+extern PGDLLIMPORT Param *replace_nestloop_param_placeholdervar(PlannerInfo *root,
 													PlaceHolderVar *phv);
-extern void process_subquery_nestloop_params(PlannerInfo *root,
+extern PGDLLIMPORT void process_subquery_nestloop_params(PlannerInfo *root,
 											 List *subplan_params);
-extern List *identify_current_nestloop_params(PlannerInfo *root,
+extern PGDLLIMPORT List *identify_current_nestloop_params(PlannerInfo *root,
 											  Relids leftrelids);
-extern Param *generate_new_exec_param(PlannerInfo *root, Oid paramtype,
+extern PGDLLIMPORT Param *generate_new_exec_param(PlannerInfo *root, Oid paramtype,
 									  int32 paramtypmod, Oid paramcollation);
-extern int	assign_special_exec_param(PlannerInfo *root);
+extern PGDLLIMPORT int	assign_special_exec_param(PlannerInfo *root);
 
 #endif							/* PARAMASSIGN_H */

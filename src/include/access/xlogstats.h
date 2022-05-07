@@ -36,8 +36,8 @@ typedef struct XLogStats
 	XLogRecStats    record_stats[RM_MAX_ID + 1][MAX_XLINFO_TYPES];
 } XLogStats;
 
-extern void XLogRecGetLen(XLogReaderState *record, uint32 *rec_len,
+extern PGDLLIMPORT void XLogRecGetLen(XLogReaderState *record, uint32 *rec_len,
 						  uint32 *fpi_len);
-extern void XLogRecStoreStats(XLogStats *stats, XLogReaderState *record);
+extern PGDLLIMPORT void XLogRecStoreStats(XLogStats *stats, XLogReaderState *record);
 
 #endif							/* XLOGSTATS_H */

@@ -17,19 +17,19 @@
 #include "mb/pg_wchar.h"
 #include "port/pg_bswap.h"
 
-extern void pq_beginmessage(StringInfo buf, char msgtype);
-extern void pq_beginmessage_reuse(StringInfo buf, char msgtype);
-extern void pq_endmessage(StringInfo buf);
-extern void pq_endmessage_reuse(StringInfo buf);
+extern PGDLLIMPORT void pq_beginmessage(StringInfo buf, char msgtype);
+extern PGDLLIMPORT void pq_beginmessage_reuse(StringInfo buf, char msgtype);
+extern PGDLLIMPORT void pq_endmessage(StringInfo buf);
+extern PGDLLIMPORT void pq_endmessage_reuse(StringInfo buf);
 
-extern void pq_sendbytes(StringInfo buf, const char *data, int datalen);
-extern void pq_sendcountedtext(StringInfo buf, const char *str, int slen,
+extern PGDLLIMPORT void pq_sendbytes(StringInfo buf, const char *data, int datalen);
+extern PGDLLIMPORT void pq_sendcountedtext(StringInfo buf, const char *str, int slen,
 							   bool countincludesself);
-extern void pq_sendtext(StringInfo buf, const char *str, int slen);
-extern void pq_sendstring(StringInfo buf, const char *str);
-extern void pq_send_ascii_string(StringInfo buf, const char *str);
-extern void pq_sendfloat4(StringInfo buf, float4 f);
-extern void pq_sendfloat8(StringInfo buf, float8 f);
+extern PGDLLIMPORT void pq_sendtext(StringInfo buf, const char *str, int slen);
+extern PGDLLIMPORT void pq_sendstring(StringInfo buf, const char *str);
+extern PGDLLIMPORT void pq_send_ascii_string(StringInfo buf, const char *str);
+extern PGDLLIMPORT void pq_sendfloat4(StringInfo buf, float4 f);
+extern PGDLLIMPORT void pq_sendfloat8(StringInfo buf, float8 f);
 
 /*
  * Append a [u]int8 to a StringInfo buffer, which already has enough space
@@ -189,22 +189,22 @@ pq_sendint(StringInfo buf, uint32 i, int b)
 }
 
 
-extern void pq_begintypsend(StringInfo buf);
-extern bytea *pq_endtypsend(StringInfo buf);
+extern PGDLLIMPORT void pq_begintypsend(StringInfo buf);
+extern PGDLLIMPORT bytea *pq_endtypsend(StringInfo buf);
 
-extern void pq_puttextmessage(char msgtype, const char *str);
-extern void pq_putemptymessage(char msgtype);
+extern PGDLLIMPORT void pq_puttextmessage(char msgtype, const char *str);
+extern PGDLLIMPORT void pq_putemptymessage(char msgtype);
 
-extern int	pq_getmsgbyte(StringInfo msg);
-extern unsigned int pq_getmsgint(StringInfo msg, int b);
-extern int64 pq_getmsgint64(StringInfo msg);
-extern float4 pq_getmsgfloat4(StringInfo msg);
-extern float8 pq_getmsgfloat8(StringInfo msg);
-extern const char *pq_getmsgbytes(StringInfo msg, int datalen);
-extern void pq_copymsgbytes(StringInfo msg, char *buf, int datalen);
-extern char *pq_getmsgtext(StringInfo msg, int rawbytes, int *nbytes);
-extern const char *pq_getmsgstring(StringInfo msg);
-extern const char *pq_getmsgrawstring(StringInfo msg);
-extern void pq_getmsgend(StringInfo msg);
+extern PGDLLIMPORT int	pq_getmsgbyte(StringInfo msg);
+extern PGDLLIMPORT unsigned int pq_getmsgint(StringInfo msg, int b);
+extern PGDLLIMPORT int64 pq_getmsgint64(StringInfo msg);
+extern PGDLLIMPORT float4 pq_getmsgfloat4(StringInfo msg);
+extern PGDLLIMPORT float8 pq_getmsgfloat8(StringInfo msg);
+extern PGDLLIMPORT const char *pq_getmsgbytes(StringInfo msg, int datalen);
+extern PGDLLIMPORT void pq_copymsgbytes(StringInfo msg, char *buf, int datalen);
+extern PGDLLIMPORT char *pq_getmsgtext(StringInfo msg, int rawbytes, int *nbytes);
+extern PGDLLIMPORT const char *pq_getmsgstring(StringInfo msg);
+extern PGDLLIMPORT const char *pq_getmsgrawstring(StringInfo msg);
+extern PGDLLIMPORT void pq_getmsgend(StringInfo msg);
 
 #endif							/* PQFORMAT_H */

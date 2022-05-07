@@ -282,13 +282,13 @@ typedef struct FdwRoutine
 
 
 /* Functions in foreign/foreign.c */
-extern FdwRoutine *GetFdwRoutine(Oid fdwhandler);
-extern Oid	GetForeignServerIdByRelId(Oid relid);
-extern FdwRoutine *GetFdwRoutineByServerId(Oid serverid);
-extern FdwRoutine *GetFdwRoutineByRelId(Oid relid);
-extern FdwRoutine *GetFdwRoutineForRelation(Relation relation, bool makecopy);
-extern bool IsImportableForeignTable(const char *tablename,
+extern PGDLLIMPORT FdwRoutine *GetFdwRoutine(Oid fdwhandler);
+extern PGDLLIMPORT Oid	GetForeignServerIdByRelId(Oid relid);
+extern PGDLLIMPORT FdwRoutine *GetFdwRoutineByServerId(Oid serverid);
+extern PGDLLIMPORT FdwRoutine *GetFdwRoutineByRelId(Oid relid);
+extern PGDLLIMPORT FdwRoutine *GetFdwRoutineForRelation(Relation relation, bool makecopy);
+extern PGDLLIMPORT bool IsImportableForeignTable(const char *tablename,
 									 ImportForeignSchemaStmt *stmt);
-extern Path *GetExistingLocalJoinPath(RelOptInfo *joinrel);
+extern PGDLLIMPORT Path *GetExistingLocalJoinPath(RelOptInfo *joinrel);
 
 #endif							/* FDWAPI_H */

@@ -48,9 +48,9 @@ extern PGDLLIMPORT int pg_file_create_mode;
 extern PGDLLIMPORT int pg_mode_mask;
 
 /* Set permissions and mask based on the provided mode */
-extern void SetDataDirectoryCreatePerm(int dataDirMode);
+extern PGDLLIMPORT void SetDataDirectoryCreatePerm(int dataDirMode);
 
 /* Set permissions and mask based on the mode of the data directory */
-extern bool GetDataDirectoryCreatePerm(const char *dataDir);
+extern PGDLLIMPORT bool GetDataDirectoryCreatePerm(const char *dataDir);
 
 #endif							/* FILE_PERM_H */

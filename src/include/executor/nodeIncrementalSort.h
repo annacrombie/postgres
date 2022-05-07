@@ -15,14 +15,14 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern IncrementalSortState *ExecInitIncrementalSort(IncrementalSort *node, EState *estate, int eflags);
-extern void ExecEndIncrementalSort(IncrementalSortState *node);
-extern void ExecReScanIncrementalSort(IncrementalSortState *node);
+extern PGDLLIMPORT IncrementalSortState *ExecInitIncrementalSort(IncrementalSort *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndIncrementalSort(IncrementalSortState *node);
+extern PGDLLIMPORT void ExecReScanIncrementalSort(IncrementalSortState *node);
 
 /* parallel instrumentation support */
-extern void ExecIncrementalSortEstimate(IncrementalSortState *node, ParallelContext *pcxt);
-extern void ExecIncrementalSortInitializeDSM(IncrementalSortState *node, ParallelContext *pcxt);
-extern void ExecIncrementalSortInitializeWorker(IncrementalSortState *node, ParallelWorkerContext *pcxt);
-extern void ExecIncrementalSortRetrieveInstrumentation(IncrementalSortState *node);
+extern PGDLLIMPORT void ExecIncrementalSortEstimate(IncrementalSortState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecIncrementalSortInitializeDSM(IncrementalSortState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecIncrementalSortInitializeWorker(IncrementalSortState *node, ParallelWorkerContext *pcxt);
+extern PGDLLIMPORT void ExecIncrementalSortRetrieveInstrumentation(IncrementalSortState *node);
 
 #endif							/* NODEINCREMENTALSORT_H */

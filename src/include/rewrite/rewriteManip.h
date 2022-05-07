@@ -41,42 +41,42 @@ typedef enum ReplaceVarsNoMatchOption
 } ReplaceVarsNoMatchOption;
 
 
-extern void OffsetVarNodes(Node *node, int offset, int sublevels_up);
-extern void ChangeVarNodes(Node *node, int old_varno, int new_varno,
+extern PGDLLIMPORT void OffsetVarNodes(Node *node, int offset, int sublevels_up);
+extern PGDLLIMPORT void ChangeVarNodes(Node *node, int old_varno, int new_varno,
 						   int sublevels_up);
-extern void IncrementVarSublevelsUp(Node *node, int delta_sublevels_up,
+extern PGDLLIMPORT void IncrementVarSublevelsUp(Node *node, int delta_sublevels_up,
 									int min_sublevels_up);
-extern void IncrementVarSublevelsUp_rtable(List *rtable,
+extern PGDLLIMPORT void IncrementVarSublevelsUp_rtable(List *rtable,
 										   int delta_sublevels_up, int min_sublevels_up);
 
-extern bool rangeTableEntry_used(Node *node, int rt_index,
+extern PGDLLIMPORT bool rangeTableEntry_used(Node *node, int rt_index,
 								 int sublevels_up);
 
-extern Query *getInsertSelectQuery(Query *parsetree, Query ***subquery_ptr);
+extern PGDLLIMPORT Query *getInsertSelectQuery(Query *parsetree, Query ***subquery_ptr);
 
-extern void AddQual(Query *parsetree, Node *qual);
-extern void AddInvertedQual(Query *parsetree, Node *qual);
+extern PGDLLIMPORT void AddQual(Query *parsetree, Node *qual);
+extern PGDLLIMPORT void AddInvertedQual(Query *parsetree, Node *qual);
 
-extern bool contain_aggs_of_level(Node *node, int levelsup);
-extern int	locate_agg_of_level(Node *node, int levelsup);
-extern bool contain_windowfuncs(Node *node);
-extern int	locate_windowfunc(Node *node);
-extern bool checkExprHasSubLink(Node *node);
+extern PGDLLIMPORT bool contain_aggs_of_level(Node *node, int levelsup);
+extern PGDLLIMPORT int	locate_agg_of_level(Node *node, int levelsup);
+extern PGDLLIMPORT bool contain_windowfuncs(Node *node);
+extern PGDLLIMPORT int	locate_windowfunc(Node *node);
+extern PGDLLIMPORT bool checkExprHasSubLink(Node *node);
 
-extern Node *replace_rte_variables(Node *node,
+extern PGDLLIMPORT Node *replace_rte_variables(Node *node,
 								   int target_varno, int sublevels_up,
 								   replace_rte_variables_callback callback,
 								   void *callback_arg,
 								   bool *outer_hasSubLinks);
-extern Node *replace_rte_variables_mutator(Node *node,
+extern PGDLLIMPORT Node *replace_rte_variables_mutator(Node *node,
 										   replace_rte_variables_context *context);
 
-extern Node *map_variable_attnos(Node *node,
+extern PGDLLIMPORT Node *map_variable_attnos(Node *node,
 								 int target_varno, int sublevels_up,
 								 const struct AttrMap *attno_map,
 								 Oid to_rowtype, bool *found_whole_row);
 
-extern Node *ReplaceVarsFromTargetList(Node *node,
+extern PGDLLIMPORT Node *ReplaceVarsFromTargetList(Node *node,
 									   int target_varno, int sublevels_up,
 									   RangeTblEntry *target_rte,
 									   List *targetlist,

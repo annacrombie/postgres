@@ -16,8 +16,8 @@
 #include "catalog/objectaddress.h"
 #include "nodes/parsenodes.h"
 
-extern ObjectAddress CreateProceduralLanguage(CreatePLangStmt *stmt);
+extern PGDLLIMPORT ObjectAddress CreateProceduralLanguage(CreatePLangStmt *stmt);
 
-extern Oid	get_language_oid(const char *langname, bool missing_ok);
+extern PGDLLIMPORT Oid	get_language_oid(const char *langname, bool missing_ok);
 
 #endif							/* PROCLANG_H */

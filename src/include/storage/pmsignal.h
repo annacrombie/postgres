@@ -60,20 +60,20 @@ typedef struct PMSignalData PMSignalData;
 /*
  * prototypes for functions in pmsignal.c
  */
-extern Size PMSignalShmemSize(void);
-extern void PMSignalShmemInit(void);
-extern void SendPostmasterSignal(PMSignalReason reason);
-extern bool CheckPostmasterSignal(PMSignalReason reason);
-extern void SetQuitSignalReason(QuitSignalReason reason);
-extern QuitSignalReason GetQuitSignalReason(void);
-extern int	AssignPostmasterChildSlot(void);
-extern bool ReleasePostmasterChildSlot(int slot);
-extern bool IsPostmasterChildWalSender(int slot);
-extern void MarkPostmasterChildActive(void);
-extern void MarkPostmasterChildInactive(void);
-extern void MarkPostmasterChildWalSender(void);
-extern bool PostmasterIsAliveInternal(void);
-extern void PostmasterDeathSignalInit(void);
+extern PGDLLIMPORT Size PMSignalShmemSize(void);
+extern PGDLLIMPORT void PMSignalShmemInit(void);
+extern PGDLLIMPORT void SendPostmasterSignal(PMSignalReason reason);
+extern PGDLLIMPORT bool CheckPostmasterSignal(PMSignalReason reason);
+extern PGDLLIMPORT void SetQuitSignalReason(QuitSignalReason reason);
+extern PGDLLIMPORT QuitSignalReason GetQuitSignalReason(void);
+extern PGDLLIMPORT int	AssignPostmasterChildSlot(void);
+extern PGDLLIMPORT bool ReleasePostmasterChildSlot(int slot);
+extern PGDLLIMPORT bool IsPostmasterChildWalSender(int slot);
+extern PGDLLIMPORT void MarkPostmasterChildActive(void);
+extern PGDLLIMPORT void MarkPostmasterChildInactive(void);
+extern PGDLLIMPORT void MarkPostmasterChildWalSender(void);
+extern PGDLLIMPORT bool PostmasterIsAliveInternal(void);
+extern PGDLLIMPORT void PostmasterDeathSignalInit(void);
 
 
 /*

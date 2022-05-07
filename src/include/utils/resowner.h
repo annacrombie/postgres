@@ -65,22 +65,22 @@ typedef void (*ResourceReleaseCallback) (ResourceReleasePhase phase,
  */
 
 /* generic routines */
-extern ResourceOwner ResourceOwnerCreate(ResourceOwner parent,
+extern PGDLLIMPORT ResourceOwner ResourceOwnerCreate(ResourceOwner parent,
 										 const char *name);
-extern void ResourceOwnerRelease(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerRelease(ResourceOwner owner,
 								 ResourceReleasePhase phase,
 								 bool isCommit,
 								 bool isTopLevel);
-extern void ResourceOwnerReleaseAllPlanCacheRefs(ResourceOwner owner);
-extern void ResourceOwnerDelete(ResourceOwner owner);
-extern ResourceOwner ResourceOwnerGetParent(ResourceOwner owner);
-extern void ResourceOwnerNewParent(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerReleaseAllPlanCacheRefs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerDelete(ResourceOwner owner);
+extern PGDLLIMPORT ResourceOwner ResourceOwnerGetParent(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerNewParent(ResourceOwner owner,
 								   ResourceOwner newparent);
-extern void RegisterResourceReleaseCallback(ResourceReleaseCallback callback,
+extern PGDLLIMPORT void RegisterResourceReleaseCallback(ResourceReleaseCallback callback,
 											void *arg);
-extern void UnregisterResourceReleaseCallback(ResourceReleaseCallback callback,
+extern PGDLLIMPORT void UnregisterResourceReleaseCallback(ResourceReleaseCallback callback,
 											  void *arg);
-extern void CreateAuxProcessResourceOwner(void);
-extern void ReleaseAuxProcessResources(bool isCommit);
+extern PGDLLIMPORT void CreateAuxProcessResourceOwner(void);
+extern PGDLLIMPORT void ReleaseAuxProcessResources(bool isCommit);
 
 #endif							/* RESOWNER_H */

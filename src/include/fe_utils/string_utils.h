@@ -21,44 +21,44 @@
 
 /* Global variables controlling behavior of fmtId() and fmtQualifiedId() */
 extern PGDLLIMPORT int quote_all_identifiers;
-extern PQExpBuffer (*getLocalPQExpBuffer) (void);
+extern PGDLLIMPORT PQExpBuffer (*getLocalPQExpBuffer) (void);
 
 /* Functions */
-extern const char *fmtId(const char *identifier);
-extern const char *fmtQualifiedId(const char *schema, const char *id);
+extern PGDLLIMPORT const char *fmtId(const char *identifier);
+extern PGDLLIMPORT const char *fmtQualifiedId(const char *schema, const char *id);
 
-extern char *formatPGVersionNumber(int version_number, bool include_minor,
+extern PGDLLIMPORT char *formatPGVersionNumber(int version_number, bool include_minor,
 								   char *buf, size_t buflen);
 
-extern void appendStringLiteral(PQExpBuffer buf, const char *str,
+extern PGDLLIMPORT void appendStringLiteral(PQExpBuffer buf, const char *str,
 								int encoding, bool std_strings);
-extern void appendStringLiteralConn(PQExpBuffer buf, const char *str,
+extern PGDLLIMPORT void appendStringLiteralConn(PQExpBuffer buf, const char *str,
 									PGconn *conn);
-extern void appendStringLiteralDQ(PQExpBuffer buf, const char *str,
+extern PGDLLIMPORT void appendStringLiteralDQ(PQExpBuffer buf, const char *str,
 								  const char *dqprefix);
-extern void appendByteaLiteral(PQExpBuffer buf,
+extern PGDLLIMPORT void appendByteaLiteral(PQExpBuffer buf,
 							   const unsigned char *str, size_t length,
 							   bool std_strings);
 
-extern void appendShellString(PQExpBuffer buf, const char *str);
-extern bool appendShellStringNoError(PQExpBuffer buf, const char *str);
-extern void appendConnStrVal(PQExpBuffer buf, const char *str);
-extern void appendPsqlMetaConnect(PQExpBuffer buf, const char *dbname);
+extern PGDLLIMPORT void appendShellString(PQExpBuffer buf, const char *str);
+extern PGDLLIMPORT bool appendShellStringNoError(PQExpBuffer buf, const char *str);
+extern PGDLLIMPORT void appendConnStrVal(PQExpBuffer buf, const char *str);
+extern PGDLLIMPORT void appendPsqlMetaConnect(PQExpBuffer buf, const char *dbname);
 
-extern bool parsePGArray(const char *atext, char ***itemarray, int *nitems);
-extern void appendPGArray(PQExpBuffer buffer, const char *value);
+extern PGDLLIMPORT bool parsePGArray(const char *atext, char ***itemarray, int *nitems);
+extern PGDLLIMPORT void appendPGArray(PQExpBuffer buffer, const char *value);
 
-extern bool appendReloptionsArray(PQExpBuffer buffer, const char *reloptions,
+extern PGDLLIMPORT bool appendReloptionsArray(PQExpBuffer buffer, const char *reloptions,
 								  const char *prefix, int encoding, bool std_strings);
 
-extern bool processSQLNamePattern(PGconn *conn, PQExpBuffer buf,
+extern PGDLLIMPORT bool processSQLNamePattern(PGconn *conn, PQExpBuffer buf,
 								  const char *pattern,
 								  bool have_where, bool force_escape,
 								  const char *schemavar, const char *namevar,
 								  const char *altnamevar, const char *visibilityrule,
 								  PQExpBuffer dbnamebuf, int *dotcnt);
 
-extern void patternToSQLRegex(int encoding, PQExpBuffer dbnamebuf,
+extern PGDLLIMPORT void patternToSQLRegex(int encoding, PQExpBuffer dbnamebuf,
 							  PQExpBuffer schemabuf, PQExpBuffer namebuf,
 							  const char *pattern, bool force_escape,
 							  bool want_literal_dbname, int *dotcnt);

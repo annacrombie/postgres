@@ -64,25 +64,25 @@ extern PGDLLIMPORT WaitEventSet *FeBeWaitSet;
 #define FeBeWaitSetLatchPos 1
 #define FeBeWaitSetNEvents 3
 
-extern int	StreamServerPort(int family, const char *hostName,
+extern PGDLLIMPORT int	StreamServerPort(int family, const char *hostName,
 							 unsigned short portNumber, const char *unixSocketDir,
 							 pgsocket ListenSocket[], int MaxListen);
-extern int	StreamConnection(pgsocket server_fd, Port *port);
-extern void StreamClose(pgsocket sock);
-extern void TouchSocketFiles(void);
-extern void RemoveSocketFiles(void);
-extern void pq_init(void);
-extern int	pq_getbytes(char *s, size_t len);
-extern void pq_startmsgread(void);
-extern void pq_endmsgread(void);
-extern bool pq_is_reading_msg(void);
-extern int	pq_getmessage(StringInfo s, int maxlen);
-extern int	pq_getbyte(void);
-extern int	pq_peekbyte(void);
-extern int	pq_getbyte_if_available(unsigned char *c);
-extern bool pq_buffer_has_data(void);
-extern int	pq_putmessage_v2(char msgtype, const char *s, size_t len);
-extern bool pq_check_connection(void);
+extern PGDLLIMPORT int	StreamConnection(pgsocket server_fd, Port *port);
+extern PGDLLIMPORT void StreamClose(pgsocket sock);
+extern PGDLLIMPORT void TouchSocketFiles(void);
+extern PGDLLIMPORT void RemoveSocketFiles(void);
+extern PGDLLIMPORT void pq_init(void);
+extern PGDLLIMPORT int	pq_getbytes(char *s, size_t len);
+extern PGDLLIMPORT void pq_startmsgread(void);
+extern PGDLLIMPORT void pq_endmsgread(void);
+extern PGDLLIMPORT bool pq_is_reading_msg(void);
+extern PGDLLIMPORT int	pq_getmessage(StringInfo s, int maxlen);
+extern PGDLLIMPORT int	pq_getbyte(void);
+extern PGDLLIMPORT int	pq_peekbyte(void);
+extern PGDLLIMPORT int	pq_getbyte_if_available(unsigned char *c);
+extern PGDLLIMPORT bool pq_buffer_has_data(void);
+extern PGDLLIMPORT int	pq_putmessage_v2(char msgtype, const char *s, size_t len);
+extern PGDLLIMPORT bool pq_check_connection(void);
 
 /*
  * prototypes for functions in be-secure.c
@@ -100,21 +100,21 @@ extern PGDLLIMPORT bool ssl_passphrase_command_supports_reload;
 extern PGDLLIMPORT bool ssl_loaded_verify_locations;
 #endif
 
-extern int	secure_initialize(bool isServerStart);
-extern bool secure_loaded_verify_locations(void);
-extern void secure_destroy(void);
-extern int	secure_open_server(Port *port);
-extern void secure_close(Port *port);
-extern ssize_t secure_read(Port *port, void *ptr, size_t len);
-extern ssize_t secure_write(Port *port, void *ptr, size_t len);
-extern ssize_t secure_raw_read(Port *port, void *ptr, size_t len);
-extern ssize_t secure_raw_write(Port *port, const void *ptr, size_t len);
+extern PGDLLIMPORT int	secure_initialize(bool isServerStart);
+extern PGDLLIMPORT bool secure_loaded_verify_locations(void);
+extern PGDLLIMPORT void secure_destroy(void);
+extern PGDLLIMPORT int	secure_open_server(Port *port);
+extern PGDLLIMPORT void secure_close(Port *port);
+extern PGDLLIMPORT ssize_t secure_read(Port *port, void *ptr, size_t len);
+extern PGDLLIMPORT ssize_t secure_write(Port *port, void *ptr, size_t len);
+extern PGDLLIMPORT ssize_t secure_raw_read(Port *port, void *ptr, size_t len);
+extern PGDLLIMPORT ssize_t secure_raw_write(Port *port, const void *ptr, size_t len);
 
 /*
  * prototypes for functions in be-secure-gssapi.c
  */
 #ifdef ENABLE_GSS
-extern ssize_t secure_open_gssapi(Port *port);
+extern PGDLLIMPORT ssize_t secure_open_gssapi(Port *port);
 #endif
 
 /* GUCs */
@@ -136,9 +136,9 @@ enum ssl_protocol_versions
 /*
  * prototypes for functions in be-secure-common.c
  */
-extern int	run_ssl_passphrase_command(const char *prompt, bool is_server_start,
+extern PGDLLIMPORT int	run_ssl_passphrase_command(const char *prompt, bool is_server_start,
 									   char *buf, int size);
-extern bool check_ssl_key_file_permissions(const char *ssl_key_file,
+extern PGDLLIMPORT bool check_ssl_key_file_permissions(const char *ssl_key_file,
 										   bool isServerStart);
 
 #endif							/* LIBPQ_H */

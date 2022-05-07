@@ -25,14 +25,14 @@ typedef enum PGFileType
 } PGFileType;
 
 #ifdef FRONTEND
-extern int	fsync_fname(const char *fname, bool isdir);
-extern void fsync_pgdata(const char *pg_data, int serverVersion);
-extern void fsync_dir_recurse(const char *dir);
-extern int	durable_rename(const char *oldfile, const char *newfile);
-extern int	fsync_parent_path(const char *fname);
+extern PGDLLIMPORT int	fsync_fname(const char *fname, bool isdir);
+extern PGDLLIMPORT void fsync_pgdata(const char *pg_data, int serverVersion);
+extern PGDLLIMPORT void fsync_dir_recurse(const char *dir);
+extern PGDLLIMPORT int	durable_rename(const char *oldfile, const char *newfile);
+extern PGDLLIMPORT int	fsync_parent_path(const char *fname);
 #endif
 
-extern PGFileType get_dirent_type(const char *path,
+extern PGDLLIMPORT PGFileType get_dirent_type(const char *path,
 								  const struct dirent *de,
 								  bool look_through_symlinks,
 								  int elevel);

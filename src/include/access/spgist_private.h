@@ -493,56 +493,56 @@ typedef SpGistDeadTupleData *SpGistDeadTuple;
 #define SPGIST_MIN_FILLFACTOR			10
 #define SPGIST_DEFAULT_FILLFACTOR		80
 
-extern SpGistCache *spgGetCache(Relation index);
-extern TupleDesc getSpGistTupleDesc(Relation index, SpGistTypeDesc *keyType);
-extern void initSpGistState(SpGistState *state, Relation index);
-extern Buffer SpGistNewBuffer(Relation index);
-extern void SpGistUpdateMetaPage(Relation index);
-extern Buffer SpGistGetBuffer(Relation index, int flags,
+extern PGDLLIMPORT SpGistCache *spgGetCache(Relation index);
+extern PGDLLIMPORT TupleDesc getSpGistTupleDesc(Relation index, SpGistTypeDesc *keyType);
+extern PGDLLIMPORT void initSpGistState(SpGistState *state, Relation index);
+extern PGDLLIMPORT Buffer SpGistNewBuffer(Relation index);
+extern PGDLLIMPORT void SpGistUpdateMetaPage(Relation index);
+extern PGDLLIMPORT Buffer SpGistGetBuffer(Relation index, int flags,
 							  int needSpace, bool *isNew);
-extern void SpGistSetLastUsedPage(Relation index, Buffer buffer);
-extern void SpGistInitPage(Page page, uint16 f);
-extern void SpGistInitBuffer(Buffer b, uint16 f);
-extern void SpGistInitMetapage(Page page);
-extern unsigned int SpGistGetInnerTypeSize(SpGistTypeDesc *att, Datum datum);
-extern Size SpGistGetLeafTupleSize(TupleDesc tupleDescriptor,
+extern PGDLLIMPORT void SpGistSetLastUsedPage(Relation index, Buffer buffer);
+extern PGDLLIMPORT void SpGistInitPage(Page page, uint16 f);
+extern PGDLLIMPORT void SpGistInitBuffer(Buffer b, uint16 f);
+extern PGDLLIMPORT void SpGistInitMetapage(Page page);
+extern PGDLLIMPORT unsigned int SpGistGetInnerTypeSize(SpGistTypeDesc *att, Datum datum);
+extern PGDLLIMPORT Size SpGistGetLeafTupleSize(TupleDesc tupleDescriptor,
 								   Datum *datums, bool *isnulls);
-extern SpGistLeafTuple spgFormLeafTuple(SpGistState *state,
+extern PGDLLIMPORT SpGistLeafTuple spgFormLeafTuple(SpGistState *state,
 										ItemPointer heapPtr,
 										Datum *datums, bool *isnulls);
-extern SpGistNodeTuple spgFormNodeTuple(SpGistState *state,
+extern PGDLLIMPORT SpGistNodeTuple spgFormNodeTuple(SpGistState *state,
 										Datum label, bool isnull);
-extern SpGistInnerTuple spgFormInnerTuple(SpGistState *state,
+extern PGDLLIMPORT SpGistInnerTuple spgFormInnerTuple(SpGistState *state,
 										  bool hasPrefix, Datum prefix,
 										  int nNodes, SpGistNodeTuple *nodes);
-extern SpGistDeadTuple spgFormDeadTuple(SpGistState *state, int tupstate,
+extern PGDLLIMPORT SpGistDeadTuple spgFormDeadTuple(SpGistState *state, int tupstate,
 										BlockNumber blkno, OffsetNumber offnum);
-extern void spgDeformLeafTuple(SpGistLeafTuple tup, TupleDesc tupleDescriptor,
+extern PGDLLIMPORT void spgDeformLeafTuple(SpGistLeafTuple tup, TupleDesc tupleDescriptor,
 							   Datum *datums, bool *isnulls,
 							   bool keyColumnIsNull);
-extern Datum *spgExtractNodeLabels(SpGistState *state,
+extern PGDLLIMPORT Datum *spgExtractNodeLabels(SpGistState *state,
 								   SpGistInnerTuple innerTuple);
-extern OffsetNumber SpGistPageAddNewItem(SpGistState *state, Page page,
+extern PGDLLIMPORT OffsetNumber SpGistPageAddNewItem(SpGistState *state, Page page,
 										 Item item, Size size,
 										 OffsetNumber *startOffset,
 										 bool errorOK);
-extern bool spgproperty(Oid index_oid, int attno,
+extern PGDLLIMPORT bool spgproperty(Oid index_oid, int attno,
 						IndexAMProperty prop, const char *propname,
 						bool *res, bool *isnull);
 
 /* spgdoinsert.c */
-extern void spgUpdateNodeLink(SpGistInnerTuple tup, int nodeN,
+extern PGDLLIMPORT void spgUpdateNodeLink(SpGistInnerTuple tup, int nodeN,
 							  BlockNumber blkno, OffsetNumber offset);
-extern void spgPageIndexMultiDelete(SpGistState *state, Page page,
+extern PGDLLIMPORT void spgPageIndexMultiDelete(SpGistState *state, Page page,
 									OffsetNumber *itemnos, int nitems,
 									int firststate, int reststate,
 									BlockNumber blkno, OffsetNumber offnum);
-extern bool spgdoinsert(Relation index, SpGistState *state,
+extern PGDLLIMPORT bool spgdoinsert(Relation index, SpGistState *state,
 						ItemPointer heapPtr, Datum *datums, bool *isnulls);
 
 /* spgproc.c */
-extern double *spg_key_orderbys_distances(Datum key, bool isLeaf,
+extern PGDLLIMPORT double *spg_key_orderbys_distances(Datum key, bool isLeaf,
 										  ScanKey orderbys, int norderbys);
-extern BOX *box_copy(BOX *orig);
+extern PGDLLIMPORT BOX *box_copy(BOX *orig);
 
 #endif							/* SPGIST_PRIVATE_H */

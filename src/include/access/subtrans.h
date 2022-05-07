@@ -14,16 +14,16 @@
 /* Number of SLRU buffers to use for subtrans */
 #define NUM_SUBTRANS_BUFFERS	32
 
-extern void SubTransSetParent(TransactionId xid, TransactionId parent);
-extern TransactionId SubTransGetParent(TransactionId xid);
-extern TransactionId SubTransGetTopmostTransaction(TransactionId xid);
+extern PGDLLIMPORT void SubTransSetParent(TransactionId xid, TransactionId parent);
+extern PGDLLIMPORT TransactionId SubTransGetParent(TransactionId xid);
+extern PGDLLIMPORT TransactionId SubTransGetTopmostTransaction(TransactionId xid);
 
-extern Size SUBTRANSShmemSize(void);
-extern void SUBTRANSShmemInit(void);
-extern void BootStrapSUBTRANS(void);
-extern void StartupSUBTRANS(TransactionId oldestActiveXID);
-extern void CheckPointSUBTRANS(void);
-extern void ExtendSUBTRANS(TransactionId newestXact);
-extern void TruncateSUBTRANS(TransactionId oldestXact);
+extern PGDLLIMPORT Size SUBTRANSShmemSize(void);
+extern PGDLLIMPORT void SUBTRANSShmemInit(void);
+extern PGDLLIMPORT void BootStrapSUBTRANS(void);
+extern PGDLLIMPORT void StartupSUBTRANS(TransactionId oldestActiveXID);
+extern PGDLLIMPORT void CheckPointSUBTRANS(void);
+extern PGDLLIMPORT void ExtendSUBTRANS(TransactionId newestXact);
+extern PGDLLIMPORT void TruncateSUBTRANS(TransactionId oldestXact);
 
 #endif							/* SUBTRANS_H */

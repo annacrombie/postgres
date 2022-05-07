@@ -216,6 +216,6 @@ typedef struct
  * in geo_ops.c
  */
 
-extern float8 pg_hypot(float8 x, float8 y);
+extern PGDLLIMPORT float8 pg_hypot(float8 x, float8 y);
 
 #endif							/* GEO_DECLS_H */

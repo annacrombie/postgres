@@ -65,9 +65,9 @@ enum ComputeQueryIdType
 extern PGDLLIMPORT int compute_query_id;
 
 
-extern const char *CleanQuerytext(const char *query, int *location, int *len);
-extern JumbleState *JumbleQuery(Query *query, const char *querytext);
-extern void EnableQueryId(void);
+extern PGDLLIMPORT const char *CleanQuerytext(const char *query, int *location, int *len);
+extern PGDLLIMPORT JumbleState *JumbleQuery(Query *query, const char *querytext);
+extern PGDLLIMPORT void EnableQueryId(void);
 
 extern PGDLLIMPORT bool query_id_enabled;
 

@@ -18,12 +18,12 @@
 #include "catalog/objectaddress.h"
 #include "parser/parse_node.h"
 
-extern ObjectAddress CreateSubscription(ParseState *pstate, CreateSubscriptionStmt *stmt,
+extern PGDLLIMPORT ObjectAddress CreateSubscription(ParseState *pstate, CreateSubscriptionStmt *stmt,
 										bool isTopLevel);
-extern ObjectAddress AlterSubscription(ParseState *pstate, AlterSubscriptionStmt *stmt, bool isTopLevel);
-extern void DropSubscription(DropSubscriptionStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT ObjectAddress AlterSubscription(ParseState *pstate, AlterSubscriptionStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT void DropSubscription(DropSubscriptionStmt *stmt, bool isTopLevel);
 
-extern ObjectAddress AlterSubscriptionOwner(const char *name, Oid newOwnerId);
-extern void AlterSubscriptionOwner_oid(Oid subid, Oid newOwnerId);
+extern PGDLLIMPORT ObjectAddress AlterSubscriptionOwner(const char *name, Oid newOwnerId);
+extern PGDLLIMPORT void AlterSubscriptionOwner_oid(Oid subid, Oid newOwnerId);
 
 #endif							/* SUBSCRIPTIONCMDS_H */

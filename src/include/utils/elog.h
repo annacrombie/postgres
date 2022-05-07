@@ -159,38 +159,38 @@
 
 #define TEXTDOMAIN NULL
 
-extern bool message_level_is_interesting(int elevel);
+extern PGDLLIMPORT bool message_level_is_interesting(int elevel);
 
-extern bool errstart(int elevel, const char *domain);
-extern pg_attribute_cold bool errstart_cold(int elevel, const char *domain);
-extern void errfinish(const char *filename, int lineno, const char *funcname);
+extern PGDLLIMPORT bool errstart(int elevel, const char *domain);
+extern PGDLLIMPORT pg_attribute_cold bool errstart_cold(int elevel, const char *domain);
+extern PGDLLIMPORT void errfinish(const char *filename, int lineno, const char *funcname);
 
-extern int	errcode(int sqlerrcode);
+extern PGDLLIMPORT int	errcode(int sqlerrcode);
 
-extern int	errcode_for_file_access(void);
-extern int	errcode_for_socket_access(void);
+extern PGDLLIMPORT int	errcode_for_file_access(void);
+extern PGDLLIMPORT int	errcode_for_socket_access(void);
 
-extern int	errmsg(const char *fmt,...) pg_attribute_printf(1, 2);
-extern int	errmsg_internal(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errmsg(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errmsg_internal(const char *fmt,...) pg_attribute_printf(1, 2);
 
-extern int	errmsg_plural(const char *fmt_singular, const char *fmt_plural,
+extern PGDLLIMPORT int	errmsg_plural(const char *fmt_singular, const char *fmt_plural,
 						  unsigned long n,...) pg_attribute_printf(1, 4) pg_attribute_printf(2, 4);
 
-extern int	errdetail(const char *fmt,...) pg_attribute_printf(1, 2);
-extern int	errdetail_internal(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errdetail(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errdetail_internal(const char *fmt,...) pg_attribute_printf(1, 2);
 
-extern int	errdetail_log(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errdetail_log(const char *fmt,...) pg_attribute_printf(1, 2);
 
-extern int	errdetail_log_plural(const char *fmt_singular,
+extern PGDLLIMPORT int	errdetail_log_plural(const char *fmt_singular,
 								 const char *fmt_plural,
 								 unsigned long n,...) pg_attribute_printf(1, 4) pg_attribute_printf(2, 4);
 
-extern int	errdetail_plural(const char *fmt_singular, const char *fmt_plural,
+extern PGDLLIMPORT int	errdetail_plural(const char *fmt_singular, const char *fmt_plural,
 							 unsigned long n,...) pg_attribute_printf(1, 4) pg_attribute_printf(2, 4);
 
-extern int	errhint(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errhint(const char *fmt,...) pg_attribute_printf(1, 2);
 
-extern int	errhint_plural(const char *fmt_singular, const char *fmt_plural,
+extern PGDLLIMPORT int	errhint_plural(const char *fmt_singular, const char *fmt_plural,
 						   unsigned long n,...) pg_attribute_printf(1, 4) pg_attribute_printf(2, 4);
 
 /*
@@ -203,25 +203,25 @@ extern int	errhint_plural(const char *fmt_singular, const char *fmt_plural,
  */
 #define errcontext	set_errcontext_domain(TEXTDOMAIN),	errcontext_msg
 
-extern int	set_errcontext_domain(const char *domain);
+extern PGDLLIMPORT int	set_errcontext_domain(const char *domain);
 
-extern int	errcontext_msg(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT int	errcontext_msg(const char *fmt,...) pg_attribute_printf(1, 2);
 
-extern int	errhidestmt(bool hide_stmt);
-extern int	errhidecontext(bool hide_ctx);
+extern PGDLLIMPORT int	errhidestmt(bool hide_stmt);
+extern PGDLLIMPORT int	errhidecontext(bool hide_ctx);
 
-extern int	errbacktrace(void);
+extern PGDLLIMPORT int	errbacktrace(void);
 
-extern int	errposition(int cursorpos);
+extern PGDLLIMPORT int	errposition(int cursorpos);
 
-extern int	internalerrposition(int cursorpos);
-extern int	internalerrquery(const char *query);
+extern PGDLLIMPORT int	internalerrposition(int cursorpos);
+extern PGDLLIMPORT int	internalerrquery(const char *query);
 
-extern int	err_generic_string(int field, const char *str);
+extern PGDLLIMPORT int	err_generic_string(int field, const char *str);
 
-extern int	geterrcode(void);
-extern int	geterrposition(void);
-extern int	getinternalerrposition(void);
+extern PGDLLIMPORT int	geterrcode(void);
+extern PGDLLIMPORT int	geterrposition(void);
+extern PGDLLIMPORT int	getinternalerrposition(void);
 
 
 /*----------
@@ -235,8 +235,8 @@ extern int	getinternalerrposition(void);
 
 /* Support for constructing error strings separately from ereport() calls */
 
-extern void pre_format_elog_string(int errnumber, const char *domain);
-extern char *format_elog_string(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT void pre_format_elog_string(int errnumber, const char *domain);
+extern PGDLLIMPORT char *format_elog_string(const char *fmt,...) pg_attribute_printf(1, 2);
 
 
 /* Support for attaching context information to error reports */
@@ -400,15 +400,15 @@ typedef struct ErrorData
 	struct MemoryContextData *assoc_context;
 } ErrorData;
 
-extern void EmitErrorReport(void);
-extern ErrorData *CopyErrorData(void);
-extern void FreeErrorData(ErrorData *edata);
-extern void FlushErrorState(void);
-extern void ReThrowError(ErrorData *edata) pg_attribute_noreturn();
-extern void ThrowErrorData(ErrorData *edata);
-extern void pg_re_throw(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void EmitErrorReport(void);
+extern PGDLLIMPORT ErrorData *CopyErrorData(void);
+extern PGDLLIMPORT void FreeErrorData(ErrorData *edata);
+extern PGDLLIMPORT void FlushErrorState(void);
+extern PGDLLIMPORT void ReThrowError(ErrorData *edata) pg_attribute_noreturn();
+extern PGDLLIMPORT void ThrowErrorData(ErrorData *edata);
+extern PGDLLIMPORT void pg_re_throw(void) pg_attribute_noreturn();
 
-extern char *GetErrorContextStack(void);
+extern PGDLLIMPORT char *GetErrorContextStack(void);
 
 /* Hook for intercepting messages before they are sent to the server log */
 typedef void (*emit_log_hook_type) (ErrorData *edata);
@@ -439,25 +439,25 @@ extern PGDLLIMPORT bool syslog_split_messages;
 #define LOG_DESTINATION_JSONLOG	16
 
 /* Other exported functions */
-extern void DebugFileOpen(void);
-extern char *unpack_sql_state(int sql_state);
-extern bool in_error_recursion_trouble(void);
+extern PGDLLIMPORT void DebugFileOpen(void);
+extern PGDLLIMPORT char *unpack_sql_state(int sql_state);
+extern PGDLLIMPORT bool in_error_recursion_trouble(void);
 
 /* Common functions shared across destinations */
-extern void reset_formatted_start_time(void);
-extern char *get_formatted_start_time(void);
-extern char *get_formatted_log_time(void);
-extern const char *get_backend_type_for_log(void);
-extern bool check_log_of_query(ErrorData *edata);
-extern const char *error_severity(int elevel);
-extern void write_pipe_chunks(char *data, int len, int dest);
+extern PGDLLIMPORT void reset_formatted_start_time(void);
+extern PGDLLIMPORT char *get_formatted_start_time(void);
+extern PGDLLIMPORT char *get_formatted_log_time(void);
+extern PGDLLIMPORT const char *get_backend_type_for_log(void);
+extern PGDLLIMPORT bool check_log_of_query(ErrorData *edata);
+extern PGDLLIMPORT const char *error_severity(int elevel);
+extern PGDLLIMPORT void write_pipe_chunks(char *data, int len, int dest);
 
 /* Destination-specific functions */
-extern void write_csvlog(ErrorData *edata);
-extern void write_jsonlog(ErrorData *edata);
+extern PGDLLIMPORT void write_csvlog(ErrorData *edata);
+extern PGDLLIMPORT void write_jsonlog(ErrorData *edata);
 
 #ifdef HAVE_SYSLOG
-extern void set_syslog_parameters(const char *ident, int facility);
+extern PGDLLIMPORT void set_syslog_parameters(const char *ident, int facility);
 #endif
 
 /*
@@ -465,6 +465,6 @@ extern void set_syslog_parameters(const char *ident, int facility);
  * not available). Used before ereport/elog can be used
  * safely (memory context, GUC load etc)
  */
-extern void write_stderr(const char *fmt,...) pg_attribute_printf(1, 2);
+extern PGDLLIMPORT void write_stderr(const char *fmt,...) pg_attribute_printf(1, 2);
 
 #endif							/* ELOG_H */

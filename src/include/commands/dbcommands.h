@@ -19,18 +19,18 @@
 #include "lib/stringinfo.h"
 #include "parser/parse_node.h"
 
-extern Oid	createdb(ParseState *pstate, const CreatedbStmt *stmt);
-extern void dropdb(const char *dbname, bool missing_ok, bool force);
-extern void DropDatabase(ParseState *pstate, DropdbStmt *stmt);
-extern ObjectAddress RenameDatabase(const char *oldname, const char *newname);
-extern Oid	AlterDatabase(ParseState *pstate, AlterDatabaseStmt *stmt, bool isTopLevel);
-extern ObjectAddress AlterDatabaseRefreshColl(AlterDatabaseRefreshCollStmt *stmt);
-extern Oid	AlterDatabaseSet(AlterDatabaseSetStmt *stmt);
-extern ObjectAddress AlterDatabaseOwner(const char *dbname, Oid newOwnerId);
+extern PGDLLIMPORT Oid	createdb(ParseState *pstate, const CreatedbStmt *stmt);
+extern PGDLLIMPORT void dropdb(const char *dbname, bool missing_ok, bool force);
+extern PGDLLIMPORT void DropDatabase(ParseState *pstate, DropdbStmt *stmt);
+extern PGDLLIMPORT ObjectAddress RenameDatabase(const char *oldname, const char *newname);
+extern PGDLLIMPORT Oid	AlterDatabase(ParseState *pstate, AlterDatabaseStmt *stmt, bool isTopLevel);
+extern PGDLLIMPORT ObjectAddress AlterDatabaseRefreshColl(AlterDatabaseRefreshCollStmt *stmt);
+extern PGDLLIMPORT Oid	AlterDatabaseSet(AlterDatabaseSetStmt *stmt);
+extern PGDLLIMPORT ObjectAddress AlterDatabaseOwner(const char *dbname, Oid newOwnerId);
 
-extern Oid	get_database_oid(const char *dbname, bool missing_ok);
-extern char *get_database_name(Oid dbid);
+extern PGDLLIMPORT Oid	get_database_oid(const char *dbname, bool missing_ok);
+extern PGDLLIMPORT char *get_database_name(Oid dbid);
 
-extern void check_encoding_locale_matches(int encoding, const char *collate, const char *ctype);
+extern PGDLLIMPORT void check_encoding_locale_matches(int encoding, const char *collate, const char *ctype);
 
 #endif							/* DBCOMMANDS_H */

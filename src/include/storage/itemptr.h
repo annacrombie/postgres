@@ -200,9 +200,9 @@ typedef ItemPointerData *ItemPointer;
  * ----------------
  */
 
-extern bool ItemPointerEquals(ItemPointer pointer1, ItemPointer pointer2);
-extern int32 ItemPointerCompare(ItemPointer arg1, ItemPointer arg2);
-extern void ItemPointerInc(ItemPointer pointer);
-extern void ItemPointerDec(ItemPointer pointer);
+extern PGDLLIMPORT bool ItemPointerEquals(ItemPointer pointer1, ItemPointer pointer2);
+extern PGDLLIMPORT int32 ItemPointerCompare(ItemPointer arg1, ItemPointer arg2);
+extern PGDLLIMPORT void ItemPointerInc(ItemPointer pointer);
+extern PGDLLIMPORT void ItemPointerDec(ItemPointer pointer);
 
 #endif							/* ITEMPTR_H */

@@ -112,22 +112,22 @@ struct BackgroundWorkerHandle;
 typedef struct BackgroundWorkerHandle BackgroundWorkerHandle;
 
 /* Register a new bgworker during shared_preload_libraries */
-extern void RegisterBackgroundWorker(BackgroundWorker *worker);
+extern PGDLLIMPORT void RegisterBackgroundWorker(BackgroundWorker *worker);
 
 /* Register a new bgworker from a regular backend */
-extern bool RegisterDynamicBackgroundWorker(BackgroundWorker *worker,
+extern PGDLLIMPORT bool RegisterDynamicBackgroundWorker(BackgroundWorker *worker,
 											BackgroundWorkerHandle **handle);
 
 /* Query the status of a bgworker */
-extern BgwHandleStatus GetBackgroundWorkerPid(BackgroundWorkerHandle *handle,
+extern PGDLLIMPORT BgwHandleStatus GetBackgroundWorkerPid(BackgroundWorkerHandle *handle,
 											  pid_t *pidp);
 extern PGDLLIMPORT BgwHandleStatus WaitForBackgroundWorkerStartup(BackgroundWorkerHandle *handle, pid_t *pid);
 extern PGDLLIMPORT BgwHandleStatus
 			WaitForBackgroundWorkerShutdown(BackgroundWorkerHandle *);
-extern const char *GetBackgroundWorkerTypeByPid(pid_t pid);
+extern PGDLLIMPORT const char *GetBackgroundWorkerTypeByPid(pid_t pid);
 
 /* Terminate a bgworker */
-extern void TerminateBackgroundWorker(BackgroundWorkerHandle *handle);
+extern PGDLLIMPORT void TerminateBackgroundWorker(BackgroundWorkerHandle *handle);
 
 /* This is valid in a running worker */
 extern PGDLLIMPORT BackgroundWorker *MyBgworkerEntry;
@@ -141,10 +141,10 @@ extern PGDLLIMPORT BackgroundWorker *MyBgworkerEntry;
  * If dbname is NULL, connection is made to no specific database;
  * only shared catalogs can be accessed.
  */
-extern void BackgroundWorkerInitializeConnection(const char *dbname, const char *username, uint32 flags);
+extern PGDLLIMPORT void BackgroundWorkerInitializeConnection(const char *dbname, const char *username, uint32 flags);
 
 /* Just like the above, but specifying database and user by OID. */
-extern void BackgroundWorkerInitializeConnectionByOid(Oid dboid, Oid useroid, uint32 flags);
+extern PGDLLIMPORT void BackgroundWorkerInitializeConnectionByOid(Oid dboid, Oid useroid, uint32 flags);
 
 /*
  * Flags to BackgroundWorkerInitializeConnection et al
@@ -156,7 +156,7 @@ extern void BackgroundWorkerInitializeConnectionByOid(Oid dboid, Oid useroid, ui
 
 
 /* Block/unblock signals in a background worker process */
-extern void BackgroundWorkerBlockSignals(void);
-extern void BackgroundWorkerUnblockSignals(void);
+extern PGDLLIMPORT void BackgroundWorkerBlockSignals(void);
+extern PGDLLIMPORT void BackgroundWorkerUnblockSignals(void);
 
 #endif							/* BGWORKER_H */

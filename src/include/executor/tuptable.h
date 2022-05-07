@@ -293,42 +293,42 @@ typedef struct MinimalTupleTableSlot
 	((slot) == NULL || TTS_EMPTY(slot))
 
 /* in executor/execTuples.c */
-extern TupleTableSlot *MakeTupleTableSlot(TupleDesc tupleDesc,
+extern PGDLLIMPORT TupleTableSlot *MakeTupleTableSlot(TupleDesc tupleDesc,
 										  const TupleTableSlotOps *tts_ops);
-extern TupleTableSlot *ExecAllocTableSlot(List **tupleTable, TupleDesc desc,
+extern PGDLLIMPORT TupleTableSlot *ExecAllocTableSlot(List **tupleTable, TupleDesc desc,
 										  const TupleTableSlotOps *tts_ops);
-extern void ExecResetTupleTable(List *tupleTable, bool shouldFree);
-extern TupleTableSlot *MakeSingleTupleTableSlot(TupleDesc tupdesc,
+extern PGDLLIMPORT void ExecResetTupleTable(List *tupleTable, bool shouldFree);
+extern PGDLLIMPORT TupleTableSlot *MakeSingleTupleTableSlot(TupleDesc tupdesc,
 												const TupleTableSlotOps *tts_ops);
-extern void ExecDropSingleTupleTableSlot(TupleTableSlot *slot);
-extern void ExecSetSlotDescriptor(TupleTableSlot *slot, TupleDesc tupdesc);
-extern TupleTableSlot *ExecStoreHeapTuple(HeapTuple tuple,
+extern PGDLLIMPORT void ExecDropSingleTupleTableSlot(TupleTableSlot *slot);
+extern PGDLLIMPORT void ExecSetSlotDescriptor(TupleTableSlot *slot, TupleDesc tupdesc);
+extern PGDLLIMPORT TupleTableSlot *ExecStoreHeapTuple(HeapTuple tuple,
 										  TupleTableSlot *slot,
 										  bool shouldFree);
-extern void ExecForceStoreHeapTuple(HeapTuple tuple,
+extern PGDLLIMPORT void ExecForceStoreHeapTuple(HeapTuple tuple,
 									TupleTableSlot *slot,
 									bool shouldFree);
-extern TupleTableSlot *ExecStoreBufferHeapTuple(HeapTuple tuple,
+extern PGDLLIMPORT TupleTableSlot *ExecStoreBufferHeapTuple(HeapTuple tuple,
 												TupleTableSlot *slot,
 												Buffer buffer);
-extern TupleTableSlot *ExecStorePinnedBufferHeapTuple(HeapTuple tuple,
+extern PGDLLIMPORT TupleTableSlot *ExecStorePinnedBufferHeapTuple(HeapTuple tuple,
 													  TupleTableSlot *slot,
 													  Buffer buffer);
-extern TupleTableSlot *ExecStoreMinimalTuple(MinimalTuple mtup,
+extern PGDLLIMPORT TupleTableSlot *ExecStoreMinimalTuple(MinimalTuple mtup,
 											 TupleTableSlot *slot,
 											 bool shouldFree);
-extern void ExecForceStoreMinimalTuple(MinimalTuple mtup, TupleTableSlot *slot,
+extern PGDLLIMPORT void ExecForceStoreMinimalTuple(MinimalTuple mtup, TupleTableSlot *slot,
 									   bool shouldFree);
-extern TupleTableSlot *ExecStoreVirtualTuple(TupleTableSlot *slot);
-extern TupleTableSlot *ExecStoreAllNullTuple(TupleTableSlot *slot);
-extern void ExecStoreHeapTupleDatum(Datum data, TupleTableSlot *slot);
-extern HeapTuple ExecFetchSlotHeapTuple(TupleTableSlot *slot, bool materialize, bool *shouldFree);
-extern MinimalTuple ExecFetchSlotMinimalTuple(TupleTableSlot *slot,
+extern PGDLLIMPORT TupleTableSlot *ExecStoreVirtualTuple(TupleTableSlot *slot);
+extern PGDLLIMPORT TupleTableSlot *ExecStoreAllNullTuple(TupleTableSlot *slot);
+extern PGDLLIMPORT void ExecStoreHeapTupleDatum(Datum data, TupleTableSlot *slot);
+extern PGDLLIMPORT HeapTuple ExecFetchSlotHeapTuple(TupleTableSlot *slot, bool materialize, bool *shouldFree);
+extern PGDLLIMPORT MinimalTuple ExecFetchSlotMinimalTuple(TupleTableSlot *slot,
 											  bool *shouldFree);
-extern Datum ExecFetchSlotHeapTupleDatum(TupleTableSlot *slot);
-extern void slot_getmissingattrs(TupleTableSlot *slot, int startAttNum,
+extern PGDLLIMPORT Datum ExecFetchSlotHeapTupleDatum(TupleTableSlot *slot);
+extern PGDLLIMPORT void slot_getmissingattrs(TupleTableSlot *slot, int startAttNum,
 								 int lastAttNum);
-extern void slot_getsomeattrs_int(TupleTableSlot *slot, int attnum);
+extern PGDLLIMPORT void slot_getsomeattrs_int(TupleTableSlot *slot, int attnum);
 
 
 #ifndef FRONTEND

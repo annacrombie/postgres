@@ -82,16 +82,16 @@ extern PGDLLIMPORT HANDLE syslogPipe[2];
 #endif
 
 
-extern int	SysLogger_Start(void);
+extern PGDLLIMPORT int	SysLogger_Start(void);
 
-extern void write_syslogger_file(const char *buffer, int count, int dest);
+extern PGDLLIMPORT void write_syslogger_file(const char *buffer, int count, int dest);
 
 #ifdef EXEC_BACKEND
-extern void SysLoggerMain(int argc, char *argv[]) pg_attribute_noreturn();
+extern PGDLLIMPORT void SysLoggerMain(int argc, char *argv[]) pg_attribute_noreturn();
 #endif
 
-extern bool CheckLogrotateSignal(void);
-extern void RemoveLogrotateSignalFiles(void);
+extern PGDLLIMPORT bool CheckLogrotateSignal(void);
+extern PGDLLIMPORT void RemoveLogrotateSignalFiles(void);
 
 /*
  * Name of files saving meta-data information about the log

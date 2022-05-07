@@ -142,8 +142,8 @@ typedef struct macaddr8
 /*
  * Support functions in network.c
  */
-extern inet *cidr_set_masklen_internal(const inet *src, int bits);
-extern int	bitncmp(const unsigned char *l, const unsigned char *r, int n);
-extern int	bitncommon(const unsigned char *l, const unsigned char *r, int n);
+extern PGDLLIMPORT inet *cidr_set_masklen_internal(const inet *src, int bits);
+extern PGDLLIMPORT int	bitncmp(const unsigned char *l, const unsigned char *r, int n);
+extern PGDLLIMPORT int	bitncommon(const unsigned char *l, const unsigned char *r, int n);
 
 #endif							/* INET_H */

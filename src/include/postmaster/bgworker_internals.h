@@ -44,21 +44,21 @@ typedef struct RegisteredBgWorker
 
 extern PGDLLIMPORT slist_head BackgroundWorkerList;
 
-extern Size BackgroundWorkerShmemSize(void);
-extern void BackgroundWorkerShmemInit(void);
-extern void BackgroundWorkerStateChange(bool allow_new_workers);
-extern void ForgetBackgroundWorker(slist_mutable_iter *cur);
-extern void ReportBackgroundWorkerPID(RegisteredBgWorker *);
-extern void ReportBackgroundWorkerExit(slist_mutable_iter *cur);
-extern void BackgroundWorkerStopNotifications(pid_t pid);
-extern void ForgetUnstartedBackgroundWorkers(void);
-extern void ResetBackgroundWorkerCrashTimes(void);
+extern PGDLLIMPORT Size BackgroundWorkerShmemSize(void);
+extern PGDLLIMPORT void BackgroundWorkerShmemInit(void);
+extern PGDLLIMPORT void BackgroundWorkerStateChange(bool allow_new_workers);
+extern PGDLLIMPORT void ForgetBackgroundWorker(slist_mutable_iter *cur);
+extern PGDLLIMPORT void ReportBackgroundWorkerPID(RegisteredBgWorker *);
+extern PGDLLIMPORT void ReportBackgroundWorkerExit(slist_mutable_iter *cur);
+extern PGDLLIMPORT void BackgroundWorkerStopNotifications(pid_t pid);
+extern PGDLLIMPORT void ForgetUnstartedBackgroundWorkers(void);
+extern PGDLLIMPORT void ResetBackgroundWorkerCrashTimes(void);
 
 /* Function to start a background worker, called from postmaster.c */
-extern void StartBackgroundWorker(void) pg_attribute_noreturn();
+extern PGDLLIMPORT void StartBackgroundWorker(void) pg_attribute_noreturn();
 
 #ifdef EXEC_BACKEND
-extern BackgroundWorker *BackgroundWorkerEntry(int slotno);
+extern PGDLLIMPORT BackgroundWorker *BackgroundWorkerEntry(int slotno);
 #endif
 
 #endif							/* BGWORKER_INTERNALS_H */

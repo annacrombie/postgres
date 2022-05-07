@@ -266,17 +266,17 @@ extern PGDLLIMPORT int VacuumCostBalanceLocal;
 
 
 /* in commands/vacuum.c */
-extern void ExecVacuum(ParseState *pstate, VacuumStmt *vacstmt, bool isTopLevel);
-extern void vacuum(List *relations, VacuumParams *params,
+extern PGDLLIMPORT void ExecVacuum(ParseState *pstate, VacuumStmt *vacstmt, bool isTopLevel);
+extern PGDLLIMPORT void vacuum(List *relations, VacuumParams *params,
 				   BufferAccessStrategy bstrategy, bool isTopLevel);
-extern void vac_open_indexes(Relation relation, LOCKMODE lockmode,
+extern PGDLLIMPORT void vac_open_indexes(Relation relation, LOCKMODE lockmode,
 							 int *nindexes, Relation **Irel);
-extern void vac_close_indexes(int nindexes, Relation *Irel, LOCKMODE lockmode);
-extern double vac_estimate_reltuples(Relation relation,
+extern PGDLLIMPORT void vac_close_indexes(int nindexes, Relation *Irel, LOCKMODE lockmode);
+extern PGDLLIMPORT double vac_estimate_reltuples(Relation relation,
 									 BlockNumber total_pages,
 									 BlockNumber scanned_pages,
 									 double scanned_tuples);
-extern void vac_update_relstats(Relation relation,
+extern PGDLLIMPORT void vac_update_relstats(Relation relation,
 								BlockNumber num_pages,
 								double num_tuples,
 								BlockNumber num_all_visible_pages,
@@ -286,7 +286,7 @@ extern void vac_update_relstats(Relation relation,
 								bool *frozenxid_updated,
 								bool *minmulti_updated,
 								bool in_outer_xact);
-extern bool vacuum_set_xid_limits(Relation rel,
+extern PGDLLIMPORT bool vacuum_set_xid_limits(Relation rel,
 								  int freeze_min_age, int freeze_table_age,
 								  int multixact_freeze_min_age,
 								  int multixact_freeze_table_age,
@@ -294,47 +294,47 @@ extern bool vacuum_set_xid_limits(Relation rel,
 								  MultiXactId *oldestMxact,
 								  TransactionId *freezeLimit,
 								  MultiXactId *multiXactCutoff);
-extern bool vacuum_xid_failsafe_check(TransactionId relfrozenxid,
+extern PGDLLIMPORT bool vacuum_xid_failsafe_check(TransactionId relfrozenxid,
 									  MultiXactId relminmxid);
-extern void vac_update_datfrozenxid(void);
-extern void vacuum_delay_point(void);
-extern bool vacuum_is_relation_owner(Oid relid, Form_pg_class reltuple,
+extern PGDLLIMPORT void vac_update_datfrozenxid(void);
+extern PGDLLIMPORT void vacuum_delay_point(void);
+extern PGDLLIMPORT bool vacuum_is_relation_owner(Oid relid, Form_pg_class reltuple,
 									 bits32 options);
-extern Relation vacuum_open_relation(Oid relid, RangeVar *relation,
+extern PGDLLIMPORT Relation vacuum_open_relation(Oid relid, RangeVar *relation,
 									 bits32 options, bool verbose,
 									 LOCKMODE lmode);
-extern IndexBulkDeleteResult *vac_bulkdel_one_index(IndexVacuumInfo *ivinfo,
+extern PGDLLIMPORT IndexBulkDeleteResult *vac_bulkdel_one_index(IndexVacuumInfo *ivinfo,
 													IndexBulkDeleteResult *istat,
 													VacDeadItems *dead_items);
-extern IndexBulkDeleteResult *vac_cleanup_one_index(IndexVacuumInfo *ivinfo,
+extern PGDLLIMPORT IndexBulkDeleteResult *vac_cleanup_one_index(IndexVacuumInfo *ivinfo,
 													IndexBulkDeleteResult *istat);
-extern Size vac_max_items_to_alloc_size(int max_items);
+extern PGDLLIMPORT Size vac_max_items_to_alloc_size(int max_items);
 
 /* in commands/vacuumparallel.c */
-extern ParallelVacuumState *parallel_vacuum_init(Relation rel, Relation *indrels,
+extern PGDLLIMPORT ParallelVacuumState *parallel_vacuum_init(Relation rel, Relation *indrels,
 												 int nindexes, int nrequested_workers,
 												 int max_items, int elevel,
 												 BufferAccessStrategy bstrategy);
-extern void parallel_vacuum_end(ParallelVacuumState *pvs, IndexBulkDeleteResult **istats);
-extern VacDeadItems *parallel_vacuum_get_dead_items(ParallelVacuumState *pvs);
-extern void parallel_vacuum_bulkdel_all_indexes(ParallelVacuumState *pvs,
+extern PGDLLIMPORT void parallel_vacuum_end(ParallelVacuumState *pvs, IndexBulkDeleteResult **istats);
+extern PGDLLIMPORT VacDeadItems *parallel_vacuum_get_dead_items(ParallelVacuumState *pvs);
+extern PGDLLIMPORT void parallel_vacuum_bulkdel_all_indexes(ParallelVacuumState *pvs,
 												long num_table_tuples,
 												int num_index_scans);
-extern void parallel_vacuum_cleanup_all_indexes(ParallelVacuumState *pvs,
+extern PGDLLIMPORT void parallel_vacuum_cleanup_all_indexes(ParallelVacuumState *pvs,
 												long num_table_tuples,
 												int num_index_scans,
 												bool estimated_count);
-extern void parallel_vacuum_main(dsm_segment *seg, shm_toc *toc);
+extern PGDLLIMPORT void parallel_vacuum_main(dsm_segment *seg, shm_toc *toc);
 
 /* in commands/analyze.c */
-extern void analyze_rel(Oid relid, RangeVar *relation,
+extern PGDLLIMPORT void analyze_rel(Oid relid, RangeVar *relation,
 						VacuumParams *params, List *va_cols, bool in_outer_xact,
 						BufferAccessStrategy bstrategy);
-extern bool std_typanalyze(VacAttrStats *stats);
+extern PGDLLIMPORT bool std_typanalyze(VacAttrStats *stats);
 
 /* in utils/misc/sampling.c --- duplicate of declarations in utils/sampling.h */
-extern double anl_random_fract(void);
-extern double anl_init_selection_state(int n);
-extern double anl_get_next_S(double t, int n, double *stateptr);
+extern PGDLLIMPORT double anl_random_fract(void);
+extern PGDLLIMPORT double anl_init_selection_state(int n);
+extern PGDLLIMPORT double anl_get_next_S(double t, int n, double *stateptr);
 
 #endif							/* VACUUM_H */

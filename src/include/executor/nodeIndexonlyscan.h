@@ -17,20 +17,20 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern IndexOnlyScanState *ExecInitIndexOnlyScan(IndexOnlyScan *node, EState *estate, int eflags);
-extern void ExecEndIndexOnlyScan(IndexOnlyScanState *node);
-extern void ExecIndexOnlyMarkPos(IndexOnlyScanState *node);
-extern void ExecIndexOnlyRestrPos(IndexOnlyScanState *node);
-extern void ExecReScanIndexOnlyScan(IndexOnlyScanState *node);
+extern PGDLLIMPORT IndexOnlyScanState *ExecInitIndexOnlyScan(IndexOnlyScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndIndexOnlyScan(IndexOnlyScanState *node);
+extern PGDLLIMPORT void ExecIndexOnlyMarkPos(IndexOnlyScanState *node);
+extern PGDLLIMPORT void ExecIndexOnlyRestrPos(IndexOnlyScanState *node);
+extern PGDLLIMPORT void ExecReScanIndexOnlyScan(IndexOnlyScanState *node);
 
 /* Support functions for parallel index-only scans */
-extern void ExecIndexOnlyScanEstimate(IndexOnlyScanState *node,
+extern PGDLLIMPORT void ExecIndexOnlyScanEstimate(IndexOnlyScanState *node,
 									  ParallelContext *pcxt);
-extern void ExecIndexOnlyScanInitializeDSM(IndexOnlyScanState *node,
+extern PGDLLIMPORT void ExecIndexOnlyScanInitializeDSM(IndexOnlyScanState *node,
 										   ParallelContext *pcxt);
-extern void ExecIndexOnlyScanReInitializeDSM(IndexOnlyScanState *node,
+extern PGDLLIMPORT void ExecIndexOnlyScanReInitializeDSM(IndexOnlyScanState *node,
 											 ParallelContext *pcxt);
-extern void ExecIndexOnlyScanInitializeWorker(IndexOnlyScanState *node,
+extern PGDLLIMPORT void ExecIndexOnlyScanInitializeWorker(IndexOnlyScanState *node,
 											  ParallelWorkerContext *pwcxt);
 
 #endif							/* NODEINDEXONLYSCAN_H */

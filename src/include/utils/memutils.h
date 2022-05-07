@@ -70,29 +70,29 @@ extern PGDLLIMPORT MemoryContext PortalContext;
 /*
  * Memory-context-type-independent functions in mcxt.c
  */
-extern void MemoryContextInit(void);
-extern void MemoryContextReset(MemoryContext context);
-extern void MemoryContextDelete(MemoryContext context);
-extern void MemoryContextResetOnly(MemoryContext context);
-extern void MemoryContextResetChildren(MemoryContext context);
-extern void MemoryContextDeleteChildren(MemoryContext context);
-extern void MemoryContextSetIdentifier(MemoryContext context, const char *id);
-extern void MemoryContextSetParent(MemoryContext context,
+extern PGDLLIMPORT void MemoryContextInit(void);
+extern PGDLLIMPORT void MemoryContextReset(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextDelete(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextResetOnly(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextResetChildren(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextDeleteChildren(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextSetIdentifier(MemoryContext context, const char *id);
+extern PGDLLIMPORT void MemoryContextSetParent(MemoryContext context,
 								   MemoryContext new_parent);
-extern Size GetMemoryChunkSpace(void *pointer);
-extern MemoryContext MemoryContextGetParent(MemoryContext context);
-extern bool MemoryContextIsEmpty(MemoryContext context);
-extern Size MemoryContextMemAllocated(MemoryContext context, bool recurse);
-extern void MemoryContextStats(MemoryContext context);
-extern void MemoryContextStatsDetail(MemoryContext context, int max_children,
+extern PGDLLIMPORT Size GetMemoryChunkSpace(void *pointer);
+extern PGDLLIMPORT MemoryContext MemoryContextGetParent(MemoryContext context);
+extern PGDLLIMPORT bool MemoryContextIsEmpty(MemoryContext context);
+extern PGDLLIMPORT Size MemoryContextMemAllocated(MemoryContext context, bool recurse);
+extern PGDLLIMPORT void MemoryContextStats(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextStatsDetail(MemoryContext context, int max_children,
 									 bool print_to_stderr);
-extern void MemoryContextAllowInCriticalSection(MemoryContext context,
+extern PGDLLIMPORT void MemoryContextAllowInCriticalSection(MemoryContext context,
 												bool allow);
 
 #ifdef MEMORY_CONTEXT_CHECKING
-extern void MemoryContextCheck(MemoryContext context);
+extern PGDLLIMPORT void MemoryContextCheck(MemoryContext context);
 #endif
-extern bool MemoryContextContains(MemoryContext context, void *pointer);
+extern PGDLLIMPORT bool MemoryContextContains(MemoryContext context, void *pointer);
 
 /* Handy macro for copying and assigning context ID ... but note double eval */
 #define MemoryContextCopyAndSetIdentifier(cxt, id) \
@@ -139,21 +139,21 @@ GetMemoryChunkContext(void *pointer)
  * context creation.  It's intended to be called from context-type-
  * specific creation routines, and noplace else.
  */
-extern void MemoryContextCreate(MemoryContext node,
+extern PGDLLIMPORT void MemoryContextCreate(MemoryContext node,
 								NodeTag tag,
 								const MemoryContextMethods *methods,
 								MemoryContext parent,
 								const char *name);
 
-extern void HandleLogMemoryContextInterrupt(void);
-extern void ProcessLogMemoryContextInterrupt(void);
+extern PGDLLIMPORT void HandleLogMemoryContextInterrupt(void);
+extern PGDLLIMPORT void ProcessLogMemoryContextInterrupt(void);
 
 /*
  * Memory-context-type-specific functions
  */
 
 /* aset.c */
-extern MemoryContext AllocSetContextCreateInternal(MemoryContext parent,
+extern PGDLLIMPORT MemoryContext AllocSetContextCreateInternal(MemoryContext parent,
 												   const char *name,
 												   Size minContextSize,
 												   Size initBlockSize,
@@ -175,13 +175,13 @@ extern MemoryContext AllocSetContextCreateInternal(MemoryContext parent,
 #endif
 
 /* slab.c */
-extern MemoryContext SlabContextCreate(MemoryContext parent,
+extern PGDLLIMPORT MemoryContext SlabContextCreate(MemoryContext parent,
 									   const char *name,
 									   Size blockSize,
 									   Size chunkSize);
 
 /* generation.c */
-extern MemoryContext GenerationContextCreate(MemoryContext parent,
+extern PGDLLIMPORT MemoryContext GenerationContextCreate(MemoryContext parent,
 											 const char *name,
 											 Size minContextSize,
 											 Size initBlockSize,

@@ -21,13 +21,13 @@
 #include "utils/relcache.h"
 
 
-extern void SetMatViewPopulatedState(Relation relation, bool newstate);
+extern PGDLLIMPORT void SetMatViewPopulatedState(Relation relation, bool newstate);
 
-extern ObjectAddress ExecRefreshMatView(RefreshMatViewStmt *stmt, const char *queryString,
+extern PGDLLIMPORT ObjectAddress ExecRefreshMatView(RefreshMatViewStmt *stmt, const char *queryString,
 										ParamListInfo params, QueryCompletion *qc);
 
-extern DestReceiver *CreateTransientRelDestReceiver(Oid oid);
+extern PGDLLIMPORT DestReceiver *CreateTransientRelDestReceiver(Oid oid);
 
-extern bool MatViewIncrementalMaintenanceIsEnabled(void);
+extern PGDLLIMPORT bool MatViewIncrementalMaintenanceIsEnabled(void);
 
 #endif							/* MATVIEW_H */

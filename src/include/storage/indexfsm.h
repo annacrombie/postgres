@@ -17,10 +17,10 @@
 #include "storage/block.h"
 #include "utils/relcache.h"
 
-extern BlockNumber GetFreeIndexPage(Relation rel);
-extern void RecordFreeIndexPage(Relation rel, BlockNumber page);
-extern void RecordUsedIndexPage(Relation rel, BlockNumber page);
+extern PGDLLIMPORT BlockNumber GetFreeIndexPage(Relation rel);
+extern PGDLLIMPORT void RecordFreeIndexPage(Relation rel, BlockNumber page);
+extern PGDLLIMPORT void RecordUsedIndexPage(Relation rel, BlockNumber page);
 
-extern void IndexFreeSpaceMapVacuum(Relation rel);
+extern PGDLLIMPORT void IndexFreeSpaceMapVacuum(Relation rel);
 
 #endif							/* INDEXFSM_H_ */

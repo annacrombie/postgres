@@ -33,10 +33,10 @@ typedef struct Session
 	dshash_table *shared_typmod_table;
 } Session;
 
-extern void InitializeSession(void);
-extern dsm_handle GetSessionDsmHandle(void);
-extern void AttachSession(dsm_handle handle);
-extern void DetachSession(void);
+extern PGDLLIMPORT void InitializeSession(void);
+extern PGDLLIMPORT dsm_handle GetSessionDsmHandle(void);
+extern PGDLLIMPORT void AttachSession(dsm_handle handle);
+extern PGDLLIMPORT void DetachSession(void);
 
 /* The current session, or NULL for none. */
 extern PGDLLIMPORT Session *CurrentSession;

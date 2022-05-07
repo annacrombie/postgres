@@ -20,11 +20,11 @@
 	(((v) >> 31) & UINT64CONST(0x100000001)))
 
 
-extern uint32 hash_bytes(const unsigned char *k, int keylen);
-extern uint64 hash_bytes_extended(const unsigned char *k,
+extern PGDLLIMPORT uint32 hash_bytes(const unsigned char *k, int keylen);
+extern PGDLLIMPORT uint64 hash_bytes_extended(const unsigned char *k,
 								  int keylen, uint64 seed);
-extern uint32 hash_bytes_uint32(uint32 k);
-extern uint64 hash_bytes_uint32_extended(uint32 k, uint64 seed);
+extern PGDLLIMPORT uint32 hash_bytes_uint32(uint32 k);
+extern PGDLLIMPORT uint64 hash_bytes_uint32_extended(uint32 k, uint64 seed);
 
 #ifndef FRONTEND
 static inline Datum
@@ -52,9 +52,9 @@ hash_uint32_extended(uint32 k, uint64 seed)
 }
 #endif
 
-extern uint32 string_hash(const void *key, Size keysize);
-extern uint32 tag_hash(const void *key, Size keysize);
-extern uint32 uint32_hash(const void *key, Size keysize);
+extern PGDLLIMPORT uint32 string_hash(const void *key, Size keysize);
+extern PGDLLIMPORT uint32 tag_hash(const void *key, Size keysize);
+extern PGDLLIMPORT uint32 uint32_hash(const void *key, Size keysize);
 
 #define oid_hash uint32_hash	/* Remove me eventually */
 

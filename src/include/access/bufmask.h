@@ -23,10 +23,10 @@
 /* Marker used to mask pages consistently */
 #define MASK_MARKER		0
 
-extern void mask_page_lsn_and_checksum(Page page);
-extern void mask_page_hint_bits(Page page);
-extern void mask_unused_space(Page page);
-extern void mask_lp_flags(Page page);
-extern void mask_page_content(Page page);
+extern PGDLLIMPORT void mask_page_lsn_and_checksum(Page page);
+extern PGDLLIMPORT void mask_page_hint_bits(Page page);
+extern PGDLLIMPORT void mask_unused_space(Page page);
+extern PGDLLIMPORT void mask_lp_flags(Page page);
+extern PGDLLIMPORT void mask_page_content(Page page);
 
 #endif

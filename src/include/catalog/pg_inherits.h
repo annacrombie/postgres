@@ -48,19 +48,19 @@ DECLARE_UNIQUE_INDEX_PKEY(pg_inherits_relid_seqno_index, 2680, InheritsRelidSeqn
 DECLARE_INDEX(pg_inherits_parent_index, 2187, InheritsParentIndexId, on pg_inherits using btree(inhparent oid_ops));
 
 
-extern List *find_inheritance_children(Oid parentrelId, LOCKMODE lockmode);
-extern List *find_inheritance_children_extended(Oid parentrelId, bool omit_detached,
+extern PGDLLIMPORT List *find_inheritance_children(Oid parentrelId, LOCKMODE lockmode);
+extern PGDLLIMPORT List *find_inheritance_children_extended(Oid parentrelId, bool omit_detached,
 												LOCKMODE lockmode, bool *detached_exist, TransactionId *detached_xmin);
 
-extern List *find_all_inheritors(Oid parentrelId, LOCKMODE lockmode,
+extern PGDLLIMPORT List *find_all_inheritors(Oid parentrelId, LOCKMODE lockmode,
 								 List **parents);
-extern bool has_subclass(Oid relationId);
-extern bool has_superclass(Oid relationId);
-extern bool typeInheritsFrom(Oid subclassTypeId, Oid superclassTypeId);
-extern void StoreSingleInheritance(Oid relationId, Oid parentOid,
+extern PGDLLIMPORT bool has_subclass(Oid relationId);
+extern PGDLLIMPORT bool has_superclass(Oid relationId);
+extern PGDLLIMPORT bool typeInheritsFrom(Oid subclassTypeId, Oid superclassTypeId);
+extern PGDLLIMPORT void StoreSingleInheritance(Oid relationId, Oid parentOid,
 								   int32 seqNumber);
-extern bool DeleteInheritsTuple(Oid inhrelid, Oid inhparent, bool allow_detached,
+extern PGDLLIMPORT bool DeleteInheritsTuple(Oid inhrelid, Oid inhparent, bool allow_detached,
 								const char *childname);
-extern bool PartitionHasPendingDetach(Oid partoid);
+extern PGDLLIMPORT bool PartitionHasPendingDetach(Oid partoid);
 
 #endif							/* PG_INHERITS_H */

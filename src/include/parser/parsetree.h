@@ -35,12 +35,12 @@
  * Given an RTE and an attribute number, return the appropriate
  * variable name or alias for that attribute of that RTE.
  */
-extern char *get_rte_attribute_name(RangeTblEntry *rte, AttrNumber attnum);
+extern PGDLLIMPORT char *get_rte_attribute_name(RangeTblEntry *rte, AttrNumber attnum);
 
 /*
  * Check whether an attribute of an RTE has been dropped
  */
-extern bool get_rte_attribute_is_dropped(RangeTblEntry *rte,
+extern PGDLLIMPORT bool get_rte_attribute_is_dropped(RangeTblEntry *rte,
 										 AttrNumber attnum);
 
 
@@ -49,13 +49,13 @@ extern bool get_rte_attribute_is_dropped(RangeTblEntry *rte,
  * ----------------
  */
 
-extern TargetEntry *get_tle_by_resno(List *tlist, AttrNumber resno);
+extern PGDLLIMPORT TargetEntry *get_tle_by_resno(List *tlist, AttrNumber resno);
 
 /* ----------------
  *		FOR UPDATE/SHARE info
  * ----------------
  */
 
-extern RowMarkClause *get_parse_rowmark(Query *qry, Index rtindex);
+extern PGDLLIMPORT RowMarkClause *get_parse_rowmark(Query *qry, Index rtindex);
 
 #endif							/* PARSETREE_H */

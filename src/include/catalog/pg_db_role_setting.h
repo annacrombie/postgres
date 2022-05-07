@@ -53,9 +53,9 @@ DECLARE_UNIQUE_INDEX_PKEY(pg_db_role_setting_databaseid_rol_index, 2965, DbRoleS
 /*
  * prototypes for functions in pg_db_role_setting.h
  */
-extern void AlterSetting(Oid databaseid, Oid roleid, VariableSetStmt *setstmt);
-extern void DropSetting(Oid databaseid, Oid roleid);
-extern void ApplySetting(Snapshot snapshot, Oid databaseid, Oid roleid,
+extern PGDLLIMPORT void AlterSetting(Oid databaseid, Oid roleid, VariableSetStmt *setstmt);
+extern PGDLLIMPORT void DropSetting(Oid databaseid, Oid roleid);
+extern PGDLLIMPORT void ApplySetting(Snapshot snapshot, Oid databaseid, Oid roleid,
 						 Relation relsetting, GucSource source);
 
 #endif							/* PG_DB_ROLE_SETTING_H */

@@ -25,6 +25,6 @@ typedef enum
 	SASLPREP_PROHIBITED = -3	/* output would contain prohibited characters */
 } pg_saslprep_rc;
 
-extern pg_saslprep_rc pg_saslprep(const char *input, char **output);
+extern PGDLLIMPORT pg_saslprep_rc pg_saslprep(const char *input, char **output);
 
 #endif							/* SASLPREP_H */

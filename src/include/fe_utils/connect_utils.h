@@ -35,14 +35,14 @@ typedef struct _connParams
 	const char *override_dbname;
 } ConnParams;
 
-extern PGconn *connectDatabase(const ConnParams *cparams,
+extern PGDLLIMPORT PGconn *connectDatabase(const ConnParams *cparams,
 							   const char *progname,
 							   bool echo, bool fail_ok,
 							   bool allow_password_reuse);
 
-extern PGconn *connectMaintenanceDatabase(ConnParams *cparams,
+extern PGDLLIMPORT PGconn *connectMaintenanceDatabase(ConnParams *cparams,
 										  const char *progname, bool echo);
 
-extern void disconnectDatabase(PGconn *conn);
+extern PGDLLIMPORT void disconnectDatabase(PGconn *conn);
 
 #endif							/* CONNECT_UTILS_H */

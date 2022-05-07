@@ -22,10 +22,10 @@ struct SN_env {
 extern "C" {
 #endif
 
-extern struct SN_env * SN_create_env(int S_size, int I_size);
-extern void SN_close_env(struct SN_env * z, int S_size);
+extern PGDLLIMPORT struct SN_env * SN_create_env(int S_size, int I_size);
+extern PGDLLIMPORT void SN_close_env(struct SN_env * z, int S_size);
 
-extern int SN_set_current(struct SN_env * z, int size, const symbol * s);
+extern PGDLLIMPORT int SN_set_current(struct SN_env * z, int size, const symbol * s);
 
 #ifdef __cplusplus
 }

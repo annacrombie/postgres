@@ -68,23 +68,23 @@ typedef struct
 
 
 /* date.c */
-extern int32 anytime_typmod_check(bool istz, int32 typmod);
-extern double date2timestamp_no_overflow(DateADT dateVal);
-extern Timestamp date2timestamp_opt_overflow(DateADT dateVal, int *overflow);
-extern TimestampTz date2timestamptz_opt_overflow(DateADT dateVal, int *overflow);
-extern int32 date_cmp_timestamp_internal(DateADT dateVal, Timestamp dt2);
-extern int32 date_cmp_timestamptz_internal(DateADT dateVal, TimestampTz dt2);
+extern PGDLLIMPORT int32 anytime_typmod_check(bool istz, int32 typmod);
+extern PGDLLIMPORT double date2timestamp_no_overflow(DateADT dateVal);
+extern PGDLLIMPORT Timestamp date2timestamp_opt_overflow(DateADT dateVal, int *overflow);
+extern PGDLLIMPORT TimestampTz date2timestamptz_opt_overflow(DateADT dateVal, int *overflow);
+extern PGDLLIMPORT int32 date_cmp_timestamp_internal(DateADT dateVal, Timestamp dt2);
+extern PGDLLIMPORT int32 date_cmp_timestamptz_internal(DateADT dateVal, TimestampTz dt2);
 
-extern void EncodeSpecialDate(DateADT dt, char *str);
-extern DateADT GetSQLCurrentDate(void);
-extern TimeTzADT *GetSQLCurrentTime(int32 typmod);
-extern TimeADT GetSQLLocalTime(int32 typmod);
-extern int	time2tm(TimeADT time, struct pg_tm *tm, fsec_t *fsec);
-extern int	timetz2tm(TimeTzADT *time, struct pg_tm *tm, fsec_t *fsec, int *tzp);
-extern int	tm2time(struct pg_tm *tm, fsec_t fsec, TimeADT *result);
-extern int	tm2timetz(struct pg_tm *tm, fsec_t fsec, int tz, TimeTzADT *result);
-extern bool time_overflows(int hour, int min, int sec, fsec_t fsec);
-extern bool float_time_overflows(int hour, int min, double sec);
-extern void AdjustTimeForTypmod(TimeADT *time, int32 typmod);
+extern PGDLLIMPORT void EncodeSpecialDate(DateADT dt, char *str);
+extern PGDLLIMPORT DateADT GetSQLCurrentDate(void);
+extern PGDLLIMPORT TimeTzADT *GetSQLCurrentTime(int32 typmod);
+extern PGDLLIMPORT TimeADT GetSQLLocalTime(int32 typmod);
+extern PGDLLIMPORT int	time2tm(TimeADT time, struct pg_tm *tm, fsec_t *fsec);
+extern PGDLLIMPORT int	timetz2tm(TimeTzADT *time, struct pg_tm *tm, fsec_t *fsec, int *tzp);
+extern PGDLLIMPORT int	tm2time(struct pg_tm *tm, fsec_t fsec, TimeADT *result);
+extern PGDLLIMPORT int	tm2timetz(struct pg_tm *tm, fsec_t fsec, int tz, TimeTzADT *result);
+extern PGDLLIMPORT bool time_overflows(int hour, int min, int sec, fsec_t fsec);
+extern PGDLLIMPORT bool float_time_overflows(int hour, int min, double sec);
+extern PGDLLIMPORT void AdjustTimeForTypmod(TimeADT *time, int32 typmod);
 
 #endif							/* DATE_H */

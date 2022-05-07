@@ -12,6 +12,6 @@
 #ifndef LINK_CANARY_H
 #define LINK_CANARY_H
 
-extern bool pg_link_canary_is_frontend(void);
+extern PGDLLIMPORT bool pg_link_canary_is_frontend(void);
 
 #endif							/* LINK_CANARY_H */

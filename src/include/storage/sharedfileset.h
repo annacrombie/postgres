@@ -30,8 +30,8 @@ typedef struct SharedFileSet
 	int			refcnt;			/* number of attached backends */
 } SharedFileSet;
 
-extern void SharedFileSetInit(SharedFileSet *fileset, dsm_segment *seg);
-extern void SharedFileSetAttach(SharedFileSet *fileset, dsm_segment *seg);
-extern void SharedFileSetDeleteAll(SharedFileSet *fileset);
+extern PGDLLIMPORT void SharedFileSetInit(SharedFileSet *fileset, dsm_segment *seg);
+extern PGDLLIMPORT void SharedFileSetAttach(SharedFileSet *fileset, dsm_segment *seg);
+extern PGDLLIMPORT void SharedFileSetDeleteAll(SharedFileSet *fileset);
 
 #endif

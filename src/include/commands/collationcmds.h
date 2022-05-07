@@ -18,8 +18,8 @@
 #include "catalog/objectaddress.h"
 #include "parser/parse_node.h"
 
-extern ObjectAddress DefineCollation(ParseState *pstate, List *names, List *parameters, bool if_not_exists);
-extern void IsThereCollationInNamespace(const char *collname, Oid nspOid);
-extern ObjectAddress AlterCollation(AlterCollationStmt *stmt);
+extern PGDLLIMPORT ObjectAddress DefineCollation(ParseState *pstate, List *names, List *parameters, bool if_not_exists);
+extern PGDLLIMPORT void IsThereCollationInNamespace(const char *collname, Oid nspOid);
+extern PGDLLIMPORT ObjectAddress AlterCollation(AlterCollationStmt *stmt);
 
 #endif							/* COLLATIONCMDS_H */

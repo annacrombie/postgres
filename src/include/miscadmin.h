@@ -105,7 +105,7 @@ extern PGDLLIMPORT volatile uint32 QueryCancelHoldoffCount;
 extern PGDLLIMPORT volatile uint32 CritSectionCount;
 
 /* in tcop/postgres.c */
-extern void ProcessInterrupts(void);
+extern PGDLLIMPORT void ProcessInterrupts(void);
 
 /* Test whether an interrupt is pending */
 #ifndef WIN32
@@ -289,19 +289,19 @@ typedef struct
 typedef char *pg_stack_base_t;
 #endif
 
-extern pg_stack_base_t set_stack_base(void);
-extern void restore_stack_base(pg_stack_base_t base);
-extern void check_stack_depth(void);
-extern bool stack_is_too_deep(void);
+extern PGDLLIMPORT pg_stack_base_t set_stack_base(void);
+extern PGDLLIMPORT void restore_stack_base(pg_stack_base_t base);
+extern PGDLLIMPORT void check_stack_depth(void);
+extern PGDLLIMPORT bool stack_is_too_deep(void);
 
 /* in tcop/utility.c */
-extern void PreventCommandIfReadOnly(const char *cmdname);
-extern void PreventCommandIfParallelMode(const char *cmdname);
-extern void PreventCommandDuringRecovery(const char *cmdname);
+extern PGDLLIMPORT void PreventCommandIfReadOnly(const char *cmdname);
+extern PGDLLIMPORT void PreventCommandIfParallelMode(const char *cmdname);
+extern PGDLLIMPORT void PreventCommandDuringRecovery(const char *cmdname);
 
 /* in utils/misc/guc.c */
 extern PGDLLIMPORT int trace_recovery_messages;
-extern int	trace_recovery(int trace_level);
+extern PGDLLIMPORT int	trace_recovery(int trace_level);
 
 /*****************************************************************************
  *	  pdir.h --																 *
@@ -316,10 +316,10 @@ extern int	trace_recovery(int trace_level);
 extern PGDLLIMPORT char *DatabasePath;
 
 /* now in utils/init/miscinit.c */
-extern void InitPostmasterChild(void);
-extern void InitStandaloneProcess(const char *argv0);
-extern void SwitchToSharedLatch(void);
-extern void SwitchBackToLocalLatch(void);
+extern PGDLLIMPORT void InitPostmasterChild(void);
+extern PGDLLIMPORT void InitStandaloneProcess(const char *argv0);
+extern PGDLLIMPORT void SwitchToSharedLatch(void);
+extern PGDLLIMPORT void SwitchBackToLocalLatch(void);
 
 typedef enum BackendType
 {
@@ -340,34 +340,34 @@ typedef enum BackendType
 
 extern PGDLLIMPORT BackendType MyBackendType;
 
-extern const char *GetBackendTypeDesc(BackendType backendType);
+extern PGDLLIMPORT const char *GetBackendTypeDesc(BackendType backendType);
 
-extern void SetDatabasePath(const char *path);
-extern void checkDataDir(void);
-extern void SetDataDir(const char *dir);
-extern void ChangeToDataDir(void);
+extern PGDLLIMPORT void SetDatabasePath(const char *path);
+extern PGDLLIMPORT void checkDataDir(void);
+extern PGDLLIMPORT void SetDataDir(const char *dir);
+extern PGDLLIMPORT void ChangeToDataDir(void);
 
-extern char *GetUserNameFromId(Oid roleid, bool noerr);
-extern Oid	GetUserId(void);
-extern Oid	GetOuterUserId(void);
-extern Oid	GetSessionUserId(void);
-extern Oid	GetAuthenticatedUserId(void);
-extern void GetUserIdAndSecContext(Oid *userid, int *sec_context);
-extern void SetUserIdAndSecContext(Oid userid, int sec_context);
-extern bool InLocalUserIdChange(void);
-extern bool InSecurityRestrictedOperation(void);
-extern bool InNoForceRLSOperation(void);
-extern void GetUserIdAndContext(Oid *userid, bool *sec_def_context);
-extern void SetUserIdAndContext(Oid userid, bool sec_def_context);
-extern void InitializeSessionUserId(const char *rolename, Oid useroid);
-extern void InitializeSessionUserIdStandalone(void);
-extern void SetSessionAuthorization(Oid userid, bool is_superuser);
-extern Oid	GetCurrentRoleId(void);
-extern void SetCurrentRoleId(Oid roleid, bool is_superuser);
+extern PGDLLIMPORT char *GetUserNameFromId(Oid roleid, bool noerr);
+extern PGDLLIMPORT Oid	GetUserId(void);
+extern PGDLLIMPORT Oid	GetOuterUserId(void);
+extern PGDLLIMPORT Oid	GetSessionUserId(void);
+extern PGDLLIMPORT Oid	GetAuthenticatedUserId(void);
+extern PGDLLIMPORT void GetUserIdAndSecContext(Oid *userid, int *sec_context);
+extern PGDLLIMPORT void SetUserIdAndSecContext(Oid userid, int sec_context);
+extern PGDLLIMPORT bool InLocalUserIdChange(void);
+extern PGDLLIMPORT bool InSecurityRestrictedOperation(void);
+extern PGDLLIMPORT bool InNoForceRLSOperation(void);
+extern PGDLLIMPORT void GetUserIdAndContext(Oid *userid, bool *sec_def_context);
+extern PGDLLIMPORT void SetUserIdAndContext(Oid userid, bool sec_def_context);
+extern PGDLLIMPORT void InitializeSessionUserId(const char *rolename, Oid useroid);
+extern PGDLLIMPORT void InitializeSessionUserIdStandalone(void);
+extern PGDLLIMPORT void SetSessionAuthorization(Oid userid, bool is_superuser);
+extern PGDLLIMPORT Oid	GetCurrentRoleId(void);
+extern PGDLLIMPORT void SetCurrentRoleId(Oid roleid, bool is_superuser);
 
 /* in utils/misc/superuser.c */
-extern bool superuser(void);	/* current user is superuser */
-extern bool superuser_arg(Oid roleid);	/* given user is superuser */
+extern PGDLLIMPORT bool superuser(void);	/* current user is superuser */
+extern PGDLLIMPORT bool superuser_arg(Oid roleid);	/* given user is superuser */
 
 
 /*****************************************************************************
@@ -455,11 +455,11 @@ extern PGDLLIMPORT AuxProcType MyAuxProcType;
  *****************************************************************************/
 
 /* in utils/init/postinit.c */
-extern void pg_split_opts(char **argv, int *argcp, const char *optstr);
-extern void InitializeMaxBackends(void);
-extern void InitPostgres(const char *in_dbname, Oid dboid, const char *username,
+extern PGDLLIMPORT void pg_split_opts(char **argv, int *argcp, const char *optstr);
+extern PGDLLIMPORT void InitializeMaxBackends(void);
+extern PGDLLIMPORT void InitPostgres(const char *in_dbname, Oid dboid, const char *username,
 						 Oid useroid, char *out_dbname, bool override_allow_connections);
-extern void BaseInit(void);
+extern PGDLLIMPORT void BaseInit(void);
 
 /* in utils/init/miscinit.c */
 extern PGDLLIMPORT bool IgnoreSystemIndexes;
@@ -469,19 +469,19 @@ extern PGDLLIMPORT char *session_preload_libraries_string;
 extern PGDLLIMPORT char *shared_preload_libraries_string;
 extern PGDLLIMPORT char *local_preload_libraries_string;
 
-extern void CreateDataDirLockFile(bool amPostmaster);
-extern void CreateSocketLockFile(const char *socketfile, bool amPostmaster,
+extern PGDLLIMPORT void CreateDataDirLockFile(bool amPostmaster);
+extern PGDLLIMPORT void CreateSocketLockFile(const char *socketfile, bool amPostmaster,
 								 const char *socketDir);
-extern void TouchSocketLockFiles(void);
-extern void AddToDataDirLockFile(int target_line, const char *str);
-extern bool RecheckDataDirLockFile(void);
-extern void ValidatePgVersion(const char *path);
-extern void process_shared_preload_libraries(void);
-extern void process_session_preload_libraries(void);
-extern void pg_bindtextdomain(const char *domain);
-extern bool has_rolreplication(Oid roleid);
+extern PGDLLIMPORT void TouchSocketLockFiles(void);
+extern PGDLLIMPORT void AddToDataDirLockFile(int target_line, const char *str);
+extern PGDLLIMPORT bool RecheckDataDirLockFile(void);
+extern PGDLLIMPORT void ValidatePgVersion(const char *path);
+extern PGDLLIMPORT void process_shared_preload_libraries(void);
+extern PGDLLIMPORT void process_session_preload_libraries(void);
+extern PGDLLIMPORT void pg_bindtextdomain(const char *domain);
+extern PGDLLIMPORT bool has_rolreplication(Oid roleid);
 
 /* in executor/nodeHash.c */
-extern size_t get_hash_memory_limit(void);
+extern PGDLLIMPORT size_t get_hash_memory_limit(void);
 
 #endif							/* MISCADMIN_H */

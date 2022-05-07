@@ -133,18 +133,18 @@ typedef struct ScannerCallbackState
 extern PGDLLIMPORT const uint16 ScanKeywordTokens[];
 
 /* Entry points in parser/scan.l */
-extern core_yyscan_t scanner_init(const char *str,
+extern PGDLLIMPORT core_yyscan_t scanner_init(const char *str,
 								  core_yy_extra_type *yyext,
 								  const ScanKeywordList *keywordlist,
 								  const uint16 *keyword_tokens);
-extern void scanner_finish(core_yyscan_t yyscanner);
-extern int	core_yylex(core_YYSTYPE *lvalp, YYLTYPE *llocp,
+extern PGDLLIMPORT void scanner_finish(core_yyscan_t yyscanner);
+extern PGDLLIMPORT int	core_yylex(core_YYSTYPE *lvalp, YYLTYPE *llocp,
 					   core_yyscan_t yyscanner);
-extern int	scanner_errposition(int location, core_yyscan_t yyscanner);
-extern void setup_scanner_errposition_callback(ScannerCallbackState *scbstate,
+extern PGDLLIMPORT int	scanner_errposition(int location, core_yyscan_t yyscanner);
+extern PGDLLIMPORT void setup_scanner_errposition_callback(ScannerCallbackState *scbstate,
 											   core_yyscan_t yyscanner,
 											   int location);
-extern void cancel_scanner_errposition_callback(ScannerCallbackState *scbstate);
-extern void scanner_yyerror(const char *message, core_yyscan_t yyscanner) pg_attribute_noreturn();
+extern PGDLLIMPORT void cancel_scanner_errposition_callback(ScannerCallbackState *scbstate);
+extern PGDLLIMPORT void scanner_yyerror(const char *message, core_yyscan_t yyscanner) pg_attribute_noreturn();
 
 #endif							/* SCANNER_H */

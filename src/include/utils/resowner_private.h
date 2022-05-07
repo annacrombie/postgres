@@ -26,87 +26,87 @@
 
 
 /* support for buffer refcount management */
-extern void ResourceOwnerEnlargeBuffers(ResourceOwner owner);
-extern void ResourceOwnerRememberBuffer(ResourceOwner owner, Buffer buffer);
-extern void ResourceOwnerForgetBuffer(ResourceOwner owner, Buffer buffer);
+extern PGDLLIMPORT void ResourceOwnerEnlargeBuffers(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberBuffer(ResourceOwner owner, Buffer buffer);
+extern PGDLLIMPORT void ResourceOwnerForgetBuffer(ResourceOwner owner, Buffer buffer);
 
 /* support for local lock management */
-extern void ResourceOwnerRememberLock(ResourceOwner owner, LOCALLOCK *locallock);
-extern void ResourceOwnerForgetLock(ResourceOwner owner, LOCALLOCK *locallock);
+extern PGDLLIMPORT void ResourceOwnerRememberLock(ResourceOwner owner, LOCALLOCK *locallock);
+extern PGDLLIMPORT void ResourceOwnerForgetLock(ResourceOwner owner, LOCALLOCK *locallock);
 
 /* support for catcache refcount management */
-extern void ResourceOwnerEnlargeCatCacheRefs(ResourceOwner owner);
-extern void ResourceOwnerRememberCatCacheRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeCatCacheRefs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberCatCacheRef(ResourceOwner owner,
 											 HeapTuple tuple);
-extern void ResourceOwnerForgetCatCacheRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetCatCacheRef(ResourceOwner owner,
 										   HeapTuple tuple);
-extern void ResourceOwnerEnlargeCatCacheListRefs(ResourceOwner owner);
-extern void ResourceOwnerRememberCatCacheListRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeCatCacheListRefs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberCatCacheListRef(ResourceOwner owner,
 												 CatCList *list);
-extern void ResourceOwnerForgetCatCacheListRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetCatCacheListRef(ResourceOwner owner,
 											   CatCList *list);
 
 /* support for relcache refcount management */
-extern void ResourceOwnerEnlargeRelationRefs(ResourceOwner owner);
-extern void ResourceOwnerRememberRelationRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeRelationRefs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberRelationRef(ResourceOwner owner,
 											 Relation rel);
-extern void ResourceOwnerForgetRelationRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetRelationRef(ResourceOwner owner,
 										   Relation rel);
 
 /* support for plancache refcount management */
-extern void ResourceOwnerEnlargePlanCacheRefs(ResourceOwner owner);
-extern void ResourceOwnerRememberPlanCacheRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargePlanCacheRefs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberPlanCacheRef(ResourceOwner owner,
 											  CachedPlan *plan);
-extern void ResourceOwnerForgetPlanCacheRef(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetPlanCacheRef(ResourceOwner owner,
 											CachedPlan *plan);
 
 /* support for tupledesc refcount management */
-extern void ResourceOwnerEnlargeTupleDescs(ResourceOwner owner);
-extern void ResourceOwnerRememberTupleDesc(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeTupleDescs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberTupleDesc(ResourceOwner owner,
 										   TupleDesc tupdesc);
-extern void ResourceOwnerForgetTupleDesc(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetTupleDesc(ResourceOwner owner,
 										 TupleDesc tupdesc);
 
 /* support for snapshot refcount management */
-extern void ResourceOwnerEnlargeSnapshots(ResourceOwner owner);
-extern void ResourceOwnerRememberSnapshot(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeSnapshots(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberSnapshot(ResourceOwner owner,
 										  Snapshot snapshot);
-extern void ResourceOwnerForgetSnapshot(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetSnapshot(ResourceOwner owner,
 										Snapshot snapshot);
 
 /* support for temporary file management */
-extern void ResourceOwnerEnlargeFiles(ResourceOwner owner);
-extern void ResourceOwnerRememberFile(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeFiles(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberFile(ResourceOwner owner,
 									  File file);
-extern void ResourceOwnerForgetFile(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetFile(ResourceOwner owner,
 									File file);
 
 /* support for dynamic shared memory management */
-extern void ResourceOwnerEnlargeDSMs(ResourceOwner owner);
-extern void ResourceOwnerRememberDSM(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeDSMs(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberDSM(ResourceOwner owner,
 									 dsm_segment *);
-extern void ResourceOwnerForgetDSM(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetDSM(ResourceOwner owner,
 								   dsm_segment *);
 
 /* support for JITContext management */
-extern void ResourceOwnerEnlargeJIT(ResourceOwner owner);
-extern void ResourceOwnerRememberJIT(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeJIT(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberJIT(ResourceOwner owner,
 									 Datum handle);
-extern void ResourceOwnerForgetJIT(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetJIT(ResourceOwner owner,
 								   Datum handle);
 
 /* support for cryptohash context management */
-extern void ResourceOwnerEnlargeCryptoHash(ResourceOwner owner);
-extern void ResourceOwnerRememberCryptoHash(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeCryptoHash(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberCryptoHash(ResourceOwner owner,
 											Datum handle);
-extern void ResourceOwnerForgetCryptoHash(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetCryptoHash(ResourceOwner owner,
 										  Datum handle);
 
 /* support for HMAC context management */
-extern void ResourceOwnerEnlargeHMAC(ResourceOwner owner);
-extern void ResourceOwnerRememberHMAC(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerEnlargeHMAC(ResourceOwner owner);
+extern PGDLLIMPORT void ResourceOwnerRememberHMAC(ResourceOwner owner,
 									  Datum handle);
-extern void ResourceOwnerForgetHMAC(ResourceOwner owner,
+extern PGDLLIMPORT void ResourceOwnerForgetHMAC(ResourceOwner owner,
 									Datum handle);
 
 #endif							/* RESOWNER_PRIVATE_H */

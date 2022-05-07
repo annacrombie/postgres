@@ -86,30 +86,30 @@ typedef struct BrinDesc
 #endif
 
 /* brin.c */
-extern BrinDesc *brin_build_desc(Relation rel);
-extern void brin_free_desc(BrinDesc *bdesc);
-extern IndexBuildResult *brinbuild(Relation heap, Relation index,
+extern PGDLLIMPORT BrinDesc *brin_build_desc(Relation rel);
+extern PGDLLIMPORT void brin_free_desc(BrinDesc *bdesc);
+extern PGDLLIMPORT IndexBuildResult *brinbuild(Relation heap, Relation index,
 								   struct IndexInfo *indexInfo);
-extern void brinbuildempty(Relation index);
-extern bool brininsert(Relation idxRel, Datum *values, bool *nulls,
+extern PGDLLIMPORT void brinbuildempty(Relation index);
+extern PGDLLIMPORT bool brininsert(Relation idxRel, Datum *values, bool *nulls,
 					   ItemPointer heaptid, Relation heapRel,
 					   IndexUniqueCheck checkUnique,
 					   bool indexUnchanged,
 					   struct IndexInfo *indexInfo);
-extern IndexScanDesc brinbeginscan(Relation r, int nkeys, int norderbys);
-extern int64 bringetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
-extern void brinrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
+extern PGDLLIMPORT IndexScanDesc brinbeginscan(Relation r, int nkeys, int norderbys);
+extern PGDLLIMPORT int64 bringetbitmap(IndexScanDesc scan, TIDBitmap *tbm);
+extern PGDLLIMPORT void brinrescan(IndexScanDesc scan, ScanKey scankey, int nscankeys,
 					   ScanKey orderbys, int norderbys);
-extern void brinendscan(IndexScanDesc scan);
-extern IndexBulkDeleteResult *brinbulkdelete(IndexVacuumInfo *info,
+extern PGDLLIMPORT void brinendscan(IndexScanDesc scan);
+extern PGDLLIMPORT IndexBulkDeleteResult *brinbulkdelete(IndexVacuumInfo *info,
 											 IndexBulkDeleteResult *stats,
 											 IndexBulkDeleteCallback callback,
 											 void *callback_state);
-extern IndexBulkDeleteResult *brinvacuumcleanup(IndexVacuumInfo *info,
+extern PGDLLIMPORT IndexBulkDeleteResult *brinvacuumcleanup(IndexVacuumInfo *info,
 												IndexBulkDeleteResult *stats);
-extern bytea *brinoptions(Datum reloptions, bool validate);
+extern PGDLLIMPORT bytea *brinoptions(Datum reloptions, bool validate);
 
 /* brin_validate.c */
-extern bool brinvalidate(Oid opclassoid);
+extern PGDLLIMPORT bool brinvalidate(Oid opclassoid);
 
 #endif							/* BRIN_INTERNAL_H */

@@ -20,10 +20,10 @@
 #include "storage/sinval.h"
 
 /* Recovery handlers for the Standby Rmgr (RM_STANDBY_ID) */
-extern void standby_redo(XLogReaderState *record);
-extern void standby_desc(StringInfo buf, XLogReaderState *record);
-extern const char *standby_identify(uint8 info);
-extern void standby_desc_invalidations(StringInfo buf,
+extern PGDLLIMPORT void standby_redo(XLogReaderState *record);
+extern PGDLLIMPORT void standby_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *standby_identify(uint8 info);
+extern PGDLLIMPORT void standby_desc_invalidations(StringInfo buf,
 									   int nmsgs, SharedInvalidationMessage *msgs,
 									   Oid dbId, Oid tsId,
 									   bool relcacheInitFileInval);

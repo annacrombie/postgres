@@ -67,24 +67,24 @@ typedef struct PsqlScanCallbacks
 } PsqlScanCallbacks;
 
 
-extern PsqlScanState psql_scan_create(const PsqlScanCallbacks *callbacks);
-extern void psql_scan_destroy(PsqlScanState state);
+extern PGDLLIMPORT PsqlScanState psql_scan_create(const PsqlScanCallbacks *callbacks);
+extern PGDLLIMPORT void psql_scan_destroy(PsqlScanState state);
 
-extern void psql_scan_set_passthrough(PsqlScanState state, void *passthrough);
+extern PGDLLIMPORT void psql_scan_set_passthrough(PsqlScanState state, void *passthrough);
 
-extern void psql_scan_setup(PsqlScanState state,
+extern PGDLLIMPORT void psql_scan_setup(PsqlScanState state,
 							const char *line, int line_len,
 							int encoding, bool std_strings);
-extern void psql_scan_finish(PsqlScanState state);
+extern PGDLLIMPORT void psql_scan_finish(PsqlScanState state);
 
-extern PsqlScanResult psql_scan(PsqlScanState state,
+extern PGDLLIMPORT PsqlScanResult psql_scan(PsqlScanState state,
 								PQExpBuffer query_buf,
 								promptStatus_t *prompt);
 
-extern void psql_scan_reset(PsqlScanState state);
+extern PGDLLIMPORT void psql_scan_reset(PsqlScanState state);
 
-extern void psql_scan_reselect_sql_lexer(PsqlScanState state);
+extern PGDLLIMPORT void psql_scan_reselect_sql_lexer(PsqlScanState state);
 
-extern bool psql_scan_in_quote(PsqlScanState state);
+extern PGDLLIMPORT bool psql_scan_in_quote(PsqlScanState state);
 
 #endif							/* PSQLSCAN_H */

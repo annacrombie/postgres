@@ -228,9 +228,9 @@ int			setitimer(int which, const struct itimerval *value, struct itimerval *oval
  *	knowing what type of system Cygwin binaries will be run on.
  *		Note: Some CYGWIN includes might #define WIN32.
  */
-extern int	pgsymlink(const char *oldpath, const char *newpath);
-extern int	pgreadlink(const char *path, char *buf, size_t size);
-extern bool pgwin32_is_junction(const char *path);
+extern PGDLLIMPORT int	pgsymlink(const char *oldpath, const char *newpath);
+extern PGDLLIMPORT int	pgreadlink(const char *path, char *buf, size_t size);
+extern PGDLLIMPORT bool pgwin32_is_junction(const char *path);
 
 #define symlink(oldpath, newpath)	pgsymlink(oldpath, newpath)
 #define readlink(path, buf, size)	pgreadlink(path, buf, size)
@@ -276,8 +276,8 @@ struct stat						/* This should match struct __stat64 */
 	__time64_t	st_ctime;
 };
 
-extern int	_pgfstat64(int fileno, struct stat *buf);
-extern int	_pgstat64(const char *name, struct stat *buf);
+extern PGDLLIMPORT int	_pgfstat64(int fileno, struct stat *buf);
+extern PGDLLIMPORT int	_pgstat64(const char *name, struct stat *buf);
 
 #define fstat(fileno, sb)	_pgfstat64(fileno, sb)
 #define stat(path, sb)		_pgstat64(path, sb)
@@ -441,7 +441,7 @@ extern int	_pgstat64(const char *name, struct stat *buf);
  * Define our own wrapper macro around setlocale() to work around bugs in
  * Windows' native setlocale() function.
  */
-extern char *pgwin32_setlocale(int category, const char *locale);
+extern PGDLLIMPORT char *pgwin32_setlocale(int category, const char *locale);
 
 #define setlocale(a,b) pgwin32_setlocale(a,b)
 
@@ -455,14 +455,14 @@ extern PGDLLIMPORT HANDLE pgwin32_initial_signal_pipe;
 #define UNBLOCKED_SIGNAL_QUEUE()	(pg_signal_queue & ~pg_signal_mask)
 #define PG_SIGNAL_COUNT 32
 
-extern void pgwin32_signal_initialize(void);
-extern HANDLE pgwin32_create_signal_listener(pid_t pid);
-extern void pgwin32_dispatch_queued_signals(void);
-extern void pg_queue_signal(int signum);
+extern PGDLLIMPORT void pgwin32_signal_initialize(void);
+extern PGDLLIMPORT HANDLE pgwin32_create_signal_listener(pid_t pid);
+extern PGDLLIMPORT void pgwin32_dispatch_queued_signals(void);
+extern PGDLLIMPORT void pg_queue_signal(int signum);
 
 /* In src/port/kill.c */
 #define kill(pid,sig)	pgkill(pid,sig)
-extern int	pgkill(int pid, int sig);
+extern PGDLLIMPORT int	pgkill(int pid, int sig);
 
 /* In backend/port/win32/socket.c */
 #ifndef FRONTEND
@@ -475,44 +475,44 @@ extern int	pgkill(int pid, int sig);
 #define recv(s, buf, len, flags) pgwin32_recv(s, buf, len, flags)
 #define send(s, buf, len, flags) pgwin32_send(s, buf, len, flags)
 
-extern SOCKET pgwin32_socket(int af, int type, int protocol);
-extern int	pgwin32_bind(SOCKET s, struct sockaddr *addr, int addrlen);
-extern int	pgwin32_listen(SOCKET s, int backlog);
-extern SOCKET pgwin32_accept(SOCKET s, struct sockaddr *addr, int *addrlen);
-extern int	pgwin32_connect(SOCKET s, const struct sockaddr *name, int namelen);
-extern int	pgwin32_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);
-extern int	pgwin32_recv(SOCKET s, char *buf, int len, int flags);
-extern int	pgwin32_send(SOCKET s, const void *buf, int len, int flags);
-extern int	pgwin32_waitforsinglesocket(SOCKET s, int what, int timeout);
+extern PGDLLIMPORT SOCKET pgwin32_socket(int af, int type, int protocol);
+extern PGDLLIMPORT int	pgwin32_bind(SOCKET s, struct sockaddr *addr, int addrlen);
+extern PGDLLIMPORT int	pgwin32_listen(SOCKET s, int backlog);
+extern PGDLLIMPORT SOCKET pgwin32_accept(SOCKET s, struct sockaddr *addr, int *addrlen);
+extern PGDLLIMPORT int	pgwin32_connect(SOCKET s, const struct sockaddr *name, int namelen);
+extern PGDLLIMPORT int	pgwin32_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);
+extern PGDLLIMPORT int	pgwin32_recv(SOCKET s, char *buf, int len, int flags);
+extern PGDLLIMPORT int	pgwin32_send(SOCKET s, const void *buf, int len, int flags);
+extern PGDLLIMPORT int	pgwin32_waitforsinglesocket(SOCKET s, int what, int timeout);
 
 extern PGDLLIMPORT int pgwin32_noblock;
 
 #endif							/* FRONTEND */
 
 /* in backend/port/win32_shmem.c */
-extern int	pgwin32_ReserveSharedMemoryRegion(HANDLE);
+extern PGDLLIMPORT int	pgwin32_ReserveSharedMemoryRegion(HANDLE);
 
 /* in backend/port/win32/crashdump.c */
-extern void pgwin32_install_crashdump_handler(void);
+extern PGDLLIMPORT void pgwin32_install_crashdump_handler(void);
 
 /* in port/win32error.c */
-extern void _dosmaperr(unsigned long);
+extern PGDLLIMPORT void _dosmaperr(unsigned long);
 
 /* in port/win32env.c */
-extern int	pgwin32_putenv(const char *);
-extern int	pgwin32_setenv(const char *name, const char *value, int overwrite);
-extern int	pgwin32_unsetenv(const char *name);
+extern PGDLLIMPORT int	pgwin32_putenv(const char *);
+extern PGDLLIMPORT int	pgwin32_setenv(const char *name, const char *value, int overwrite);
+extern PGDLLIMPORT int	pgwin32_unsetenv(const char *name);
 
 #define putenv(x) pgwin32_putenv(x)
 #define setenv(x,y,z) pgwin32_setenv(x,y,z)
 #define unsetenv(x) pgwin32_unsetenv(x)
 
 /* in port/win32security.c */
-extern int	pgwin32_is_service(void);
-extern int	pgwin32_is_admin(void);
+extern PGDLLIMPORT int	pgwin32_is_service(void);
+extern PGDLLIMPORT int	pgwin32_is_admin(void);
 
 /* Windows security token manipulation (in src/common/exec.c) */
-extern BOOL AddUserToTokenDacl(HANDLE hToken);
+extern PGDLLIMPORT BOOL AddUserToTokenDacl(HANDLE hToken);
 
 /* Things that exist in MinGW headers, but need to be added to MSVC */
 #ifdef _MSC_VER

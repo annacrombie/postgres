@@ -39,12 +39,12 @@ typedef struct PartitionDescData
 } PartitionDescData;
 
 
-extern PartitionDesc RelationGetPartitionDesc(Relation rel, bool omit_detached);
+extern PGDLLIMPORT PartitionDesc RelationGetPartitionDesc(Relation rel, bool omit_detached);
 
-extern PartitionDirectory CreatePartitionDirectory(MemoryContext mcxt, bool omit_detached);
-extern PartitionDesc PartitionDirectoryLookup(PartitionDirectory, Relation);
-extern void DestroyPartitionDirectory(PartitionDirectory pdir);
+extern PGDLLIMPORT PartitionDirectory CreatePartitionDirectory(MemoryContext mcxt, bool omit_detached);
+extern PGDLLIMPORT PartitionDesc PartitionDirectoryLookup(PartitionDirectory, Relation);
+extern PGDLLIMPORT void DestroyPartitionDirectory(PartitionDirectory pdir);
 
-extern Oid	get_default_oid_from_partdesc(PartitionDesc partdesc);
+extern PGDLLIMPORT Oid	get_default_oid_from_partdesc(PartitionDesc partdesc);
 
 #endif							/* PARTCACHE_H */

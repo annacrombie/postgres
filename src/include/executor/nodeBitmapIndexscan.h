@@ -16,9 +16,9 @@
 
 #include "nodes/execnodes.h"
 
-extern BitmapIndexScanState *ExecInitBitmapIndexScan(BitmapIndexScan *node, EState *estate, int eflags);
-extern Node *MultiExecBitmapIndexScan(BitmapIndexScanState *node);
-extern void ExecEndBitmapIndexScan(BitmapIndexScanState *node);
-extern void ExecReScanBitmapIndexScan(BitmapIndexScanState *node);
+extern PGDLLIMPORT BitmapIndexScanState *ExecInitBitmapIndexScan(BitmapIndexScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT Node *MultiExecBitmapIndexScan(BitmapIndexScanState *node);
+extern PGDLLIMPORT void ExecEndBitmapIndexScan(BitmapIndexScanState *node);
+extern PGDLLIMPORT void ExecReScanBitmapIndexScan(BitmapIndexScanState *node);
 
 #endif							/* NODEBITMAPINDEXSCAN_H */

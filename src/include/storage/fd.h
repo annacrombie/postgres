@@ -100,96 +100,96 @@ extern PGDLLIMPORT int max_safe_fds;
  */
 
 /* Operations on virtual Files --- equivalent to Unix kernel file ops */
-extern File PathNameOpenFile(const char *fileName, int fileFlags);
-extern File PathNameOpenFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
-extern File OpenTemporaryFile(bool interXact);
-extern void FileClose(File file);
-extern int	FilePrefetch(File file, off_t offset, int amount, uint32 wait_event_info);
-extern int	FileRead(File file, char *buffer, int amount, off_t offset, uint32 wait_event_info);
-extern int	FileWrite(File file, char *buffer, int amount, off_t offset, uint32 wait_event_info);
-extern int	FileSync(File file, uint32 wait_event_info);
-extern off_t FileSize(File file);
-extern int	FileTruncate(File file, off_t offset, uint32 wait_event_info);
-extern void FileWriteback(File file, off_t offset, off_t nbytes, uint32 wait_event_info);
-extern char *FilePathName(File file);
-extern int	FileGetRawDesc(File file);
-extern int	FileGetRawFlags(File file);
-extern mode_t FileGetRawMode(File file);
+extern PGDLLIMPORT File PathNameOpenFile(const char *fileName, int fileFlags);
+extern PGDLLIMPORT File PathNameOpenFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
+extern PGDLLIMPORT File OpenTemporaryFile(bool interXact);
+extern PGDLLIMPORT void FileClose(File file);
+extern PGDLLIMPORT int	FilePrefetch(File file, off_t offset, int amount, uint32 wait_event_info);
+extern PGDLLIMPORT int	FileRead(File file, char *buffer, int amount, off_t offset, uint32 wait_event_info);
+extern PGDLLIMPORT int	FileWrite(File file, char *buffer, int amount, off_t offset, uint32 wait_event_info);
+extern PGDLLIMPORT int	FileSync(File file, uint32 wait_event_info);
+extern PGDLLIMPORT off_t FileSize(File file);
+extern PGDLLIMPORT int	FileTruncate(File file, off_t offset, uint32 wait_event_info);
+extern PGDLLIMPORT void FileWriteback(File file, off_t offset, off_t nbytes, uint32 wait_event_info);
+extern PGDLLIMPORT char *FilePathName(File file);
+extern PGDLLIMPORT int	FileGetRawDesc(File file);
+extern PGDLLIMPORT int	FileGetRawFlags(File file);
+extern PGDLLIMPORT mode_t FileGetRawMode(File file);
 
 /* Operations used for sharing named temporary files */
-extern File PathNameCreateTemporaryFile(const char *name, bool error_on_failure);
-extern File PathNameOpenTemporaryFile(const char *path, int mode);
-extern bool PathNameDeleteTemporaryFile(const char *name, bool error_on_failure);
-extern void PathNameCreateTemporaryDir(const char *base, const char *name);
-extern void PathNameDeleteTemporaryDir(const char *name);
-extern void TempTablespacePath(char *path, Oid tablespace);
+extern PGDLLIMPORT File PathNameCreateTemporaryFile(const char *name, bool error_on_failure);
+extern PGDLLIMPORT File PathNameOpenTemporaryFile(const char *path, int mode);
+extern PGDLLIMPORT bool PathNameDeleteTemporaryFile(const char *name, bool error_on_failure);
+extern PGDLLIMPORT void PathNameCreateTemporaryDir(const char *base, const char *name);
+extern PGDLLIMPORT void PathNameDeleteTemporaryDir(const char *name);
+extern PGDLLIMPORT void TempTablespacePath(char *path, Oid tablespace);
 
 /* Operations that allow use of regular stdio --- USE WITH CAUTION */
-extern FILE *AllocateFile(const char *name, const char *mode);
-extern int	FreeFile(FILE *file);
+extern PGDLLIMPORT FILE *AllocateFile(const char *name, const char *mode);
+extern PGDLLIMPORT int	FreeFile(FILE *file);
 
 /* Operations that allow use of pipe streams (popen/pclose) */
-extern FILE *OpenPipeStream(const char *command, const char *mode);
-extern int	ClosePipeStream(FILE *file);
+extern PGDLLIMPORT FILE *OpenPipeStream(const char *command, const char *mode);
+extern PGDLLIMPORT int	ClosePipeStream(FILE *file);
 
 /* Operations to allow use of the <dirent.h> library routines */
-extern DIR *AllocateDir(const char *dirname);
-extern struct dirent *ReadDir(DIR *dir, const char *dirname);
-extern struct dirent *ReadDirExtended(DIR *dir, const char *dirname,
+extern PGDLLIMPORT DIR *AllocateDir(const char *dirname);
+extern PGDLLIMPORT struct dirent *ReadDir(DIR *dir, const char *dirname);
+extern PGDLLIMPORT struct dirent *ReadDirExtended(DIR *dir, const char *dirname,
 									  int elevel);
-extern int	FreeDir(DIR *dir);
+extern PGDLLIMPORT int	FreeDir(DIR *dir);
 
 /* Operations to allow use of a plain kernel FD, with automatic cleanup */
-extern int	OpenTransientFile(const char *fileName, int fileFlags);
-extern int	OpenTransientFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
-extern int	CloseTransientFile(int fd);
+extern PGDLLIMPORT int	OpenTransientFile(const char *fileName, int fileFlags);
+extern PGDLLIMPORT int	OpenTransientFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
+extern PGDLLIMPORT int	CloseTransientFile(int fd);
 
 /* If you've really really gotta have a plain kernel FD, use this */
-extern int	BasicOpenFile(const char *fileName, int fileFlags);
-extern int	BasicOpenFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
+extern PGDLLIMPORT int	BasicOpenFile(const char *fileName, int fileFlags);
+extern PGDLLIMPORT int	BasicOpenFilePerm(const char *fileName, int fileFlags, mode_t fileMode);
 
 /* Use these for other cases, and also for long-lived BasicOpenFile FDs */
-extern bool AcquireExternalFD(void);
-extern void ReserveExternalFD(void);
-extern void ReleaseExternalFD(void);
+extern PGDLLIMPORT bool AcquireExternalFD(void);
+extern PGDLLIMPORT void ReserveExternalFD(void);
+extern PGDLLIMPORT void ReleaseExternalFD(void);
 
 /* Make a directory with default permissions */
-extern int	MakePGDirectory(const char *directoryName);
+extern PGDLLIMPORT int	MakePGDirectory(const char *directoryName);
 
 /* Miscellaneous support routines */
-extern void InitFileAccess(void);
-extern void InitTemporaryFileAccess(void);
-extern void set_max_safe_fds(void);
-extern void closeAllVfds(void);
-extern void SetTempTablespaces(Oid *tableSpaces, int numSpaces);
-extern bool TempTablespacesAreSet(void);
-extern int	GetTempTablespaces(Oid *tableSpaces, int numSpaces);
-extern Oid	GetNextTempTableSpace(void);
-extern void AtEOXact_Files(bool isCommit);
-extern void AtEOSubXact_Files(bool isCommit, SubTransactionId mySubid,
+extern PGDLLIMPORT void InitFileAccess(void);
+extern PGDLLIMPORT void InitTemporaryFileAccess(void);
+extern PGDLLIMPORT void set_max_safe_fds(void);
+extern PGDLLIMPORT void closeAllVfds(void);
+extern PGDLLIMPORT void SetTempTablespaces(Oid *tableSpaces, int numSpaces);
+extern PGDLLIMPORT bool TempTablespacesAreSet(void);
+extern PGDLLIMPORT int	GetTempTablespaces(Oid *tableSpaces, int numSpaces);
+extern PGDLLIMPORT Oid	GetNextTempTableSpace(void);
+extern PGDLLIMPORT void AtEOXact_Files(bool isCommit);
+extern PGDLLIMPORT void AtEOSubXact_Files(bool isCommit, SubTransactionId mySubid,
 							  SubTransactionId parentSubid);
-extern void RemovePgTempFiles(void);
-extern void RemovePgTempFilesInDir(const char *tmpdirname, bool missing_ok,
+extern PGDLLIMPORT void RemovePgTempFiles(void);
+extern PGDLLIMPORT void RemovePgTempFilesInDir(const char *tmpdirname, bool missing_ok,
 								   bool unlink_all);
-extern bool looks_like_temp_rel_name(const char *name);
+extern PGDLLIMPORT bool looks_like_temp_rel_name(const char *name);
 
-extern int	pg_fsync(int fd);
-extern int	pg_fsync_no_writethrough(int fd);
-extern int	pg_fsync_writethrough(int fd);
-extern int	pg_fdatasync(int fd);
-extern void pg_flush_data(int fd, off_t offset, off_t amount);
-extern ssize_t pg_pwritev_with_retry(int fd,
+extern PGDLLIMPORT int	pg_fsync(int fd);
+extern PGDLLIMPORT int	pg_fsync_no_writethrough(int fd);
+extern PGDLLIMPORT int	pg_fsync_writethrough(int fd);
+extern PGDLLIMPORT int	pg_fdatasync(int fd);
+extern PGDLLIMPORT void pg_flush_data(int fd, off_t offset, off_t amount);
+extern PGDLLIMPORT ssize_t pg_pwritev_with_retry(int fd,
 									 const struct iovec *iov,
 									 int iovcnt,
 									 off_t offset);
-extern int	pg_truncate(const char *path, off_t length);
-extern void fsync_fname(const char *fname, bool isdir);
-extern int	fsync_fname_ext(const char *fname, bool isdir, bool ignore_perm, int elevel);
-extern int	durable_rename(const char *oldfile, const char *newfile, int loglevel);
-extern int	durable_unlink(const char *fname, int loglevel);
-extern int	durable_rename_excl(const char *oldfile, const char *newfile, int loglevel);
-extern void SyncDataDirectory(void);
-extern int	data_sync_elevel(int elevel);
+extern PGDLLIMPORT int	pg_truncate(const char *path, off_t length);
+extern PGDLLIMPORT void fsync_fname(const char *fname, bool isdir);
+extern PGDLLIMPORT int	fsync_fname_ext(const char *fname, bool isdir, bool ignore_perm, int elevel);
+extern PGDLLIMPORT int	durable_rename(const char *oldfile, const char *newfile, int loglevel);
+extern PGDLLIMPORT int	durable_unlink(const char *fname, int loglevel);
+extern PGDLLIMPORT int	durable_rename_excl(const char *oldfile, const char *newfile, int loglevel);
+extern PGDLLIMPORT void SyncDataDirectory(void);
+extern PGDLLIMPORT int	data_sync_elevel(int elevel);
 
 /* Filename components */
 #define PG_TEMP_FILES_DIR "pgsql_tmp"

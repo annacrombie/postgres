@@ -28,16 +28,16 @@
 /*
  * prototypes for functions in sinvaladt.c
  */
-extern Size SInvalShmemSize(void);
-extern void CreateSharedInvalidationState(void);
-extern void SharedInvalBackendInit(bool sendOnly);
-extern PGPROC *BackendIdGetProc(int backendID);
-extern void BackendIdGetTransactionIds(int backendID, TransactionId *xid, TransactionId *xmin);
+extern PGDLLIMPORT Size SInvalShmemSize(void);
+extern PGDLLIMPORT void CreateSharedInvalidationState(void);
+extern PGDLLIMPORT void SharedInvalBackendInit(bool sendOnly);
+extern PGDLLIMPORT PGPROC *BackendIdGetProc(int backendID);
+extern PGDLLIMPORT void BackendIdGetTransactionIds(int backendID, TransactionId *xid, TransactionId *xmin);
 
-extern void SIInsertDataEntries(const SharedInvalidationMessage *data, int n);
-extern int	SIGetDataEntries(SharedInvalidationMessage *data, int datasize);
-extern void SICleanupQueue(bool callerHasWriteLock, int minFree);
+extern PGDLLIMPORT void SIInsertDataEntries(const SharedInvalidationMessage *data, int n);
+extern PGDLLIMPORT int	SIGetDataEntries(SharedInvalidationMessage *data, int datasize);
+extern PGDLLIMPORT void SICleanupQueue(bool callerHasWriteLock, int minFree);
 
-extern LocalTransactionId GetNextLocalTransactionId(void);
+extern PGDLLIMPORT LocalTransactionId GetNextLocalTransactionId(void);
 
 #endif							/* SINVALADT_H */

@@ -17,15 +17,15 @@
 #include "access/parallel.h"
 #include "nodes/execnodes.h"
 
-extern SeqScanState *ExecInitSeqScan(SeqScan *node, EState *estate, int eflags);
-extern void ExecEndSeqScan(SeqScanState *node);
-extern void ExecReScanSeqScan(SeqScanState *node);
+extern PGDLLIMPORT SeqScanState *ExecInitSeqScan(SeqScan *node, EState *estate, int eflags);
+extern PGDLLIMPORT void ExecEndSeqScan(SeqScanState *node);
+extern PGDLLIMPORT void ExecReScanSeqScan(SeqScanState *node);
 
 /* parallel scan support */
-extern void ExecSeqScanEstimate(SeqScanState *node, ParallelContext *pcxt);
-extern void ExecSeqScanInitializeDSM(SeqScanState *node, ParallelContext *pcxt);
-extern void ExecSeqScanReInitializeDSM(SeqScanState *node, ParallelContext *pcxt);
-extern void ExecSeqScanInitializeWorker(SeqScanState *node,
+extern PGDLLIMPORT void ExecSeqScanEstimate(SeqScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecSeqScanInitializeDSM(SeqScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecSeqScanReInitializeDSM(SeqScanState *node, ParallelContext *pcxt);
+extern PGDLLIMPORT void ExecSeqScanInitializeWorker(SeqScanState *node,
 										ParallelWorkerContext *pwcxt);
 
 #endif							/* NODESEQSCAN_H */

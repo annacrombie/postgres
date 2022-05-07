@@ -135,15 +135,15 @@ extern PGDLLIMPORT DestReceiver *None_Receiver; /* permanent receiver for
 
 /* The primary destination management functions */
 
-extern void BeginCommand(CommandTag commandTag, CommandDest dest);
-extern DestReceiver *CreateDestReceiver(CommandDest dest);
-extern void EndCommand(const QueryCompletion *qc, CommandDest dest,
+extern PGDLLIMPORT void BeginCommand(CommandTag commandTag, CommandDest dest);
+extern PGDLLIMPORT DestReceiver *CreateDestReceiver(CommandDest dest);
+extern PGDLLIMPORT void EndCommand(const QueryCompletion *qc, CommandDest dest,
 					   bool force_undecorated_output);
-extern void EndReplicationCommand(const char *commandTag);
+extern PGDLLIMPORT void EndReplicationCommand(const char *commandTag);
 
 /* Additional functions that go with destination management, more or less. */
 
-extern void NullCommand(CommandDest dest);
-extern void ReadyForQuery(CommandDest dest);
+extern PGDLLIMPORT void NullCommand(CommandDest dest);
+extern PGDLLIMPORT void ReadyForQuery(CommandDest dest);
 
 #endif							/* DEST_H */

@@ -36,28 +36,28 @@ typedef struct xl_clog_truncate
 	Oid			oldestXactDb;
 } xl_clog_truncate;
 
-extern void TransactionIdSetTreeStatus(TransactionId xid, int nsubxids,
+extern PGDLLIMPORT void TransactionIdSetTreeStatus(TransactionId xid, int nsubxids,
 									   TransactionId *subxids, XidStatus status, XLogRecPtr lsn);
-extern XidStatus TransactionIdGetStatus(TransactionId xid, XLogRecPtr *lsn);
+extern PGDLLIMPORT XidStatus TransactionIdGetStatus(TransactionId xid, XLogRecPtr *lsn);
 
-extern Size CLOGShmemBuffers(void);
-extern Size CLOGShmemSize(void);
-extern void CLOGShmemInit(void);
-extern void BootStrapCLOG(void);
-extern void StartupCLOG(void);
-extern void TrimCLOG(void);
-extern void CheckPointCLOG(void);
-extern void ExtendCLOG(TransactionId newestXact);
-extern void TruncateCLOG(TransactionId oldestXact, Oid oldestxid_datoid);
+extern PGDLLIMPORT Size CLOGShmemBuffers(void);
+extern PGDLLIMPORT Size CLOGShmemSize(void);
+extern PGDLLIMPORT void CLOGShmemInit(void);
+extern PGDLLIMPORT void BootStrapCLOG(void);
+extern PGDLLIMPORT void StartupCLOG(void);
+extern PGDLLIMPORT void TrimCLOG(void);
+extern PGDLLIMPORT void CheckPointCLOG(void);
+extern PGDLLIMPORT void ExtendCLOG(TransactionId newestXact);
+extern PGDLLIMPORT void TruncateCLOG(TransactionId oldestXact, Oid oldestxid_datoid);
 
-extern int	clogsyncfiletag(const FileTag *ftag, char *path);
+extern PGDLLIMPORT int	clogsyncfiletag(const FileTag *ftag, char *path);
 
 /* XLOG stuff */
 #define CLOG_ZEROPAGE		0x00
 #define CLOG_TRUNCATE		0x10
 
-extern void clog_redo(XLogReaderState *record);
-extern void clog_desc(StringInfo buf, XLogReaderState *record);
-extern const char *clog_identify(uint8 info);
+extern PGDLLIMPORT void clog_redo(XLogReaderState *record);
+extern PGDLLIMPORT void clog_desc(StringInfo buf, XLogReaderState *record);
+extern PGDLLIMPORT const char *clog_identify(uint8 info);
 
 #endif							/* CLOG_H */

@@ -69,45 +69,45 @@ typedef struct StatsBuildData
 } StatsBuildData;
 
 
-extern MVNDistinct *statext_ndistinct_build(double totalrows, StatsBuildData *data);
-extern bytea *statext_ndistinct_serialize(MVNDistinct *ndistinct);
-extern MVNDistinct *statext_ndistinct_deserialize(bytea *data);
+extern PGDLLIMPORT MVNDistinct *statext_ndistinct_build(double totalrows, StatsBuildData *data);
+extern PGDLLIMPORT bytea *statext_ndistinct_serialize(MVNDistinct *ndistinct);
+extern PGDLLIMPORT MVNDistinct *statext_ndistinct_deserialize(bytea *data);
 
-extern MVDependencies *statext_dependencies_build(StatsBuildData *data);
-extern bytea *statext_dependencies_serialize(MVDependencies *dependencies);
-extern MVDependencies *statext_dependencies_deserialize(bytea *data);
+extern PGDLLIMPORT MVDependencies *statext_dependencies_build(StatsBuildData *data);
+extern PGDLLIMPORT bytea *statext_dependencies_serialize(MVDependencies *dependencies);
+extern PGDLLIMPORT MVDependencies *statext_dependencies_deserialize(bytea *data);
 
-extern MCVList *statext_mcv_build(StatsBuildData *data,
+extern PGDLLIMPORT MCVList *statext_mcv_build(StatsBuildData *data,
 								  double totalrows, int stattarget);
-extern bytea *statext_mcv_serialize(MCVList *mcv, VacAttrStats **stats);
-extern MCVList *statext_mcv_deserialize(bytea *data);
+extern PGDLLIMPORT bytea *statext_mcv_serialize(MCVList *mcv, VacAttrStats **stats);
+extern PGDLLIMPORT MCVList *statext_mcv_deserialize(bytea *data);
 
-extern MultiSortSupport multi_sort_init(int ndims);
-extern void multi_sort_add_dimension(MultiSortSupport mss, int sortdim,
+extern PGDLLIMPORT MultiSortSupport multi_sort_init(int ndims);
+extern PGDLLIMPORT void multi_sort_add_dimension(MultiSortSupport mss, int sortdim,
 									 Oid oper, Oid collation);
-extern int	multi_sort_compare(const void *a, const void *b, void *arg);
-extern int	multi_sort_compare_dim(int dim, const SortItem *a,
+extern PGDLLIMPORT int	multi_sort_compare(const void *a, const void *b, void *arg);
+extern PGDLLIMPORT int	multi_sort_compare_dim(int dim, const SortItem *a,
 								   const SortItem *b, MultiSortSupport mss);
-extern int	multi_sort_compare_dims(int start, int end, const SortItem *a,
+extern PGDLLIMPORT int	multi_sort_compare_dims(int start, int end, const SortItem *a,
 									const SortItem *b, MultiSortSupport mss);
-extern int	compare_scalars_simple(const void *a, const void *b, void *arg);
-extern int	compare_datums_simple(Datum a, Datum b, SortSupport ssup);
+extern PGDLLIMPORT int	compare_scalars_simple(const void *a, const void *b, void *arg);
+extern PGDLLIMPORT int	compare_datums_simple(Datum a, Datum b, SortSupport ssup);
 
-extern AttrNumber *build_attnums_array(Bitmapset *attrs, int nexprs, int *numattrs);
+extern PGDLLIMPORT AttrNumber *build_attnums_array(Bitmapset *attrs, int nexprs, int *numattrs);
 
-extern SortItem *build_sorted_items(StatsBuildData *data, int *nitems,
+extern PGDLLIMPORT SortItem *build_sorted_items(StatsBuildData *data, int *nitems,
 									MultiSortSupport mss,
 									int numattrs, AttrNumber *attnums);
 
-extern bool examine_opclause_args(List *args, Node **exprp,
+extern PGDLLIMPORT bool examine_opclause_args(List *args, Node **exprp,
 								  Const **cstp, bool *expronleftp);
 
-extern Selectivity mcv_combine_selectivities(Selectivity simple_sel,
+extern PGDLLIMPORT Selectivity mcv_combine_selectivities(Selectivity simple_sel,
 											 Selectivity mcv_sel,
 											 Selectivity mcv_basesel,
 											 Selectivity mcv_totalsel);
 
-extern Selectivity mcv_clauselist_selectivity(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity mcv_clauselist_selectivity(PlannerInfo *root,
 											  StatisticExtInfo *stat,
 											  List *clauses,
 											  int varRelid,
@@ -117,7 +117,7 @@ extern Selectivity mcv_clauselist_selectivity(PlannerInfo *root,
 											  Selectivity *basesel,
 											  Selectivity *totalsel);
 
-extern Selectivity mcv_clause_selectivity_or(PlannerInfo *root,
+extern PGDLLIMPORT Selectivity mcv_clause_selectivity_or(PlannerInfo *root,
 											 StatisticExtInfo *stat,
 											 MCVList *mcv,
 											 Node *clause,

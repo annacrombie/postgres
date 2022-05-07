@@ -70,12 +70,12 @@ typedef struct PartitionPruneContext
 #define PruneCxtStateIdx(partnatts, step_id, keyno) \
 	((partnatts) * (step_id) + (keyno))
 
-extern PartitionPruneInfo *make_partition_pruneinfo(struct PlannerInfo *root,
+extern PGDLLIMPORT PartitionPruneInfo *make_partition_pruneinfo(struct PlannerInfo *root,
 													struct RelOptInfo *parentrel,
 													List *subpaths,
 													List *prunequal);
-extern Bitmapset *prune_append_rel_partitions(struct RelOptInfo *rel);
-extern Bitmapset *get_matching_partitions(PartitionPruneContext *context,
+extern PGDLLIMPORT Bitmapset *prune_append_rel_partitions(struct RelOptInfo *rel);
+extern PGDLLIMPORT Bitmapset *get_matching_partitions(PartitionPruneContext *context,
 										  List *pruning_steps);
 
 #endif							/* PARTPRUNE_H */
