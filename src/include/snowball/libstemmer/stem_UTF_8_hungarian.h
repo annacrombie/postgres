@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-extern PGDLLIMPORT struct SN_env * hungarian_UTF_8_create_env(void);
-extern PGDLLIMPORT void hungarian_UTF_8_close_env(struct SN_env * z);
+extern struct SN_env * hungarian_UTF_8_create_env(void);
+extern void hungarian_UTF_8_close_env(struct SN_env * z);
 
-extern PGDLLIMPORT int hungarian_UTF_8_stem(struct SN_env * z);
+extern int hungarian_UTF_8_stem(struct SN_env * z);
 
 #ifdef __cplusplus
 }

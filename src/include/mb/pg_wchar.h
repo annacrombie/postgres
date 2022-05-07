@@ -655,8 +655,9 @@ extern wchar_scope char *pg_server_to_any(const char *s, int len, int encoding);
 
 extern wchar_scope void pg_unicode_to_server(pg_wchar c, unsigned char *s);
 
-extern wchar_scope unsigned short BIG5toCNS(unsigned short big5, unsigned char *lc);
-extern wchar_scope unsigned short CNStoBIG5(unsigned short cns, unsigned char lc);
+/* not exported, these are parts of euc_tw_and_big5 */
+extern unsigned short BIG5toCNS(unsigned short big5, unsigned char *lc);
+extern unsigned short CNStoBIG5(unsigned short cns, unsigned char lc);
 
 extern wchar_scope int	UtfToLocal(const unsigned char *utf, int len,
 					   unsigned char *iso,

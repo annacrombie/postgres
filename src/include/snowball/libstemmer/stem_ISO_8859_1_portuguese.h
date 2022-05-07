@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-extern PGDLLIMPORT struct SN_env * portuguese_ISO_8859_1_create_env(void);
-extern PGDLLIMPORT void portuguese_ISO_8859_1_close_env(struct SN_env * z);
+extern struct SN_env * portuguese_ISO_8859_1_create_env(void);
+extern void portuguese_ISO_8859_1_close_env(struct SN_env * z);
 
-extern PGDLLIMPORT int portuguese_ISO_8859_1_stem(struct SN_env * z);
+extern int portuguese_ISO_8859_1_stem(struct SN_env * z);
 
 #ifdef __cplusplus
 }
