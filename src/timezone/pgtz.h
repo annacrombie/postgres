@@ -69,13 +69,18 @@ struct pg_tz
 	struct state state;
 };
 
+#ifdef FRONTEND
+#define pgtz_scope
+#else
+#define pgtz_scope PGDLLIMPORT
+#endif
 
 /* in pgtz.c */
-extern int	pg_open_tzfile(const char *name, char *canonname);
+extern pgtz_scope int pg_open_tzfile(const char *name, char *canonname);
 
 /* in localtime.c */
-extern int	tzload(const char *name, char *canonname, struct state *sp,
+extern pgtz_scope int tzload(const char *name, char *canonname, struct state *sp,
 				   bool doextend);
-extern bool tzparse(const char *name, struct state *sp, bool lastditch);
+extern pgtz_scope bool tzparse(const char *name, struct state *sp, bool lastditch);
 
 #endif							/* _PGTZ_H */

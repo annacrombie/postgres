@@ -126,7 +126,7 @@ extern slock_t *ShmemLock;
  * All these names are user-visible as wait event names, so choose with care
  * ... and do not forget to update the documentation's list of wait events.
  */
-extern const char *const IndividualLWLockNames[];	/* in lwlocknames.c */
+extern PGDLLIMPORT const char *const IndividualLWLockNames[];	/* in lwlocknames.c */
 
 static const char *const BuiltinTrancheNames[] = {
 	/* LWTRANCHE_XACT_BUFFER: */

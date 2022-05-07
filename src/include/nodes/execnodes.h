@@ -763,7 +763,7 @@ typedef struct TupleHashEntryData
 #define SH_PREFIX tuplehash
 #define SH_ELEMENT_TYPE TupleHashEntryData
 #define SH_KEY_TYPE MinimalTuple
-#define SH_SCOPE extern
+#define SH_SCOPE extern PGDLLIMPORT
 #define SH_DECLARE
 #include "lib/simplehash.h"
 

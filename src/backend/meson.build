@@ -109,6 +109,10 @@ if cc.get_id() == 'msvc' # or true
 
 else
 
+  if cdata.has('HAVE_VISIBILITY_ATTRIBUTE')
+    backend_c_args += ['-fvisibility=hidden']
+  endif
+
   postgres = executable('postgres',
     backend_sources + generated_backend_sources + timezone_sources,
     c_pch: pch_postgres_h,

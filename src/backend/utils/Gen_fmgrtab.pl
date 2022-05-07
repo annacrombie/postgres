@@ -202,7 +202,7 @@ foreach my $s (sort { $a->{oid} <=> $b->{oid} } @fmgr)
 		&& !$seenit{ $s->{prosrc} })
 	{
 		$seenit{ $s->{prosrc} } = 1;
-		print $pfh "extern Datum $s->{prosrc}(PG_FUNCTION_ARGS);\n";
+		print $pfh "extern PGDLLIMPORT Datum $s->{prosrc}(PG_FUNCTION_ARGS);\n";
 	}
 }
 

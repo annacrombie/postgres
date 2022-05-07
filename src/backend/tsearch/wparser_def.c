@@ -531,7 +531,7 @@ p_isurlchar(TParser *prs)
 
 
 /* deliberately suppress unused-function complaints for the above */
-void		_make_compiler_happy(void);
+extern PGDLLIMPORT void _make_compiler_happy(void);
 void
 _make_compiler_happy(void)
 {

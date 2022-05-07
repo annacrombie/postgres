@@ -39,7 +39,7 @@ static inline TupleHashEntry LookupTupleHashEntry_internal(TupleHashTable hashta
 #define SH_KEY firstTuple
 #define SH_HASH_KEY(tb, key) TupleHashTableHash_internal(tb, key)
 #define SH_EQUAL(tb, a, b) TupleHashTableMatch(tb, a, b) == 0
-#define SH_SCOPE extern
+#define SH_SCOPE extern PGDLLIMPORT
 #define SH_STORE_HASH
 #define SH_GET_HASH(tb, a) a->hash
 #define SH_DEFINE

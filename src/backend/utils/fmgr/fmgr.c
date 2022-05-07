@@ -63,7 +63,7 @@ static void record_C_func(HeapTuple procedureTuple,
 						  PGFunction user_fn, const Pg_finfo_record *inforec);
 
 /* extern so it's callable via JIT */
-extern Datum fmgr_security_definer(PG_FUNCTION_ARGS);
+extern PGDLLIMPORT Datum fmgr_security_definer(PG_FUNCTION_ARGS);
 
 
 /*

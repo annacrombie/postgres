@@ -47,8 +47,13 @@ for my $include_file (@ARGV)
 
 		# Variable declarations should end in a semicolon. If we see an
 		# opening parenthesis, it's probably a function declaration.
-		$needs_pgdllimport = 0 if $stripped_line !~ /;$/
-			|| $stripped_line =~ /\(/;
+		$needs_pgdllimport = 0 if $stripped_line =~ /;$/ and $stripped_line !~ /\(/;
+
+		$needs_pgdllimport = 0 if $stripped_line =~ /PGDLLEXPORT/;
+		$needs_pgdllimport = 0 if $stripped_line =~ /extern \"C\"/;
+		$needs_pgdllimport = 0 if $stripped_line =~ /wchar_scope/;
+		$needs_pgdllimport = 0 if $stripped_line =~ /base_yyparse/;
+		$needs_pgdllimport = 0 if $stripped_line =~ /no_such_variable/;
 
 		# Add PGDLLIMPORT marker, if required.
 		if ($needs_pgdllimport)
