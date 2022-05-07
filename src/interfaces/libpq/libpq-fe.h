@@ -655,9 +655,12 @@ extern char *PQencryptPasswordConn(PGconn *conn, const char *passwd, const char 
 
 /* === in encnames.c === */
 
+/* FIXME: different declarations when included in backend code */
+#ifdef FRONTEND
 extern int	pg_char_to_encoding(const char *name);
 extern const char *pg_encoding_to_char(int encoding);
 extern int	pg_valid_server_encoding_id(int encoding);
+#endif
 
 /* === in fe-secure-openssl.c === */
 

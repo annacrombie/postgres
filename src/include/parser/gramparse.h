@@ -70,6 +70,7 @@ extern PGDLLIMPORT int	base_yylex(YYSTYPE *lvalp, YYLTYPE *llocp,
 
 /* from gram.y */
 extern PGDLLIMPORT void parser_init(base_yy_extra_type *yyext);
-extern PGDLLIMPORT int	base_yyparse(core_yyscan_t yyscanner);
+/* not exported, can't specify declspec in bison's generated header */
+extern int	base_yyparse(core_yyscan_t yyscanner);
 
 #endif							/* GRAMPARSE_H */

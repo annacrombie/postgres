@@ -19,6 +19,12 @@
 #ifndef PG_WCHAR_H
 #define PG_WCHAR_H
 
+#ifdef FRONTEND
+#define wchar_scope
+#else
+#define wchar_scope PGDLLIMPORT
+#endif
+
 /*
  * The pg_wchar type
  */
@@ -359,7 +365,7 @@ typedef struct pg_enc2name
 #endif
 } pg_enc2name;
 
-extern PGDLLIMPORT const pg_enc2name pg_enc2name_tbl[];
+extern wchar_scope const pg_enc2name pg_enc2name_tbl[];
 
 /*
  * Encoding names for gettext
@@ -370,7 +376,7 @@ typedef struct pg_enc2gettext
 	const char *name;
 } pg_enc2gettext;
 
-extern PGDLLIMPORT const pg_enc2gettext pg_enc2gettext_tbl[];
+extern wchar_scope const pg_enc2gettext pg_enc2gettext_tbl[];
 
 /*
  * pg_wchar stuff
@@ -406,7 +412,7 @@ typedef struct
 	int			maxmblen;		/* max bytes for a char in this encoding */
 } pg_wchar_tbl;
 
-extern PGDLLIMPORT const pg_wchar_tbl pg_wchar_table[];
+extern wchar_scope const pg_wchar_tbl pg_wchar_table[];
 
 /*
  * Data structures for conversions between UTF-8 and other encodings
@@ -564,139 +570,139 @@ surrogate_pair_to_codepoint(pg_wchar first, pg_wchar second)
  * These functions are considered part of libpq's exported API and
  * are also declared in libpq-fe.h.
  */
-extern PGDLLIMPORT int	pg_char_to_encoding(const char *name);
-extern PGDLLIMPORT const char *pg_encoding_to_char(int encoding);
-extern PGDLLIMPORT int	pg_valid_server_encoding_id(int encoding);
+extern wchar_scope int	pg_char_to_encoding(const char *name);
+extern wchar_scope const char *pg_encoding_to_char(int encoding);
+extern wchar_scope int	pg_valid_server_encoding_id(int encoding);
 
 /*
  * These functions are available to frontend code that links with libpgcommon
  * (in addition to the ones just above).  The constant tables declared
  * earlier in this file are also available from libpgcommon.
  */
-extern PGDLLIMPORT int	pg_encoding_mblen(int encoding, const char *mbstr);
-extern PGDLLIMPORT int	pg_encoding_mblen_bounded(int encoding, const char *mbstr);
-extern PGDLLIMPORT int	pg_encoding_dsplen(int encoding, const char *mbstr);
-extern PGDLLIMPORT int	pg_encoding_verifymbchar(int encoding, const char *mbstr, int len);
-extern PGDLLIMPORT int	pg_encoding_verifymbstr(int encoding, const char *mbstr, int len);
-extern PGDLLIMPORT int	pg_encoding_max_length(int encoding);
-extern PGDLLIMPORT int	pg_valid_client_encoding(const char *name);
-extern PGDLLIMPORT int	pg_valid_server_encoding(const char *name);
-extern PGDLLIMPORT bool is_encoding_supported_by_icu(int encoding);
-extern PGDLLIMPORT const char *get_encoding_name_for_icu(int encoding);
+extern wchar_scope int	pg_encoding_mblen(int encoding, const char *mbstr);
+extern wchar_scope int	pg_encoding_mblen_bounded(int encoding, const char *mbstr);
+extern wchar_scope int	pg_encoding_dsplen(int encoding, const char *mbstr);
+extern wchar_scope int	pg_encoding_verifymbchar(int encoding, const char *mbstr, int len);
+extern wchar_scope int	pg_encoding_verifymbstr(int encoding, const char *mbstr, int len);
+extern wchar_scope int	pg_encoding_max_length(int encoding);
+extern wchar_scope int	pg_valid_client_encoding(const char *name);
+extern wchar_scope int	pg_valid_server_encoding(const char *name);
+extern wchar_scope bool is_encoding_supported_by_icu(int encoding);
+extern wchar_scope const char *get_encoding_name_for_icu(int encoding);
 
-extern PGDLLIMPORT unsigned char *unicode_to_utf8(pg_wchar c, unsigned char *utf8string);
-extern PGDLLIMPORT pg_wchar utf8_to_unicode(const unsigned char *c);
-extern PGDLLIMPORT bool pg_utf8_islegal(const unsigned char *source, int length);
-extern PGDLLIMPORT int	pg_utf_mblen(const unsigned char *s);
-extern PGDLLIMPORT int	pg_mule_mblen(const unsigned char *s);
+extern wchar_scope unsigned char *unicode_to_utf8(pg_wchar c, unsigned char *utf8string);
+extern wchar_scope pg_wchar utf8_to_unicode(const unsigned char *c);
+extern wchar_scope bool pg_utf8_islegal(const unsigned char *source, int length);
+extern wchar_scope int	pg_utf_mblen(const unsigned char *s);
+extern wchar_scope int	pg_mule_mblen(const unsigned char *s);
 
 /*
  * The remaining functions are backend-only.
  */
-extern PGDLLIMPORT int	pg_mb2wchar(const char *from, pg_wchar *to);
-extern PGDLLIMPORT int	pg_mb2wchar_with_len(const char *from, pg_wchar *to, int len);
-extern PGDLLIMPORT int	pg_encoding_mb2wchar_with_len(int encoding,
+extern wchar_scope int	pg_mb2wchar(const char *from, pg_wchar *to);
+extern wchar_scope int	pg_mb2wchar_with_len(const char *from, pg_wchar *to, int len);
+extern wchar_scope int	pg_encoding_mb2wchar_with_len(int encoding,
 										  const char *from, pg_wchar *to, int len);
-extern PGDLLIMPORT int	pg_wchar2mb(const pg_wchar *from, char *to);
-extern PGDLLIMPORT int	pg_wchar2mb_with_len(const pg_wchar *from, char *to, int len);
-extern PGDLLIMPORT int	pg_encoding_wchar2mb_with_len(int encoding,
+extern wchar_scope int	pg_wchar2mb(const pg_wchar *from, char *to);
+extern wchar_scope int	pg_wchar2mb_with_len(const pg_wchar *from, char *to, int len);
+extern wchar_scope int	pg_encoding_wchar2mb_with_len(int encoding,
 										  const pg_wchar *from, char *to, int len);
-extern PGDLLIMPORT int	pg_char_and_wchar_strcmp(const char *s1, const pg_wchar *s2);
-extern PGDLLIMPORT int	pg_wchar_strncmp(const pg_wchar *s1, const pg_wchar *s2, size_t n);
-extern PGDLLIMPORT int	pg_char_and_wchar_strncmp(const char *s1, const pg_wchar *s2, size_t n);
-extern PGDLLIMPORT size_t pg_wchar_strlen(const pg_wchar *wstr);
-extern PGDLLIMPORT int	pg_mblen(const char *mbstr);
-extern PGDLLIMPORT int	pg_dsplen(const char *mbstr);
-extern PGDLLIMPORT int	pg_mbstrlen(const char *mbstr);
-extern PGDLLIMPORT int	pg_mbstrlen_with_len(const char *mbstr, int len);
-extern PGDLLIMPORT int	pg_mbcliplen(const char *mbstr, int len, int limit);
-extern PGDLLIMPORT int	pg_encoding_mbcliplen(int encoding, const char *mbstr,
+extern wchar_scope int	pg_char_and_wchar_strcmp(const char *s1, const pg_wchar *s2);
+extern wchar_scope int	pg_wchar_strncmp(const pg_wchar *s1, const pg_wchar *s2, size_t n);
+extern wchar_scope int	pg_char_and_wchar_strncmp(const char *s1, const pg_wchar *s2, size_t n);
+extern wchar_scope size_t pg_wchar_strlen(const pg_wchar *wstr);
+extern wchar_scope int	pg_mblen(const char *mbstr);
+extern wchar_scope int	pg_dsplen(const char *mbstr);
+extern wchar_scope int	pg_mbstrlen(const char *mbstr);
+extern wchar_scope int	pg_mbstrlen_with_len(const char *mbstr, int len);
+extern wchar_scope int	pg_mbcliplen(const char *mbstr, int len, int limit);
+extern wchar_scope int	pg_encoding_mbcliplen(int encoding, const char *mbstr,
 								  int len, int limit);
-extern PGDLLIMPORT int	pg_mbcharcliplen(const char *mbstr, int len, int limit);
-extern PGDLLIMPORT int	pg_database_encoding_max_length(void);
-extern PGDLLIMPORT mbcharacter_incrementer pg_database_encoding_character_incrementer(void);
+extern wchar_scope int	pg_mbcharcliplen(const char *mbstr, int len, int limit);
+extern wchar_scope int	pg_database_encoding_max_length(void);
+extern wchar_scope mbcharacter_incrementer pg_database_encoding_character_incrementer(void);
 
-extern PGDLLIMPORT int	PrepareClientEncoding(int encoding);
-extern PGDLLIMPORT int	SetClientEncoding(int encoding);
-extern PGDLLIMPORT void InitializeClientEncoding(void);
-extern PGDLLIMPORT int	pg_get_client_encoding(void);
-extern PGDLLIMPORT const char *pg_get_client_encoding_name(void);
+extern wchar_scope int	PrepareClientEncoding(int encoding);
+extern wchar_scope int	SetClientEncoding(int encoding);
+extern wchar_scope void InitializeClientEncoding(void);
+extern wchar_scope int	pg_get_client_encoding(void);
+extern wchar_scope const char *pg_get_client_encoding_name(void);
 
-extern PGDLLIMPORT void SetDatabaseEncoding(int encoding);
-extern PGDLLIMPORT int	GetDatabaseEncoding(void);
-extern PGDLLIMPORT const char *GetDatabaseEncodingName(void);
-extern PGDLLIMPORT void SetMessageEncoding(int encoding);
-extern PGDLLIMPORT int	GetMessageEncoding(void);
+extern wchar_scope void SetDatabaseEncoding(int encoding);
+extern wchar_scope int	GetDatabaseEncoding(void);
+extern wchar_scope const char *GetDatabaseEncodingName(void);
+extern wchar_scope void SetMessageEncoding(int encoding);
+extern wchar_scope int	GetMessageEncoding(void);
 
 #ifdef ENABLE_NLS
-extern PGDLLIMPORT int	pg_bind_textdomain_codeset(const char *domainname);
+extern wchar_scope int	pg_bind_textdomain_codeset(const char *domainname);
 #endif
 
-extern PGDLLIMPORT unsigned char *pg_do_encoding_conversion(unsigned char *src, int len,
+extern wchar_scope unsigned char *pg_do_encoding_conversion(unsigned char *src, int len,
 												int src_encoding,
 												int dest_encoding);
-extern PGDLLIMPORT int	pg_do_encoding_conversion_buf(Oid proc,
+extern wchar_scope int	pg_do_encoding_conversion_buf(Oid proc,
 										  int src_encoding,
 										  int dest_encoding,
 										  unsigned char *src, int srclen,
 										  unsigned char *dst, int dstlen,
 										  bool noError);
 
-extern PGDLLIMPORT char *pg_client_to_server(const char *s, int len);
-extern PGDLLIMPORT char *pg_server_to_client(const char *s, int len);
-extern PGDLLIMPORT char *pg_any_to_server(const char *s, int len, int encoding);
-extern PGDLLIMPORT char *pg_server_to_any(const char *s, int len, int encoding);
+extern wchar_scope char *pg_client_to_server(const char *s, int len);
+extern wchar_scope char *pg_server_to_client(const char *s, int len);
+extern wchar_scope char *pg_any_to_server(const char *s, int len, int encoding);
+extern wchar_scope char *pg_server_to_any(const char *s, int len, int encoding);
 
-extern PGDLLIMPORT void pg_unicode_to_server(pg_wchar c, unsigned char *s);
+extern wchar_scope void pg_unicode_to_server(pg_wchar c, unsigned char *s);
 
-extern PGDLLIMPORT unsigned short BIG5toCNS(unsigned short big5, unsigned char *lc);
-extern PGDLLIMPORT unsigned short CNStoBIG5(unsigned short cns, unsigned char lc);
+extern wchar_scope unsigned short BIG5toCNS(unsigned short big5, unsigned char *lc);
+extern wchar_scope unsigned short CNStoBIG5(unsigned short cns, unsigned char lc);
 
-extern PGDLLIMPORT int	UtfToLocal(const unsigned char *utf, int len,
+extern wchar_scope int	UtfToLocal(const unsigned char *utf, int len,
 					   unsigned char *iso,
 					   const pg_mb_radix_tree *map,
 					   const pg_utf_to_local_combined *cmap, int cmapsize,
 					   utf_local_conversion_func conv_func,
 					   int encoding, bool noError);
-extern PGDLLIMPORT int	LocalToUtf(const unsigned char *iso, int len,
+extern wchar_scope int	LocalToUtf(const unsigned char *iso, int len,
 					   unsigned char *utf,
 					   const pg_mb_radix_tree *map,
 					   const pg_local_to_utf_combined *cmap, int cmapsize,
 					   utf_local_conversion_func conv_func,
 					   int encoding, bool noError);
 
-extern PGDLLIMPORT bool pg_verifymbstr(const char *mbstr, int len, bool noError);
-extern PGDLLIMPORT bool pg_verify_mbstr(int encoding, const char *mbstr, int len,
+extern wchar_scope bool pg_verifymbstr(const char *mbstr, int len, bool noError);
+extern wchar_scope bool pg_verify_mbstr(int encoding, const char *mbstr, int len,
 							bool noError);
-extern PGDLLIMPORT int	pg_verify_mbstr_len(int encoding, const char *mbstr, int len,
+extern wchar_scope int	pg_verify_mbstr_len(int encoding, const char *mbstr, int len,
 								bool noError);
 
-extern PGDLLIMPORT void check_encoding_conversion_args(int src_encoding,
+extern wchar_scope void check_encoding_conversion_args(int src_encoding,
 										   int dest_encoding,
 										   int len,
 										   int expected_src_encoding,
 										   int expected_dest_encoding);
 
-extern PGDLLIMPORT void report_invalid_encoding(int encoding, const char *mbstr, int len) pg_attribute_noreturn();
-extern PGDLLIMPORT void report_untranslatable_char(int src_encoding, int dest_encoding,
+extern wchar_scope void report_invalid_encoding(int encoding, const char *mbstr, int len) pg_attribute_noreturn();
+extern wchar_scope void report_untranslatable_char(int src_encoding, int dest_encoding,
 									   const char *mbstr, int len) pg_attribute_noreturn();
 
-extern PGDLLIMPORT int	local2local(const unsigned char *l, unsigned char *p, int len,
+extern wchar_scope int	local2local(const unsigned char *l, unsigned char *p, int len,
 						int src_encoding, int dest_encoding,
 						const unsigned char *tab, bool noError);
-extern PGDLLIMPORT int	latin2mic(const unsigned char *l, unsigned char *p, int len,
+extern wchar_scope int	latin2mic(const unsigned char *l, unsigned char *p, int len,
 					  int lc, int encoding, bool noError);
-extern PGDLLIMPORT int	mic2latin(const unsigned char *mic, unsigned char *p, int len,
+extern wchar_scope int	mic2latin(const unsigned char *mic, unsigned char *p, int len,
 					  int lc, int encoding, bool noError);
-extern PGDLLIMPORT int	latin2mic_with_table(const unsigned char *l, unsigned char *p,
+extern wchar_scope int	latin2mic_with_table(const unsigned char *l, unsigned char *p,
 								 int len, int lc, int encoding,
 								 const unsigned char *tab, bool noError);
-extern PGDLLIMPORT int	mic2latin_with_table(const unsigned char *mic, unsigned char *p,
+extern wchar_scope int	mic2latin_with_table(const unsigned char *mic, unsigned char *p,
 								 int len, int lc, int encoding,
 								 const unsigned char *tab, bool noError);
 
 #ifdef WIN32
-extern PGDLLIMPORT WCHAR *pgwin32_message_to_UTF16(const char *str, int len, int *utf16len);
+extern wchar_scope WCHAR *pgwin32_message_to_UTF16(const char *str, int len, int *utf16len);
 #endif
 
 

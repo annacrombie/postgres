@@ -48,83 +48,21 @@ if host_machine.system() == 'windows'
 endif
 
 
-# On windows when compiling with msvc we need to make postgres export all its
-# symbols so that extension libraries can use them. For that we need to scan
-# the constituting objects and generate a file specifying all the functions as
-# exported (variables need an "import" declaration in the header, hence
-# PGDLLEXPORT, but functions work without that, due to import libraries
-# basically being trampolines).
-#
-#
-# On meson there's currently no easy way to do this that I found. So we build
-# a static library with all the input objects, run our script to generate
-# exports, and build the final executable using that static library
-#
-#
-# XXX: This needs to be improved.
-#
-
-# NB: There's an outer and inner layer of == windows checks, to allow to
-# exercise most of this on !windows, by widening the outer "layer".
-
-if cc.get_id() == 'msvc' # or true
-
-  postgres_lib = static_library('postgres_lib',
-    backend_sources + timezone_sources + generated_backend_sources,
-    link_whole: backend_link_with,
-    c_pch: pch_postgres_h,
-    c_args: backend_c_args,
-    implicit_include_directories: false,
-    dependencies: backend_build_deps,
-    build_by_default: false,
-    install: false,
-  )
-
-  postgres_def = custom_target('postgres.def',
-    command: [perl, files('../tools/msvc/gendef2.pl'), 'x64', '@OUTPUT@', '@PRIVATE_DIR@', '@INPUT@'],
-    input: [postgres_lib, common_srv, pgport_srv],
-    output: 'postgres.def',
-    depends: [postgres_lib, common_srv, pgport_srv],
-    install: false,
-  )
-
-  if cc.get_id() == 'msvc'
-    postgres_link_args += '/DEF:@0@'.format(postgres_def.full_path())
-    postgres_link_depends += postgres_def
-  endif
-
-  # Unfortunately the msvc linker whines when building an executable with just
-  # libraries, hence the reuse of the 'main' object directly.
-
-  postgres = executable('postgres',
-    objects: [postgres_lib.extract_objects(main_file)],
-    link_with: [postgres_lib],
-    link_args: postgres_link_args,
-    link_depends: postgres_link_depends,
-    dependencies: backend_deps,
-    export_dynamic: true,
-    implib: true,
-    kwargs: default_bin_args,
-  )
-
-else
-
-  if cdata.has('HAVE_VISIBILITY_ATTRIBUTE')
-    backend_c_args += ['-fvisibility=hidden']
-  endif
-
-  postgres = executable('postgres',
-    backend_sources + generated_backend_sources + timezone_sources,
-    c_pch: pch_postgres_h,
-    c_args: backend_c_args,
-    link_args: postgres_link_args,
-    link_with: backend_link_with,
-    export_dynamic: true,
-    dependencies: [backend_build_deps, backend_deps],
-    kwargs: default_bin_args,
-  )
-
+if cdata.has('HAVE_VISIBILITY_ATTRIBUTE')
+  backend_c_args += ['-fvisibility=hidden']
 endif
+
+postgres = executable('postgres',
+  backend_sources + generated_backend_sources + timezone_sources,
+  c_pch: pch_postgres_h,
+  c_args: backend_c_args,
+  link_args: postgres_link_args,
+  link_with: backend_link_with,
+  export_dynamic: true,
+  implib: true,
+  dependencies: [backend_build_deps, backend_deps],
+  kwargs: default_bin_args,
+)
 
 backend_targets += postgres
 
