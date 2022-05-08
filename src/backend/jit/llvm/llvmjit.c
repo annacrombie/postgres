@@ -382,11 +382,15 @@ llvm_pg_var_type(const char *varname)
 	if (!v_srcvar)
 		elog(ERROR, "variable %s not in llvmjit_types.c", varname);
 
+#if 0
 	/* look at the contained type */
 	typ = LLVMTypeOf(v_srcvar);
 	Assert(typ != NULL && LLVMGetTypeKind(typ) == LLVMPointerTypeKind);
 	typ = LLVMGetElementType(typ);
 	Assert(typ != NULL);
+#else
+	typ = LLVMGlobalGetValueType(v_srcvar);
+#endif
 
 	return typ;
 }
@@ -398,12 +402,23 @@ llvm_pg_var_type(const char *varname)
 LLVMTypeRef
 llvm_pg_var_func_type(const char *varname)
 {
+	LLVMValueRef v_srcvar;
+	LLVMTypeRef typ;
+
+#if 0
 	LLVMTypeRef typ = llvm_pg_var_type(varname);
 
 	/* look at the contained type */
 	Assert(LLVMGetTypeKind(typ) == LLVMPointerTypeKind);
 	typ = LLVMGetElementType(typ);
 	Assert(typ != NULL && LLVMGetTypeKind(typ) == LLVMFunctionTypeKind);
+#endif
+	v_srcvar = LLVMGetNamedGlobal(llvm_types_module, varname);
+	if (!v_srcvar)
+		elog(ERROR, "variable %s not in llvmjit_types.c", varname);
+
+	typ = LLVMGlobalGetValueType(v_srcvar);
+	//typ = LLVMGetFunctionType(v_srcvar);
 
 	return typ;
 }
@@ -956,6 +971,7 @@ load_return_type(LLVMModuleRef mod, const char *name)
 	if (!value)
 		elog(ERROR, "function %s is unknown", name);
 
+#if 0
 	/* get type of function pointer */
 	typ = LLVMTypeOf(value);
 	Assert(typ != NULL);
@@ -965,6 +981,10 @@ load_return_type(LLVMModuleRef mod, const char *name)
 	/* and look at return type */
 	typ = LLVMGetReturnType(typ);
 	Assert(typ != NULL);
+#else
+	//typ = LLVMTypeOf(value);
+	typ = LLVMGetFunctionReturnType(value);		/* in llvmjit_wrap.cpp */
+#endif
 
 	return typ;
 }
