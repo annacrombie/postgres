@@ -646,8 +646,6 @@ else
 
     perl_inc_dir = '@0@/CORE'.format(archlibexp)
 
-    perl_ccflags = []
-
     if useshrplib != 'true'
       perl_may_work = false
       perl_msg = 'need a shared perl'
@@ -661,9 +659,13 @@ else
   # et al seeing them. So we can't use include_directories(), as that checks
   # file existence.
   if perl_may_work
-    perl_ccflags += ['-I@0@'.format(perl_inc_dir)]
-    if host_machine.system() == 'darwin'
-      perl_ccflags += ['-iwithsysroot', perl_inc_dir]
+    # On most platforms, archlibexp is also where the Perl include files live ...
+    perl_ccflags = ['-I@0@'.format(perl_inc_dir)]
+    # ... but on newer macOS versions, we must use -iwithsysroot to look
+    # under sysroot
+    if not fs.is_file('@0@/perl.h'.format(perl_inc_dir)) and \
+       fs.is_file('@0@@1@/perl.h'.format(sysroot, perl_inc_dir))
+      perl_ccflags = ['-iwithsysroot', perl_inc_dir]
     endif
   endif
 
