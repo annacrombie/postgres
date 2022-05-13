@@ -105,7 +105,7 @@ libpq = declare_dependency(
 
 pkgconfig.generate(
   libpq_so,
-  filebase: 'libpq',
+  name: 'libpq',
   description: 'PostgreSQL libpq library',
   url: pg_url,
 )

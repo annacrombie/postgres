@@ -18,7 +18,7 @@ ecpg_pgtypes = both_libraries('pgtypes',
 
 pkgconfig.generate(
   ecpg_pgtypes.get_shared_lib(),
-  filebase: 'libpgtypes',
+  name: 'libpgtypes',
   description: 'PostgreSQL libpgtypes library',
   url: pg_url,
 )

@@ -23,7 +23,7 @@ ecpglib = both_libraries('ecpg',
 
 pkgconfig.generate(
   ecpglib.get_shared_lib(),
-  filebase: 'libecpg',
+  name: 'libecpg',
   description: 'PostgreSQL libecpg library',
   url: pg_url,
 )
