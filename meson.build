@@ -245,6 +245,9 @@ cdata.set('RELSEG_SIZE', get_option('segsize') * 131072)
 cdata.set('DEF_PGPORT', get_option('pgport'))
 cdata.set_quoted('DEF_PGPORT_STR', get_option('pgport'))
 cdata.set_quoted('PG_KRB_SRVNAM', get_option('krb-srvnam'))
+if get_option('system-tzdata') != ''
+  cdata.set_quoted('SYSTEMTZDIR', get_option('system-tzdata'))
+endif
 
 
 
