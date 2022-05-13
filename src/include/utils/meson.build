@@ -7,14 +7,32 @@ errcodes = custom_target('errcodes',
 )
 generated_headers += errcodes
 
-generated_backend_headers += custom_target('probes.d',
-  input: files('../../backend/utils/probes.d'),
-  output : 'probes.h',
-  capture: true,
-  command : [sed, '-f', files('../../backend/utils/Gen_dummy_probes.sed'), '@INPUT@'],
-  install: true,
-  install_dir: dir_include_server/'utils',
-)
+if dtrace.found()
+  probes_tmp = custom_target('probes.h.tmp',
+    input: files('../../backend/utils/probes.d'),
+    output : 'probes.h.tmp',
+    command : [dtrace, '-C', '-h', '-s', '@INPUT@', '-o', '@OUTPUT@'],
+  )
+  probes = custom_target('probes.h',
+    input: probes_tmp[0],
+    output : 'probes.h',
+    capture: true,
+    command : [sed, '-f', files('../../backend/utils/postprocess_dtrace.sed'), '@INPUT@'],
+    install: true,
+    install_dir: dir_include_server/'utils',
+  )
+else
+  probes = custom_target('probes.h',
+    input: files('../../backend/utils/probes.d'),
+    output : 'probes.h',
+    capture: true,
+    command : [sed, '-f', files('../../backend/utils/Gen_dummy_probes.sed'), '@INPUT@'],
+    install: true,
+    install_dir: dir_include_server/'utils',
+  )
+endif
+
+generated_backend_headers += probes
 
 fmgrtab_target = custom_target('fmgrtab',
   input: '../catalog/pg_proc.dat',

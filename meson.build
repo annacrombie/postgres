@@ -162,6 +162,7 @@ program_lz4 = find_program(get_option('LZ4'), native: true, required: false)
 touch = find_program('touch', native: true)
 sh = find_program('sh', native: true) # FIXME, should get rid of this
 program_zstd = find_program(get_option('ZSTD'), native: true, required: false)
+dtrace = find_program(get_option('DTRACE'), required: get_option('dtrace'))
 
 # Internal programs
 testwrap = find_program('src/tools/testwrap', native: true)

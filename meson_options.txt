@@ -66,6 +66,9 @@ option('extra_version', type : 'string', value: '',
 option('bonjour', type : 'feature', value: 'auto',
   description: 'build with Bonjour support')
 
+option('dtrace', type : 'feature', value: 'disabled',
+  description: 'DTrace support')
+
 option('gssapi', type : 'feature', value: 'auto',
   description: 'GSSAPI support')
 
@@ -134,6 +137,9 @@ option('zstd', type : 'feature', value: 'auto',
 
 option('BISON', type : 'string', value: 'bison',
   description: 'path to bison binary')
+
+option('DTRACE', type : 'string', value: 'dtrace',
+  description: 'path to dtrace binary')
 
 option('FLEX', type : 'string', value: 'flex',
   description: 'path to flex binary')
