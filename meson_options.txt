@@ -161,3 +161,6 @@ option('TAR', type : 'string', value: 'tar',
 
 option('ZSTD', type : 'string', value: 'zstd',
   description: 'path to zstd binary')
+
+option('ZIC', type : 'string', value: 'zic',
+  description: 'path to zic binary, when cross-compiling')
