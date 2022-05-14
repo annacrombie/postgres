@@ -109,10 +109,43 @@ if cc.get_id() == 'msvc' # or true
 
 else
 
-  postgres = executable('postgres',
-    backend_sources + generated_backend_sources + timezone_sources,
+  postgres_objs = []
+  postgres_tmpl = static_library('postgres_lib',
+    backend_sources, timezone_sources, generated_backend_sources,
+    link_whole: backend_link_with,
     c_pch: pch_postgres_h,
     c_args: backend_c_args,
+    implicit_include_directories: false,
+    dependencies: backend_build_deps,
+    build_by_default: false,
+    install: false,
+  )
+
+  # As of 1/2010:
+  # The probes.o file is necessary for dtrace support on Solaris, and on recent
+  # versions of systemtap.  (Older systemtap releases just produce an empty
+  # file, but that's okay.)  However, macOS's dtrace doesn't use it and doesn't
+  # even recognize the -G option.  So, build probes.o except on macOS.
+  # This might need adjustment as other platforms add dtrace support.
+  #
+  # On at least linux we don't actually need to pass in all the objects, but
+  # at least on FreeBSD and Solaris we have to.
+  #
+  # XXX: The reason we only use the objects for generated sources is that hits
+  # a meson bug. Luckily we don't don't have probes in generated sources...
+  if dtrace.found() and host_machine.system() != 'darwin'
+    postgres_objs += custom_target(
+      'probes.o',
+      input: ['utils/probes.d', postgres_tmpl.extract_objects(backend_sources, timezone_sources)],
+      output : 'probes.o',
+      command : [dtrace, '-C', '-G', '-o', '@OUTPUT@', '-s', '@INPUT@'],
+      install: false,
+    )
+  endif
+
+  postgres = executable('postgres',
+    postgres_objs,
+    objects: postgres_tmpl.extract_all_objects(recursive: false),
     link_args: postgres_link_args,
     link_with: backend_link_with,
     export_dynamic: true,
