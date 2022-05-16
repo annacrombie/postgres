@@ -2177,6 +2177,7 @@ rccompile_kw = {
   'include_directories': rcgen_inc,
 }
 
+
 # First visit src/include - all targets creating headers are defined
 # within. That makes it easy to add the necessary dependencies for the
 # subsequent build steps.
@@ -2229,6 +2230,16 @@ frontend_shlib_code = declare_dependency(
   dependencies: [os_deps, libintl],
 )
 
+libpq_deps = [
+  frontend_shlib_code,
+  thread_dep,
+
+  gssapi,
+  ldap,
+  libintl,
+  ssl,
+]
+
 subdir('src/interfaces/libpq')
 # fe_utils depends on libpq
 subdir('src/fe_utils')
@@ -2241,12 +2252,39 @@ frontend_code = declare_dependency(
   dependencies: [os_deps, libintl],
 )
 
+backend_both_deps = [
+  thread_dep,
+  os_deps,
+
+  bsd_auth,
+  gssapi,
+  icu,
+  icu_i18n,
+  ldap,
+  libintl,
+  libxml,
+  lz4,
+  pam,
+  ssl,
+  systemd,
+  zlib,
+  zstd,
+]
+
+backend_deps = backend_both_deps
+
+if host_machine.system() == 'windows'
+  backend_deps += cc.find_library('secur32', required: true)
+endif
+
+backend_mod_deps = backend_both_deps
+
 backend_code = declare_dependency(
   compile_args: ['-DBUILDING_DLL'],
   include_directories: [postgres_inc],
   link_with: [],
   sources: generated_headers + generated_backend_headers,
-  dependencies: [os_deps, libintl, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, pam, zstd, systemd],
+  dependencies: backend_deps,
 )
 
 # Note there's intentionally no dependency on pgport/common here - we want the
@@ -2257,7 +2295,7 @@ backend_mod_code = declare_dependency(
   include_directories: [postgres_inc],
   link_with: [],
   sources: generated_headers + generated_backend_headers,
-  dependencies: [os_deps, ssl, lz4, zlib, icu, icu_i18n, ldap, gssapi, libxml, pam, zstd, systemd],
+  dependencies: backend_mod_deps,
 )
 
 # Then through the main sources. That way contrib can have dependencies on

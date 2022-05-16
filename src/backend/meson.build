@@ -1,5 +1,4 @@
 backend_build_deps = [backend_code]
-backend_deps = [dl_dep, thread_dep]
 backend_sources = []
 backend_link_with = [pgport_srv, common_srv]
 backend_c_args = []
@@ -38,8 +37,6 @@ postgres_link_args = []
 postgres_link_depends = []
 
 if host_machine.system() == 'windows'
-  backend_deps += cc.find_library('secur32', required: true)
-
   if cc.get_id() == 'msvc'
     postgres_link_args += '/STACK:@0@'.format(cdata.get('WIN32_STACK_RLIMIT'))
   else
@@ -101,7 +98,6 @@ if cc.get_id() == 'msvc' # or true
     link_with: [postgres_lib],
     link_args: postgres_link_args,
     link_depends: postgres_link_depends,
-    dependencies: backend_deps,
     export_dynamic: true,
     implib: true,
     kwargs: default_bin_args,
@@ -149,7 +145,7 @@ else
     link_args: postgres_link_args,
     link_with: backend_link_with,
     export_dynamic: true,
-    dependencies: [backend_build_deps, backend_deps],
+    dependencies: [backend_build_deps],
     kwargs: default_bin_args,
   )
 
