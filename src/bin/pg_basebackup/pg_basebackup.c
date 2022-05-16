@@ -27,6 +27,11 @@
 #include <zlib.h>
 #endif
 
+#ifdef WIN32
+#include <ntstatus.h>
+#include <wincrypt.h>
+#endif
+
 #include "access/xlog_internal.h"
 #include "bbstreamer.h"
 #include "common/compression.h"

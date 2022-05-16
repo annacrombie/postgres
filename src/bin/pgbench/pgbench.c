@@ -27,10 +27,6 @@
  *
  */
 
-#ifdef WIN32
-#define FD_SETSIZE 1024			/* must set before winsock2.h is included */
-#endif
-
 #include "postgres_fe.h"
 
 #include <ctype.h>
@@ -55,6 +51,11 @@
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif
+#endif
+
+#ifdef WIN32
+#include <ntstatus.h>
+#include <wincrypt.h>
 #endif
 
 #include "common/int.h"

@@ -23,6 +23,11 @@
 #include <sys/resource.h>
 #endif
 
+#ifdef WIN32
+#include <ntstatus.h>
+#include <wincrypt.h>
+#endif
+
 #include "catalog/pg_control.h"
 #include "common/controldata_utils.h"
 #include "common/file_perm.h"

@@ -57,6 +57,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <fcntl.h>
+#else
+#include <ntstatus.h>
+#include <wincrypt.h>
 #endif
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>

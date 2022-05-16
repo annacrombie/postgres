@@ -50,6 +50,11 @@
 #include <poll.h>
 #endif
 
+#ifdef WIN32
+#include <ntstatus.h>
+#include <wincrypt.h>
+#endif
+
 #include "libpq/pqsignal.h"
 #include "miscadmin.h"
 #include "pgstat.h"

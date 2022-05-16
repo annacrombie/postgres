@@ -12,6 +12,8 @@
 #include <sys/wait.h>
 #ifdef WIN32
 #include <io.h>
+#include <ntstatus.h>
+#include <wincrypt.h>
 #endif
 
 #include "pg_upgrade.h"

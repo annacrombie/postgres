@@ -13,6 +13,9 @@
 
 #include "postgres.h"
 
+#include <ntstatus.h>
+#include <wincrypt.h>
+
 #include "miscadmin.h"
 #include "storage/ipc.h"
 #include "storage/pg_sema.h"

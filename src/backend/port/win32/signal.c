@@ -13,6 +13,9 @@
 
 #include "postgres.h"
 
+#include <ntstatus.h>
+#include <wincrypt.h>
+
 #include "libpq/pqsignal.h"
 
 /*

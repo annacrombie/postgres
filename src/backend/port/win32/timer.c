@@ -18,6 +18,8 @@
 
 #include "postgres.h"
 
+#include <ntstatus.h>
+#include <wincrypt.h>
 
 /* Communication area for inter-thread communication */
 typedef struct timerCA

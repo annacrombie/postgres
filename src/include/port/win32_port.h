@@ -43,6 +43,8 @@
 #define _WINSOCKAPI_
 #endif
 
+#define FD_SETSIZE 1024			/* must set before winsock2.h is included */
+
 /*
  * windows.h includes a lot of other headers, slowing down compilation
  * significantly.  WIN32_LEAN_AND_MEAN reduces that a bit. It'd be better to
@@ -50,6 +52,14 @@
  * such a central place, but until then...
  */
 #define WIN32_LEAN_AND_MEAN
+
+/*
+ * In some places we use NT headers that normally conflict with Win32
+ * headers. Any translation unit that includes it should #define
+ * UMDF_USING_NTSTATUS before including <windows.h>. Do so centrally to allow
+ * precompiled headers to work.
+ */
+#define UMDF_USING_NTSTATUS
 
 #include <winsock2.h>
 #include <ws2tcpip.h>

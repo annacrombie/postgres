@@ -29,6 +29,11 @@
 #include <sys/resource.h>
 #endif
 
+#ifdef WIN32
+#include <ntstatus.h>
+#include <wincrypt.h>
+#endif
+
 #include "common/logging.h"
 #include "common/restricted_token.h"
 #include "common/string.h"

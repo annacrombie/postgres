@@ -13,6 +13,9 @@
 
 #include "postgres.h"
 
+#include <ntstatus.h>
+#include <wincrypt.h>
+
 /*
  * Indicate if pgwin32_recv() and pgwin32_send() should operate
  * in non-blocking mode.
