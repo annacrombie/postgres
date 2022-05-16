@@ -7,6 +7,16 @@ initdb_sources += timezone_localtime_source
 
 #fixme: reimplement libpq_pgport logic
 
+if host_machine.system() == 'windows'
+  initdb_sources += windows.compile_resources(
+    custom_target('win32ver.rc', kwargs: rcgen_kw,
+      command: rcgen_bin_cmd + [
+        '--FILEDESC', 'initdb - initialize a new database cluster',
+        '--NAME', 'initdb',]),
+    kwargs: rccompile_kw,
+  )
+endif
+
 executable('initdb',
   initdb_sources,
   include_directories: [timezone_inc],

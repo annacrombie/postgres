@@ -2149,17 +2149,33 @@ endif
 ### windows resources related stuff
 ###
 
-rc_cdata = configuration_data()
-rc_cdata.set_quoted('ICO', meson.source_root() / 'src' / 'port' / 'win32.ico')
-
-rc_lib_cdata = rc_cdata
-rc_lib_cdata.set('VFT_TYPE', 'VFT_DLL')
-
-rc_bin_cdata = rc_cdata
-rc_bin_cdata.set('VFT_TYPE', 'VFT_APP')
-
+pg_ico = meson.source_root() / 'src' / 'port' / 'win32.ico'
 win32ver_rc_in = files('src/port/win32ver.rc.in')
+rcgen = find_program('src/tools/rcgen', native: true)
 
+rcgen_cmd = [rcgen, '@INPUT@', '-o', '@OUTPUT@', '--depfile', '@DEPFILE@']
+rcgen_bin_cmd = rcgen_cmd + [
+  '--VFT_TYPE', 'VFT_APP',
+  '--FILEENDING', 'exe',
+  '--ICO', pg_ico,
+]
+
+rcgen_lib_cmd = rcgen_cmd + [
+  '--VFT_TYPE', 'VFT_DLL',
+  '--FILEENDING', 'dll',
+]
+
+rcgen_inc = [postgres_inc]
+
+rcgen_kw = {
+  'input': win32ver_rc_in,
+  'output': 'win32ver.rc',
+  'depfile': '@PLAINNAME@.d',
+}
+
+rccompile_kw = {
+  'include_directories': rcgen_inc,
+}
 
 # First visit src/include - all targets creating headers are defined
 # within. That makes it easy to add the necessary dependencies for the

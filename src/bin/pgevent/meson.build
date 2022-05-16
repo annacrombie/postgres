@@ -6,20 +6,18 @@ pgevent_sources = files(
     'pgevent.c',
 )
 
-pgevent_cdata = rc_lib_cdata
-pgevent_cdata.set_quoted('FILEDESC', 'Eventlog message formatter')
-pgevent_cdata.set_quoted('INTERNAL_NAME', 'pgevent')
-pgevent_cdata.set_quoted('ORIGINAL_NAME', 'pgevent.dll')
-
-configure_file(
-  output: 'win32ver.rc',
-  input: win32ver_rc_in,
-  configuration: pgevent_cdata
+# built as part of pgmsgevent.rc, via #include
+win32ver_rc = custom_target(
+  'win32ver.rc',
+  kwargs: rcgen_kw,
+  command: rcgen_lib_cmd + [
+    '--FILEDESC', 'Eventlog message formatter',
+    '--NAME', 'pgevent',],
 )
 
 pgevent_sources += windows.compile_resources(
   'pgmsgevent.rc',
-  include_directories: [include_directories('.'), postgres_inc],
+  kwargs: rccompile_kw,
 )
 
 shared_library('pgevent',

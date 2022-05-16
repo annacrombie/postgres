@@ -17,7 +17,7 @@ BEGIN
   BLOCK "040904B0"			// U.S. English, Unicode
   BEGIN
    VALUE "CompanyName",      "PostgreSQL Global Development Group"
-   VALUE "FileDescription",  @FILEDESC@
+   VALUE "FileDescription",  "@FILEDESC@"
    /*
     * XXX: In the autoconf / src/tools/msvc build this was set differently than
     * ProductVersion below, using the current date. But that doesn't seem like a
@@ -25,9 +25,9 @@ BEGIN
     * unnecessary rebuilds?
     */
    VALUE "FileVersion",      PG_VERSION
-   VALUE "InternalName",     @INTERNAL_NAME@
+   VALUE "InternalName",     "@NAME@"
    VALUE "LegalCopyright", "Portions Copyright (c) 1996-2022, PostgreSQL Global Development Group. Portions Copyright (c) 1994, Regents of the University of California."
-   VALUE "OriginalFileName", @ORIGINAL_NAME@
+   VALUE "OriginalFileName", "@NAME@.@FILEENDING@"
    VALUE "ProductName",      "PostgreSQL"
    VALUE "ProductVersion",   PG_VERSION
   END
@@ -38,4 +38,4 @@ BEGIN
  END
 END
 
-IDI_ICON ICON @ICO@
+IDI_ICON ICON "@ICO@"

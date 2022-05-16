@@ -27,20 +27,12 @@ psql_sources += custom_target('psql_help',
   command: [perl, '@INPUT0@', '@SOURCE_ROOT@/doc/src/sgml/ref', '@OUTDIR@', 'sql_help'])
 
 if host_machine.system() == 'windows'
-  psql_cdata = rc_bin_cdata
-  psql_cdata.set_quoted('FILEDESC', 'psql - the PostgreSQL interactive terminal')
-  psql_cdata.set_quoted('INTERNAL_NAME', 'psql')
-  psql_cdata.set_quoted('ORIGINAL_NAME', 'psql.exe')
-
-  win32_ver_rc = configure_file(
-    output: 'win32ver.rc',
-    input: win32ver_rc_in,
-    configuration: psql_cdata
-  )
-
   psql_sources += windows.compile_resources(
-    win32_ver_rc,
-    include_directories: postgres_inc,
+    custom_target('win32ver.rc', kwargs: rcgen_kw,
+      command: rcgen_bin_cmd + [
+        '--FILEDESC', 'psql - the PostgreSQL interactive terminal',
+        '--NAME', 'psql',]),
+    kwargs: rccompile_kw,
   )
 endif
 

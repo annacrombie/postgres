@@ -1,14 +1,26 @@
+pageinspect_sources = files(
+  'brinfuncs.c',
+  'btreefuncs.c',
+  'fsmfuncs.c',
+  'ginfuncs.c',
+  'gistfuncs.c',
+  'hashfuncs.c',
+  'heapfuncs.c',
+  'rawpage.c',
+)
+
+if host_machine.system() == 'windows'
+  pageinspect_sources += windows.compile_resources(
+    custom_target('win32ver.rc', kwargs: rcgen_kw,
+      command: rcgen_lib_cmd + [
+        '--FILEDESC', 'pageinspect - functions to inspect contents of database pages',
+        '--NAME', 'pageinspect',]),
+    kwargs: rccompile_kw,
+  )
+endif
+
 pageinspect = shared_module('pageinspect',
-  files(
-    'brinfuncs.c',
-    'btreefuncs.c',
-    'fsmfuncs.c',
-    'ginfuncs.c',
-    'gistfuncs.c',
-    'hashfuncs.c',
-    'heapfuncs.c',
-    'rawpage.c',
-  ),
+  pageinspect_sources,
   kwargs: contrib_mod_args,
 )
 

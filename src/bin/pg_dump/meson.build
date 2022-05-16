@@ -11,12 +11,23 @@ pg_dump_common_sources = files(
   'pg_backup_utils.c',
 )
 
+if host_machine.system() == 'windows'
+  pg_dump_common_sources += windows.compile_resources(
+    custom_target('win32ver.rc', kwargs: rcgen_kw,
+      command: rcgen_bin_cmd + [
+        '--FILEDESC', 'pg_dump/pg_restore/pg_dumpall - backup and restore PostgreSQL databases',
+        '--NAME', 'pg_dump',]),
+    kwargs: rccompile_kw,
+  )
+endif
+
 pg_dump_common = static_library('pg_dump_common',
   pg_dump_common_sources,
   c_pch: pch_c_h,
   dependencies: [frontend_code, libpq, zlib],
   kwargs: internal_lib_args,
 )
+
 
 pg_dump_sources = files(
   'pg_dump.c',
