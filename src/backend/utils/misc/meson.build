@@ -1,4 +1,5 @@
 backend_sources += files(
+  'guc.c',
   'help_config.c',
   'pg_config.c',
   'pg_controldata.c',
@@ -11,7 +12,6 @@ backend_sources += files(
   'superuser.c',
   'timeout.c',
   'tzparser.c',
-  'guc.c',
 )
 
 # guc-file.c.h is compiled as part of guc.c

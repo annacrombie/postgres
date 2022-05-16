@@ -196,9 +196,10 @@ if llvm.found()
   #
   # FIXME: this needs to be in a central place
   #
-  # generator and custom_'t accept CustomTargetIndex as 'depends', nor do they
-  # like targets with more than one output. However, a custom target accepts
-  # them as input without a problem. So we have the below transitive target :(
+  # generators don't accept CustomTargetIndex as input or 'depends', nor do
+  # they like targets with more than one output. However, a custom target
+  # accepts them as input without a problem. So we have the below transitive
+  # target :(
 
   transitive_depend_target = custom_target('stamp',
     input: generated_headers + generated_backend_headers + generated_backend_sources,
