@@ -17,6 +17,7 @@ win32ver_rc = custom_target(
 
 pgevent_sources += windows.compile_resources(
   'pgmsgevent.rc',
+  depends: win32ver_rc, # included in file
   kwargs: rccompile_kw,
 )
 
