@@ -39,6 +39,7 @@
 #include "port/pg_bitutils.h"
 #include "utils/memdebug.h"
 #include "utils/memutils.h"
+#include "utils/memutils_internal.h"
 
 
 #define Generation_BLOCKHDRSZ	MAXALIGN(sizeof(GenerationBlock))
@@ -159,42 +160,6 @@ static inline Size GenerationBlockFreeBytes(GenerationBlock *block);
 static inline void GenerationBlockFree(GenerationContext *set,
 									   GenerationBlock *block);
 
-/*
- * These functions implement the MemoryContext API for Generation contexts.
- */
-static void *GenerationAlloc(MemoryContext context, Size size);
-static void GenerationFree(MemoryContext context, void *pointer);
-static void *GenerationRealloc(MemoryContext context, void *pointer, Size size);
-static void GenerationReset(MemoryContext context);
-static void GenerationDelete(MemoryContext context);
-static Size GenerationGetChunkSpace(MemoryContext context, void *pointer);
-static bool GenerationIsEmpty(MemoryContext context);
-static void GenerationStats(MemoryContext context,
-							MemoryStatsPrintFunc printfunc, void *passthru,
-							MemoryContextCounters *totals,
-							bool print_to_stderr);
-
-#ifdef MEMORY_CONTEXT_CHECKING
-static void GenerationCheck(MemoryContext context);
-#endif
-
-/*
- * This is the virtual function table for Generation contexts.
- */
-static const MemoryContextMethods GenerationMethods = {
-	GenerationAlloc,
-	GenerationFree,
-	GenerationRealloc,
-	GenerationReset,
-	GenerationDelete,
-	GenerationGetChunkSpace,
-	GenerationIsEmpty,
-	GenerationStats
-#ifdef MEMORY_CONTEXT_CHECKING
-	,GenerationCheck
-#endif
-};
-
 
 /*
  * Public routines
@@ -310,7 +275,7 @@ GenerationContextCreate(MemoryContext parent,
 	/* Finally, do the type-independent part of context creation */
 	MemoryContextCreate((MemoryContext) set,
 						T_GenerationContext,
-						&GenerationMethods,
+						MCTX_GENERATION_ID,
 						parent,
 						name);
 
@@ -326,7 +291,7 @@ GenerationContextCreate(MemoryContext parent,
  * The code simply frees all the blocks in the context - we don't keep any
  * keeper blocks or anything like that.
  */
-static void
+void
 GenerationReset(MemoryContext context)
 {
 	GenerationContext *set = (GenerationContext *) context;
@@ -371,7 +336,7 @@ GenerationReset(MemoryContext context)
  * GenerationDelete
  *		Free all memory which is allocated in the given context.
  */
-static void
+void
 GenerationDelete(MemoryContext context)
 {
 	/* Reset to release all releasable GenerationBlocks */
@@ -393,7 +358,7 @@ GenerationDelete(MemoryContext context)
  * is marked, as mcxt.c will set it to UNDEFINED.  In some paths we will
  * return space that is marked NOACCESS - GenerationRealloc has to beware!
  */
-static void *
+void *
 GenerationAlloc(MemoryContext context, Size size)
 {
 	GenerationContext *set = (GenerationContext *) context;
@@ -661,7 +626,7 @@ GenerationBlockFree(GenerationContext *set, GenerationBlock *block)
  *		Update number of chunks in the block, and if all chunks in the block
  *		are now free then discard the block.
  */
-static void
+void
 GenerationFree(MemoryContext context, void *pointer)
 {
 	GenerationContext *set = (GenerationContext *) context;
@@ -742,7 +707,7 @@ GenerationFree(MemoryContext context, void *pointer)
  *		and discard the old one. The only exception is when the new size fits
  *		into the old chunk - in that case we just update chunk header.
  */
-static void *
+void *
 GenerationRealloc(MemoryContext context, void *pointer, Size size)
 {
 	GenerationContext *set = (GenerationContext *) context;
@@ -858,7 +823,7 @@ GenerationRealloc(MemoryContext context, void *pointer, Size size)
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
  */
-static Size
+Size
 GenerationGetChunkSpace(MemoryContext context, void *pointer)
 {
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
@@ -874,7 +839,7 @@ GenerationGetChunkSpace(MemoryContext context, void *pointer)
  * GenerationIsEmpty
  *		Is a GenerationContext empty of any allocated space?
  */
-static bool
+bool
 GenerationIsEmpty(MemoryContext context)
 {
 	GenerationContext *set = (GenerationContext *) context;
@@ -903,7 +868,7 @@ GenerationIsEmpty(MemoryContext context)
  * XXX freespace only accounts for empty space at the end of the block, not
  * space of freed chunks (which is unknown).
  */
-static void
+void
 GenerationStats(MemoryContext context,
 				MemoryStatsPrintFunc printfunc, void *passthru,
 				MemoryContextCounters *totals, bool print_to_stderr)
@@ -961,7 +926,7 @@ GenerationStats(MemoryContext context,
  * find yourself in an infinite loop when trouble occurs, because this
  * routine will be entered again when elog cleanup tries to release memory!
  */
-static void
+void
 GenerationCheck(MemoryContext context)
 {
 	GenerationContext *gen = (GenerationContext *) context;

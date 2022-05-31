@@ -49,6 +49,7 @@
 #include "port/pg_bitutils.h"
 #include "utils/memdebug.h"
 #include "utils/memutils.h"
+#include "utils/memutils_internal.h"
 
 /*--------------------
  * Chunk freelist k holds chunks of size 1 << (k + ALLOC_MINBITS),
@@ -260,42 +261,6 @@ static AllocSetFreeList context_freelists[2] =
 	}
 };
 
-/*
- * These functions implement the MemoryContext API for AllocSet contexts.
- */
-static void *AllocSetAlloc(MemoryContext context, Size size);
-static void AllocSetFree(MemoryContext context, void *pointer);
-static void *AllocSetRealloc(MemoryContext context, void *pointer, Size size);
-static void AllocSetReset(MemoryContext context);
-static void AllocSetDelete(MemoryContext context);
-static Size AllocSetGetChunkSpace(MemoryContext context, void *pointer);
-static bool AllocSetIsEmpty(MemoryContext context);
-static void AllocSetStats(MemoryContext context,
-						  MemoryStatsPrintFunc printfunc, void *passthru,
-						  MemoryContextCounters *totals,
-						  bool print_to_stderr);
-
-#ifdef MEMORY_CONTEXT_CHECKING
-static void AllocSetCheck(MemoryContext context);
-#endif
-
-/*
- * This is the virtual function table for AllocSet contexts.
- */
-static const MemoryContextMethods AllocSetMethods = {
-	AllocSetAlloc,
-	AllocSetFree,
-	AllocSetRealloc,
-	AllocSetReset,
-	AllocSetDelete,
-	AllocSetGetChunkSpace,
-	AllocSetIsEmpty,
-	AllocSetStats
-#ifdef MEMORY_CONTEXT_CHECKING
-	,AllocSetCheck
-#endif
-};
-
 
 /* ----------
  * AllocSetFreeIndex -
@@ -443,7 +408,7 @@ AllocSetContextCreateInternal(MemoryContext parent,
 			/* Reinitialize its header, installing correct name and parent */
 			MemoryContextCreate((MemoryContext) set,
 								T_AllocSetContext,
-								&AllocSetMethods,
+								MCTX_ASET_ID,
 								parent,
 								name);
 
@@ -534,7 +499,7 @@ AllocSetContextCreateInternal(MemoryContext parent,
 	/* Finally, do the type-independent part of context creation */
 	MemoryContextCreate((MemoryContext) set,
 						T_AllocSetContext,
-						&AllocSetMethods,
+						MCTX_ASET_ID,
 						parent,
 						name);
 
@@ -555,7 +520,7 @@ AllocSetContextCreateInternal(MemoryContext parent,
  * thrash malloc() when a context is repeatedly reset after small allocations,
  * which is typical behavior for per-tuple contexts.
  */
-static void
+void
 AllocSetReset(MemoryContext context)
 {
 	AllocSet	set = (AllocSet) context;
@@ -623,7 +588,7 @@ AllocSetReset(MemoryContext context)
  *
  * Unlike AllocSetReset, this *must* free all resources of the set.
  */
-static void
+void
 AllocSetDelete(MemoryContext context)
 {
 	AllocSet	set = (AllocSet) context;
@@ -717,7 +682,7 @@ AllocSetDelete(MemoryContext context)
  * is marked, as mcxt.c will set it to UNDEFINED.  In some paths we will
  * return space that is marked NOACCESS - AllocSetRealloc has to beware!
  */
-static void *
+void *
 AllocSetAlloc(MemoryContext context, Size size)
 {
 	AllocSet	set = (AllocSet) context;
@@ -989,7 +954,7 @@ AllocSetAlloc(MemoryContext context, Size size)
  * AllocSetFree
  *		Frees allocated memory; memory is removed from the set.
  */
-static void
+void
 AllocSetFree(MemoryContext context, void *pointer)
 {
 	AllocSet	set = (AllocSet) context;
@@ -1071,7 +1036,7 @@ AllocSetFree(MemoryContext context, void *pointer)
  * (In principle, we could use VALGRIND_GET_VBITS() to rediscover the old
  * request size.)
  */
-static void *
+void *
 AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 {
 	AllocSet	set = (AllocSet) context;
@@ -1300,7 +1265,7 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
  */
-static Size
+Size
 AllocSetGetChunkSpace(MemoryContext context, void *pointer)
 {
 	AllocChunk	chunk = AllocPointerGetChunk(pointer);
@@ -1316,7 +1281,7 @@ AllocSetGetChunkSpace(MemoryContext context, void *pointer)
  * AllocSetIsEmpty
  *		Is an allocset empty of any allocated space?
  */
-static bool
+bool
 AllocSetIsEmpty(MemoryContext context)
 {
 	/*
@@ -1339,7 +1304,7 @@ AllocSetIsEmpty(MemoryContext context)
  * totals: if not NULL, add stats about this context into *totals.
  * print_to_stderr: print stats to stderr if true, elog otherwise.
  */
-static void
+void
 AllocSetStats(MemoryContext context,
 			  MemoryStatsPrintFunc printfunc, void *passthru,
 			  MemoryContextCounters *totals, bool print_to_stderr)
@@ -1404,7 +1369,7 @@ AllocSetStats(MemoryContext context,
  * find yourself in an infinite loop when trouble occurs, because this
  * routine will be entered again when elog cleanup tries to release memory!
  */
-static void
+void
 AllocSetCheck(MemoryContext context)
 {
 	AllocSet	set = (AllocSet) context;

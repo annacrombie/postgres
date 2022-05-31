@@ -55,6 +55,7 @@
 #include "lib/ilist.h"
 #include "utils/memdebug.h"
 #include "utils/memutils.h"
+#include "utils/memutils_internal.h"
 
 /*
  * SlabContext is a specialized implementation of MemoryContext.
@@ -122,41 +123,6 @@ typedef struct SlabChunk
 	((char *) block + sizeof(SlabBlock))
 #define SlabChunkIndex(slab, block, chunk)	\
 	(((char *) chunk - SlabBlockStart(block)) / slab->fullChunkSize)
-
-/*
- * These functions implement the MemoryContext API for Slab contexts.
- */
-static void *SlabAlloc(MemoryContext context, Size size);
-static void SlabFree(MemoryContext context, void *pointer);
-static void *SlabRealloc(MemoryContext context, void *pointer, Size size);
-static void SlabReset(MemoryContext context);
-static void SlabDelete(MemoryContext context);
-static Size SlabGetChunkSpace(MemoryContext context, void *pointer);
-static bool SlabIsEmpty(MemoryContext context);
-static void SlabStats(MemoryContext context,
-					  MemoryStatsPrintFunc printfunc, void *passthru,
-					  MemoryContextCounters *totals,
-					  bool print_to_stderr);
-#ifdef MEMORY_CONTEXT_CHECKING
-static void SlabCheck(MemoryContext context);
-#endif
-
-/*
- * This is the virtual function table for Slab contexts.
- */
-static const MemoryContextMethods SlabMethods = {
-	SlabAlloc,
-	SlabFree,
-	SlabRealloc,
-	SlabReset,
-	SlabDelete,
-	SlabGetChunkSpace,
-	SlabIsEmpty,
-	SlabStats
-#ifdef MEMORY_CONTEXT_CHECKING
-	,SlabCheck
-#endif
-};
 
 
 /*
@@ -265,7 +231,7 @@ SlabContextCreate(MemoryContext parent,
 	/* Finally, do the type-independent part of context creation */
 	MemoryContextCreate((MemoryContext) slab,
 						T_SlabContext,
-						&SlabMethods,
+						MCTX_SLAB_ID,
 						parent,
 						name);
 
@@ -279,7 +245,7 @@ SlabContextCreate(MemoryContext parent,
  * The code simply frees all the blocks in the context - we don't keep any
  * keeper blocks or anything like that.
  */
-static void
+void
 SlabReset(MemoryContext context)
 {
 	int			i;
@@ -322,7 +288,7 @@ SlabReset(MemoryContext context)
  * SlabDelete
  *		Free all memory which is allocated in the given context.
  */
-static void
+void
 SlabDelete(MemoryContext context)
 {
 	/* Reset to release all the SlabBlocks */
@@ -336,7 +302,7 @@ SlabDelete(MemoryContext context)
  *		Returns pointer to allocated memory of given size or NULL if
  *		request could not be completed; memory is added to the slab.
  */
-static void *
+void *
 SlabAlloc(MemoryContext context, Size size)
 {
 	SlabContext *slab = castNode(SlabContext, context);
@@ -494,7 +460,7 @@ SlabAlloc(MemoryContext context, Size size)
  * SlabFree
  *		Frees allocated memory; memory is removed from the slab.
  */
-static void
+void
 SlabFree(MemoryContext context, void *pointer)
 {
 	int			idx;
@@ -582,7 +548,7 @@ SlabFree(MemoryContext context, void *pointer)
  * rather pointless - Slab is meant for chunks of constant size, and moreover
  * realloc is usually used to enlarge the chunk.
  */
-static void *
+void *
 SlabRealloc(MemoryContext context, void *pointer, Size size)
 {
 	SlabContext *slab = castNode(SlabContext, context);
@@ -602,7 +568,7 @@ SlabRealloc(MemoryContext context, void *pointer, Size size)
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
  */
-static Size
+Size
 SlabGetChunkSpace(MemoryContext context, void *pointer)
 {
 	SlabContext *slab = castNode(SlabContext, context);
@@ -616,7 +582,7 @@ SlabGetChunkSpace(MemoryContext context, void *pointer)
  * SlabIsEmpty
  *		Is an Slab empty of any allocated space?
  */
-static bool
+bool
 SlabIsEmpty(MemoryContext context)
 {
 	SlabContext *slab = castNode(SlabContext, context);
@@ -635,7 +601,7 @@ SlabIsEmpty(MemoryContext context)
  * totals: if not NULL, add stats about this context into *totals.
  * print_to_stderr: print stats to stderr if true, elog otherwise.
  */
-static void
+void
 SlabStats(MemoryContext context,
 		  MemoryStatsPrintFunc printfunc, void *passthru,
 		  MemoryContextCounters *totals,
@@ -697,7 +663,7 @@ SlabStats(MemoryContext context,
  * find yourself in an infinite loop when trouble occurs, because this
  * routine will be entered again when elog cleanup tries to release memory!
  */
-static void
+void
 SlabCheck(MemoryContext context)
 {
 	int			i;

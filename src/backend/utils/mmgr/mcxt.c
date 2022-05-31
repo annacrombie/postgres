@@ -29,11 +29,56 @@
 #include "utils/fmgrprotos.h"
 #include "utils/memdebug.h"
 #include "utils/memutils.h"
+#include "utils/memutils_internal.h"
 
 
 /*****************************************************************************
  *	  GLOBAL MEMORY															 *
  *****************************************************************************/
+
+const MemoryContextMethods mcxt_methods[] = {
+	[MCTX_ASET_ID] = {
+		AllocSetAlloc,
+		AllocSetFree,
+		AllocSetRealloc,
+		AllocSetReset,
+		AllocSetDelete,
+		AllocSetGetChunkSpace,
+		AllocSetIsEmpty,
+		AllocSetStats
+#ifdef MEMORY_CONTEXT_CHECKING
+		,AllocSetCheck
+#endif
+	},
+
+	[MCTX_GENERATION_ID] = {
+		GenerationAlloc,
+		GenerationFree,
+		GenerationRealloc,
+		GenerationReset,
+		GenerationDelete,
+		GenerationGetChunkSpace,
+		GenerationIsEmpty,
+		GenerationStats
+#ifdef MEMORY_CONTEXT_CHECKING
+		,GenerationCheck
+#endif
+	},
+
+	[MCTX_SLAB_ID] = {
+		SlabAlloc,
+		SlabFree,
+		SlabRealloc,
+		SlabReset,
+		SlabDelete,
+		SlabGetChunkSpace,
+		SlabIsEmpty,
+		SlabStats
+#ifdef MEMORY_CONTEXT_CHECKING
+		,SlabCheck
+#endif
+	},
+};
 
 /*
  * CurrentMemoryContext
@@ -814,7 +859,7 @@ MemoryContextContains(MemoryContext context, void *pointer)
 void
 MemoryContextCreate(MemoryContext node,
 					NodeTag tag,
-					const MemoryContextMethods *methods,
+					MemoryContextMethodID method_id,
 					MemoryContext parent,
 					const char *name)
 {
@@ -824,7 +869,7 @@ MemoryContextCreate(MemoryContext node,
 	/* Initialize all standard fields of memory context header */
 	node->type = tag;
 	node->isReset = true;
-	node->methods = methods;
+	node->methods = &mcxt_methods[method_id];
 	node->parent = parent;
 	node->firstchild = NULL;
 	node->mem_allocated = 0;

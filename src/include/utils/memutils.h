@@ -134,17 +134,6 @@ GetMemoryChunkContext(void *pointer)
 }
 #endif
 
-/*
- * This routine handles the context-type-independent part of memory
- * context creation.  It's intended to be called from context-type-
- * specific creation routines, and noplace else.
- */
-extern void MemoryContextCreate(MemoryContext node,
-								NodeTag tag,
-								const MemoryContextMethods *methods,
-								MemoryContext parent,
-								const char *name);
-
 extern void HandleLogMemoryContextInterrupt(void);
 extern void ProcessLogMemoryContextInterrupt(void);
 
