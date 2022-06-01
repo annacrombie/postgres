@@ -36,7 +36,7 @@
  *	  GLOBAL MEMORY															 *
  *****************************************************************************/
 
-const MemoryContextMethods mcxt_methods[] = {
+static const MemoryContextMethods mcxt_methods[] = {
 	[MCTX_ASET_ID] = {
 		AllocSetAlloc,
 		AllocSetFree,
