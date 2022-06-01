@@ -1237,7 +1237,7 @@ palloc_extended(Size size, int flags)
 void
 pfree(void *pointer)
 {
-	return MCXT_METHOD(pointer, free_p)(pointer);
+	MCXT_METHOD(pointer, free_p)(pointer);
 #if 0
 	VALGRIND_MEMPOOL_FREE(context, pointer);
 #endif
