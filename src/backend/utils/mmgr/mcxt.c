@@ -475,11 +475,8 @@ MemoryContextAllowInCriticalSection(MemoryContext context, bool allow)
 
 /*
  * GetMemoryChunkContext
- *		Given a currently-allocated chunk, determine the total space
- *		it occupies (including all memory-allocation overhead).
- *
- * This is useful for measuring the total space occupied by a set of
- * allocated chunks.
+ *		Given a currently-allocated chunk, determine the MemoryContext that
+ *		the chunk belongs to.
  */
 MemoryContext
 GetMemoryChunkContext(void *pointer)
