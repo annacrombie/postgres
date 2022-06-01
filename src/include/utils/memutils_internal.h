@@ -4,11 +4,12 @@
 #include "utils/memutils.h"
 
 extern void *AllocSetAlloc(MemoryContext context, Size size);
-extern void AllocSetFree(MemoryContext context, void *pointer);
-extern void *AllocSetRealloc(MemoryContext context, void *pointer, Size size);
+extern void AllocSetFree(void *pointer);
+extern void *AllocSetRealloc(void *pointer, Size size);
 extern void AllocSetReset(MemoryContext context);
 extern void AllocSetDelete(MemoryContext context);
-extern Size AllocSetGetChunkSpace(MemoryContext context, void *pointer);
+extern MemoryContext AllocSetGetChunkContext(void *pointer);
+extern Size AllocSetGetChunkSpace(void *pointer);
 extern bool AllocSetIsEmpty(MemoryContext context);
 extern void AllocSetStats(MemoryContext context,
 						  MemoryStatsPrintFunc printfunc, void *passthru,
@@ -21,11 +22,12 @@ extern void AllocSetCheck(MemoryContext context);
 
 
 extern void *GenerationAlloc(MemoryContext context, Size size);
-extern void GenerationFree(MemoryContext context, void *pointer);
-extern void *GenerationRealloc(MemoryContext context, void *pointer, Size size);
+extern void GenerationFree(void *pointer);
+extern void *GenerationRealloc(void *pointer, Size size);
 extern void GenerationReset(MemoryContext context);
 extern void GenerationDelete(MemoryContext context);
-extern Size GenerationGetChunkSpace(MemoryContext context, void *pointer);
+extern MemoryContext GenerationGetChunkContext(void *pointer);
+extern Size GenerationGetChunkSpace(void *pointer);
 extern bool GenerationIsEmpty(MemoryContext context);
 extern void GenerationStats(MemoryContext context,
 							MemoryStatsPrintFunc printfunc, void *passthru,
@@ -41,11 +43,12 @@ extern void GenerationCheck(MemoryContext context);
  * These functions implement the MemoryContext API for Slab contexts.
  */
 extern void *SlabAlloc(MemoryContext context, Size size);
-extern void SlabFree(MemoryContext context, void *pointer);
-extern void *SlabRealloc(MemoryContext context, void *pointer, Size size);
+extern void SlabFree(void *pointer);
+extern void *SlabRealloc(void *pointer, Size size);
 extern void SlabReset(MemoryContext context);
 extern void SlabDelete(MemoryContext context);
-extern Size SlabGetChunkSpace(MemoryContext context, void *pointer);
+extern MemoryContext SlabGetChunkContext(void *pointer);
+extern Size SlabGetChunkSpace(void *pointer);
 extern bool SlabIsEmpty(MemoryContext context);
 extern void SlabStats(MemoryContext context,
 					  MemoryStatsPrintFunc printfunc, void *passthru,
@@ -74,5 +77,31 @@ extern void MemoryContextCreate(MemoryContext node,
 								MemoryContextMethodID method_id,
 								MemoryContext parent,
 								const char *name);
+
+
+typedef struct GenericChunkHeader
+{
+	Size		size:(SIZEOF_SIZE_T * 8 - 3);
+	uint8		method_id:3;
+} GenericChunkHeader;
+
+
+static inline MemoryContextMethodID
+GetMemoryChunkMethodID(void *pointer)
+{
+	GenericChunkHeader *header;
+
+	/*
+	 * Try to detect bogus pointers handed to us, poorly though we can.
+	 * Presumably, a pointer that isn't MAXALIGNED isn't pointing at an
+	 * allocated chunk.
+	 */
+	Assert(pointer != NULL);
+	Assert(pointer == (void *) MAXALIGN(pointer));
+
+	header = (GenericChunkHeader *) (((char *) pointer) - sizeof(GenericChunkHeader));
+
+	return header->method_id;
+}
 
 #endif

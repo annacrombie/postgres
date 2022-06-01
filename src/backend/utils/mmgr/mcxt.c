@@ -43,6 +43,7 @@ const MemoryContextMethods mcxt_methods[] = {
 		AllocSetRealloc,
 		AllocSetReset,
 		AllocSetDelete,
+		AllocSetGetChunkContext,
 		AllocSetGetChunkSpace,
 		AllocSetIsEmpty,
 		AllocSetStats
@@ -57,6 +58,7 @@ const MemoryContextMethods mcxt_methods[] = {
 		GenerationRealloc,
 		GenerationReset,
 		GenerationDelete,
+		GenerationGetChunkContext,
 		GenerationGetChunkSpace,
 		GenerationIsEmpty,
 		GenerationStats
@@ -71,6 +73,7 @@ const MemoryContextMethods mcxt_methods[] = {
 		SlabRealloc,
 		SlabReset,
 		SlabDelete,
+		SlabGetChunkContext,
 		SlabGetChunkSpace,
 		SlabIsEmpty,
 		SlabStats
@@ -117,6 +120,9 @@ static void MemoryContextStatsPrint(MemoryContext context, void *passthru,
  */
 #define AssertNotInCriticalSection(context) \
 	Assert(CritSectionCount == 0 || (context)->allowInCritSection)
+
+
+#define MCXT_METHOD(pointer, method) mcxt_methods[GetMemoryChunkMethodID(pointer)].method
 
 
 /*****************************************************************************
@@ -468,6 +474,20 @@ MemoryContextAllowInCriticalSection(MemoryContext context, bool allow)
 }
 
 /*
+ * GetMemoryChunkContext
+ *		Given a currently-allocated chunk, determine the total space
+ *		it occupies (including all memory-allocation overhead).
+ *
+ * This is useful for measuring the total space occupied by a set of
+ * allocated chunks.
+ */
+MemoryContext
+GetMemoryChunkContext(void *pointer)
+{
+	return MCXT_METHOD(pointer, get_chunk_context)(pointer);
+}
+
+/*
  * GetMemoryChunkSpace
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
@@ -478,9 +498,7 @@ MemoryContextAllowInCriticalSection(MemoryContext context, bool allow)
 Size
 GetMemoryChunkSpace(void *pointer)
 {
-	MemoryContext context = GetMemoryChunkContext(pointer);
-
-	return context->methods->get_chunk_space(context, pointer);
+	return MCXT_METHOD(pointer, get_chunk_space)(pointer);
 }
 
 /*
@@ -1219,10 +1237,10 @@ palloc_extended(Size size, int flags)
 void
 pfree(void *pointer)
 {
-	MemoryContext context = GetMemoryChunkContext(pointer);
-
-	context->methods->free_p(context, pointer);
+	return MCXT_METHOD(pointer, free_p)(pointer);
+#if 0
 	VALGRIND_MEMPOOL_FREE(context, pointer);
+#endif
 }
 
 /*
@@ -1232,9 +1250,10 @@ pfree(void *pointer)
 void *
 repalloc(void *pointer, Size size)
 {
-	MemoryContext context = GetMemoryChunkContext(pointer);
 	void	   *ret;
 
+#if 0
+	MemoryContext context = GetMemoryChunkContext(pointer);
 	if (!AllocSizeIsValid(size))
 		elog(ERROR, "invalid memory alloc request size %zu", size);
 
@@ -1242,8 +1261,9 @@ repalloc(void *pointer, Size size)
 
 	/* isReset must be false already */
 	Assert(!context->isReset);
+#endif
 
-	ret = context->methods->realloc(context, pointer, size);
+	ret = MCXT_METHOD(pointer, realloc)(pointer, size);
 	if (unlikely(ret == NULL))
 	{
 		MemoryContextStats(TopMemoryContext);
@@ -1251,10 +1271,12 @@ repalloc(void *pointer, Size size)
 				(errcode(ERRCODE_OUT_OF_MEMORY),
 				 errmsg("out of memory"),
 				 errdetail("Failed on request of size %zu in memory context \"%s\".",
-						   size, context->name)));
+						   size, "fake-name")));
 	}
 
+#if 0
 	VALGRIND_MEMPOOL_CHANGE(context, pointer, ret, size);
+#endif
 
 	return ret;
 }
@@ -1302,20 +1324,23 @@ MemoryContextAllocHuge(MemoryContext context, Size size)
 void *
 repalloc_huge(void *pointer, Size size)
 {
-	MemoryContext context = GetMemoryChunkContext(pointer);
 	void	   *ret;
 
 	if (!AllocHugeSizeIsValid(size))
 		elog(ERROR, "invalid memory alloc request size %zu", size);
 
+#if 0
 	AssertNotInCriticalSection(context);
 
 	/* isReset must be false already */
 	Assert(!context->isReset);
+#endif
 
-	ret = context->methods->realloc(context, pointer, size);
+	ret = MCXT_METHOD(pointer, realloc)(pointer, size);
 	if (unlikely(ret == NULL))
 	{
+		MemoryContext context = GetMemoryChunkContext(pointer);
+
 		MemoryContextStats(TopMemoryContext);
 		ereport(ERROR,
 				(errcode(ERRCODE_OUT_OF_MEMORY),
@@ -1324,7 +1349,9 @@ repalloc_huge(void *pointer, Size size)
 						   size, context->name)));
 	}
 
+#if 0
 	VALGRIND_MEMPOOL_CHANGE(context, pointer, ret, size);
+#endif
 
 	return ret;
 }

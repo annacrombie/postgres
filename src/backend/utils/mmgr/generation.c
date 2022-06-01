@@ -111,25 +111,21 @@ struct GenerationBlock
  */
 struct GenerationChunk
 {
-	/* size is always the size of the usable space in the chunk */
-	Size		size;
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* when debugging memory usage, also store actual requested size */
 	/* this is zero in a free chunk */
 	Size		requested_size;
-
-#define GENERATIONCHUNK_RAWSIZE  (SIZEOF_SIZE_T * 2 + SIZEOF_VOID_P * 2)
-#else
-#define GENERATIONCHUNK_RAWSIZE  (SIZEOF_SIZE_T + SIZEOF_VOID_P * 2)
-#endif							/* MEMORY_CONTEXT_CHECKING */
-
-	/* ensure proper alignment by adding padding if needed */
-#if (GENERATIONCHUNK_RAWSIZE % MAXIMUM_ALIGNOF) != 0
-	char		padding[MAXIMUM_ALIGNOF - GENERATIONCHUNK_RAWSIZE % MAXIMUM_ALIGNOF];
 #endif
+
+	/* FIXME: used to fix up alignment here, need to see how that'll work */
 
 	GenerationBlock *block;		/* block owning this chunk */
 	GenerationContext *context; /* owning context, or NULL if freed chunk */
+
+	/* size is always the size of the usable space in the chunk */
+	Size		size:(SIZEOF_SIZE_T * 8 - 3);
+	uint8		method_id:3;
+
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 };
 
@@ -191,9 +187,11 @@ GenerationContextCreate(MemoryContext parent,
 	/* Assert we padded GenerationChunk properly */
 	StaticAssertStmt(Generation_CHUNKHDRSZ == MAXALIGN(Generation_CHUNKHDRSZ),
 					 "sizeof(GenerationChunk) is not maxaligned");
+#if 0
 	StaticAssertStmt(offsetof(GenerationChunk, context) + sizeof(MemoryContext) ==
 					 Generation_CHUNKHDRSZ,
 					 "padding calculation in GenerationChunk is wrong");
+#endif
 
 	/*
 	 * First, validate allocation parameters.  Asserts seem sufficient because
@@ -390,6 +388,7 @@ GenerationAlloc(MemoryContext context, Size size)
 		chunk->block = block;
 		chunk->context = set;
 		chunk->size = chunk_size;
+		chunk->method_id = MCTX_GENERATION_ID;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 		chunk->requested_size = size;
@@ -511,6 +510,7 @@ GenerationAlloc(MemoryContext context, Size size)
 	chunk->block = block;
 	chunk->context = set;
 	chunk->size = chunk_size;
+	chunk->method_id = MCTX_GENERATION_ID;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
@@ -627,10 +627,10 @@ GenerationBlockFree(GenerationContext *set, GenerationBlock *block)
  *		are now free then discard the block.
  */
 void
-GenerationFree(MemoryContext context, void *pointer)
+GenerationFree(void *pointer)
 {
-	GenerationContext *set = (GenerationContext *) context;
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
+	GenerationContext *set = chunk->context;
 	GenerationBlock *block;
 
 	/* Allow access to private part of chunk header. */
@@ -697,7 +697,7 @@ GenerationFree(MemoryContext context, void *pointer)
 	 */
 	dlist_delete(&block->node);
 
-	context->mem_allocated -= block->blksize;
+	set->header.mem_allocated -= block->blksize;
 	free(block);
 }
 
@@ -708,10 +708,10 @@ GenerationFree(MemoryContext context, void *pointer)
  *		into the old chunk - in that case we just update chunk header.
  */
 void *
-GenerationRealloc(MemoryContext context, void *pointer, Size size)
+GenerationRealloc(void *pointer, Size size)
 {
-	GenerationContext *set = (GenerationContext *) context;
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
+	GenerationContext *set = chunk->context;
 	GenerationPointer newPointer;
 	Size		oldsize;
 
@@ -813,7 +813,7 @@ GenerationRealloc(MemoryContext context, void *pointer, Size size)
 	memcpy(newPointer, pointer, oldsize);
 
 	/* free old chunk */
-	GenerationFree((MemoryContext) set, pointer);
+	GenerationFree(pointer);
 
 	return newPointer;
 }
@@ -823,8 +823,26 @@ GenerationRealloc(MemoryContext context, void *pointer, Size size)
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
  */
+MemoryContext
+GenerationGetChunkContext(void *pointer)
+{
+	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
+	GenerationContext *set;
+
+	VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
+	set = chunk->context;
+	VALGRIND_MAKE_MEM_NOACCESS(chunk, GENERATIONCHUNK_PRIVATE_LEN);
+
+	return &set->header;
+}
+
+/*
+ * GenerationGetChunkSpace
+ *		Given a currently-allocated chunk, determine the total space
+ *		it occupies (including all memory-allocation overhead).
+ */
 Size
-GenerationGetChunkSpace(MemoryContext context, void *pointer)
+GenerationGetChunkSpace(void *pointer)
 {
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
 	Size		result;

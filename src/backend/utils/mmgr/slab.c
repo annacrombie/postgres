@@ -108,6 +108,9 @@ typedef struct SlabChunk
 {
 	SlabBlock  *block;			/* block owning this chunk */
 	SlabContext *slab;			/* owning context */
+	/* FIXME: obviously increases overhead, need to store block as relative pointer */
+	Size		pad:(SIZEOF_SIZE_T * 8 - 3);
+	uint8		method_id:3;
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 } SlabChunk;
 
@@ -153,9 +156,11 @@ SlabContextCreate(MemoryContext parent,
 	/* Assert we padded SlabChunk properly */
 	StaticAssertStmt(sizeof(SlabChunk) == MAXALIGN(sizeof(SlabChunk)),
 					 "sizeof(SlabChunk) is not maxaligned");
+#if 0
 	StaticAssertStmt(offsetof(SlabChunk, slab) + sizeof(MemoryContext) ==
 					 sizeof(SlabChunk),
 					 "padding calculation in SlabChunk is wrong");
+#endif
 
 	/* Make sure the linked list node fits inside a freed chunk */
 	if (chunkSize < sizeof(int))
@@ -434,6 +439,7 @@ SlabAlloc(MemoryContext context, Size size)
 
 	chunk->block = block;
 	chunk->slab = slab;
+	chunk->method_id = MCTX_SLAB_ID;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* slab mark to catch clobber of "unused" space */
@@ -461,11 +467,11 @@ SlabAlloc(MemoryContext context, Size size)
  *		Frees allocated memory; memory is removed from the slab.
  */
 void
-SlabFree(MemoryContext context, void *pointer)
+SlabFree(void *pointer)
 {
 	int			idx;
-	SlabContext *slab = castNode(SlabContext, context);
 	SlabChunk  *chunk = SlabPointerGetChunk(pointer);
+	SlabContext *slab = chunk->slab;
 	SlabBlock  *block = chunk->block;
 
 #ifdef MEMORY_CONTEXT_CHECKING
@@ -526,13 +532,13 @@ SlabFree(MemoryContext context, void *pointer)
 	{
 		free(block);
 		slab->nblocks--;
-		context->mem_allocated -= slab->blockSize;
+		slab->header.mem_allocated -= slab->blockSize;
 	}
 	else
 		dlist_push_head(&slab->freelist[block->nfree], &block->node);
 
 	Assert(slab->nblocks >= 0);
-	Assert(slab->nblocks * slab->blockSize == context->mem_allocated);
+	Assert(slab->nblocks * slab->blockSize == slab->header.mem_allocated);
 }
 
 /*
@@ -549,9 +555,10 @@ SlabFree(MemoryContext context, void *pointer)
  * realloc is usually used to enlarge the chunk.
  */
 void *
-SlabRealloc(MemoryContext context, void *pointer, Size size)
+SlabRealloc(void *pointer, Size size)
 {
-	SlabContext *slab = castNode(SlabContext, context);
+	SlabChunk  *chunk = SlabPointerGetChunk(pointer);
+	SlabContext *slab = chunk->slab;
 
 	Assert(slab);
 
@@ -564,14 +571,29 @@ SlabRealloc(MemoryContext context, void *pointer, Size size)
 }
 
 /*
+ * SlabGetChunkContext
+ */
+MemoryContext
+SlabGetChunkContext(void *pointer)
+{
+	SlabChunk  *chunk = SlabPointerGetChunk(pointer);
+	SlabContext *slab = chunk->slab;
+
+	Assert(slab);
+
+	return &slab->header;
+}
+
+/*
  * SlabGetChunkSpace
  *		Given a currently-allocated chunk, determine the total space
  *		it occupies (including all memory-allocation overhead).
  */
 Size
-SlabGetChunkSpace(MemoryContext context, void *pointer)
+SlabGetChunkSpace(void *pointer)
 {
-	SlabContext *slab = castNode(SlabContext, context);
+	SlabChunk  *chunk = SlabPointerGetChunk(pointer);
+	SlabContext *slab = chunk->slab;
 
 	Assert(slab);
 

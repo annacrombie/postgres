@@ -172,25 +172,20 @@ typedef struct AllocBlockData
  */
 typedef struct AllocChunkData
 {
-	/* size is always the size of the usable space in the chunk */
-	Size		size;
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* when debugging memory usage, also store actual requested size */
 	/* this is zero in a free chunk */
 	Size		requested_size;
-
-#define ALLOCCHUNK_RAWSIZE  (SIZEOF_SIZE_T * 2 + SIZEOF_VOID_P)
-#else
-#define ALLOCCHUNK_RAWSIZE  (SIZEOF_SIZE_T + SIZEOF_VOID_P)
-#endif							/* MEMORY_CONTEXT_CHECKING */
-
-	/* ensure proper alignment by adding padding if needed */
-#if (ALLOCCHUNK_RAWSIZE % MAXIMUM_ALIGNOF) != 0
-	char		padding[MAXIMUM_ALIGNOF - ALLOCCHUNK_RAWSIZE % MAXIMUM_ALIGNOF];
 #endif
+
+	/* FIXME: used to fix up alignment here, need to see how that'll work */
 
 	/* aset is the owning aset if allocated, or the freelist link if free */
 	void	   *aset;
+
+	Size		size:(SIZEOF_SIZE_T * 8 - 3);
+	uint8		method_id:3;
+
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 }			AllocChunkData;
 
@@ -352,12 +347,14 @@ AllocSetContextCreateInternal(MemoryContext parent,
 	AllocSet	set;
 	AllocBlock	block;
 
+#if 0
 	/* Assert we padded AllocChunkData properly */
 	StaticAssertStmt(ALLOC_CHUNKHDRSZ == MAXALIGN(ALLOC_CHUNKHDRSZ),
 					 "sizeof(AllocChunkData) is not maxaligned");
 	StaticAssertStmt(offsetof(AllocChunkData, aset) + sizeof(MemoryContext) ==
 					 ALLOC_CHUNKHDRSZ,
 					 "padding calculation in AllocChunkData is wrong");
+#endif
 
 	/*
 	 * First, validate allocation parameters.  Once these were regular runtime
@@ -714,6 +711,8 @@ AllocSetAlloc(MemoryContext context, Size size)
 		chunk = (AllocChunk) (((char *) block) + ALLOC_BLOCKHDRSZ);
 		chunk->aset = set;
 		chunk->size = chunk_size;
+		chunk->method_id = MCTX_ASET_ID;
+
 #ifdef MEMORY_CONTEXT_CHECKING
 		chunk->requested_size = size;
 		/* set mark to catch clobber of "unused" space */
@@ -751,6 +750,8 @@ AllocSetAlloc(MemoryContext context, Size size)
 		/* Disallow external access to private part of chunk header. */
 		VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
 
+		Assert(GetMemoryChunkMethodID(AllocChunkGetPointer(chunk)) == MCTX_ASET_ID);
+
 		return AllocChunkGetPointer(chunk);
 	}
 
@@ -787,6 +788,8 @@ AllocSetAlloc(MemoryContext context, Size size)
 
 		/* Disallow external access to private part of chunk header. */
 		VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
+
+		Assert(GetMemoryChunkMethodID(AllocChunkGetPointer(chunk)) == MCTX_ASET_ID);
 
 		return AllocChunkGetPointer(chunk);
 	}
@@ -845,6 +848,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 				availspace -= (availchunk + ALLOC_CHUNKHDRSZ);
 
 				chunk->size = availchunk;
+				chunk->method_id = MCTX_ASET_ID;
 #ifdef MEMORY_CONTEXT_CHECKING
 				chunk->requested_size = 0;	/* mark it free */
 #endif
@@ -929,6 +933,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 
 	chunk->aset = (void *) set;
 	chunk->size = chunk_size;
+	chunk->method_id = MCTX_ASET_ID;
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
 	/* set mark to catch clobber of "unused" space */
@@ -947,6 +952,8 @@ AllocSetAlloc(MemoryContext context, Size size)
 	/* Disallow external access to private part of chunk header. */
 	VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
 
+	Assert(GetMemoryChunkMethodID(AllocChunkGetPointer(chunk)) == MCTX_ASET_ID);
+
 	return AllocChunkGetPointer(chunk);
 }
 
@@ -955,10 +962,10 @@ AllocSetAlloc(MemoryContext context, Size size)
  *		Frees allocated memory; memory is removed from the set.
  */
 void
-AllocSetFree(MemoryContext context, void *pointer)
+AllocSetFree(void *pointer)
 {
-	AllocSet	set = (AllocSet) context;
 	AllocChunk	chunk = AllocPointerGetChunk(pointer);
+	AllocSet	set = chunk->aset;
 
 	/* Allow access to private part of chunk header. */
 	VALGRIND_MAKE_MEM_DEFINED(chunk, ALLOCCHUNK_PRIVATE_LEN);
@@ -998,7 +1005,7 @@ AllocSetFree(MemoryContext context, void *pointer)
 		if (block->next)
 			block->next->prev = block->prev;
 
-		context->mem_allocated -= block->endptr - ((char *) block);
+		set->header.mem_allocated -= block->endptr - ((char *) block);
 
 #ifdef CLOBBER_FREED_MEMORY
 		wipe_mem(block, block->freeptr - ((char *) block));
@@ -1037,10 +1044,10 @@ AllocSetFree(MemoryContext context, void *pointer)
  * request size.)
  */
 void *
-AllocSetRealloc(MemoryContext context, void *pointer, Size size)
+AllocSetRealloc(void *pointer, Size size)
 {
-	AllocSet	set = (AllocSet) context;
 	AllocChunk	chunk = AllocPointerGetChunk(pointer);
+	AllocSet	set = chunk->aset;
 	Size		oldsize;
 
 	/* Allow access to private part of chunk header. */
@@ -1101,8 +1108,8 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 		}
 
 		/* updated separately, not to underflow when (oldblksize > blksize) */
-		context->mem_allocated -= oldblksize;
-		context->mem_allocated += blksize;
+		set->header.mem_allocated -= oldblksize;
+		set->header.mem_allocated += blksize;
 
 		block->freeptr = block->endptr = ((char *) block) + blksize;
 
@@ -1116,6 +1123,7 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 		if (block->next)
 			block->next->prev = block;
 		chunk->size = chksize;
+		chunk->method_id = MCTX_ASET_ID;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 #ifdef RANDOMIZE_ALLOCATED_MEMORY
@@ -1156,6 +1164,8 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 
 		/* Disallow external access to private part of chunk header. */
 		VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
+
+		Assert(GetMemoryChunkMethodID(pointer) == MCTX_ASET_ID);
 
 		return pointer;
 	}
@@ -1207,6 +1217,8 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 		/* Disallow external access to private part of chunk header. */
 		VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
 
+		Assert(GetMemoryChunkMethodID(pointer) == MCTX_ASET_ID);
+
 		return pointer;
 	}
 	else
@@ -1254,10 +1266,30 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
 		memcpy(newPointer, pointer, oldsize);
 
 		/* free old chunk */
-		AllocSetFree((MemoryContext) set, pointer);
+		AllocSetFree(pointer);
+
+		Assert(GetMemoryChunkMethodID(newPointer) == MCTX_ASET_ID);
 
 		return newPointer;
 	}
+}
+
+/*
+ * AllocSetGetChunkContext
+ *		Given a currently-allocated chunk, determine the total space
+ *		it occupies (including all memory-allocation overhead).
+ */
+MemoryContext
+AllocSetGetChunkContext(void *pointer)
+{
+	AllocChunk	chunk = AllocPointerGetChunk(pointer);
+	AllocSet	set;
+
+	VALGRIND_MAKE_MEM_DEFINED(chunk, ALLOCCHUNK_PRIVATE_LEN);
+	set = chunk->aset;
+	VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
+
+	return &set->header;
 }
 
 /*
@@ -1266,7 +1298,7 @@ AllocSetRealloc(MemoryContext context, void *pointer, Size size)
  *		it occupies (including all memory-allocation overhead).
  */
 Size
-AllocSetGetChunkSpace(MemoryContext context, void *pointer)
+AllocSetGetChunkSpace(void *pointer)
 {
 	AllocChunk	chunk = AllocPointerGetChunk(pointer);
 	Size		result;
