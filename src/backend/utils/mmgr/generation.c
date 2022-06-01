@@ -90,6 +90,7 @@ typedef struct GenerationContext
 struct GenerationBlock
 {
 	dlist_node	node;			/* doubly-linked list of blocks */
+	GenerationContext *context;
 	Size		blksize;		/* allocated size of this block */
 	int			nchunks;		/* number of chunks in the block */
 	int			nfree;			/* number of free chunks */
@@ -119,8 +120,13 @@ struct GenerationChunk
 
 	/* FIXME: used to fix up alignment here, need to see how that'll work */
 
+	/*
+	 * TODO: block could be stored as a relative address to chunk, for normal
+	 * sized chunks. For that we'd need two different chunk header formats,
+	 * which isn't a problem, but more work than I want to do in this
+	 * prototype :).
+	 */
 	GenerationBlock *block;		/* block owning this chunk */
-	GenerationContext *context; /* owning context, or NULL if freed chunk */
 
 	/* size is always the size of the usable space in the chunk */
 	Size		size:(SIZEOF_SIZE_T * 8 - 3);
@@ -130,12 +136,13 @@ struct GenerationChunk
 };
 
 /*
- * Only the "context" field should be accessed outside this module.
+ * Only the "method" field should be accessed outside this module.
+ * XXX: Can't use offsetof for bitfields
  * We keep the rest of an allocated chunk's header marked NOACCESS when using
  * valgrind.  But note that freed chunk headers are kept accessible, for
  * simplicity.
  */
-#define GENERATIONCHUNK_PRIVATE_LEN	offsetof(GenerationChunk, context)
+#define GENERATIONCHUNK_PRIVATE_LEN	(sizeof(GenerationChunk) - sizeof(Size))
 
 /*
  * GenerationIsValid
@@ -149,7 +156,7 @@ struct GenerationChunk
 	((GenerationPointer *)(((char *)(chk)) + Generation_CHUNKHDRSZ))
 
 /* Inlined helper functions */
-static inline void GenerationBlockInit(GenerationBlock *block, Size blksize);
+static inline void GenerationBlockInit(GenerationContext *context, GenerationBlock *block, Size blksize);
 static inline bool GenerationBlockIsEmpty(GenerationBlock *block);
 static inline void GenerationBlockMarkEmpty(GenerationBlock *block);
 static inline Size GenerationBlockFreeBytes(GenerationBlock *block);
@@ -241,7 +248,7 @@ GenerationContextCreate(MemoryContext parent,
 	block = (GenerationBlock *) (((char *) set) + MAXALIGN(sizeof(GenerationContext)));
 	/* determine the block size and initialize it */
 	firstBlockSize = allocSize - MAXALIGN(sizeof(GenerationContext));
-	GenerationBlockInit(block, firstBlockSize);
+	GenerationBlockInit(set, block, firstBlockSize);
 
 	/* add it to the doubly-linked list of blocks */
 	dlist_push_head(&set->blocks, &block->node);
@@ -377,6 +384,7 @@ GenerationAlloc(MemoryContext context, Size size)
 		context->mem_allocated += blksize;
 
 		/* block with a single (used) chunk */
+		block->context = set;
 		block->blksize = blksize;
 		block->nchunks = 1;
 		block->nfree = 0;
@@ -386,7 +394,6 @@ GenerationAlloc(MemoryContext context, Size size)
 
 		chunk = (GenerationChunk *) (((char *) block) + Generation_BLOCKHDRSZ);
 		chunk->block = block;
-		chunk->context = set;
 		chunk->size = chunk_size;
 		chunk->method_id = MCTX_GENERATION_ID;
 
@@ -480,7 +487,7 @@ GenerationAlloc(MemoryContext context, Size size)
 			context->mem_allocated += blksize;
 
 			/* initialize the new block */
-			GenerationBlockInit(block, blksize);
+			GenerationBlockInit(set, block, blksize);
 
 			/* add it to the doubly-linked list of blocks */
 			dlist_push_head(&set->blocks, &block->node);
@@ -508,7 +515,6 @@ GenerationAlloc(MemoryContext context, Size size)
 	Assert(block->freeptr <= block->endptr);
 
 	chunk->block = block;
-	chunk->context = set;
 	chunk->size = chunk_size;
 	chunk->method_id = MCTX_GENERATION_ID;
 
@@ -539,8 +545,9 @@ GenerationAlloc(MemoryContext context, Size size)
  *		mem_allocated field.
  */
 static inline void
-GenerationBlockInit(GenerationBlock *block, Size blksize)
+GenerationBlockInit(GenerationContext *context, GenerationBlock *block, Size blksize)
 {
+	block->context = context;
 	block->blksize = blksize;
 	block->nchunks = 0;
 	block->nfree = 0;
@@ -630,13 +637,14 @@ void
 GenerationFree(void *pointer)
 {
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
-	GenerationContext *set = chunk->context;
 	GenerationBlock *block;
+	GenerationContext *set;
 
 	/* Allow access to private part of chunk header. */
 	VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 
 	block = chunk->block;
+	set = block->context;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Test for someone scribbling on unused space in chunk */
@@ -650,8 +658,12 @@ GenerationFree(void *pointer)
 	wipe_mem(pointer, chunk->size);
 #endif
 
-	/* Reset context to NULL in freed chunks */
-	chunk->context = NULL;
+	/* Reset block to NULL in freed chunks */
+	/*
+	 * XXX: Probably better to set method_id to something invalid? But not
+	 * obvious that we'd want to waste a bit-pattern on that?
+	 */
+	chunk->block = NULL;
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Reset requested_size to 0 in freed chunks */
@@ -711,7 +723,8 @@ void *
 GenerationRealloc(void *pointer, Size size)
 {
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
-	GenerationContext *set = chunk->context;
+	GenerationBlock *block = chunk->block;
+	GenerationContext *set = block->context;
 	GenerationPointer newPointer;
 	Size		oldsize;
 
@@ -827,13 +840,13 @@ MemoryContext
 GenerationGetChunkContext(void *pointer)
 {
 	GenerationChunk *chunk = GenerationPointerGetChunk(pointer);
-	GenerationContext *set;
+	GenerationBlock *block;
 
 	VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
-	set = chunk->context;
+	block = chunk->block;
 	VALGRIND_MAKE_MEM_NOACCESS(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 
-	return &set->header;
+	return &block->context->header;
 }
 
 /*
@@ -987,11 +1000,12 @@ GenerationCheck(MemoryContext context)
 
 			nchunks += 1;
 
-			/* chunks have both block and context pointers, so check both */
-			if (chunk->block != block)
+			/* check block pointer in valid state */
+			if (chunk->block != NULL && chunk->block != block)
 				elog(WARNING, "problem in Generation %s: bogus block link in block %p, chunk %p",
 					 name, block, chunk);
 
+#if 0
 			/*
 			 * Check for valid context pointer.  Note this is an incomplete
 			 * test, since palloc(0) produces an allocated chunk with
@@ -1001,6 +1015,7 @@ GenerationCheck(MemoryContext context)
 				(chunk->context != gen && chunk->context != NULL))
 				elog(WARNING, "problem in Generation %s: bogus context link in block %p, chunk %p",
 					 name, block, chunk);
+#endif
 
 			/* now make sure the chunk size is correct */
 			if (chunk->size < chunk->requested_size ||
@@ -1009,7 +1024,7 @@ GenerationCheck(MemoryContext context)
 					 name, block, chunk);
 
 			/* is chunk allocated? */
-			if (chunk->context != NULL)
+			if (chunk->block != NULL)
 			{
 				/* check sentinel, but only in allocated blocks */
 				if (chunk->requested_size < chunk->size &&
@@ -1024,7 +1039,7 @@ GenerationCheck(MemoryContext context)
 			 * If chunk is allocated, disallow external access to private part
 			 * of chunk header.
 			 */
-			if (chunk->context != NULL)
+			if (chunk->block != NULL)
 				VALGRIND_MAKE_MEM_NOACCESS(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 		}
 
