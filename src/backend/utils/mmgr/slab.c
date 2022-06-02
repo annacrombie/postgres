@@ -439,7 +439,7 @@ SlabAlloc(MemoryContext context, Size size)
 
 	chunk->block = block;
 	chunk->slab = slab;
-	GenericChunkSetSizeandMethod(chunk->header, 0, MCTX_GENERATION_ID);
+	GenericChunkSetSizeandMethod(chunk->header, 0, MCTX_SLAB_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* slab mark to catch clobber of "unused" space */
