@@ -129,8 +129,9 @@ struct GenerationChunk
 	GenerationBlock *block;		/* block owning this chunk */
 
 	/* size is always the size of the usable space in the chunk */
-	Size		size:(SIZEOF_SIZE_T * 8 - 3);
-	uint8		method_id:3;
+
+	/* size of chunk and context method id */
+	GenericChunkHeader header;
 
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 };
@@ -394,8 +395,8 @@ GenerationAlloc(MemoryContext context, Size size)
 
 		chunk = (GenerationChunk *) (((char *) block) + Generation_BLOCKHDRSZ);
 		chunk->block = block;
-		chunk->size = chunk_size;
-		chunk->method_id = MCTX_GENERATION_ID;
+
+		GenericChunkSetSizeandMethod(chunk->header, chunk_size, MCTX_GENERATION_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 		chunk->requested_size = size;
@@ -515,8 +516,7 @@ GenerationAlloc(MemoryContext context, Size size)
 	Assert(block->freeptr <= block->endptr);
 
 	chunk->block = block;
-	chunk->size = chunk_size;
-	chunk->method_id = MCTX_GENERATION_ID;
+	GenericChunkSetSizeandMethod(chunk->header, chunk_size, MCTX_GENERATION_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
@@ -731,7 +731,7 @@ GenerationRealloc(void *pointer, Size size)
 	/* Allow access to private part of chunk header. */
 	VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 
-	oldsize = chunk->size;
+	oldsize = GenericChunkGetSize(chunk->header);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Test for someone scribbling on unused space in chunk */
@@ -861,7 +861,7 @@ GenerationGetChunkSpace(void *pointer)
 	Size		result;
 
 	VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
-	result = chunk->size + Generation_CHUNKHDRSZ;
+	result = GenericChunkGetSize(chunk->header) + Generation_CHUNKHDRSZ;
 	VALGRIND_MAKE_MEM_NOACCESS(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 	return result;
 }

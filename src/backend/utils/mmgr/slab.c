@@ -109,8 +109,8 @@ typedef struct SlabChunk
 	SlabBlock  *block;			/* block owning this chunk */
 	SlabContext *slab;			/* owning context */
 	/* FIXME: obviously increases overhead, need to store block as relative pointer */
-	Size		pad:(SIZEOF_SIZE_T * 8 - 3);
-	uint8		method_id:3;
+	/* size of chunk and context method id */
+	GenericChunkHeader header;
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 } SlabChunk;
 
@@ -439,7 +439,7 @@ SlabAlloc(MemoryContext context, Size size)
 
 	chunk->block = block;
 	chunk->slab = slab;
-	chunk->method_id = MCTX_SLAB_ID;
+	GenericChunkSetSizeandMethod(chunk->header, 0, MCTX_GENERATION_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* slab mark to catch clobber of "unused" space */

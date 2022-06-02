@@ -81,10 +81,12 @@ extern void MemoryContextCreate(MemoryContext node,
 
 typedef struct GenericChunkHeader
 {
-	Size		size:(SIZEOF_SIZE_T * 8 - 3);
-	uint8		method_id:3;
+	/* Upper 3-bits of size used for storing the memory context method */
+	Size		size;
 } GenericChunkHeader;
 
+#define GenericChunkSetSizeandMethod(c, sz, m) (c).size = (sz) | ((Size) m) << (SIZEOF_SIZE_T * 8 - 3)
+#define GenericChunkGetSize(c) (((c).size << 3) >> 3)
 
 static inline MemoryContextMethodID
 GetMemoryChunkMethodID(void *pointer)
@@ -101,7 +103,7 @@ GetMemoryChunkMethodID(void *pointer)
 
 	header = (GenericChunkHeader *) (((char *) pointer) - sizeof(GenericChunkHeader));
 
-	return header->method_id;
+	return header->size >> (SIZEOF_SIZE_T * 8 - 3);
 }
 
 #endif

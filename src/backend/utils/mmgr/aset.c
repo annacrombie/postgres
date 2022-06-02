@@ -183,8 +183,8 @@ typedef struct AllocChunkData
 	/* aset is the owning aset if allocated, or the freelist link if free */
 	void	   *aset;
 
-	Size		size:(SIZEOF_SIZE_T * 8 - 3);
-	uint8		method_id:3;
+	/* size of chunk and context method id */
+	GenericChunkHeader header;
 
 	/* there must not be any padding to reach a MAXALIGN boundary here! */
 }			AllocChunkData;
@@ -710,8 +710,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 
 		chunk = (AllocChunk) (((char *) block) + ALLOC_BLOCKHDRSZ);
 		chunk->aset = set;
-		chunk->size = chunk_size;
-		chunk->method_id = MCTX_ASET_ID;
+		GenericChunkSetSizeandMethod(chunk->header, chunk_size, MCTX_ASET_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 		chunk->requested_size = size;
@@ -847,8 +846,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 				block->freeptr += (availchunk + ALLOC_CHUNKHDRSZ);
 				availspace -= (availchunk + ALLOC_CHUNKHDRSZ);
 
-				chunk->size = availchunk;
-				chunk->method_id = MCTX_ASET_ID;
+				GenericChunkSetSizeandMethod(chunk->header, availchunk, MCTX_ASET_ID);
 #ifdef MEMORY_CONTEXT_CHECKING
 				chunk->requested_size = 0;	/* mark it free */
 #endif
@@ -932,8 +930,9 @@ AllocSetAlloc(MemoryContext context, Size size)
 	Assert(block->freeptr <= block->endptr);
 
 	chunk->aset = (void *) set;
-	chunk->size = chunk_size;
-	chunk->method_id = MCTX_ASET_ID;
+
+	GenericChunkSetSizeandMethod(chunk->header, chunk_size, MCTX_ASET_ID);
+
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
 	/* set mark to catch clobber of "unused" space */
@@ -978,7 +977,7 @@ AllocSetFree(void *pointer)
 				 set->header.name, chunk);
 #endif
 
-	if (chunk->size > set->allocChunkLimit)
+	if (GenericChunkGetSize(chunk->header) > set->allocChunkLimit)
 	{
 		/*
 		 * Big chunks are certain to have been allocated as single-chunk
@@ -994,7 +993,7 @@ AllocSetFree(void *pointer)
 		if (block->aset != set ||
 			block->freeptr != block->endptr ||
 			block->freeptr != ((char *) block) +
-			(chunk->size + ALLOC_BLOCKHDRSZ + ALLOC_CHUNKHDRSZ))
+			(GenericChunkGetSize(chunk->header) + ALLOC_BLOCKHDRSZ + ALLOC_CHUNKHDRSZ))
 			elog(ERROR, "could not find block containing chunk %p", chunk);
 
 		/* OK, remove block from aset's list and free it */
@@ -1015,7 +1014,7 @@ AllocSetFree(void *pointer)
 	else
 	{
 		/* Normal case, put the chunk into appropriate freelist */
-		int			fidx = AllocSetFreeIndex(chunk->size);
+		int			fidx = AllocSetFreeIndex(GenericChunkGetSize(chunk->header));
 
 		chunk->aset = (void *) set->freelist[fidx];
 
@@ -1053,7 +1052,7 @@ AllocSetRealloc(void *pointer, Size size)
 	/* Allow access to private part of chunk header. */
 	VALGRIND_MAKE_MEM_DEFINED(chunk, ALLOCCHUNK_PRIVATE_LEN);
 
-	oldsize = chunk->size;
+	oldsize = GenericChunkGetSize(chunk->header);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Test for someone scribbling on unused space in chunk */
@@ -1122,8 +1121,7 @@ AllocSetRealloc(void *pointer, Size size)
 			set->blocks = block;
 		if (block->next)
 			block->next->prev = block;
-		chunk->size = chksize;
-		chunk->method_id = MCTX_ASET_ID;
+		GenericChunkSetSizeandMethod(chunk->header, chksize, MCTX_ASET_ID);
 
 #ifdef MEMORY_CONTEXT_CHECKING
 #ifdef RANDOMIZE_ALLOCATED_MEMORY
@@ -1147,7 +1145,7 @@ AllocSetRealloc(void *pointer, Size size)
 		chunk->requested_size = size;
 
 		/* set mark to catch clobber of "unused" space */
-		if (size < chunk->size)
+		if (size < GenericChunkGetSize(chunk->header))
 			set_sentinel(pointer, size);
 #else							/* !MEMORY_CONTEXT_CHECKING */
 
@@ -1304,7 +1302,7 @@ AllocSetGetChunkSpace(void *pointer)
 	Size		result;
 
 	VALGRIND_MAKE_MEM_DEFINED(chunk, ALLOCCHUNK_PRIVATE_LEN);
-	result = chunk->size + ALLOC_CHUNKHDRSZ;
+	result = GenericChunkGetSize(chunk->header) + ALLOC_CHUNKHDRSZ;
 	VALGRIND_MAKE_MEM_NOACCESS(chunk, ALLOCCHUNK_PRIVATE_LEN);
 	return result;
 }
@@ -1366,7 +1364,7 @@ AllocSetStats(MemoryContext context,
 			 chunk = (AllocChunk) chunk->aset)
 		{
 			freechunks++;
-			freespace += chunk->size + ALLOC_CHUNKHDRSZ;
+			freespace += GenericChunkGetSize(chunk->header) + ALLOC_CHUNKHDRSZ;
 		}
 	}
 
