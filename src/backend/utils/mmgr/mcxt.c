@@ -1235,9 +1235,7 @@ void
 pfree(void *pointer)
 {
 	MCXT_METHOD(pointer, free_p)(pointer);
-#if 0
-	VALGRIND_MEMPOOL_FREE(context, pointer);
-#endif
+	VALGRIND_MEMPOOL_FREE(GetMemoryChunkContext(pointer), pointer);
 }
 
 /*
@@ -1249,8 +1247,10 @@ repalloc(void *pointer, Size size)
 {
 	void	   *ret;
 
-#if 0
+#if defined(USE_ASSERT_CHECKING) || defined(USE_VALGRIND)
 	MemoryContext context = GetMemoryChunkContext(pointer);
+#endif
+
 	if (!AllocSizeIsValid(size))
 		elog(ERROR, "invalid memory alloc request size %zu", size);
 
@@ -1258,22 +1258,21 @@ repalloc(void *pointer, Size size)
 
 	/* isReset must be false already */
 	Assert(!context->isReset);
-#endif
 
 	ret = MCXT_METHOD(pointer, realloc)(pointer, size);
 	if (unlikely(ret == NULL))
 	{
+		MemoryContext context = GetMemoryChunkContext(pointer);
+
 		MemoryContextStats(TopMemoryContext);
 		ereport(ERROR,
 				(errcode(ERRCODE_OUT_OF_MEMORY),
 				 errmsg("out of memory"),
 				 errdetail("Failed on request of size %zu in memory context \"%s\".",
-						   size, "fake-name")));
+						   size, context->name)));
 	}
 
-#if 0
 	VALGRIND_MEMPOOL_CHANGE(context, pointer, ret, size);
-#endif
 
 	return ret;
 }
@@ -1322,16 +1321,17 @@ void *
 repalloc_huge(void *pointer, Size size)
 {
 	void	   *ret;
+#if defined(USE_ASSERT_CHECKING) || defined(USE_VALGRIND)
+	MemoryContext context = GetMemoryChunkContext(pointer);
+#endif
 
 	if (!AllocHugeSizeIsValid(size))
 		elog(ERROR, "invalid memory alloc request size %zu", size);
 
-#if 0
 	AssertNotInCriticalSection(context);
 
 	/* isReset must be false already */
 	Assert(!context->isReset);
-#endif
 
 	ret = MCXT_METHOD(pointer, realloc)(pointer, size);
 	if (unlikely(ret == NULL))
@@ -1346,9 +1346,7 @@ repalloc_huge(void *pointer, Size size)
 						   size, context->name)));
 	}
 
-#if 0
 	VALGRIND_MEMPOOL_CHANGE(context, pointer, ret, size);
-#endif
 
 	return ret;
 }
