@@ -521,7 +521,7 @@ GenerationAlloc(MemoryContext context, Size size)
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
 	/* set mark to catch clobber of "unused" space */
-	if (size < chunk->size)
+	if (size < GenericChunkGetSize(chunk->header))
 		set_sentinel(GenerationChunkGetPointer(chunk), size);
 #endif
 #ifdef RANDOMIZE_ALLOCATED_MEMORY
@@ -648,14 +648,14 @@ GenerationFree(void *pointer)
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Test for someone scribbling on unused space in chunk */
-	if (chunk->requested_size < chunk->size)
+	if (chunk->requested_size < GenericChunkGetSize(chunk->header))
 		if (!sentinel_ok(pointer, chunk->requested_size))
 			elog(WARNING, "detected write past chunk end in %s %p",
 				 ((MemoryContext) set)->name, chunk);
 #endif
 
 #ifdef CLOBBER_FREED_MEMORY
-	wipe_mem(pointer, chunk->size);
+	wipe_mem(pointer, GenericChunkGetSize(chunk->header));
 #endif
 
 	/* Reset block to NULL in freed chunks */
@@ -996,7 +996,7 @@ GenerationCheck(MemoryContext context)
 			VALGRIND_MAKE_MEM_DEFINED(chunk, GENERATIONCHUNK_PRIVATE_LEN);
 
 			/* move to the next chunk */
-			ptr += (chunk->size + Generation_CHUNKHDRSZ);
+			ptr += (GenericChunkGetSize(chunk->header) + Generation_CHUNKHDRSZ);
 
 			nchunks += 1;
 
@@ -1018,8 +1018,8 @@ GenerationCheck(MemoryContext context)
 #endif
 
 			/* now make sure the chunk size is correct */
-			if (chunk->size < chunk->requested_size ||
-				chunk->size != MAXALIGN(chunk->size))
+			if (GenericChunkGetSize(chunk->header) < chunk->requested_size ||
+				GenericChunkGetSize(chunk->header) != MAXALIGN(GenericChunkGetSize(chunk->header)))
 				elog(WARNING, "problem in Generation %s: bogus chunk size in block %p, chunk %p",
 					 name, block, chunk);
 
@@ -1027,7 +1027,7 @@ GenerationCheck(MemoryContext context)
 			if (chunk->block != NULL)
 			{
 				/* check sentinel, but only in allocated blocks */
-				if (chunk->requested_size < chunk->size &&
+				if (chunk->requested_size < GenericChunkGetSize(chunk->header) &&
 					!sentinel_ok(chunk, Generation_CHUNKHDRSZ + chunk->requested_size))
 					elog(WARNING, "problem in Generation %s: detected write past chunk end in block %p, chunk %p",
 						 name, block, chunk);

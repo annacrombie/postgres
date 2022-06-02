@@ -764,7 +764,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 	chunk = set->freelist[fidx];
 	if (chunk != NULL)
 	{
-		Assert(chunk->size >= size);
+		Assert(GenericChunkGetSize(chunk->header) >= size);
 
 		set->freelist[fidx] = (AllocChunk) chunk->aset;
 
@@ -773,7 +773,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 #ifdef MEMORY_CONTEXT_CHECKING
 		chunk->requested_size = size;
 		/* set mark to catch clobber of "unused" space */
-		if (size < chunk->size)
+		if (size < GenericChunkGetSize(chunk->header))
 			set_sentinel(AllocChunkGetPointer(chunk), size);
 #endif
 #ifdef RANDOMIZE_ALLOCATED_MEMORY
@@ -936,7 +936,7 @@ AllocSetAlloc(MemoryContext context, Size size)
 #ifdef MEMORY_CONTEXT_CHECKING
 	chunk->requested_size = size;
 	/* set mark to catch clobber of "unused" space */
-	if (size < chunk->size)
+	if (size < GenericChunkGetSize(chunk->header))
 		set_sentinel(AllocChunkGetPointer(chunk), size);
 #endif
 #ifdef RANDOMIZE_ALLOCATED_MEMORY
@@ -971,7 +971,7 @@ AllocSetFree(void *pointer)
 
 #ifdef MEMORY_CONTEXT_CHECKING
 	/* Test for someone scribbling on unused space in chunk */
-	if (chunk->requested_size < chunk->size)
+	if (chunk->requested_size < GenericChunkGetSize(chunk->header))
 		if (!sentinel_ok(pointer, chunk->requested_size))
 			elog(WARNING, "detected write past chunk end in %s %p",
 				 set->header.name, chunk);
@@ -1019,7 +1019,7 @@ AllocSetFree(void *pointer)
 		chunk->aset = (void *) set->freelist[fidx];
 
 #ifdef CLOBBER_FREED_MEMORY
-		wipe_mem(pointer, chunk->size);
+		wipe_mem(pointer, GenericChunkGetSize(chunk->header));
 #endif
 
 #ifdef MEMORY_CONTEXT_CHECKING
@@ -1454,7 +1454,7 @@ AllocSetCheck(MemoryContext context)
 			/* Allow access to private part of chunk header. */
 			VALGRIND_MAKE_MEM_DEFINED(chunk, ALLOCCHUNK_PRIVATE_LEN);
 
-			chsize = chunk->size;	/* aligned chunk size */
+			chsize = GenericChunkGetSize(chunk->header);	/* aligned chunk size */
 			dsize = chunk->requested_size;	/* real data */
 
 			/*
