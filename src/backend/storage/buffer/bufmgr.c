@@ -1932,9 +1932,9 @@ AsyncGetVictimBuffer(BufferAccessStrategy strategy, XLogRecPtr *lsn, PgAioIoRef 
 			if (LWLockConditionalAcquire(content_lock, LW_SHARED))
 			{
 				if (AsyncFlushBuffer(aio, cur_buf_hdr, NULL))
-				{
 					pgaio_io_ref(aio, aio_ref);
-				}
+				else
+					LWLockRelease(content_lock);
 
 				break;
 			}
@@ -1985,7 +1985,10 @@ AsyncFlushVictim(Buffer buf_id, XLogRecPtr *lsn, PgAioIoRef *aio_ref)
 				if (AsyncFlushBuffer(aio, buf_hdr, NULL))
 					pgaio_io_ref(aio, aio_ref);
 				else
+				{
+					LWLockRelease(content_lock);
 					pgaio_io_ref_clear(aio_ref);
+				}
 
 				valid = true;
 			}
