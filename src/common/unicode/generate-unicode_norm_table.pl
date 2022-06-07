@@ -40,7 +40,7 @@ close $FH;
 my @characters     = ();
 my %character_hash = ();
 open($FH, '<', "$directory/UnicodeData.txt")
-  or die "Could not open UnicodeData.txt: $!.";
+  or die "Could not open $directory/UnicodeData.txt: $!.";
 while (my $line = <$FH>)
 {
 
