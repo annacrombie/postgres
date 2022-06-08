@@ -7,8 +7,52 @@ use Getopt::Long;
 my $output_path = '';
 my $makefile_path = '';
 my $input_path = '';
+my $depfile;
+
+our @languages = qw(
+	arabic
+	armenian
+	basque
+	catalan
+	danish
+	dutch
+	english
+	finnish
+	french
+	german
+	greek
+	hindi
+	hungarian
+	indonesian
+	irish
+	italian
+	lithuanian
+	nepali
+	norwegian
+	portuguese
+	romanian
+	russian
+	serbian
+	spanish
+	swedish
+	tamil
+	turkish
+	yiddish
+);
+
+# Names of alternative dictionaries for all-ASCII words.  If not
+# listed, the language itself is used.  Note order dependency: Use of
+# some other language as ASCII dictionary must come after creation of
+# that language, so the "backup" language must be listed earlier in
+# @languages.
+
+our %ascii_languages = (
+	'hindi' => 'english',
+	'russian' => 'english',
+);
 
 GetOptions(
+	'depfile'    => \$depfile,
 	'output:s'   => \$output_path,
 	'input:s'    => \$input_path) || usage();
 
@@ -29,7 +73,8 @@ GenerateTsearchFiles();
 sub usage
 {
 	die <<EOM;
-Usage: snowball_create.pl --input/-i <path> --input <path>
+Usage: snowball_create.pl --input/-i <path> --output/-o <path>
+    --depfile       Write dependency file
     --output        Output directory (default '.')
     --input         Input directory
 
@@ -45,19 +90,16 @@ sub GenerateTsearchFiles
 	my $F;
 	my $D;
 	my $tmpl = read_file("$input_path/snowball.sql.in");
-	my $mf   = read_file("$input_path/Makefile");
 
-	open($D, '>', "$output_path/snowball_create.dep")
-	  || die "Could not write snowball_create.dep";
+	if ($depfile)
+	{
+		open($D, '>', "$output_path/snowball_create.dep")
+		  || die "Could not write snowball_create.dep";
+	}
 
-	print $D "$output_file: $input_path/Makefile\n";
-	print $D "$output_file: $input_path/snowball.sql.in\n";
-	print $D "$output_file: $input_path/snowball_func.sql.in\n";
+	print $D "$output_file: $input_path/snowball.sql.in\n" if $depfile;
+	print $D "$output_file: $input_path/snowball_func.sql.in\n" if $depfile;
 
-	$mf =~ s{\\\r?\n}{}g;
-	$mf =~ /^LANGUAGES\s*=\s*(.*)$/m
-	  || die "Could not find LANGUAGES line in snowball Makefile\n";
-	my @pieces = split /\s+/, $1;
 	open($F, '>', $output_file)
 	  || die "Could not write snowball_create.sql";
 
@@ -65,10 +107,9 @@ sub GenerateTsearchFiles
 
 	print $F read_file("$input_path/snowball_func.sql.in");
 
-	while ($#pieces > 0)
+	foreach my $lang (@languages)
 	{
-		my $lang    = shift @pieces || last;
-		my $asclang = shift @pieces || last;
+		my $asclang = $ascii_languages{$lang} || $lang;
 		my $txt     = $tmpl;
 		my $stop    = '';
 		my $stopword_path = "$input_path/stopwords/$lang.stop";
@@ -77,7 +118,7 @@ sub GenerateTsearchFiles
 		{
 			$stop = ", StopWords=$lang";
 
-			print $D "$output_file: $stopword_path\n";
+			print $D "$output_file: $stopword_path\n" if $depfile;
 		}
 
 		$txt =~ s#_LANGNAME_#${lang}#gs;
@@ -89,7 +130,7 @@ sub GenerateTsearchFiles
 		print $F $txt;
 	}
 	close($F);
-	close($D);
+	close($D) if $depfile;
 	return;
 }
 
