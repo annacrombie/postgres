@@ -4851,15 +4851,8 @@ XLogFileForIO(XLogIO *xio)
 		if (openLogFile >= 0)
 			XLogFileClose();
 
-		/*
-		 * FIXME: This was a useful check when we were using ThisTimeLineID,
-		 * but probably not anymore?
-		 */
 		if (xio->tli != openLogTLI)
-		{
-			Assert(AmIoWorkerProcess());
 			openLogTLI = xio->tli;
-		}
 
 		XLByteToPrevSeg(xio->upto, openLogSegNo, wal_segment_size);
 		openLogFile = XLogFileOpen(openLogSegNo, openLogTLI);
