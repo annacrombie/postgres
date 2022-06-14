@@ -70,12 +70,11 @@ snowball_create = custom_target('snowball_create',
   input: ['snowball_create.pl'],
   output: ['snowball_create.sql'],
   depfile: 'snowball_create.dep',
-  command: [perl, '@INPUT0@', '--input', '@CURRENT_SOURCE_DIR@', '--output', '@OUTDIR@'],
+  command: [perl, '@INPUT0@', '--depfile', '--input', '@CURRENT_SOURCE_DIR@', '--output', '@OUTDIR@'],
   install: true,
   install_dir: dir_data,
 )
 
-# FIXME: check whether the logic to select languages currently in Makefile is needed
 install_subdir('stopwords',
   install_dir: dir_data / 'tsearch_data',
   strip_directory: true,
