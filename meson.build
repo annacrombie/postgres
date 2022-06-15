@@ -21,13 +21,19 @@ project('postgresql',
 # Basic prep
 ###############################################################
 
+host_system = host_machine.system() == 'windows' ? 'win32' : host_machine.system()
+build_system = build_machine.system() == 'windows' ? 'win32' : build_machine.system()
+
+host_cpu = host_machine.cpu_family()
+build_cpu = build_machine.cpu_family()
+
 fs = import('fs')
 pkgconfig = import('pkgconfig')
-windows = import('windows')
+if host_system == 'win32'
+  windows = import('windows')
+endif
 
 thread_dep = dependency('threads')
-
-cpu_family = host_machine.cpu_family()
 
 
 # It's very easy to get into confusing states when the source directory
@@ -84,7 +90,7 @@ cdata.set_quoted('PACKAGE_VERSION', pg_version)
 pg_version += get_option('extra_version')
 cdata.set_quoted('PG_VERSION', pg_version)
 cdata.set_quoted('PG_VERSION_STR', 'PostgreSQL @0@ on @1@, compiled by @2@-@3@'.format(
-  pg_version, target_machine.cpu_family(), cc.get_id(), cc.version()))
+  pg_version, build_cpu, cc.get_id(), cc.version()))
 cdata.set_quoted('PG_MAJORVERSION', pg_version_major.to_string())
 cdata.set('PG_MAJORVERSION_NUM', pg_version_major)
 cdata.set('PG_MINORVERSION_NUM', pg_version_minor)
@@ -106,7 +112,7 @@ g_c_args = []
 g_c_inc = []
 g_l_args = []
 
-if host_machine.system() == 'darwin'
+if host_system == 'darwin'
   # XXX, should this be required?
   xcrun = find_program('xcrun', native: true, required: true)
 
@@ -117,7 +123,7 @@ if host_machine.system() == 'darwin'
   g_l_args += ['-isysroot', sysroot]
 endif
 
-if host_machine.system() == 'linux' or host_machine.system() == 'cygwin'
+if host_system == 'linux' or host_system == 'cygwin'
   g_c_args += '-D_GNU_SOURCE'
 endif
 
@@ -135,7 +141,7 @@ postgres_inc = [include_directories('src/include')]
 
 # Windows replacement headers - need them to be usable during the feature
 # tests below.
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   win32_inc = include_directories('src/include/port/win32')
   g_c_inc += win32_inc
   postgres_inc += win32_inc
@@ -386,7 +392,7 @@ endif
 ldapopt = get_option('ldap')
 if not ldapopt.disabled()
 
-  if host_machine.system() == 'windows'
+  if host_system == 'win32'
     ldap = cc.find_library('wldap32')
     ldap_r = ldap
   else
@@ -744,7 +750,7 @@ else
       endif
     endforeach
 
-    if host_machine.system() == 'windows'
+    if host_system == 'win32'
       perl_ccflags += ['-DPLPERL_HAVE_UID_GID']
     endif
 
@@ -1613,7 +1619,7 @@ endif
 
 have_optimized_crc = false
 cflags_crc = []
-if cpu_family == 'x86' or cpu_family == 'x86_64'
+if host_cpu == 'x86' or host_cpu == 'x86_64'
 
   if cc.get_id() == 'msvc'
     cdata.set('USE_SSE42_CRC32C', false)
@@ -1646,7 +1652,7 @@ int main(void)
 
   endif
 
-elif cpu_family == 'arm' or cpu_family == 'aarch64'
+elif host_cpu == 'arm' or host_cpu == 'aarch64'
 
   prog = '''
 #include <arm_acle.h>
@@ -1687,8 +1693,7 @@ endif
 # Other CPU specific stuff
 ###############################################################
 
-host_cpu_fam = host_machine.cpu_family()
-if host_cpu_fam == 'x86_64'
+if host_cpu == 'x86_64'
 
   if cc.compiles('''
       void main(void)
@@ -1696,12 +1701,12 @@ if host_cpu_fam == 'x86_64'
           long long x = 1; long long r;
           __asm__ __volatile__ (" popcntq %1,%0\n" : "=q"(r) : "rm"(x));
       }''',
-      name: '@0@: popcntq instruction'.format(host_cpu_fam),
+      name: '@0@: popcntq instruction'.format(host_cpu),
       args: g_c_args)
     cdata.set('HAVE_X86_64_POPCNTQ', 1)
   endif
 
-elif host_cpu_fam == 'ppc' or host_cpu_fam == 'ppc64'
+elif host_cpu == 'ppc' or host_cpu == 'ppc64'
 
   if cc.compiles('''
       void main(void)
@@ -1709,7 +1714,7 @@ elif host_cpu_fam == 'ppc' or host_cpu_fam == 'ppc64'
           int a = 0; int *p = &a; int r;
 	  __asm__ __volatile__ (" lwarx %0,0,%1,1\n" : "=&r"(r) : "r"(p));
       }''',
-      name: '@0@: whether assembler supports lwarx hint bit'.format(host_cpu_fam),
+      name: '@0@: whether assembler supports lwarx hint bit'.format(host_cpu),
       args: g_c_args)
     cdata.set('HAVE_PPC_LWARX_MUTEX_HINT', 1)
   endif
@@ -2060,7 +2065,7 @@ cdata.set('pg_restrict', '__restrict')
 cdata.set('MEMSET_LOOP_LIMIT', 1024)
 
 # XXX: We probably can just rely on this existing in supported windows versions?
-if host_machine.system() == 'windows' and \
+if host_system == 'win32' and \
   cc.has_type('MINIDUMP_TYPE', prefix: '''
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -2207,15 +2212,15 @@ endif
 
 
 
-if host_machine.system() == 'aix'
+if host_system == 'aix'
   dlsuffix = '.so'
   exesuffix = ''
   export_file_format = 'aix'
-elif host_machine.system() == 'darwin'
+elif host_system == 'darwin'
   dlsuffix = '.dylib'
   exesuffix = ''
   export_file_format = 'darwin'
-elif host_machine.system() == 'windows'
+elif host_system == 'win32'
   dlsuffix = '.dll'
   exesuffix = '.exe'
   export_file_format = ''
@@ -2227,15 +2232,15 @@ endif
 
 cdata.set_quoted('DLSUFFIX', dlsuffix)
 
-if host_machine.system() == 'darwin'
+if host_system == 'darwin'
   cdata.set('USE_SYSV_SEMAPHORES', 1)
   cdata.set('USE_SYSV_SHARED_MEMORY', 1)
-elif host_machine.system() == 'openbsd'
+elif host_system == 'openbsd'
   # FIXME: This likely defaulted to sysv, but the defaults for sysv semas on
   # openbsd are so low that tap tests don't pass.
   cdata.set('USE_NAMED_POSIX_SEMAPHORES', 1)
   cdata.set('USE_SYSV_SHARED_MEMORY', 1)
-elif host_machine.system() == 'windows'
+elif host_system == 'win32'
   cdata.set('USE_WIN32_SEMAPHORES', 1)
   cdata.set('USE_WIN32_SHARED_MEMORY', 1)
 else
@@ -2244,7 +2249,7 @@ else
 endif
 
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   cdata.set('HAVE_IPV6', 1)
   cdata.set('HAVE_SYMLINK', 1)
   cdata.set('WIN32_STACK_RLIMIT', 4194304)
@@ -2255,7 +2260,7 @@ if cc.get_id() == 'msvc'
   ldflags += ['/fixed:no','/dynamicbase', '/nxcompat']
 endif
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   os_deps += cc.find_library('ws2_32', required: true)
 endif
 
@@ -2333,7 +2338,7 @@ default_target_args = {
 
 default_lib_args = default_target_args + {
 }
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   default_lib_args = default_lib_args + {'name_prefix': 'lib'}
 endif
 
@@ -2353,15 +2358,15 @@ default_bin_args = default_target_args + {
 
 library_path_var = ''
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   # nothing to do
-elif host_machine.system() == 'openbsd'
+elif host_system == 'openbsd'
   # openbsd's $ORIGIN doesn't use an absolute path to the binary, but argv[0]
   # (i.e. absolute when invoked with an absolute name, but e.g. not absolute
   # when invoked via PATH search).
   library_path_var = 'LD_LIBRARY_PATH'
 else
-  if host_machine.system() == 'darwin'
+  if host_system == 'darwin'
     rpath_var = '@loader_path'
   else
     rpath_var = '$ORIGIN'
@@ -2509,7 +2514,7 @@ backend_both_deps = [
 
 backend_deps = backend_both_deps
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   backend_deps += cc.find_library('secur32', required: true)
 endif
 
@@ -2549,7 +2554,7 @@ subdir('src/interfaces/ecpg/test')
 subdir('doc/src/sgml')
 
 
-if host_machine.system() == 'darwin'
+if host_system == 'darwin'
   meson.add_install_script('src/tools/relativize_shared_library_references')
 endif
 
@@ -2567,7 +2572,7 @@ prefix = get_option('prefix')
 test_prefix = prefix
 
 if fs.is_absolute(get_option('prefix'))
-  if host_machine.system() == 'windows'
+  if host_system == 'win32'
     if prefix.split(':\\').length() == 1
         # just a drive
         test_prefix = ''
@@ -2830,8 +2835,8 @@ if meson.version().version_compare('>=0.57')
 
   summary(
     {
-      'host system' : '@0@ @1@'.format(host_machine.system(), host_machine.cpu_family()),
-      'build system' : '@0@ @1@'.format(build_machine.system(), build_machine.cpu_family()),
+      'host system' : '@0@ @1@'.format(host_system, host_cpu),
+      'build system' : '@0@ @1@'.format(build_system, build_cpu),
     },
     section: 'System'
   )

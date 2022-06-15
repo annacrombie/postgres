@@ -21,7 +21,7 @@ pgport_sources = [
   'thread.c',
 ]
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   pgport_sources += files(
     'dirmod.c',
     'kill.c',
@@ -116,7 +116,7 @@ foreach f : replace_funcs_pos
 endforeach
 
 
-if (host_machine.system() == 'windows' or host_machine.system() == 'cygwin') and \
+if (host_system == 'win32' or host_system == 'cygwin') and \
   (cc.get_id() != 'msvc' or cc.version().version_compare('<14.0'))
 
   # Cygwin and (apparently, based on test results) Mingw both
@@ -127,10 +127,10 @@ if (host_machine.system() == 'windows' or host_machine.system() == 'cygwin') and
   # force the file to be compiled despite HAVE_STRTOF.
   pgport_sources += files('strtof.c')
   message('On @0@ with compiler @1@ @2@ we will use our strtof wrapper.'.format(
-    host_machine.system(), cc.get_id(), cc.version()))
+    host_system, cc.get_id(), cc.version()))
 endif
 
-if not cdata.has('HAVE_PTHREAD_BARRIER_WAIT') and host_machine.system() != 'windows'
+if not cdata.has('HAVE_PTHREAD_BARRIER_WAIT') and host_system != 'win32'
    pgport_sources += files('pthread_barrier_wait.c')
 endif
 

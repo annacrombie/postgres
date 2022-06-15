@@ -1,5 +1,5 @@
 # TODO: missing handling for exports.txt breaks at least windows
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   subdir_done()
 endif
 

@@ -17,7 +17,7 @@ libpq_sources = files(
   'fe-auth.c',
 )
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   libpq_sources += files('win32.c', 'pthread-win32.c')
 endif
 
@@ -60,19 +60,19 @@ libpq_kwargs = default_lib_args + {
 }
 
 
-if host_machine.system() == 'aix'
+if host_system == 'aix'
   libpq_kwargs = libpq_kwargs + {
     'link_args': ['-Wl,-bE:' + export_file.full_path()],
     'link_depends': export_file,
     'soversion': '5',
   }
-elif host_machine.system() == 'darwin'
+elif host_system == 'darwin'
   libpq_kwargs = libpq_kwargs + {
     'link_args': ['-exported_symbols_list', export_file.full_path()],
     'link_depends': export_file,
     'soversion': '5',
   }
-elif host_machine.system() == 'windows'
+elif host_system == 'win32'
   libpq_deps += cc.find_library('secur32', required: true)
 
   libpq_kwargs = libpq_kwargs + {

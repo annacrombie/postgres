@@ -23,6 +23,6 @@ if cdata.has('USE_WIN32_SHARED_MEMORY')
    backend_sources += files('win32_shmem.c')
 endif
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   subdir('win32')
 endif

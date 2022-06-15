@@ -26,7 +26,7 @@ psql_sources += custom_target('psql_help',
   depfile: 'sql_help.dep',
   command: [perl, '@INPUT0@', '@SOURCE_ROOT@/doc/src/sgml/ref', '@OUTDIR@', 'sql_help'])
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   psql_sources += windows.compile_resources(
     custom_target('win32ver.rc', kwargs: rcgen_kw,
       command: rcgen_bin_cmd + [

@@ -36,7 +36,7 @@ subdir('po', if_found: libintl)
 postgres_link_args = []
 postgres_link_depends = []
 
-if host_machine.system() == 'windows'
+if host_system == 'win32'
   if cc.get_id() == 'msvc'
     postgres_link_args += '/STACK:@0@'.format(cdata.get('WIN32_STACK_RLIMIT'))
   else
@@ -129,7 +129,7 @@ else
   #
   # XXX: The reason we only use the objects for generated sources is that hits
   # a meson bug. Luckily we don't don't have probes in generated sources...
-  if dtrace.found() and host_machine.system() != 'darwin'
+  if dtrace.found() and host_system != 'darwin'
     postgres_objs += custom_target(
       'probes.o',
       input: ['utils/probes.d', postgres_tmpl.extract_objects(backend_sources, timezone_sources)],
@@ -169,10 +169,10 @@ endif
 # Windows / MacOs link shared modules against postgres. To avoid unnecessary
 # build-time dependencies on other operating systems, only add it when
 # necessary.
-if host_machine.system() == 'windows' or host_machine.system() == 'darwin'
+if host_system == 'win32' or host_system == 'darwin'
    pg_mod_args = pg_mod_args + {'link_with': [postgres]}
 endif
-if host_machine.system() == 'darwin'
+if host_system == 'darwin'
    pg_mod_args = pg_mod_args + {'link_args': ['-bundle_loader', '@0@'.format(postgres.full_path())]}
 endif
 

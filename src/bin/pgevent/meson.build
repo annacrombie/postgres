@@ -1,4 +1,4 @@
-if host_machine.system() != 'windows'
+if host_system != 'win32'
   subdir_done()
 endif
 

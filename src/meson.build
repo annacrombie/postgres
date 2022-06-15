@@ -30,11 +30,11 @@ pgxs_kv = {
   'vpath_build': 'yes',
   'autodepend': 'no', # XXX: Should we just set this to true when possible?
 
-  'host_cpu': host_machine.cpu(),
-  'host': '@0@-@1@'.format(host_machine.cpu(), host_machine.system()),
-  'host_os': host_machine.system(),
-  'build_os': build_machine.system(),
-  'PORTNAME': system,
+  'host_cpu': host_cpu,
+  'host': '@0@-@1@'.format(host_cpu, host_system),
+  'host_os': host_system,
+  'build_os': build_system,
+  'PORTNAME': host_system,
 
   'abs_top_builddir': meson.build_root(),
   'abs_top_srcdir': meson.source_root(),
@@ -255,7 +255,7 @@ pg_config_ext = configure_file(input: 'Makefile.global.in',
   install_dir: dir_pgxs / 'src')
 
 configure_file(
-  input: 'makefiles' / 'Makefile.@0@'.format(system),
+  input: 'makefiles' / 'Makefile.@0@'.format(host_system),
   output: 'Makefile.port',
   copy: true,
   install_dir: dir_pgxs / 'src')

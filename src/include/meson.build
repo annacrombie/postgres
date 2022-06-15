@@ -4,14 +4,9 @@ pg_config_ext = configure_file(input: 'pg_config_ext.h.meson',
   install: true,
   install_dir: dir_include)
 
-system = host_machine.system()
-if system == 'windows'
-  system = 'win32'
-endif
-
 pg_config_os = configure_file(
   output : 'pg_config_os.h',
-  input: files('port/@0@.h'.format(system)),
+  input: files('port/@0@.h'.format(host_system)),
   install: true,
   install_dir : dir_include,
   copy : true)
