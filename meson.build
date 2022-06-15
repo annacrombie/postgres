@@ -1526,7 +1526,7 @@ endforeach
 
 # From Project.pm
 if cc.get_id() == 'msvc'
-  cflags += ['/wd4018', '/wd4244', '/wd4273', '/wd4102', '/wd4090', '/wd4267']
+  cflags += ['/wd4018', '/wd4244', '/wd4273', '/wd4101', '/wd4102', '/wd4090', '/wd4267']
   cflags += ['/DWIN32', '/DWINDOWS', '/D__WINDOWS__', '/D__WIN32__',
              '/DWIN32_STACK_RLIMIT=4194304', '/D_CRT_SECURE_NO_DEPRECATE',
              '/D_CRT_NONSTDC_NO_DEPRECATE']
