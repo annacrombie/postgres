@@ -345,11 +345,15 @@ endif
 
 ###############################################################
 # Library: bonjour
+#
+# For now don't search for DNSServiceRegister in a library - only Apple's
+# Bonjour implementation, which is always linked, works.
 ###############################################################
 
 bonjouropt = get_option('bonjour')
 bonjour = dependency('', required : false)
-if cc.check_header('dns_sd.h', args: g_c_args, required: bonjouropt)
+if cc.check_header('dns_sd.h', args: g_c_args, required: bonjouropt) \
+  and cc.has_function('DNSServiceRegister', args: g_c_args)
   cdata.set('USE_BONJOUR', 1)
   bonjour = declare_dependency()
 endif
