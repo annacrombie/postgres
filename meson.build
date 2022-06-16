@@ -427,7 +427,7 @@ if not ldapopt.disabled()
     # If found via cc.find_library() ensure headers are found when using the
     # dependency. On meson < 0.57 one cannot do compiler checks using the
     # dependency returned by declare_dependency(), so we can't do this above.
-    if ldap.type_name() == 'library'
+    if ldap.found() and ldap.type_name() == 'library'
       # declare dependency so that the additional include dir it might reside in
       # is added automatically where necessary
       ldap = declare_dependency(dependencies: ldap,
