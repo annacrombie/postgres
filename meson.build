@@ -156,6 +156,7 @@ endif
 g_c_inc += postgres_inc
 
 
+
 ###############################################################
 # Program paths
 ###############################################################
@@ -204,6 +205,7 @@ flex_fix_warning = ['--perl', perl, '--fix_warning_script', flex_fix_warning_scr
 
 wget = find_program('wget', required: false, native: true)
 wget_flags = ['-O', '@OUTPUT0@', '--no-use-server-timestamps']
+
 
 
 ###############################################################
@@ -1614,7 +1616,19 @@ endif
 
 
 ###############################################################
-# CRC
+# Select CRC-32C implementation.
+#
+# If we are targeting a processor that has Intel SSE 4.2 instructions, we can
+# use the special CRC instructions for calculating CRC-32C. If we're not
+# targeting such a processor, but we can nevertheless produce code that uses
+# the SSE intrinsics, perhaps with some extra CFLAGS, compile both
+# implementations and select which one to use at runtime, depending on whether
+# SSE 4.2 is supported by the processor we're running on.
+#
+# Similarly, if we are targeting an ARM processor that has the CRC
+# instructions that are part of the ARMv8 CRC Extension, use them. And if
+# we're not targeting such a processor, but can nevertheless produce code that
+# uses the CRC instructions, compile both, and select at runtime.
 ###############################################################
 
 have_optimized_crc = false
@@ -1641,9 +1655,12 @@ int main(void)
 '''
 
     if cc.links(prog, name: '_mm_crc32_u8 and _mm_crc32_u32 without -msse4.2', args: g_c_args)
+      # Use Intel SSE 4.2 unconditionally.
       cdata.set('USE_SSE42_CRC32C', 1)
       have_optimized_crc = true
     elif cc.links(prog, name: '_mm_crc32_u8 and _mm_crc32_u32 with -msse4.2', args: g_c_args + ['-msse4.2'])
+      # Use Intel SSE 4.2, with runtime check. The CPUID instruction is needed for
+      # the runtime check.
       cflags_crc += '-msse4.2'
       cdata.set('USE_SSE42_CRC32C', false)
       cdata.set('USE_SSE42_CRC32C_WITH_RUNTIME_CHECK', 1)
@@ -1672,10 +1689,12 @@ int main(void)
 
   if cc.links(prog, name: '__crc32cb, __crc32ch, __crc32cw, and __crc32cd without -march=armv8-a+crc',
       args: g_c_args)
+    # Use ARM CRC Extension unconditionally
     cdata.set('USE_ARMV8_CRC32C', true)
     have_optimized_crc = true
   elif cc.links(prog, name: '__crc32cb, __crc32ch, __crc32cw, and __crc32cd with -march=armv8-a+crc',
       args: g_c_args + ['-march=armv8-a+crc'])
+    # Use ARM CRC Extension, with runtime check
     cflags_crc += '-march=armv8-a+crc'
     cdata.set('USE_ARMV8_CRC32C', false)
     cdata.set('USE_ARMV8_CRC32C_WITH_RUNTIME_CHECK', 1)
@@ -1684,6 +1703,8 @@ int main(void)
 endif
 
 if not have_optimized_crc
+  # fall back to slicing-by-8 algorithm, which doesn't require any special CPU
+  # support.
   cdata.set('USE_SLICING_BY_8_CRC32C', 1)
 endif
 
@@ -1774,10 +1795,15 @@ header_checks = [
   ['sys/un.h'],
   ['termios.h'],
   ['ucred.h'],
-  # FIXME: openbsd workaround
+  # Historically we've included sys/param.h first, due to sys/ucred.h not
+  # being standalone on OpenBSD (in 2013). But that doesn't look to be the case
+  # anymore in 2022.
   ['sys/ucred.h'],
   ['wctype.h'],
   ['netinet/tcp.h'],
+  # Historically we've included sys/socket.h first due to net/if.h not being
+  # standalone on some BSDs (in 2009). But that doesn't look to be the case
+  # anymore in 2022.
   ['net/if.h'],
   ['crtdefs.h'],
 ]
