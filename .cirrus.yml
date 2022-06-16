@@ -367,7 +367,7 @@ task:
   upload_caches: ccache
 
   tests_world_script:
-    - su postgres -c 'meson test --no-rebuild -C build'
+    - su postgres -c 'meson test --no-rebuild -C build --num-processes ${TEST_JOBS}'
 
   on_failure:
     <<: *on_failure
@@ -456,7 +456,7 @@ task:
   upload_caches: ccache
 
   tests_world_script:
-    - su postgres -c 'meson test --no-rebuild -C build'
+    - su postgres -c 'meson test --no-rebuild -C build --num-processes ${TEST_JOBS}'
 
   on_failure:
     <<: *on_failure
@@ -519,7 +519,7 @@ task:
   upload_caches: ccache
 
   tests_world_script:
-    - su postgres -c 'meson test --no-rebuild -C build'
+    - su postgres -c 'meson test --no-rebuild -C build --num-processes ${TEST_JOBS}'
 
   on_failure:
     <<: *on_failure
@@ -596,7 +596,7 @@ task:
   upload_caches: ccache
 
   tests_world_script:
-    - su postgres -c 'meson test --no-rebuild -C build'
+    - su postgres -c 'meson test --no-rebuild -C build --num-processes ${TEST_JOBS}'
 
   on_failure:
     <<: *on_failure
