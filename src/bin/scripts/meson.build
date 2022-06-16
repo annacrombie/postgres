@@ -1,4 +1,4 @@
-scripts_common = static_library('scripts_common',
+scripts_common = static_library('libscripts_common',
   files('common.c'),
   dependencies: [frontend_code, libpq],
   kwargs: internal_lib_args,

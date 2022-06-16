@@ -161,7 +161,7 @@ foreach name, opts : pgport_variants
       continue
     endif
     c_args = opts.get('c_args', []) + pgport_cflags[cflagname]
-    cflag_libs += static_library('pgport@0@_@1@'.format(name, cflagname),
+    cflag_libs += static_library('libpgport@0@_@1@'.format(name, cflagname),
       sources,
       c_pch: pch_c_h,
       kwargs: opts + {
@@ -172,7 +172,7 @@ foreach name, opts : pgport_variants
     )
   endforeach
 
-  lib = static_library('pgport@0@'.format(name),
+  lib = static_library('libpgport@0@'.format(name),
       pgport_sources,
       link_with: cflag_libs,
       c_pch: pch_c_h,

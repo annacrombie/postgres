@@ -87,7 +87,7 @@ else
   }
 endif
 
-libpq_both = both_libraries('pq',
+libpq_both = both_libraries('libpq',
   libpq_sources,
   include_directories : [libpq_inc, postgres_inc],
   c_args: ['-DFRONTEND'],

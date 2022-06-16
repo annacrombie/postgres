@@ -11,19 +11,18 @@ ecpglib_sources = files(
   'typename.c',
 )
 
-ecpglib = both_libraries('ecpg',
+ecpglib = both_libraries('libecpg',
   ecpglib_sources,
   include_directories : ['.', ecpg_inc, postgres_inc],
   dependencies: [frontend_shlib_code, libpq, thread_dep],
   link_with: [ecpg_pgtypes],
   soversion: 6,
   version: '6.'+pg_version_major.to_string(),
-  install: true,
+  kwargs: default_lib_args,
 )
 
 pkgconfig.generate(
   ecpglib.get_shared_lib(),
-  name: 'libecpg',
   description: 'PostgreSQL libecpg library',
   url: pg_url,
 )

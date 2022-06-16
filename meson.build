@@ -2363,10 +2363,8 @@ default_target_args = {
 }
 
 default_lib_args = default_target_args + {
+  'name_prefix': '',
 }
-if host_system == 'win32'
-  default_lib_args = default_lib_args + {'name_prefix': 'lib'}
-endif
 
 internal_lib_args = default_lib_args + {
   'build_by_default': false,
