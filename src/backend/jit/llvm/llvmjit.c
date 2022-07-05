@@ -412,13 +412,29 @@ llvm_pg_var_func_type(const char *varname)
 	Assert(LLVMGetTypeKind(typ) == LLVMPointerTypeKind);
 	typ = LLVMGetElementType(typ);
 	Assert(typ != NULL && LLVMGetTypeKind(typ) == LLVMFunctionTypeKind);
-#endif
+#elif 0
 	v_srcvar = LLVMGetNamedGlobal(llvm_types_module, varname);
 	if (!v_srcvar)
 		elog(ERROR, "variable %s not in llvmjit_types.c", varname);
 
 	typ = LLVMGlobalGetValueType(v_srcvar);
-	//typ = LLVMGetFunctionType(v_srcvar);
+	LLVMDumpType(typ);
+	fprintf(stderr, "\n");
+	typ = LLVMGetFunctionType(typ);
+	LLVMDumpType(typ);
+	fprintf(stderr, "\n");
+#endif
+
+	v_srcvar = LLVMGetNamedFunction(llvm_types_module, varname);
+	if (!v_srcvar)
+		elog(ERROR, "function %s not in llvmjit_types.c", varname);
+
+	LLVMDumpValue(v_srcvar);
+	fprintf(stderr, "\n");
+
+	typ = LLVMGetFunctionType(v_srcvar);
+	LLVMDumpType(typ);
+	fprintf(stderr, "\n");
 
 	return typ;
 }
@@ -1132,7 +1148,7 @@ llvm_resolve_symbols(LLVMOrcDefinitionGeneratorRef GeneratorObj, void *Ctx,
 					 LLVMOrcJITDylibRef JD, LLVMOrcJITDylibLookupFlags JDLookupFlags,
 					 LLVMOrcCLookupSet LookupSet, size_t LookupSetSize)
 {
-	LLVMOrcCSymbolMapPairs symbols = palloc0(sizeof(LLVMJITCSymbolMapPair) * LookupSetSize);
+	LLVMOrcCSymbolMapPairs symbols = palloc0(sizeof(LLVMOrcCSymbolMapPair) * LookupSetSize);
 	LLVMErrorRef error;
 	LLVMOrcMaterializationUnitRef mu;
 
@@ -1250,7 +1266,7 @@ llvm_create_jit_instance(LLVMTargetMachineRef tm)
 	 * Symbol resolution support for "special" functions, e.g. a call into an
 	 * SQL callable function.
 	 */
-	ref_gen = LLVMOrcCreateCustomCAPIDefinitionGenerator(llvm_resolve_symbols, NULL);
+	ref_gen = LLVMOrcCreateCustomCAPIDefinitionGenerator(llvm_resolve_symbols, NULL, NULL);
 	LLVMOrcJITDylibAddGenerator(LLVMOrcLLJITGetMainJITDylib(lljit), ref_gen);
 
 	return lljit;

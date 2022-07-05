@@ -150,7 +150,7 @@ llvm_compile_expr(ExprState *state)
 
 	/* create function */
 	eval_fn = LLVMAddFunction(mod, funcname,
-							  llvm_pg_var_func_type("TypeExprStateEvalFunc"));
+							  llvm_pg_var_func_type("ExecInterpExprStillValid"));
 	LLVMSetLinkage(eval_fn, LLVMExternalLinkage);
 	LLVMSetVisibility(eval_fn, LLVMDefaultVisibility);
 	llvm_copy_attributes(AttributeTemplate, eval_fn);
@@ -1075,13 +1075,11 @@ llvm_compile_expr(ExprState *state)
 
 			case EEOP_PARAM_CALLBACK:
 				{
-					LLVMTypeRef v_functype;
 					LLVMValueRef v_func;
 					LLVMValueRef v_params[3];
 
-					v_functype = llvm_pg_var_func_type("TypeExecEvalSubroutine");
 					v_func = l_ptr_const(op->d.cparam.paramfunc,
-										 LLVMPointerType(v_functype, 0));
+										 llvm_pg_var_type("TypeExecEvalSubroutine"));
 
 					v_params[0] = v_state;
 					v_params[1] = l_ptr_const(op, l_ptr(StructExprEvalStep));
@@ -1097,14 +1095,12 @@ llvm_compile_expr(ExprState *state)
 			case EEOP_SBSREF_SUBSCRIPTS:
 				{
 					int			jumpdone = op->d.sbsref_subscript.jumpdone;
-					LLVMTypeRef v_functype;
 					LLVMValueRef v_func;
 					LLVMValueRef v_params[3];
 					LLVMValueRef v_ret;
 
-					v_functype = llvm_pg_var_func_type("TypeExecEvalBoolSubroutine");
 					v_func = l_ptr_const(op->d.sbsref_subscript.subscriptfunc,
-										 LLVMPointerType(v_functype, 0));
+										 llvm_pg_var_type("TypeExecEvalBoolSubroutine"));
 
 					v_params[0] = v_state;
 					v_params[1] = l_ptr_const(op, l_ptr(StructExprEvalStep));
@@ -1130,9 +1126,8 @@ llvm_compile_expr(ExprState *state)
 					LLVMValueRef v_func;
 					LLVMValueRef v_params[3];
 
-					v_functype = llvm_pg_var_func_type("TypeExecEvalSubroutine");
 					v_func = l_ptr_const(op->d.sbsref.subscriptfunc,
-										 LLVMPointerType(v_functype, 0));
+										 llvm_pg_var_type("TypeExecEvalSubroutine"));
 
 					v_params[0] = v_state;
 					v_params[1] = l_ptr_const(op, l_ptr(StructExprEvalStep));
