@@ -1130,11 +1130,11 @@ ReadBuffer_start(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 	/* Make sure we will have room to remember the buffer pin */
 	ResourceOwnerEnlargeBuffers(CurrentResourceOwner);
 
-	TRACE_POSTGRESQL_BUFFER_READ_START(forkNum, blockNum,
-									   smgr->smgr_rnode.node.spcNode,
-									   smgr->smgr_rnode.node.dbNode,
-									   smgr->smgr_rnode.node.relNode,
-									   smgr->smgr_rnode.backend,
+     TRACE_POSTGRESQL_BUFFER_READ_START(forkNum, blockNum,
+                                        smgr->smgr_rlocator.locator.spcOid,
+                                        smgr->smgr_rlocator.locator.dbOid,
+                                        smgr->smgr_rlocator.locator.relNumber,
+                                        smgr->smgr_rlocator.backend,
 									   false);
 
 	if (isLocalBuf)
@@ -1175,10 +1175,10 @@ ReadBuffer_start(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 			VacuumCostBalance += VacuumCostPageHit;
 
 		TRACE_POSTGRESQL_BUFFER_READ_DONE(forkNum, blockNum,
-										  smgr->smgr_rnode.node.spcNode,
-										  smgr->smgr_rnode.node.dbNode,
-										  smgr->smgr_rnode.node.relNode,
-										  smgr->smgr_rnode.backend,
+										  smgr->smgr_rlocator.locator.spcOid,
+										  smgr->smgr_rlocator.locator.dbOid,
+										  smgr->smgr_rlocator.locator.relNumber,
+										  smgr->smgr_rlocator.backend,
 										  false,
 										  found);
 

@@ -1062,10 +1062,10 @@ mdstartwrite(PgAioInProgress *io, SMgrRelation reln,
 #endif
 
 	TRACE_POSTGRESQL_SMGR_MD_WRITE_START(forknum, blocknum,
-										 reln->smgr_rnode.node.spcNode,
-										 reln->smgr_rnode.node.dbNode,
-										 reln->smgr_rnode.node.relNode,
-										 reln->smgr_rnode.backend);
+										 reln->smgr_rlocator.locator.spcOid,
+										 reln->smgr_rlocator.locator.dbOid,
+										 reln->smgr_rlocator.locator.relNumber,
+										 reln->smgr_rlocator.backend);
 
 	v = _mdfd_getseg(reln, forknum, blocknum, skipFsync,
 					 EXTENSION_FAIL | EXTENSION_CREATE_RECOVERY);
