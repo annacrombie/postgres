@@ -303,9 +303,6 @@
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
 
-/* Define to 1 if you have the <ldap.h> header file. */
-#undef HAVE_LDAP_H
-
 /* Define to 1 if you have the `ldap_initialize' function. */
 #undef HAVE_LDAP_INITIALIZE
 
@@ -686,9 +683,6 @@
 
 /* Define to 1 if you have the `wcstombs_l' function. */
 #undef HAVE_WCSTOMBS_L
-
-/* Define to 1 if you have the <winldap.h> header file. */
-#undef HAVE_WINLDAP_H
 
 /* Define to 1 if you have the `writev' function. */
 #undef HAVE_WRITEV
